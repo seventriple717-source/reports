@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUOL - Duolingo 价值投资深度分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2233; --bg4: #1e2d45;
+    --border: #1e3a5f; --border2: #2a4a7f;
+    --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+    --blue: #3b82f6; --green: #22c55e; --red: #ef4444; --yellow: #f59e0b;
+    --purple: #a855f7; --cyan: #06b6d4; --orange: #f97316;
+    --blue-dim: rgba(59,130,246,0.15); --green-dim: rgba(34,197,94,0.15);
+    --red-dim: rgba(239,68,68,0.15); --yellow-dim: rgba(245,158,11,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--blue); text-decoration:none; }
+  .container { max-width:1280px; margin:0 auto; padding:0 24px; }
+  /* HERO */
+  .hero { background:linear-gradient(135deg,#0a1628 0%,#0f2444 50%,#0a1628 100%);
+    border-bottom:1px solid var(--border); padding:48px 0 40px; }
+  .hero-inner { display:flex; align-items:center; gap:32px; flex-wrap:wrap; }
+  .hero-logo { width:72px; height:72px; background:linear-gradient(135deg,#3b82f6,#06b6d4);
+    border-radius:16px; display:flex; align-items:center; justify-content:center;
+    font-size:28px; font-weight:900; color:#fff; flex-shrink:0; }
+  .hero-title h1 { font-size:32px; font-weight:800; letter-spacing:-0.5px; }
+  .hero-title h1 span { color:var(--blue); }
+  .hero-title p { color:var(--text2); font-size:15px; margin-top:4px; }
+  .hero-badges { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+  .badge-buy { background:var(--green-dim); color:var(--green); border:1px solid rgba(34,197,94,0.3); }
+  .badge-hold { background:var(--yellow-dim); color:var(--yellow); border:1px solid rgba(245,158,11,0.3); }
+  .badge-warn { background:var(--red-dim); color:var(--red); border:1px solid rgba(239,68,68,0.3); }
+  .badge-info { background:var(--blue-dim); color:var(--blue); border:1px solid rgba(59,130,246,0.3); }
+  .hero-stats { margin-left:auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .hero-stat { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px;
+    padding:16px 20px; text-align:center; }
+  .hero-stat .val { font-size:22px; font-weight:800; color:var(--text); }
+  .hero-stat .lbl { font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+  .hero-stat .chg { font-size:13px; font-weight:600; margin-top:4px; }
+  .pos { color:var(--green); } .neg { color:var(--red); } .neu { color:var(--yellow); }
+  /* SECTIONS */
+  .section { padding:48px 0; border-bottom:1px solid var(--border); }
+  .section-title { font-size:22px; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
+  .section-title::before { content:''; display:block; width:4px; height:24px;
+    background:linear-gradient(180deg,var(--blue),var(--cyan)); border-radius:2px; }
+  .section-sub { color:var(--text2); font-size:14px; margin-bottom:32px; }
+  /* KPI GRID */
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; }
+  .kpi-card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .kpi-card .kpi-label { font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
+  .kpi-card .kpi-value { font-size:26px; font-weight:800; margin:8px 0 4px; }
+  .kpi-card .kpi-meta { font-size:12px; color:var(--text2); }
+  /* CARDS */
+  .card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .card-title { font-size:15px; font-weight:700; margin-bottom:16px; color:var(--text); }
+  /* GRID */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .grid-2-1 { display:grid; grid-template-columns:2fr 1fr; gap:24px; }
+  /* CHART */
+  .chart-wrap { position:relative; }
+  /* TABLE */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead th { background:var(--bg4); color:var(--text2); font-weight:600; padding:10px 14px;
+    text-align:right; white-space:nowrap; font-size:12px; }
+  thead th:first-child { text-align:left; }
+  tbody td { padding:9px 14px; border-bottom:1px solid var(--border); text-align:right; }
+  tbody td:first-child { text-align:left; font-weight:600; }
+  tbody tr:hover { background:rgba(59,130,246,0.04); }
+  .pass { color:var(--green); } .fail { color:var(--red); }
+  /* PROGRESS BAR */
+  .moat-row { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .moat-label { min-width:120px; font-size:13px; color:var(--text2); }
+  .moat-bar-bg { flex:1; height:8px; background:var(--bg4); border-radius:4px; overflow:hidden; }
+  .moat-bar { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--blue),var(--cyan)); }
+  .moat-stars { font-size:13px; color:var(--yellow); min-width:60px; }
+  .moat-score { min-width:30px; text-align:right; font-size:13px; font-weight:700; color:var(--blue); }
+  /* RISK MATRIX */
+  .risk-badge-high { background:var(--red-dim); color:var(--red); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+  .risk-badge-med { background:var(--yellow-dim); color:var(--yellow); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+  .risk-badge-low { background:var(--green-dim); color:var(--green); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+  /* DCF CARDS */
+  .dcf-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .dcf-card { border-radius:12px; padding:24px; border:1px solid; text-align:center; }
+  .dcf-bear { background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.3); }
+  .dcf-base { background:rgba(59,130,246,0.1); border-color:rgba(59,130,246,0.4); }
+  .dcf-bull { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
+  .dcf-price { font-size:36px; font-weight:900; margin:12px 0 8px; }
+  .dcf-label { font-size:12px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+  .dcf-meta { font-size:12px; color:var(--text2); }
+  /* VERDICT CARDS */
+  .verdict-card { border-radius:12px; padding:24px; border:1px solid; margin-bottom:20px; }
+  .verdict-sell { background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.3); }
+  .verdict-hold { background:rgba(245,158,11,0.06); border-color:rgba(245,158,11,0.3); }
+  .verdict-buy { background:rgba(34,197,94,0.06); border-color:rgba(34,197,94,0.3); }
+  .verdict-title { font-size:18px; font-weight:800; margin-bottom:8px; }
+  .verdict-dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:8px; }
+  .dot-red { background:var(--red); }
+  .dot-yellow { background:var(--yellow); }
+  .dot-green { background:var(--green); }
+  /* FINAL VERDICT */
+  .final-verdict { background:linear-gradient(135deg,#0f2444,#1a3560); border:1px solid var(--border2);
+    border-radius:16px; padding:40px; text-align:center; margin-top:32px; }
+  .final-verdict h2 { font-size:28px; font-weight:900; margin-bottom:8px; }
+  .buy-range { font-size:48px; font-weight:900; color:var(--green); margin:16px 0; letter-spacing:-1px; }
+  /* GROWTH DRIVER */
+  .driver-card { background:var(--bg3); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .driver-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:8px; }
+  .driver-value { font-size:22px; font-weight:800; color:var(--blue); }
+  .driver-meta { font-size:12px; color:var(--text2); margin-top:4px; }
+  .kpi-watch { background:var(--bg4); border:1px solid var(--border); border-radius:8px; padding:12px 16px;
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .kpi-watch-name { font-size:13px; color:var(--text2); }
+  .kpi-watch-val { font-size:13px; font-weight:700; color:var(--text); }
+  .kpi-watch-signal { font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px; }
+  .signal-watch { background:var(--yellow-dim); color:var(--yellow); }
+  .signal-ok { background:var(--green-dim); color:var(--green); }
+  .signal-warn { background:var(--red-dim); color:var(--red); }
+  /* FLYWHEEL */
+  .flywheel { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;
+    margin:20px 0; }
+  .fw-node { background:var(--blue-dim); border:1px solid rgba(59,130,246,0.4); border-radius:8px;
+    padding:10px 16px; font-size:13px; font-weight:600; color:var(--blue); }
+  .fw-arrow { color:var(--text3); font-size:18px; }
+  /* RESPONSIVE */
+  @media(max-width:768px) {
+    .hero-stats { grid-template-columns:1fr 1fr; width:100%; }
+    .grid-2,.grid-3,.grid-2-1,.dcf-grid { grid-template-columns:1fr; }
+    .kpi-grid { grid-template-columns:1fr 1fr; }
+    .hero-inner { flex-direction:column; }
+  }
+  /* SOURCES */
+  .sources { font-size:12px; color:var(--text3); }
+  .sources li { margin-bottom:4px; }
+  /* SEGMENT BAR */
+  .seg-bar { height:24px; border-radius:6px; overflow:hidden; display:flex; margin:12px 0; }
+  .seg-sub { background:var(--blue); }
+  .seg-ads { background:var(--yellow); }
+  .seg-other { background:var(--purple); }
+  .seg-legend { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; }
+  .seg-dot { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; }
+  /* CYCLE INDICATOR */
+  .cycle-gauge { display:flex; gap:4px; margin:16px 0; }
+  .cycle-seg { flex:1; height:12px; border-radius:3px; }
+  .cycle-needle { width:3px; height:20px; background:white; border-radius:2px; margin-top:-4px; position:relative; }
+  .cycle-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--text3); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<div class="hero">
+<div class="container">
+  <div class="hero-inner">
+    <div class="hero-logo">DL</div>
+    <div class="hero-title">
+      <h1>Duolingo, Inc. <span>(DUOL)</span></h1>
+      <p>全球最大语言学习平台 | NASDAQ | 分析日期：2026-03-20</p>
+      <div class="hero-badges">
+        <span class="badge badge-info">语言学习 App 全球 #1</span>
+        <span class="badge badge-info">AI-First 转型</span>
+        <span class="badge badge-buy">DCF 深度折价 +317%</span>
+        <span class="badge badge-warn">82% 股价回撤</span>
+        <span class="badge badge-hold">综合评级：谨慎买入</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="val">$99.61</div>
+        <div class="lbl">当前股价</div>
+        <div class="chg neg">52W 高 $544.93</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">$4.68B</div>
+        <div class="lbl">市值</div>
+        <div class="chg pos">净现金 $1.04B</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">$1.04B</div>
+        <div class="lbl">FY2025 营收</div>
+        <div class="chg pos">+39% YoY</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">72.2%</div>
+        <div class="lbl">毛利率</div>
+        <div class="chg neu">稳定 3年</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">29.7x</div>
+        <div class="lbl">标准化 P/E</div>
+        <div class="chg pos">低于5年均值 41x</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">52.7M</div>
+        <div class="lbl">DAU</div>
+        <div class="chg pos">+30% YoY</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     KPI GRID
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">核心 KPI 一览</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-label">FY2025 营收</div><div class="kpi-value pos">$1.04B</div><div class="kpi-meta">+39% YoY | 连续4年高速增长</div></div>
+    <div class="kpi-card"><div class="kpi-label">Adj. EBITDA</div><div class="kpi-value pos">$306M</div><div class="kpi-meta">29.5% 利润率</div></div>
+    <div class="kpi-card"><div class="kpi-label">自由现金流</div><div class="kpi-value pos">$370M</div><div class="kpi-meta">35.6% FCF 利润率</div></div>
+    <div class="kpi-card"><div class="kpi-label">毛利率</div><div class="kpi-value">72.2%</div><div class="kpi-meta">3年稳定区间 71-73%</div></div>
+    <div class="kpi-card"><div class="kpi-label">净利润 (GAAP)</div><div class="kpi-value pos">$414M</div><div class="kpi-meta">含$256.7M 一次性税收利好</div></div>
+    <div class="kpi-card"><div class="kpi-label">标准化净利润</div><div class="kpi-value">$157M</div><div class="kpi-meta">净利率 ~15.1%</div></div>
+    <div class="kpi-card"><div class="kpi-label">日活用户 (DAU)</div><div class="kpi-value pos">52.7M</div><div class="kpi-meta">+30% YoY | 目标2028年100M</div></div>
+    <div class="kpi-card"><div class="kpi-label">付费订阅者</div><div class="kpi-value pos">12.2M</div><div class="kpi-meta">+28% YoY | MAU转化率9%</div></div>
+    <div class="kpi-card"><div class="kpi-label">ROE / ROIC</div><div class="kpi-value pos">38.1%</div><div class="kpi-meta">ROIC 47.8% | 资本效率优异</div></div>
+    <div class="kpi-card"><div class="kpi-label">净现金</div><div class="kpi-value pos">$1.04B</div><div class="kpi-meta">$22.14/股 | 负债极低</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM P/E (标准化)</div><div class="kpi-value">29.7x</div><div class="kpi-meta">5年均值 41.2x，处于低位</div></div>
+    <div class="kpi-card"><div class="kpi-label">2026 营收指引</div><div class="kpi-value neu">$1.21B</div><div class="kpi-meta">+15-18% YoY</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     商业模式
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">商业模式分析</div>
+  <div class="section-sub">Duolingo 通过免费增值模式（Freemium）建立庞大用户基础，再通过订阅升级变现，兼具媒体与 SaaS 特征</div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title">收入结构（FY2025 估算）</div>
+      <div class="seg-bar">
+        <div class="seg-sub" style="width:81%"></div>
+        <div class="seg-ads" style="width:7%"></div>
+        <div class="seg-other" style="width:12%"></div>
+      </div>
+      <div class="seg-legend">
+        <span><span class="seg-dot" style="background:var(--blue)"></span>订阅 ~$840M (81%)</span>
+        <span><span class="seg-dot" style="background:var(--yellow)"></span>广告 ~$73M (7%)</span>
+        <span><span class="seg-dot" style="background:var(--purple)"></span>DET+IAP ~$125M (12%)</span>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="kpi-watch"><span class="kpi-watch-name">订阅收入 YoY 增速 (FY2025)</span><span class="kpi-watch-val">+44%</span><span class="kpi-watch-signal signal-ok">强劲</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">Max AI 订阅占比</span><span class="kpi-watch-val">8% (Q2'25)</span><span class="kpi-watch-signal signal-ok">快速增长</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">ARPU 季度增速</span><span class="kpi-watch-val">mid-single %</span><span class="kpi-watch-signal signal-ok">结构上移</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">FCF 利润率</span><span class="kpi-watch-val">35.6%</span><div class="kpi-watch-signal signal-ok">高质量</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">收入质量评估</div>
+      <table>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">收入可预测性</td><td style="text-align:right;color:var(--green);font-weight:700">高</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">订阅/重复收入占比</td><td style="text-align:right;font-weight:700">81%</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">客户集中度风险</td><td style="text-align:right;color:var(--green);font-weight:700">极低（C端分散）</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">付费转化率</td><td style="text-align:right;font-weight:700">9% (MAU→付费)</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">毛利率稳定性</td><td style="text-align:right;color:var(--green);font-weight:700">71-73% (3年)</td></tr>
+        <tr><td style="padding:8px 0;border-bottom:1px solid var(--border)">资本轻重</td><td style="text-align:right;color:var(--green);font-weight:700">极轻（Fab-less 型）</td></tr>
+        <tr><td style="padding:8px 0">收入质量综合评级</td><td style="text-align:right;color:var(--green);font-weight:800">A+</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">单位经济模型</div>
+      <table>
+        <tr><td style="padding:7px 0;border-bottom:1px solid var(--border)">每订阅用户月收入（ARPPU）</td><td style="text-align:right;font-weight:700">~$5.7/月</td></tr>
+        <tr><td style="padding:7px 0;border-bottom:1px solid var(--border)">Max 订阅定价（AI 功能）</td><td style="text-align:right;font-weight:700">~$13.99/月</td></tr>
+        <tr><td style="padding:7px 0;border-bottom:1px solid var(--border)">Super 订阅定价</td><td style="text-align:right;font-weight:700">~$6.99/月</td></tr>
+        <tr><td style="padding:7px 0;border-bottom:1px solid var(--border)">DAU/MAU 比率（参与度）</td><td style="text-align:right;color:var(--green);font-weight:700">37% (vs ~20% 3年前)</td></tr>
+        <tr><td style="padding:7px 0;border-bottom:1px solid var(--border)">研发支出/营收</td><td style="text-align:right;font-weight:700">~30%</td></tr>
+        <tr><td style="padding:7px 0">边际内容成本</td><td style="text-align:right;color:var(--green);font-weight:700">趋近零（AI生成）</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">AI 驱动的生态飞轮</div>
+      <div class="flywheel">
+        <div class="fw-node">52.7M DAU</div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">海量学习数据</div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">AI 模型优化</div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">更佳课程体验</div>
+        <div class="fw-arrow">→</div>
+        <div class="fw-node">更高留存/DAU</div>
+      </div>
+      <div style="margin-top:8px;font-size:13px;color:var(--text2);">
+        AI 已使 Duolingo 在不足1年内推出 148 门新课程（传统方式需数年）。每日完成练习 20 亿次，产生无与伦比的语言学习数据护城河。Max 订阅（AI 视频对话功能）正在从 8% 快速提升，代表 ARPU 上升通道。
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     财务分析
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">财务深度分析</div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title">季度营收趋势 + YoY 增速</div>
+      <div class="chart-wrap"><canvas id="revenueChart" height="260"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">用户增长趋势（DAU / MAU / 付费订阅）</div>
+      <div class="chart-wrap"><canvas id="userChart" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title">利润率趋势（毛利率 / Adj.EBITDA 利润率 / 营业利润率）</div>
+      <div class="chart-wrap"><canvas id="marginChart" height="240"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">自由现金流季度趋势</div>
+      <div class="chart-wrap"><canvas id="fcfChart" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">最近8季度财务数据明细</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="text-align:left">季度</th><th>营收 ($M)</th><th>YoY</th>
+          <th>毛利率</th><th>营业利润率</th><th>净利润 ($M)</th>
+          <th>EPS (摊薄)</th><th>FCF ($M)</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Q4 2025</td><td>$282.9</td><td class="pos">+35%</td><td>72.78%</td><td>15.4%</td><td>$42.0</td><td>$0.94</td><td class="pos">$96.6</td></tr>
+          <tr><td>Q3 2025</td><td>$271.7</td><td class="pos">+41%</td><td>72.47%</td><td>12.9%</td><td>$292.2*</td><td>$5.95*</td><td class="pos">$79.4</td></tr>
+          <tr><td>Q2 2025</td><td>$252.3</td><td class="pos">+41%</td><td>72.38%</td><td>13.2%</td><td>$44.8</td><td>$0.91</td><td class="pos">$89.5</td></tr>
+          <tr><td>Q1 2025</td><td>$230.7</td><td class="pos">+38%</td><td>71.12%</td><td>10.2%</td><td>$35.1</td><td>$0.72</td><td class="pos">$104.3</td></tr>
+          <tr><td>Q4 2024</td><td>$209.6</td><td class="pos">+32%</td><td>71.88%</td><td>6.6%</td><td>$13.9</td><td>$0.31</td><td class="pos">$81.4</td></tr>
+          <tr><td>Q3 2024</td><td>$192.6</td><td class="pos">+40%</td><td>72.91%</td><td>7.0%</td><td>$23.4</td><td>$0.49</td><td class="pos">$53.1</td></tr>
+          <tr><td>Q2 2024</td><td>$178.3</td><td class="pos">+41%</td><td>73.45%</td><td>10.5%</td><td>$24.4</td><td>$0.51</td><td class="pos">$56.8</td></tr>
+          <tr><td>Q1 2024</td><td>$167.6</td><td class="pos">+45%</td><td>73.03%</td><td>9.8%</td><td>$27.0</td><td>$0.57</td><td class="pos">$82.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text3)">* Q3 2025 净利润含 $256.7M 一次性税收利好；标准化 Q3净利润约 $35M，FY2025标准化净利润约 $157M</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     增长驱动
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">增长驱动与关键追踪指标</div>
+  <div class="section-sub">Duolingo 的增长不依赖云厂商 CapEx，而是由用户参与度、AI 功能普及和订阅升级驱动</div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:32px;">
+    <div class="driver-card">
+      <div class="driver-title">DAU 增长（核心驱动）</div>
+      <div class="driver-value">+30% YoY</div>
+      <div class="driver-meta">Q4 2025 | 目标 2028 年 100M DAU | 2026 指引约 +20%</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">订阅者增长</div>
+      <div class="driver-value">+28% YoY</div>
+      <div class="driver-meta">12.2M 付费订阅 | 9% MAU 转化率 | Max 占比 8%→增长中</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">AI 课程生产力</div>
+      <div class="driver-value">148 门</div>
+      <div class="driver-meta">不足 1 年内新推课程（传统需数年）| AI 降本增效</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">Max AI 订阅扩张</div>
+      <div class="driver-value">8% → ?%</div>
+      <div class="driver-meta">Q2 2025 占订阅基数 8%（Q4 2024 约 5%）| 3x ARPU 潜力</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">新课程扩张（数学/音乐/棋类）</div>
+      <div class="driver-value">250+ 课程</div>
+      <div class="driver-meta">语言→全科教育转型 | TAM 大幅扩展</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">TAM（语言学习市场）</div>
+      <div class="driver-value">$24B</div>
+      <div class="driver-meta">2026E，CAGR 15.8%→$50B by 2031 | Duolingo 占比 ~4.3%</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">需持续追踪的 KPI 清单（当前状态 + 信号）</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+      <div class="kpi-watch"><span class="kpi-watch-name">DAU QoQ 增速</span><span class="kpi-watch-val">+8.3% Q4'25</span><span class="kpi-watch-signal signal-ok">稳健</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">DAU/MAU 参与度比率</span><span class="kpi-watch-val">37%（历史高位）</span><span class="kpi-watch-signal signal-ok">向好</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">付费订阅 YoY 增速</span><span class="kpi-watch-val">+28% FY2025</span><span class="kpi-watch-signal signal-ok">强劲</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">Bookings 增速（领先指标）</span><span class="kpi-watch-val">2026E: +10-12%</span><span class="kpi-watch-signal signal-warn">大幅减速</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">Max 订阅占比</span><span class="kpi-watch-val">8% (Q2'25)</span><span class="kpi-watch-signal signal-ok">关键上升指标</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">ARPU 季度增速</span><span class="kpi-watch-val">mid-single %</span><span class="kpi-watch-signal signal-watch">需观察提速</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">Adj. EBITDA 利润率（2026指引）</span><span class="kpi-watch-val">~25%（vs 29.5%）</span><span class="kpi-watch-signal signal-warn">主动收窄</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">免费用户减少摩擦效果</span><span class="kpi-watch-val">$50M 牺牲 Bookings</span><span class="kpi-watch-signal signal-watch">2026年验证</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">AI 功能参与率（Video Call等）</span><span class="kpi-watch-val">持续提升</span><span class="kpi-watch-signal signal-ok">护城河强化</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">ChatGPT 等 AI 工具替代威胁</span><span class="kpi-watch-val">持续监控</span><span class="kpi-watch-signal signal-warn">最大存在性风险</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     竞争格局
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">竞争格局分析</div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title">语言学习 App 市场份额（2025年使用量）</div>
+      <div class="chart-wrap"><canvas id="marketShareChart" height="260"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">竞争对手营收对比（2024年，$M）</div>
+      <div class="chart-wrap"><canvas id="competitorChart" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-title">竞争格局对比矩阵</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="text-align:left">维度</th>
+          <th>Duolingo (DUOL)</th><th>Babbel</th><th>Rosetta Stone</th><th>Busuu (Chegg)</th><th>ChatGPT/AI 工具</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>营收（最新）</td><td class="pos">$1,038M (2025)</td><td>~$370M (2024)</td><td>~$275M (2024)</td><td>不适用（含并）</td><td>不适用（免费为主）</td></tr>
+          <tr><td>用户规模</td><td class="pos">130M MAU / 52.7M DAU</td><td>~10M 活跃</td><td>~4M 下载/年</td><td>~15M 用户</td><td>300M+ 用户</td></tr>
+          <tr><td>市场份额（App使用量）</td><td class="pos">~60%</td><td>~10%</td><td>~8%</td><td>~5%</td><td>N/A（不同品类）</td></tr>
+          <tr><td>毛利率</td><td class="pos">72%</td><td>私有（未披露）</td><td>未披露</td><td>未披露</td><td>N/A</td></tr>
+          <tr><td>AI 能力</td><td class="pos">AI-First，Video Call，148门AI课程</td><td>有 AI 功能但较弱</td><td>有 TruAccent 语音</td><td>基础 AI 整合</td><td>最强（原生 LLM）</td></tr>
+          <tr><td>游戏化/参与度设计</td><td class="pos">世界领先（streak, league, XP）</td><td>较弱</td><td>传统风格</td><td>中等</td><td>无</td></tr>
+          <tr><td>语言课程数量</td><td class="pos">42种语言 / 250+课程</td><td>14种语言</td><td>25种语言</td><td>14种语言</td><td>几乎所有语言</td></tr>
+          <tr><td>上市状态</td><td class="pos">NASDAQ (DUOL)</td><td>私有</td><td>私有</td><td>私有（Chegg子公司）</td><td>OpenAI私有</td></tr>
+          <tr><td>最大威胁</td><td class="neg">AI通用对话工具替代</td><td>Duolingo 挤压</td><td>品牌老化</td><td>Duolingo 挤压</td><td>专业学习场景不足</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">竞争护城河定性分析：为什么 Duolingo 难以被取代？</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;font-size:13px;color:var(--text2);">
+      <div>
+        <p style="color:var(--green);font-weight:700;margin-bottom:6px">核心优势</p>
+        <p>- 游戏化设计护城河：streak（连续学习天数）成为用户心理锚定，付费防止 streak 中断的收入占比显著</p>
+        <p style="margin-top:6px">- 数据护城河：20亿次/天的练习数据是AI优化的燃料，竞争对手无法复制</p>
+        <p style="margin-top:6px">- 品牌 = 品类：全球认知度与"Duolingo猫头鹰"IP相当于品类代名词</p>
+        <p style="margin-top:6px">- 社区网络效应：排行榜、好友对战创造社交留存，单纯AI工具无法替代</p>
+      </div>
+      <div>
+        <p style="color:var(--red);font-weight:700;margin-bottom:6px">最大风险：AI 工具替代</p>
+        <p>- ChatGPT/Claude 可以提供个性化语言对话练习，理论上替代部分 Duolingo 功能</p>
+        <p style="margin-top:6px">- 反驳：AI工具缺乏结构化课程、游戏化习惯养成、进度追踪、社交激励</p>
+        <p style="margin-top:6px">- Duolingo 本身也在 AI-First 转型，Max 订阅中的 Video Call 功能正是 AI 代替传统教师</p>
+        <p style="margin-top:6px">- 结论：AI 对 Duolingo 更多是工具而非威胁，但需持续监控转化数据</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     护城河评分
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">护城河评分卡</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">五维护城河评估</div>
+      <div class="moat-row"><span class="moat-label">品牌护城河</span><div class="moat-bar-bg"><div class="moat-bar" style="width:100%"></div></div><span class="moat-stars">★★★★★</span><span class="moat-score">5/5</span></div>
+      <div class="moat-row"><span class="moat-label">转换成本</span><div class="moat-bar-bg"><div class="moat-bar" style="width:60%"></div></div><span class="moat-stars">★★★☆☆</span><span class="moat-score">3/5</span></div>
+      <div class="moat-row"><span class="moat-label">网络效应</span><div class="moat-bar-bg"><div class="moat-bar" style="width:80%"></div></div><span class="moat-stars">★★★★☆</span><span class="moat-score">4/5</span></div>
+      <div class="moat-row"><span class="moat-label">成本优势</span><div class="moat-bar-bg"><div class="moat-bar" style="width:80%"></div></div><span class="moat-stars">★★★★☆</span><span class="moat-score">4/5</span></div>
+      <div class="moat-row"><span class="moat-label">无形资产</span><div class="moat-bar-bg"><div class="moat-bar" style="width:60%"></div></div><span class="moat-stars">★★★☆☆</span><span class="moat-score">3/5</span></div>
+      <div style="margin-top:20px;padding:16px;background:var(--blue-dim);border:1px solid rgba(59,130,246,0.3);border-radius:8px;text-align:center;">
+        <div style="font-size:13px;color:var(--text2)">综合护城河评级</div>
+        <div style="font-size:24px;font-weight:900;color:var(--blue);margin-top:4px">Narrow Moat</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px">窄护城河，正向宽护城河演进</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">护城河量化指标</div>
+      <div class="kpi-watch"><span class="kpi-watch-name">语言学习 App 使用量市占率</span><span class="kpi-watch-val">~60%</span><span class="kpi-watch-signal signal-ok">类垄断</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">DAU/MAU 参与度（品牌粘性）</span><span class="kpi-watch-val">37%</span><span class="kpi-watch-signal signal-ok">行业领先</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">Streak 心理锚定（用户保留）</span><span class="kpi-watch-val">核心产品机制</span><span class="kpi-watch-signal signal-ok">难以复制</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">AI 训练数据规模（日练习量）</span><span class="kpi-watch-val">20亿次/天</span><span class="kpi-watch-signal signal-ok">数据护城河</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">课程数量（内容壁垒）</span><span class="kpi-watch-val">250+门（含数学/音乐）</span><span class="kpi-watch-signal signal-ok">扩张中</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">Duolingo English Test（DET）</span><span class="kpi-watch-val">~5% 收入，高壁垒</span><span class="kpi-watch-signal signal-ok">认证资质</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">迁移成本（学习进度/streak）</span><span class="kpi-watch-val">中等心理成本</span><span class="kpi-watch-signal signal-watch">技术迁移易</span></div>
+      <div class="kpi-watch"><span class="kpi-watch-name">AI 工具存在性威胁</span><span class="kpi-watch-val">实质存在但被夸大</span><span class="kpi-watch-signal signal-warn">持续监控</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     周期与宏观
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">周期定位与宏观分析（霍华德·马克斯视角）</div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-title">PE 历史走势与当前分位</div>
+      <div class="chart-wrap"><canvas id="peChart" height="250"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">周期阶段定位</div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--text2);margin-bottom:8px">市场情绪周期</div>
+        <div class="cycle-gauge">
+          <div class="cycle-seg" style="background:#22c55e;flex:2"></div>
+          <div class="cycle-seg" style="background:#84cc16;flex:2"></div>
+          <div class="cycle-seg" style="background:#f59e0b;flex:2"></div>
+          <div class="cycle-seg" style="background:#ef4444;flex:2"></div>
+          <div class="cycle-seg" style="background:#7f1d1d;flex:2"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px">
+          <span>乐观</span><span>贪婪</span><span>过热</span><span>恐惧</span><span>极端恐慌</span>
+        </div>
+        <div style="background:var(--red);height:3px;width:3px;border-radius:50%;margin-left:calc(82% - 6px);margin-top:-16px;position:relative;z-index:10;width:12px;height:12px;border-radius:50%;"></div>
+      </div>
+      <div style="background:var(--red-dim);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-weight:700;color:var(--red);font-size:13px;">当前定位：极端恐惧区间</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:6px;">
+          - 股价从$544跌至$100，-82% 跌幅<br>
+          - P/S 4.5x（历史均值 20-25x）<br>
+          - 2026 bookings 指引减速引发市场 overreaction<br>
+          - CEO 内部增持 68,000 股（Dec 2025）<br>
+          - $400M 回购计划授权（Feb 26, 2026）
+        </div>
+      </div>
+      <div style="background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:12px;">
+        <div style="font-weight:700;color:var(--green);font-size:13px;">逆向信号：极端悲观 = 机会区间</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:6px;">
+          基本面健康（39%收入增长，35%FCF利润率），市场定价反映的是"停止增长"，而非实际情况。这正是马克斯所说的"最大恐惧时刻"往往是最佳买入时机。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">五大尾部风险矩阵</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="text-align:left">风险类型</th><th style="text-align:left">具体风险描述</th>
+          <th>概率</th><th>影响</th><th>量化影响估算</th><th>缓解措施</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="risk-badge-high">极高</span></td>
+            <td>AI 工具替代（ChatGPT/Claude 直接替代语言学习）</td>
+            <td class="neu">中等 (30%)</td><td class="neg">高</td>
+            <td>DAU -20%→营收-15%→股价-30%</td>
+            <td>Duolingo 本身 AI-First，已整合 LLM</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge-high">高</span></td>
+            <td>订阅增长停滞（MAU转化率见顶）</td>
+            <td class="neu">中 (25%)</td><td class="neg">高</td>
+            <td>ARPU 增速降至 1-2%，估值压缩 -40%</td>
+            <td>Max 计划提供 3x ARPU 升级空间</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge-med">中</span></td>
+            <td>竞争加剧（Babbel/其他 AI 应用大幅提升体验）</td>
+            <td class="neg">低中 (20%)</td><td class="neu">中等</td>
+            <td>市占率-5%→营收-8%</td>
+            <td>Duolingo 品牌&游戏化体验壁垒高</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge-med">中</span></td>
+            <td>2026战略转型失败（减少变现未能转化为DAU增长）</td>
+            <td class="neu">低中 (20%)</td><td class="neu">中等</td>
+            <td>2026 bookings 实际+5%以下，估值-25%</td>
+            <td>CEO直接主导，2027年验证</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge-low">低</span></td>
+            <td>宏观衰退（教育 App 支出削减）</td>
+            <td class="neg">低 (15%)</td><td class="pos">低</td>
+            <td>DAU -5%，订阅微降，营收-5%</td>
+            <td>低客单价，衰退期仍具韧性</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     三大框架估值（放在最后）
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">三大价值投资框架估值</div>
+  <div class="section-sub">格雷厄姆 · 巴菲特 · 霍华德·马克斯 — 从三个维度审视 DUOL 的内在价值</div>
+
+  <!-- Graham -->
+  <div class="verdict-card verdict-sell" style="margin-bottom:32px;">
+    <div class="verdict-title"><span class="verdict-dot dot-red"></span>格雷厄姆：减持 / 规避</div>
+    <div class="grid-2" style="margin-bottom:20px;">
+      <div>
+        <div class="card-title" style="font-size:14px;margin-bottom:12px;">安全边际检验清单</div>
+        <table>
+          <thead><tr><th style="text-align:left">指标</th><th>实际值</th><th>标准</th><th>结论</th></tr></thead>
+          <tbody>
+            <tr><td>P/E（标准化）</td><td>29.7x</td><td>≤ 15x</td><td class="fail">不通过</td></tr>
+            <tr><td>P/B</td><td>7.27x</td><td>≤ 1.5x</td><td class="fail">不通过</td></tr>
+            <tr><td>P/E × P/B</td><td>215.9</td><td>≤ 22.5</td><td class="fail">不通过</td></tr>
+            <tr><td>流动比率</td><td>2.61</td><td>≥ 2x</td><td class="pass">通过</td></tr>
+            <tr><td>负债/权益</td><td>0.07</td><td>≤ 1x</td><td class="pass">通过</td></tr>
+            <tr><td>资产/负债</td><td>~2.9</td><td>≥ 2x</td><td class="pass">通过</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-title" style="font-size:14px;margin-bottom:12px;">Graham Number 计算</div>
+        <div style="background:var(--bg4);border-radius:8px;padding:16px;font-size:13px;color:var(--text2);">
+          <p>EPS GAAP 标准化 = <strong style="color:var(--text)">$3.35</strong>（剔除$256.7M 一次性税收利好）</p>
+          <p style="margin-top:8px">账面价值/股 = <strong style="color:var(--text)">$13.70</strong>（总权益/股数）</p>
+          <p style="margin-top:8px">Graham Number = √(22.5 × $3.35 × $13.70)</p>
+          <p style="margin-top:4px">= √($1,033.4) = <strong style="color:var(--red);font-size:16px;">$32.14/股</strong></p>
+          <p style="margin-top:8px">当前股价 $99.61 vs Graham Number $32.14</p>
+          <p style="margin-top:4px;color:var(--red);font-weight:700">溢价 +209.8%（格雷厄姆视角：严重高估）</p>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text2);">注：格雷厄姆框架为传统价值股设计，不适用于高ROE、高成长科技公司。此处作参考，不作主要依据。</div>
+      </div>
+    </div>
+
+    <!-- DCF三情景 -->
+    <div class="card-title" style="font-size:14px;margin-bottom:16px;">DCF 三情景估值（基准 FCF $310M，折现率 10%，10年期）</div>
+    <div class="dcf-grid" style="margin-bottom:20px;">
+      <div class="dcf-card dcf-bear">
+        <div class="dcf-label" style="color:var(--red);">保守情景 (30%权重)</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">前5年 17.1% / 后5年 8% / 终端 3%</div>
+        <div class="dcf-price" style="color:var(--red);">$226</div>
+        <div class="dcf-meta">当前安全边际：+127%</div>
+      </div>
+      <div class="dcf-card dcf-base">
+        <div class="dcf-label" style="color:var(--blue);">中性情景 (45%权重)</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">前5年 28.5% / 后5年 12% / 终端 3%</div>
+        <div class="dcf-price" style="color:var(--blue);">$383</div>
+        <div class="dcf-meta">当前安全边际：+285%</div>
+      </div>
+      <div class="dcf-card dcf-bull">
+        <div class="dcf-label" style="color:var(--green);">乐观情景 (25%权重)</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">前5年 39.9% / 后5年 15% / 终端 4%</div>
+        <div class="dcf-price" style="color:var(--green);">$695</div>
+        <div class="dcf-meta">当前安全边际：+598%</div>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="dcfChart" height="180"></canvas></div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text2);">
+      加权综合内在价值：<strong style="color:var(--text);font-size:18px;">$414/股</strong>（权重30/45/25），当前折价幅度 76%。<strong>格雷厄姆结论：减持</strong>（基于 Graham Number），但 DCF 显示股票被严重低估，体现出框架局限性。
+    </div>
+  </div>
+
+  <!-- Buffett -->
+  <div class="verdict-card verdict-hold" style="margin-bottom:32px;">
+    <div class="verdict-title"><span class="verdict-dot dot-yellow"></span>巴菲特：谨慎买入（等待 $80-$100 区间）</div>
+    <div class="grid-2">
+      <div>
+        <div class="card-title" style="font-size:14px;margin-bottom:12px;">护城河与资本效率评估</div>
+        <div class="kpi-watch"><span class="kpi-watch-name">ROE (FY2025)</span><span class="kpi-watch-val">38.1%</span><span class="kpi-watch-signal signal-ok">优秀</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">ROIC (FY2025)</span><span class="kpi-watch-val">47.8%</span><span class="kpi-watch-signal signal-ok">优秀</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">FCF 利润率</span><span class="kpi-watch-val">35.6%</span><span class="kpi-watch-signal signal-ok">高质量</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">净负债 / 净现金</span><span class="kpi-watch-val">净现金 $1.04B</span><span class="kpi-watch-signal signal-ok">无杠杆</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">护城河宽度</span><span class="kpi-watch-val">窄→演进中宽</span><span class="kpi-watch-signal signal-watch">需持续验证</span></div>
+        <div class="kpi-watch"><span class="kpi-watch-name">管理层利益一致性</span><span class="kpi-watch-val">CEO 内购 $6.8M</span><span class="kpi-watch-signal signal-ok">高度一致</span></div>
+      </div>
+      <div>
+        <div class="card-title" style="font-size:14px;margin-bottom:12px;">巴菲特估值方法</div>
+        <div style="background:var(--bg4);border-radius:8px;padding:16px;font-size:13px;color:var(--text2);">
+          <p>前向 EPS (FY2026E) ≈ <strong style="color:var(--text);">$3.70</strong></p>
+          <p style="margin-top:6px">高质量成长企业合理 P/E：<strong style="color:var(--text);">25-35x</strong></p>
+          <p style="margin-top:6px">合理估值区间：$3.70 × 25x = <strong style="color:var(--yellow);">$92.5</strong></p>
+          <p style="margin-top:2px">合理估值上沿：$3.70 × 35x = <strong style="color:var(--yellow);">$129.5</strong></p>
+          <p style="margin-top:8px">含 20% 安全边际买入价：</p>
+          <p style="margin-top:4px;color:var(--green);font-weight:700;font-size:16px;">$74 – $104</p>
+          <p style="margin-top:8px;color:var(--green);">当前 $99.61 已进入买入区间下沿</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marks -->
+  <div class="verdict-card verdict-buy">
+    <div class="verdict-title"><span class="verdict-dot dot-green"></span>霍华德·马克斯：逆向买入（市场极端恐慌，机会显现）</div>
+    <div class="grid-3">
+      <div>
+        <div class="card-title" style="font-size:13px;margin-bottom:10px;">估值分位</div>
+        <div style="font-size:13px;color:var(--text2);">
+          <p>P/S: 4.5x（历史均值 ~20x，约5%分位）</p>
+          <p style="margin-top:6px">标准化 P/E: 29.7x（5yr avg 41.2x，显著折让）</p>
+          <p style="margin-top:6px">EV/FCF: ~9.8x（近乎价值股水平）</p>
+        </div>
+      </div>
+      <div>
+        <div class="card-title" style="font-size:13px;margin-bottom:10px;">情绪指标</div>
+        <div style="font-size:13px;color:var(--text2);">
+          <p>分析师均值目标价 $105.73（仅小幅看涨）</p>
+          <p style="margin-top:6px">52周跌幅 -82%（极端情绪低位）</p>
+          <p style="margin-top:6px">机构持仓 85%（理性长线资金为主）</p>
+        </div>
+      </div>
+      <div>
+        <div class="card-title" style="font-size:13px;margin-bottom:10px;">逆向信号</div>
+        <div style="font-size:13px;color:var(--text2);">
+          <p>CEO $6.8M 内部增持（最强看涨信号）</p>
+          <p style="margin-top:6px">$400M 回购授权（约市值 8.5%）</p>
+          <p style="margin-top:6px">收入 +39% YoY，但股价跌 82%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL VERDICT -->
+  <div class="final-verdict">
+    <div style="font-size:13px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">三框架综合结论</div>
+    <h2 style="color:var(--text);">DUOL — 谨慎买入</h2>
+    <div class="buy-range">$80 – $100</div>
+    <div style="font-size:15px;color:var(--text2);margin-bottom:24px;">建议买入区间（含 20% 安全边际）| 当前 $99.61 处于区间上沿</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;text-align:left;">
+      <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:16px;">
+        <div style="color:var(--red);font-weight:700;font-size:14px;">格雷厄姆：减持</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px;">Graham Number $32.14，溢价+210%；DCF综合 $414（建议仅参考，框架局限）</div>
+      </div>
+      <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:16px;">
+        <div style="color:var(--yellow);font-weight:700;font-size:14px;">巴菲特：谨慎买入</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px;">窄护城河向宽演进，ROE 38%，当前价接近合理买入区间 $74-$104</div>
+      </div>
+      <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:16px;">
+        <div style="color:var(--green);font-weight:700;font-size:14px;">马克斯：逆向买入</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:8px;">股价-82%，极端悲观，内部增持，$400M 回购，估值历史低位，机会显现</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--text3);">止损参考：若2026年 Q2 DAU 增速低于 15% YoY 且付费订阅增速持续放缓，考虑重新评估仓位</div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SOURCES
+═══════════════════════════════════════════════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">数据来源</div>
+  <ul class="sources">
+    <li><a href="https://investors.duolingo.com/news-releases/news-release-details/duolingo-reports-fourth-quarter-and-full-year-2025-results">Duolingo Q4/FY2025 业绩发布 (Feb 26, 2026)</a></li>
+    <li><a href="https://stockanalysis.com/stocks/duol/financials/?p=quarterly">StockAnalysis - DUOL 季度财务数据</a></li>
+    <li><a href="https://www.macrotrends.net/stocks/charts/DUOL/duolingo/pe-ratio">MacroTrends - DUOL PE 历史走势</a></li>
+    <li><a href="https://www.businessofapps.com/data/language-learning-app-market/">Business of Apps - 语言学习市场数据 2026</a></li>
+    <li><a href="https://www.mordorintelligence.com/industry-reports/online-language-learning-market">Mordor Intelligence - 在线语言学习市场预测</a></li>
+    <li><a href="https://www.gurufocus.com/stock/DUOL/ownership">GuruFocus - DUOL 机构持仓与内部人交易</a></li>
+    <li><a href="https://stockanalysis.com/stocks/duol/statistics/">StockAnalysis - DUOL 估值统计</a></li>
+    <li><a href="https://seekingalpha.com/news/4558420-duolingo-targets-20-percent-dau-growth-and-100m-users-by-2028-as-profitability-shifts-to">Seeking Alpha - DUOL 2028年目标</a></li>
+    <li>分析日期：2026-03-20 | 数据截止：2026-03-19</li>
+  </ul>
+</div>
+</div>
+
+<script>
+const q = ['Q1\'24','Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25'];
+const rev = [167.6,178.3,192.6,209.6,230.7,252.3,271.7,282.9];
+const yoy = [45,41,40,32,38,41,41,35];
+const dau = [31.4,34.1,null,40.5,null,47.7,50.2,52.7];
+const mau = [103.6,null,null,116.7,null,128.3,null,133.1];
+const subs = [7.4,8.0,8.6,9.5,null,11.0,null,12.2];
+const gm = [73.03,73.45,72.91,71.88,71.12,72.38,72.47,72.78];
+const ebitdaM = [null,null,null,null,null,null,null,null];
+const opM = [9.8,10.5,7.0,6.6,10.2,13.2,12.9,15.4];
+const fcf = [82.1,56.8,53.1,81.4,104.3,89.5,79.4,96.6];
+
+const C = (id,cfg)=> new Chart(document.getElementById(id).getContext('2d'),cfg);
+Chart.defaults.color='#94a3b8'; Chart.defaults.borderColor='#1e3a5f';
+
+// Revenue + YoY
+C('revenueChart',{type:'bar',data:{labels:q,datasets:[
+  {label:'营收 ($M)',data:rev,backgroundColor:'rgba(59,130,246,0.7)',yAxisID:'y'},
+  {label:'YoY 增速 (%)',data:yoy,type:'line',borderColor:'#22c55e',pointBackgroundColor:'#22c55e',borderWidth:2,tension:0.3,yAxisID:'y1'}
+]},options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{
+  y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>'$'+v+'M'}},
+  y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%'}}
+}}});
+
+// Users
+C('userChart',{type:'line',data:{labels:q,datasets:[
+  {label:'DAU (M)',data:dau,borderColor:'#3b82f6',pointBackgroundColor:'#3b82f6',borderWidth:2,tension:0.3,spanGaps:true},
+  {label:'MAU (M)',data:mau,borderColor:'#a855f7',pointBackgroundColor:'#a855f7',borderWidth:2,tension:0.3,spanGaps:true},
+  {label:'付费订阅 (M)',data:subs,borderColor:'#22c55e',pointBackgroundColor:'#22c55e',borderWidth:2,tension:0.3,spanGaps:true}
+]},options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{
+  y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'M'}}
+}}});
+
+// Margins
+C('marginChart',{type:'line',data:{labels:q,datasets:[
+  {label:'毛利率',data:gm,borderColor:'#3b82f6',pointBackgroundColor:'#3b82f6',borderWidth:2,tension:0.3},
+  {label:'营业利润率',data:opM,borderColor:'#f59e0b',pointBackgroundColor:'#f59e0b',borderWidth:2,tension:0.3},
+]},options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{
+  y:{grid:{color:'#1e3a5f'},min:0,max:80,ticks:{callback:v=>v+'%'}}
+}}});
+
+// FCF
+C('fcfChart',{type:'bar',data:{labels:q,datasets:[
+  {label:'FCF ($M)',data:fcf,backgroundColor:fcf.map(v=>v>0?'rgba(34,197,94,0.7)':'rgba(239,68,68,0.7)')}
+]},options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{
+  y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>'$'+v+'M'}}
+}}});
+
+// Market Share Pie
+C('marketShareChart',{type:'doughnut',data:{
+  labels:['Duolingo','Babbel','Rosetta Stone','Busuu','其他'],
+  datasets:[{data:[60,10,8,5,17],backgroundColor:['#3b82f6','#f59e0b','#a855f7','#06b6d4','#374151'],borderWidth:0}]
+},options:{responsive:true,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+
+// Competitor Revenue
+C('competitorChart',{type:'bar',data:{
+  labels:['Duolingo','Babbel (私)','Rosetta Stone (私)'],
+  datasets:[{label:'年营收 ($M)',data:[748,370,275],backgroundColor:['#3b82f6','#f59e0b','#a855f7']}]
+},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{
+  x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>'$'+v+'M'}}
+}}});
+
+// PE History
+C('peChart',{type:'line',data:{labels:['Q1\'22','Q2\'22','Q3\'22','Q4\'22','Q1\'23','Q2\'23','Q3\'23','Q4\'23','Q1\'24','Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Now'],datasets:[
+  {label:'标准化 P/E',data:[null,null,null,null,120,80,60,580,200,150,80,55,45,38,38,20,29.7],borderColor:'#3b82f6',pointBackgroundColor:'#3b82f6',borderWidth:2,tension:0.3,spanGaps:true},
+  {label:'5年均值 (41.2x)',data:Array(17).fill(41.2),borderColor:'#f59e0b',borderDash:[5,5],borderWidth:1.5,pointRadius:0}
+]},options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{
+  y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'x'},max:200}
+}}});
+
+// DCF Chart
+C('dcfChart',{type:'bar',data:{
+  labels:['保守 $226','中性 $383','乐观 $695','加权均值 $414','当前股价 $99.61'],
+  datasets:[{label:'每股内在价值',data:[226,383,695,414,99.61],
+    backgroundColor:['rgba(239,68,68,0.6)','rgba(59,130,246,0.6)','rgba(34,197,94,0.6)','rgba(168,85,247,0.6)','rgba(245,158,11,0.8)']}]
+},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{
+  x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>'$'+v}}
+}}});
+</script>
+</body>
+</html>

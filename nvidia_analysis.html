@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA (NVDA) 价值投资深度分析 | 2026-03-20</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #76b900;
+    --accent2: #00c8ff;
+    --accent3: #ff6b35;
+    --accent4: #f59e0b;
+    --text: #e2e8f0;
+    --text-muted: #8899aa;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1f35 50%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(118,185,0,0.12) 0%, transparent 70%);
+  }
+  .hero-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-logo {
+    width: 52px; height: 52px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; color: #000;
+  }
+  .ticker-info h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .ticker-info p { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-block .price { font-size: 36px; font-weight: 800; color: var(--accent2); }
+  .price-block .market-cap { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+  .verdict-bar {
+    margin-top: 20px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .verdict-chip {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .chip-hold { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .chip-moat { background: rgba(118,185,0,0.15); color: var(--accent); border: 1px solid rgba(118,185,0,0.3); }
+  .chip-date { background: rgba(136,153,170,0.1); color: var(--text-muted); border: 1px solid var(--border); }
+
+  /* Layout */
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 32px 0; border-bottom: 1px solid var(--border); }
+  .section-title {
+    font-size: 18px; font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 18px;
+    background: var(--accent2);
+    border-radius: 2px;
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px; width: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .kpi-card:hover::after { opacity: 1; }
+  .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .kpi-sub { font-size: 11px; color: var(--text-muted); }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-value.yellow { color: var(--yellow); }
+  .kpi-value.blue { color: var(--accent2); }
+
+  /* Charts Grid */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .chart-card.wide { grid-column: span 2; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-container { position: relative; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--surface2); }
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+  .highlight-row td { background: rgba(118,185,0,0.06); }
+  .pass { color: var(--green); font-weight: 600; }
+  .fail { color: var(--red); font-weight: 600; }
+  .warn { color: var(--yellow); font-weight: 600; }
+
+  /* Two-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* Moat Cards */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .moat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .moat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .moat-name { font-weight: 700; font-size: 14px; }
+  .moat-rating {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .rating-wide { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .rating-narrow { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .moat-desc { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+  .moat-stars { color: var(--accent); font-size: 16px; margin-bottom: 6px; }
+
+  /* Stars meter */
+  .star-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .star-label { font-size: 12px; color: var(--text-muted); width: 120px; flex-shrink: 0; }
+  .star-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .star-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+
+  /* DCF Scenarios */
+  .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .scenario-card {
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid;
+    text-align: center;
+  }
+  .scenario-bear { background: rgba(239,68,68,0.05); border-color: rgba(239,68,68,0.25); }
+  .scenario-neutral { background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.25); }
+  .scenario-bull { background: rgba(34,197,94,0.05); border-color: rgba(34,197,94,0.25); }
+  .scenario-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .scenario-bear .scenario-label { color: var(--red); }
+  .scenario-neutral .scenario-label { color: var(--yellow); }
+  .scenario-bull .scenario-label { color: var(--green); }
+  .scenario-price { font-size: 32px; font-weight: 800; margin-bottom: 4px; }
+  .scenario-bear .scenario-price { color: var(--red); }
+  .scenario-neutral .scenario-price { color: var(--yellow); }
+  .scenario-bull .scenario-price { color: var(--green); }
+  .scenario-margin { font-size: 12px; }
+  .scenario-params { font-size: 11px; color: var(--text-muted); margin-top: 10px; line-height: 1.6; }
+
+  /* Graham number vis */
+  .graham-vis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .price-scale {
+    position: relative;
+    height: 60px;
+    background: linear-gradient(90deg, rgba(34,197,94,0.2) 0%, rgba(245,158,11,0.2) 30%, rgba(239,68,68,0.2) 100%);
+    border-radius: 8px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .price-marker {
+    position: absolute;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 2px;
+  }
+  .marker-label {
+    position: absolute;
+    top: -20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+  .marker-value {
+    position: absolute;
+    bottom: -20px;
+    font-size: 10px;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+  }
+
+  /* Cycle dial */
+  .cycle-container { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .cycle-stages { flex: 1; min-width: 280px; }
+  .stage-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; }
+  .stage-row.active { background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.2); }
+  .stage-row:not(.active) { border: 1px solid transparent; opacity: 0.5; }
+  .stage-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .stage-name { font-size: 13px; font-weight: 600; }
+  .stage-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Risk matrix */
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .risk-item {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px;
+    border-left: 3px solid;
+  }
+  .risk-high { border-color: var(--red); }
+  .risk-med { border-color: var(--yellow); }
+  .risk-low { border-color: var(--green); }
+  .risk-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .risk-desc { font-size: 11px; color: var(--text-muted); }
+  .risk-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .tag-high { background: rgba(239,68,68,0.15); color: var(--red); }
+  .tag-med { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .tag-low { background: rgba(34,197,94,0.15); color: var(--green); }
+
+  /* Final verdict */
+  .verdict-card {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .verdict-frameworks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  .framework-verdict {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .fw-name { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 8px; }
+  .fw-verdict { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .fw-note { font-size: 11px; color: var(--text-muted); }
+  .buy-range {
+    background: rgba(118,185,0,0.08);
+    border: 1px solid rgba(118,185,0,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .buy-range-label { font-size: 12px; color: var(--text-muted); }
+  .buy-range-value { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .buy-range-note { font-size: 12px; color: var(--text-muted); }
+
+  /* Investor types */
+  .investor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .investor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .investor-icon { font-size: 18px; flex-shrink: 0; }
+  .investor-type { font-size: 12px; font-weight: 600; }
+  .investor-rec { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Peer comparison */
+  .peer-row-nvda td { background: rgba(118,185,0,0.05); }
+
+  /* Sources */
+  .sources { font-size: 11px; color: var(--text-muted); padding: 24px 0; }
+  .sources a { color: var(--accent2); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .chart-card.wide { grid-column: span 1; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .verdict-frameworks { grid-template-columns: 1fr; }
+    .hero { padding: 20px; }
+  }
+
+  /* Tooltip override */
+  canvas { max-height: 280px; }
+  .chart-container canvas { max-height: none; }
+
+  /* Footer */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-top">
+      <div class="ticker-block">
+        <div class="ticker-logo">NV</div>
+        <div class="ticker-info">
+          <h1>NVIDIA Corporation <span style="color:var(--text-muted);font-weight:400;font-size:20px">NVDA</span></h1>
+          <p>NASDAQ · 半导体 · 数据中心 / AI加速器</p>
+        </div>
+      </div>
+      <div class="price-block">
+        <div class="price">$178.56</div>
+        <div class="market-cap">市值 $4.38T &nbsp;·&nbsp; 分析日期：2026-03-20</div>
+      </div>
+    </div>
+    <div class="verdict-bar">
+      <span class="verdict-chip chip-hold">综合评级：持有 / 等待买点</span>
+      <span class="verdict-chip chip-moat">护城河：宽（Wide Moat）</span>
+      <span class="verdict-chip chip-date">FY2026 全年数据</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ─── SECTION 1: KEY METRICS ─── -->
+<div class="section">
+  <div class="section-title">第一部分 · 关键财务指标 (FY2026)</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">全年营收</div>
+      <div class="kpi-value blue">$215.9B</div>
+      <div class="kpi-sub">同比 +65%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">净利润 (GAAP)</div>
+      <div class="kpi-value green">$120.1B</div>
+      <div class="kpi-sub">净利率 55.6%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">自由现金流</div>
+      <div class="kpi-value green">$96.6B</div>
+      <div class="kpi-sub">FCF利润率 44.7%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">毛利率</div>
+      <div class="kpi-value green">71.1%</div>
+      <div class="kpi-sub">Q4达75.0%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">营业利润率</div>
+      <div class="kpi-value green">60.4%</div>
+      <div class="kpi-sub">营业利润$130.4B</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">EPS (GAAP摊薄)</div>
+      <div class="kpi-value blue">$4.90</div>
+      <div class="kpi-sub">Q4: $1.76</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">资产负债率</div>
+      <div class="kpi-value green">4.1%</div>
+      <div class="kpi-sub">负债/权益 0.07x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ROE</div>
+      <div class="kpi-value green">101.5%</div>
+      <div class="kpi-sub">ROIC 126.3%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">每股账面价值</div>
+      <div class="kpi-value">$6.46</div>
+      <div class="kpi-sub">P/B 27.6x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">市盈率 (TTM)</div>
+      <div class="kpi-value yellow">36.8x</div>
+      <div class="kpi-sub">5年均值~65x (低位)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">前向市盈率</div>
+      <div class="kpi-value green">21.8x</div>
+      <div class="kpi-sub">基于FY27估计</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Q1 FY27 指引</div>
+      <div class="kpi-value blue">$78.0B</div>
+      <div class="kpi-sub">同比+77% · 超预期7%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 2: CHARTS ─── -->
+<div class="section">
+  <div class="section-title">财务数据趋势</div>
+  <div class="charts-grid">
+
+    <!-- Revenue Bar Chart -->
+    <div class="chart-card wide">
+      <div class="chart-title">季度营收趋势 (FY2026 · $十亿)</div>
+      <div class="chart-container"><canvas id="revenueChart" height="120"></canvas></div>
+    </div>
+
+    <!-- Margin Trend -->
+    <div class="chart-card">
+      <div class="chart-title">利润率趋势 (%)</div>
+      <div class="chart-container"><canvas id="marginChart" height="200"></canvas></div>
+    </div>
+
+    <!-- PE History -->
+    <div class="chart-card">
+      <div class="chart-title">NVDA 市盈率历史 (TTM P/E)</div>
+      <div class="chart-container"><canvas id="peChart" height="200"></canvas></div>
+    </div>
+
+    <!-- Peer Comparison Bar -->
+    <div class="chart-card wide">
+      <div class="chart-title">同业对比 (关键财务指标)</div>
+      <div class="chart-container"><canvas id="peerChart" height="120"></canvas></div>
+    </div>
+
+  </div>
+
+  <!-- Quarterly Detail Table -->
+  <div style="margin-top:20px;">
+    <div class="chart-title" style="margin-bottom:12px;">NVIDIA FY2026 季度详情</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>季度</th>
+            <th>营收</th>
+            <th>QoQ增长</th>
+            <th>YoY增长</th>
+            <th>毛利率(GAAP)</th>
+            <th>净利润(估算)</th>
+            <th>EPS(GAAP)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Q1 FY26</strong> <span style="color:var(--text-muted);font-size:11px">(Apr-May 2025)</span></td>
+            <td class="num">$44.1B</td>
+            <td class="num">—</td>
+            <td class="num" style="color:var(--green)">+262%</td>
+            <td class="num">~71%</td>
+            <td class="num">~$14.9B</td>
+            <td class="num">~$0.60</td>
+          </tr>
+          <tr>
+            <td><strong>Q2 FY26</strong> <span style="color:var(--text-muted);font-size:11px">(Jun-Jul 2025)</span></td>
+            <td class="num">$46.7B</td>
+            <td class="num" style="color:var(--green)">+5.9%</td>
+            <td class="num" style="color:var(--green)">+122%</td>
+            <td class="num">~71%</td>
+            <td class="num">~$16.6B</td>
+            <td class="num">~$0.68</td>
+          </tr>
+          <tr>
+            <td><strong>Q3 FY26</strong> <span style="color:var(--text-muted);font-size:11px">(Aug-Oct 2025)</span></td>
+            <td class="num">$57.0B</td>
+            <td class="num" style="color:var(--green)">+22.1%</td>
+            <td class="num" style="color:var(--green)">+94%</td>
+            <td class="num">~74.6%</td>
+            <td class="num">~$19.3B*</td>
+            <td class="num">~$0.81</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Q4 FY26</strong> <span style="color:var(--text-muted);font-size:11px">(Nov 2025-Jan 2026)</span></td>
+            <td class="num"><strong>$68.1B</strong></td>
+            <td class="num" style="color:var(--green)">+20.0%</td>
+            <td class="num" style="color:var(--green)">+73%</td>
+            <td class="num"><strong>75.0%</strong></td>
+            <td class="num"><strong>$43.0B**</strong></td>
+            <td class="num"><strong>$1.76</strong></td>
+          </tr>
+          <tr style="background:var(--surface2)">
+            <td><strong>全年 FY26</strong></td>
+            <td class="num"><strong>$215.9B</strong></td>
+            <td class="num">—</td>
+            <td class="num" style="color:var(--green)"><strong>+65%</strong></td>
+            <td class="num"><strong>71.1%</strong></td>
+            <td class="num"><strong>$120.1B</strong></td>
+            <td class="num"><strong>$4.90</strong></td>
+          </tr>
+          <tr style="background:rgba(0,200,255,0.04)">
+            <td><strong>Q1 FY27 指引</strong></td>
+            <td class="num" style="color:var(--accent2)"><strong>$78.0B</strong></td>
+            <td class="num" style="color:var(--green)">+14.5%</td>
+            <td class="num" style="color:var(--green)">+77%E</td>
+            <td class="num" style="color:var(--accent2)">~75.0%</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">* Q3净利润包含正常运营利润；** Q4净利润包含约$20B一次性税收优惠。Q1-Q3净利润为基于全年$120.1B及Q4 $43.0B的倒算估算值。</p>
+  </div>
+</div>
+
+<!-- ─── SECTION 3: PEER COMPARISON ─── -->
+<div class="section">
+  <div class="section-title">同业对比（最新季度/年度）</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>公司</th>
+          <th>财报期</th>
+          <th>年营收</th>
+          <th>净利润</th>
+          <th>净利率</th>
+          <th>毛利率</th>
+          <th>市值</th>
+          <th>TTM P/E</th>
+          <th>前向P/E</th>
+          <th>P/S</th>
+          <th>AI业务增速</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="peer-row-nvda">
+          <td><strong style="color:var(--accent)">NVIDIA</strong></td>
+          <td>FY2026</td>
+          <td class="num"><strong>$215.9B</strong></td>
+          <td class="num"><strong>$120.1B</strong></td>
+          <td class="num" style="color:var(--green)"><strong>55.6%</strong></td>
+          <td class="num" style="color:var(--green)"><strong>71.1%</strong></td>
+          <td class="num"><strong>$4.38T</strong></td>
+          <td class="num" style="color:var(--yellow)">36.8x</td>
+          <td class="num" style="color:var(--green)"><strong>21.8x</strong></td>
+          <td class="num">20.5x</td>
+          <td class="num" style="color:var(--green)">+73%(全业务)</td>
+        </tr>
+        <tr>
+          <td><strong>AMD</strong></td>
+          <td>FY2025</td>
+          <td class="num">$34.6B</td>
+          <td class="num">$4.3B</td>
+          <td class="num">12.4%</td>
+          <td class="num">50.0%</td>
+          <td class="num">$320.9B</td>
+          <td class="num" style="color:var(--red)">72.4x</td>
+          <td class="num">29.6x</td>
+          <td class="num">9.2x</td>
+          <td class="num">—</td>
+        </tr>
+        <tr>
+          <td><strong>Broadcom</strong></td>
+          <td>Q1 FY26</td>
+          <td class="num">~$77.2B*</td>
+          <td class="num">~$29.4B*</td>
+          <td class="num">~38.1%</td>
+          <td class="num">~65%+</td>
+          <td class="num">$1.51T</td>
+          <td class="num" style="color:var(--red)">62.6x</td>
+          <td class="num">24.0x</td>
+          <td class="num">19.6x</td>
+          <td class="num" style="color:var(--green)"><strong>+106%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">* Broadcom年化数据基于Q1 FY26单季乘以4，实际全年数据待发布。</p>
+</div>
+
+<!-- ─── SECTION 4: GRAHAM ANALYSIS ─── -->
+<div class="section">
+  <div class="section-title">第二部分 · 格雷厄姆安全边际估值</div>
+
+  <!-- Graham Number Visual -->
+  <div class="graham-vis" style="margin-bottom:20px;">
+    <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">价格标尺：格雷厄姆数 vs 当前股价</div>
+    <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-top:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">格雷厄姆数</div>
+        <div style="font-size:28px;font-weight:800;color:var(--green)">$26.69</div>
+        <div style="font-size:11px;color:var(--text-muted)">√(22.5 × $4.90 × $6.46)</div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="position:relative;height:48px;margin:28px 0;">
+          <div style="position:absolute;top:0;left:0;right:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,rgba(34,197,94,0.3) 0%,rgba(245,158,11,0.3) 40%,rgba(239,68,68,0.3) 100%);"></div>
+          <!-- Graham marker at ~14.9% of scale 0-$180 -->
+          <div style="position:absolute;left:14.9%;top:0;width:2px;height:100%;background:var(--green);"></div>
+          <div style="position:absolute;left:14.9%;top:-20px;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--green);">$26.69</div>
+          <!-- Current price marker at ~99.2% -->
+          <div style="position:absolute;left:99.2%;top:0;width:3px;height:100%;background:var(--red);"></div>
+          <div style="position:absolute;left:99.2%;top:-20px;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--red);">$178.56</div>
+          <!-- Buy range 130-152 at ~72%-84% -->
+          <div style="position:absolute;left:72.2%;right:15.6%;top:6px;height:36px;background:rgba(118,185,0,0.2);border:1px dashed var(--accent);border-radius:4px;"></div>
+          <div style="position:absolute;left:73%;top:10px;font-size:9px;color:var(--accent);font-weight:700;">理想买入区</div>
+          <div style="position:absolute;left:73%;top:22px;font-size:9px;color:var(--accent);">$130-$152</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);">
+          <span>$0</span><span>$45</span><span>$90</span><span>$135</span><span>$180</span>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">当前溢价</div>
+        <div style="font-size:28px;font-weight:800;color:var(--red)">+569%</div>
+        <div style="font-size:11px;color:var(--text-muted)">相对格雷厄姆数</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graham Checklist -->
+  <div class="two-col">
+    <div>
+      <div class="chart-title" style="margin-bottom:12px;">格雷厄姆安全检验清单</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>标准</th><th>要求</th><th>NVDA实际值</th><th>结论</th></tr></thead>
+          <tbody>
+            <tr><td>市盈率</td><td>≤ 15x</td><td class="num">36.8x</td><td class="fail">❌ 未达标</td></tr>
+            <tr><td>市净率</td><td>≤ 1.5x</td><td class="num">27.6x</td><td class="fail">❌ 严重超标</td></tr>
+            <tr><td>P/E × P/B</td><td>≤ 22.5</td><td class="num" style="color:var(--red)">1,016x</td><td class="fail">❌ 严重超标</td></tr>
+            <tr><td>流动比率</td><td>≥ 2x</td><td class="num">3.91x</td><td class="pass">✅ 通过</td></tr>
+            <tr><td>负债/权益</td><td>≤ 1x</td><td class="num">0.07x</td><td class="pass">✅ 优秀</td></tr>
+            <tr><td>资产/负债</td><td>≥ 2x</td><td class="num">4.18x</td><td class="pass">✅ 通过</td></tr>
+            <tr><td>EPS连续10年增长</td><td>稳定增长</td><td>近3年爆发增长</td><td class="warn">⚠️ 历史不稳定</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="chart-title" style="margin-bottom:12px;">DCF估值汇总</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>参数</th><th>保守</th><th>中性</th><th>乐观</th></tr></thead>
+          <tbody>
+            <tr><td>前5年FCF增速</td><td>15%</td><td>25%</td><td>35%</td></tr>
+            <tr><td>后5年FCF增速</td><td>8%</td><td>12%</td><td>15%</td></tr>
+            <tr><td>永续增长率</td><td>3%</td><td>3%</td><td>4%</td></tr>
+            <tr><td>折现率</td><td>10%</td><td>10%</td><td>10%</td></tr>
+            <tr><td>前10年FCF现值</td><td class="num">$1,124B</td><td class="num">$1,686B</td><td class="num">$2,470B</td></tr>
+            <tr><td>终值现值</td><td class="num">$1,620B</td><td class="num">$2,947B</td><td class="num">$5,822B</td></tr>
+            <tr style="background:var(--surface2)"><td><strong>每股内在价值</strong></td><td class="num" style="color:var(--red)"><strong>$111.85</strong></td><td class="num" style="color:var(--yellow)"><strong>$188.89</strong></td><td class="num" style="color:var(--green)"><strong>$338.00</strong></td></tr>
+            <tr><td><strong>安全边际</strong></td><td class="num" style="color:var(--red)"><strong>-37.4%</strong></td><td class="num" style="color:var(--green)"><strong>+5.8%</strong></td><td class="num" style="color:var(--green)"><strong>+47.2%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCF Scenario Cards -->
+  <div class="scenario-grid" style="margin-top:20px;">
+    <div class="scenario-card scenario-bear">
+      <div class="scenario-label">保守情景</div>
+      <div class="scenario-price">$111.85</div>
+      <div class="scenario-margin" style="color:var(--red)">当前高估 37.4%</div>
+      <div class="scenario-params">
+        前5年 FCF +15%/yr<br>
+        后5年 FCF +8%/yr<br>
+        终端增长 3% · 折现 10%
+      </div>
+    </div>
+    <div class="scenario-card scenario-neutral">
+      <div class="scenario-label">中性情景（基准）</div>
+      <div class="scenario-price">$188.89</div>
+      <div class="scenario-margin" style="color:var(--yellow)">当前低估 5.8%</div>
+      <div class="scenario-params">
+        前5年 FCF +25%/yr<br>
+        后5年 FCF +12%/yr<br>
+        终端增长 3% · 折现 10%
+      </div>
+    </div>
+    <div class="scenario-card scenario-bull">
+      <div class="scenario-label">乐观情景</div>
+      <div class="scenario-price">$338.00</div>
+      <div class="scenario-margin" style="color:var(--green)">当前低估 47.2%</div>
+      <div class="scenario-params">
+        前5年 FCF +35%/yr<br>
+        后5年 FCF +15%/yr<br>
+        终端增长 4% · 折现 10%
+      </div>
+    </div>
+  </div>
+
+  <!-- DCF chart -->
+  <div class="chart-card" style="margin-top:20px;">
+    <div class="chart-title">DCF三情景内在价值 vs 当前股价</div>
+    <div class="chart-container"><canvas id="dcfChart" height="80"></canvas></div>
+  </div>
+</div>
+
+<!-- ─── SECTION 5: MOAT ─── -->
+<div class="section">
+  <div class="section-title">第三部分 · 巴菲特护城河分析</div>
+
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-header">
+        <div>
+          <div class="moat-stars">★★★★★</div>
+          <div class="moat-name">品牌护城河 · CUDA生态</div>
+        </div>
+        <span class="moat-rating rating-wide">宽护城河</span>
+      </div>
+      <div class="moat-desc">18年积累，全球400万+开发者，PyTorch/TensorFlow等主流框架深度绑定。CUDA在AI加速器市场占有<strong style="color:var(--text)">75-90%</strong>份额，软件生态价值远超硬件本身。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-header">
+        <div>
+          <div class="moat-stars">★★★★★</div>
+          <div class="moat-name">转换成本 · 迁移壁垒</div>
+        </div>
+        <span class="moat-rating rating-wide">宽护城河</span>
+      </div>
+      <div class="moat-desc">cuDNN/TensorRT等专有库无AMD直接对应，迁移需重写代码+重训团队+重验性能。CUDA Gap Score <strong style="color:var(--text)">28.7-99.1</strong>：同等硬件CUDA比ROCm快30-99%。即便Google、Meta等超大规模厂商也难承受切换成本。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-header">
+        <div>
+          <div class="moat-stars">★★★★</div>
+          <div class="moat-name">网络效应 · 开发者正反馈</div>
+        </div>
+        <span class="moat-rating rating-narrow">窄护城河</span>
+      </div>
+      <div class="moat-desc">开发者→框架适配→企业采购→顶尖论文→新开发者的正反馈循环已建立。但ROCm开源生态正在追赶，Meta/OpenAI已部分使用AMD，护城河有被侵蚀风险。ROCm性能差距已从30%+缩窄至10-30%。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-header">
+        <div>
+          <div class="moat-stars">★★★</div>
+          <div class="moat-name">成本优势 · 台积电制程</div>
+        </div>
+        <span class="moat-rating rating-narrow">窄护城河</span>
+      </div>
+      <div class="moat-desc">供应承诺从Q3的$503亿跳至Q4的<strong style="color:var(--text)">$952亿</strong>，深度绑定台积电。Blackwell采用N4P工艺推动毛利率达75%。但台积电非NVIDIA独占，AMD/苹果/博通同样使用先进制程，优势有限。</div>
+    </div>
+  </div>
+
+  <!-- Moat scores -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:16px;">
+    <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">护城河综合评分</div>
+    <div class="star-row"><span class="star-label">品牌/CUDA生态</span><div class="star-bar"><div class="star-fill" style="width:100%"></div></div><span style="font-size:12px;color:var(--accent);margin-left:8px;">5/5</span></div>
+    <div class="star-row"><span class="star-label">转换成本</span><div class="star-bar"><div class="star-fill" style="width:100%"></div></div><span style="font-size:12px;color:var(--accent);margin-left:8px;">5/5</span></div>
+    <div class="star-row"><span class="star-label">网络效应</span><div class="star-bar"><div class="star-fill" style="width:80%"></div></div><span style="font-size:12px;color:var(--accent);margin-left:8px;">4/5</span></div>
+    <div class="star-row"><span class="star-label">成本优势</span><div class="star-bar"><div class="star-fill" style="width:60%"></div></div><span style="font-size:12px;color:var(--accent);margin-left:8px;">3/5</span></div>
+    <div class="star-row"><span class="star-label">综合护城河宽度</span><div class="star-bar"><div class="star-fill" style="width:90%;background:var(--accent2)"></div></div><span style="font-size:12px;color:var(--accent2);margin-left:8px;">宽（Wide）</span></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">巴菲特评语（假设）：<em style="color:var(--text)">"这是我们这个时代的Coca-Cola护城河——只不过不是味道的护城河，而是代码习惯的护城河。代价是它的价格也同样昂贵。"</em></div>
+  </div>
+</div>
+
+<!-- ─── SECTION 6: MARKS CYCLE ─── -->
+<div class="section">
+  <div class="section-title">第四部分 · 霍华德·马克斯周期思维</div>
+
+  <div class="two-col">
+    <div>
+      <div class="chart-title" style="margin-bottom:12px;">当前AI芯片周期定位</div>
+      <div class="cycle-stages">
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#666"></div>
+          <div>
+            <div class="stage-name">早期萌芽</div>
+            <div class="stage-desc">技术验证，少数先知者参与</div>
+          </div>
+        </div>
+        <div class="stage-row active">
+          <div class="stage-dot" style="background:var(--accent2)"></div>
+          <div>
+            <div class="stage-name" style="color:var(--accent2)">中期扩张后段 ◄ 当前位置</div>
+            <div class="stage-desc" style="color:var(--text-muted)">需求强劲但增速开始放缓信号，CapEx强度历史性高位，市场情绪从贪婪降至中性，DeepSeek效率挑战开始影响预期</div>
+          </div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#888"></div>
+          <div>
+            <div class="stage-name">过热期</div>
+            <div class="stage-desc">ROI数据不佳，需求出现超预期放缓</div>
+          </div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#444"></div>
+          <div>
+            <div class="stage-name">衰退/修正期</div>
+            <div class="stage-desc">产能过剩，价格竞争，股价大幅回调</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="chart-title" style="margin-bottom:12px;">市场情绪与估值分位</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>指标</th><th>当前值</th><th>历史分位</th><th>信号</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>TTM P/E</td>
+              <td class="num">36.8x</td>
+              <td>5年最低位</td>
+              <td><span style="color:var(--green)">🟢 情绪降温</span></td>
+            </tr>
+            <tr>
+              <td>5年均值P/E</td>
+              <td class="num">~63-69x</td>
+              <td>当前为均值的54%</td>
+              <td><span style="color:var(--green)">🟢 相对历史偏低</span></td>
+            </tr>
+            <tr>
+              <td>P/S (TTM)</td>
+              <td class="num">20.5x</td>
+              <td>历史高位区间</td>
+              <td><span style="color:var(--red)">🔴 收入端仍贵</span></td>
+            </tr>
+            <tr>
+              <td>前向P/E</td>
+              <td class="num">21.8x</td>
+              <td>合理区间</td>
+              <td><span style="color:var(--green)">🟢 增长有支撑</span></td>
+            </tr>
+            <tr>
+              <td>CapEx/GDP</td>
+              <td class="num">4.4%</td>
+              <td>接近互联网泡沫顶峰</td>
+              <td><span style="color:var(--red)">🔴 历史警示水位</span></td>
+            </tr>
+            <tr>
+              <td>Hyperscaler CapEx</td>
+              <td class="num">$600B+</td>
+              <td>历史最高</td>
+              <td><span style="color:var(--yellow)">🟡 需关注ROI数据</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capex chart -->
+  <div class="chart-card" style="margin-top:20px;">
+    <div class="chart-title">超大规模云厂商 AI CapEx 趋势 ($十亿)</div>
+    <div class="chart-container"><canvas id="capexChart" height="100"></canvas></div>
+  </div>
+
+  <!-- Risk Matrix -->
+  <div style="margin-top:20px;">
+    <div class="chart-title" style="margin-bottom:12px;">主要风险矩阵</div>
+    <div class="risk-grid">
+      <div class="risk-item risk-high">
+        <span class="risk-tag tag-high">高影响 · 中概率</span>
+        <div class="risk-title">CapEx 周期逆转</div>
+        <div class="risk-desc">若hyperscaler ROI不达预期，削减CapEx将直接导致NVDA需求断崖下跌。历史上电信光纤泡沫即为此类案例。</div>
+      </div>
+      <div class="risk-item risk-high">
+        <span class="risk-tag tag-high">高影响 · 中概率</span>
+        <div class="risk-title">AI效率突破（DeepSeek效应）</div>
+        <div class="risk-desc">AI推理效率的指数级提升可能导致"同等算力实现更多"，压缩新增算力需求。</div>
+      </div>
+      <div class="risk-item risk-med">
+        <span class="risk-tag tag-med">中影响 · 高概率</span>
+        <div class="risk-title">地缘政治/出口管制升级</div>
+        <div class="risk-desc">NVDA已将中国从Q1 FY27指引中排除。进一步管制将永久失去中国市场，约占历史收入10-15%。</div>
+      </div>
+      <div class="risk-item risk-med">
+        <span class="risk-tag tag-med">中影响 · 中概率</span>
+        <div class="risk-title">竞争加剧</div>
+        <div class="risk-desc">谷歌TPU、亚马逊Trainium、AMD MI系列迭代加速，加上各超大规模厂商自研ASIC加速蚕食市场。</div>
+      </div>
+      <div class="risk-item risk-med">
+        <span class="risk-tag tag-med">高影响 · 低概率</span>
+        <div class="risk-title">台湾供应链风险</div>
+        <div class="risk-desc">台积电供应中断将严重影响NVDA生产能力。TSMC正在美国、日本建设备用产能但进展缓慢。</div>
+      </div>
+      <div class="risk-item risk-low">
+        <span class="risk-tag tag-low">中影响 · 中概率</span>
+        <div class="risk-title">估值均值回归</div>
+        <div class="risk-desc">即便业绩不变，P/E从36x回归至20x将导致股价下跌~44%。历史上高成长股的估值压缩往往超预期。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 7: VERDICT ─── -->
+<div class="section">
+  <div class="section-title">第五部分 · 投资备忘录</div>
+
+  <div class="verdict-card">
+    <div style="font-size:20px;font-weight:800;margin-bottom:4px;">三框架综合结论</div>
+    <div style="font-size:13px;color:var(--text-muted);">基于格雷厄姆安全边际、巴菲特护城河、马克斯周期三个框架的综合判断</div>
+
+    <div class="verdict-frameworks">
+      <div class="framework-verdict">
+        <div class="fw-name">格雷厄姆框架</div>
+        <div class="fw-verdict" style="color:var(--red)">减持 / 卖出</div>
+        <div class="fw-note">Graham Number $26.69<br>溢价+569%，DCF保守情景高估37%</div>
+      </div>
+      <div class="framework-verdict">
+        <div class="fw-name">巴菲特框架</div>
+        <div class="fw-verdict" style="color:var(--yellow)">长期持有</div>
+        <div class="fw-note">宽护城河，ROE 101%，FCF 44.7%<br>等待合理价格买入</div>
+      </div>
+      <div class="framework-verdict">
+        <div class="fw-name">马克斯框架</div>
+        <div class="fw-verdict" style="color:var(--yellow)">谨慎持有</div>
+        <div class="fw-note">周期中后段，PE处5年低位（积极）<br>CapEx强度历史最高（警示）</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">综合评级：⭐⭐⭐ 持有（已持有者）/ 等待买点（未持有者）</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.8;">
+        NVIDIA是拥有极深护城河的稀缺资产，但在格雷厄姆意义上任何保守假设下都难以找到安全边际。
+        DCF中性至乐观情景下当前价格具备合理性（中性情景内在价值$188.89，当前$178.56，有6%上行空间）。
+        加权内在价值（保守30%/中性45%/乐观25%）约为<strong style="color:var(--accent)">$190.15</strong>，
+        考虑20%安全边际后理想买入区间为<strong style="color:var(--accent)">$130-$152</strong>。
+      </div>
+    </div>
+
+    <div class="buy-range">
+      <div>
+        <div class="buy-range-label">加权内在价值（3情景加权）</div>
+        <div class="buy-range-value">$190.15</div>
+      </div>
+      <div style="width:1px;height:40px;background:var(--border)"></div>
+      <div>
+        <div class="buy-range-label">建议买入区间（含20%安全边际）</div>
+        <div class="buy-range-value">$130 – $152</div>
+      </div>
+      <div style="width:1px;height:40px;background:var(--border)"></div>
+      <div>
+        <div class="buy-range-label">当前股价 vs 买入区间</div>
+        <div class="buy-range-value" style="color:var(--yellow)">$178.56 (+17%溢价)</div>
+      </div>
+      <div class="buy-range-note">当前价格高于理想买入区间，建议等待回调或采用分批建仓策略（每跌5-8%加一次仓）</div>
+    </div>
+  </div>
+
+  <!-- Investor Types -->
+  <div style="margin-top:20px;">
+    <div class="chart-title" style="margin-bottom:12px;">适合什么类型的投资者</div>
+    <div class="investor-grid">
+      <div class="investor-card">
+        <div class="investor-icon">📈</div>
+        <div>
+          <div class="investor-type" style="color:var(--green)">✅ 成长/动量型</div>
+          <div class="investor-rec">业绩超预期，Q1 FY27指引$78B令人信服，动量策略适用</div>
+        </div>
+      </div>
+      <div class="investor-card">
+        <div class="investor-icon">🎯</div>
+        <div>
+          <div class="investor-type" style="color:var(--green)">✅ GARP型</div>
+          <div class="investor-rec">前向PE 21.8x配合77%增速，增长合理折价，可持有或等回调</div>
+        </div>
+      </div>
+      <div class="investor-card">
+        <div class="investor-icon">🏛</div>
+        <div>
+          <div class="investor-type" style="color:var(--yellow)">⚠️ 长期价值型</div>
+          <div class="investor-rec">护城河极深可长期持有，但$130-$152才是理想买入价</div>
+        </div>
+      </div>
+      <div class="investor-card">
+        <div class="investor-icon">📚</div>
+        <div>
+          <div class="investor-type" style="color:var(--red)">❌ 格雷厄姆价值型</div>
+          <div class="investor-rec">严格价值投资者应回避，安全边际完全不满足</div>
+        </div>
+      </div>
+      <div class="investor-card">
+        <div class="investor-icon">💰</div>
+        <div>
+          <div class="investor-type" style="color:var(--red)">❌ 收入/保守型</div>
+          <div class="investor-rec">波动率高，股息收益率极低，不适合收入型投资者</div>
+        </div>
+      </div>
+      <div class="investor-card">
+        <div class="investor-icon">🏦</div>
+        <div>
+          <div class="investor-type" style="color:var(--yellow)">⚠️ 机构投资者</div>
+          <div class="investor-rec">标配以不跑输基准，但超配风险偏高</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sources -->
+<div class="sources">
+  <strong>数据来源（实时查询，截至2026-03-20）：</strong><br>
+  <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026">NVIDIA Q4 FY2026官方新闻稿</a> ·
+  <a href="https://ir.amd.com/news-events/press-releases/detail/1276/amd-reports-fourth-quarter-and-full-year-2025-financial-results">AMD FY2025财报</a> ·
+  <a href="https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial">Broadcom Q1 FY2026财报</a> ·
+  <a href="https://stockanalysis.com/stocks/nvda/statistics/">StockAnalysis NVDA Statistics</a> ·
+  <a href="https://www.macrotrends.net/stocks/charts/NVDA/nvidia/pe-ratio">MacroTrends PE History</a> ·
+  <a href="https://www.goldmansachs.com/insights/articles/why-ai-companies-may-invest-more-than-500-billion-in-2026">Goldman Sachs AI CapEx Outlook</a> ·
+  <a href="https://www.thundercompute.com/blog/rocm-vs-cuda-gpu-computing">ROCm vs CUDA 2026</a>
+  <br><br>
+  <strong>免责声明：</strong>本报告仅供学习研究之用，不构成任何投资建议。所有DCF估算基于公开数据和特定假设，实际结果可能存在重大差异。投资有风险，入市需谨慎。
+</div>
+
+</div><!-- end container -->
+
+<footer>
+  NVIDIA (NVDA) 价值投资深度分析 &nbsp;·&nbsp; 分析日期：2026-03-20 &nbsp;·&nbsp; 由 Claude Code 生成 &nbsp;·&nbsp; 数据来源：公开财报及市场数据
+</footer>
+
+<script>
+// ── Chart Defaults ──
+Chart.defaults.color = '#8899aa';
+Chart.defaults.borderColor = '#1e2d45';
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+Chart.defaults.font.size = 12;
+
+// ── 1. Revenue Bar Chart ──
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q1 FY26\n(Apr-May 25)', 'Q2 FY26\n(Jun-Jul 25)', 'Q3 FY26\n(Aug-Oct 25)', 'Q4 FY26\n(Nov 25-Jan 26)', 'Q1 FY27E\n指引'],
+    datasets: [{
+      label: '季度营收 ($B)',
+      data: [44.1, 46.7, 57.0, 68.1, 78.0],
+      backgroundColor: ['rgba(118,185,0,0.7)', 'rgba(118,185,0,0.7)', 'rgba(118,185,0,0.7)', 'rgba(118,185,0,0.85)', 'rgba(0,200,255,0.5)'],
+      borderColor: ['#76b900', '#76b900', '#76b900', '#76b900', '#00c8ff'],
+      borderWidth: 1.5,
+      borderRadius: 6,
+    }, {
+      label: 'YoY增长率 (%)',
+      data: [262, 122, 94, 73, 77],
+      type: 'line',
+      yAxisID: 'y1',
+      borderColor: '#f59e0b',
+      backgroundColor: 'rgba(245,158,11,0.1)',
+      tension: 0.3,
+      pointBackgroundColor: '#f59e0b',
+      pointRadius: 4,
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      y: { grid: { color: '#1e2d45' }, ticks: { callback: v => '$' + v + 'B' }, title: { display: true, text: '营收 ($十亿)', color: '#8899aa' } },
+      y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%' }, title: { display: true, text: 'YoY增长率', color: '#f59e0b' }, min: 0 }
+    },
+    plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.datasetIndex === 0 ? ` $${ctx.raw}B` : ` ${ctx.raw}%` } } }
+  }
+});
+
+// ── 2. Margin Trend ──
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1 FY26', 'Q2 FY26', 'Q3 FY26', 'Q4 FY26'],
+    datasets: [{
+      label: '毛利率',
+      data: [71.0, 71.1, 74.6, 75.0],
+      borderColor: '#76b900',
+      backgroundColor: 'rgba(118,185,0,0.1)',
+      tension: 0.3,
+      pointRadius: 5,
+      fill: true,
+      borderWidth: 2,
+    }, {
+      label: '净利率',
+      data: [33.8, 35.5, 33.9, 63.1],
+      borderColor: '#00c8ff',
+      backgroundColor: 'rgba(0,200,255,0.1)',
+      tension: 0.3,
+      pointRadius: 5,
+      fill: false,
+      borderWidth: 2,
+      borderDash: [4, 2],
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { grid: { color: '#1e2d45' }, ticks: { callback: v => v + '%' }, min: 25, max: 80 }
+    },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } },
+      annotation: {}
+    }
+  }
+});
+
+// ── 3. PE History ──
+new Chart(document.getElementById('peChart'), {
+  type: 'line',
+  data: {
+    labels: ['2022', '2023', '2024', '2025', '2026\n(当前)'],
+    datasets: [{
+      label: 'NVDA TTM P/E',
+      data: [74.6, 80.7, 80.5, 46.6, 36.8],
+      borderColor: '#00c8ff',
+      backgroundColor: 'rgba(0,200,255,0.1)',
+      tension: 0.3,
+      pointRadius: 6,
+      fill: true,
+      borderWidth: 2.5,
+    }, {
+      label: '5年均值 (~65x)',
+      data: [65, 65, 65, 65, 65],
+      borderColor: '#f59e0b',
+      borderDash: [6, 3],
+      pointRadius: 0,
+      borderWidth: 1.5,
+      fill: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { grid: { color: '#1e2d45' }, ticks: { callback: v => v + 'x' }, min: 20, max: 95 }
+    },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.raw}x` } }
+    }
+  }
+});
+
+// ── 4. Peer Comparison ──
+new Chart(document.getElementById('peerChart'), {
+  type: 'bar',
+  data: {
+    labels: ['净利率 (%)', '毛利率 (%)', 'FCF利润率 (%)', '营业利润率 (%)'],
+    datasets: [{
+      label: 'NVIDIA',
+      data: [55.6, 71.1, 44.7, 60.4],
+      backgroundColor: 'rgba(118,185,0,0.8)',
+      borderColor: '#76b900',
+      borderWidth: 1,
+      borderRadius: 4,
+    }, {
+      label: 'AMD',
+      data: [12.4, 50.0, null, 10.7],
+      backgroundColor: 'rgba(239,68,68,0.6)',
+      borderColor: '#ef4444',
+      borderWidth: 1,
+      borderRadius: 4,
+    }, {
+      label: 'Broadcom',
+      data: [38.1, 65.0, null, null],
+      backgroundColor: 'rgba(0,200,255,0.6)',
+      borderColor: '#00c8ff',
+      borderWidth: 1,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { grid: { color: '#1e2d45' }, ticks: { callback: v => v + '%' }, min: 0, max: 80 },
+      x: { grid: { color: '#1e2d45' } }
+    },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => ctx.raw !== null ? ` ${ctx.raw}%` : ' N/A' } }
+    }
+  }
+});
+
+// ── 5. DCF Scenarios ──
+new Chart(document.getElementById('dcfChart'), {
+  type: 'bar',
+  data: {
+    labels: ['保守情景', '中性情景（基准）', '乐观情景', '当前股价'],
+    datasets: [{
+      label: '每股价值/股价 ($)',
+      data: [111.85, 188.89, 338.00, 178.56],
+      backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(245,158,11,0.7)', 'rgba(34,197,94,0.7)', 'rgba(0,200,255,0.5)'],
+      borderColor: ['#ef4444', '#f59e0b', '#22c55e', '#00c8ff'],
+      borderWidth: 2,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    scales: {
+      x: { grid: { color: '#1e2d45' }, ticks: { callback: v => '$' + v }, min: 0, max: 380 },
+      y: { grid: { color: '#1e2d45' } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.raw}` } }
+    }
+  }
+});
+
+// ── 6. CapEx Chart ──
+new Chart(document.getElementById('capexChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2022', '2023', '2024', '2025E', '2026E'],
+    datasets: [{
+      label: 'Amazon',
+      data: [63, 71, 104, 155, 200],
+      backgroundColor: 'rgba(255,153,0,0.75)',
+      stack: 'stack',
+      borderRadius: 2,
+    }, {
+      label: 'Google/Alphabet',
+      data: [32, 32, 52, 104, 180],
+      backgroundColor: 'rgba(66,133,244,0.75)',
+      stack: 'stack',
+      borderRadius: 2,
+    }, {
+      label: 'Microsoft',
+      data: [23, 28, 55, 88, 120],
+      backgroundColor: 'rgba(0,200,255,0.65)',
+      stack: 'stack',
+      borderRadius: 2,
+    }, {
+      label: 'Meta',
+      data: [32, 28, 40, 65, 125],
+      backgroundColor: 'rgba(24,119,242,0.7)',
+      stack: 'stack',
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { grid: { color: '#1e2d45' }, stacked: true, ticks: { callback: v => '$' + v + 'B' }, title: { display: true, text: '$十亿', color: '#8899aa' } },
+      x: { stacked: true, grid: { color: '#1e2d45' } }
+    },
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.raw}B` } }
+    }
+  }
+});
+</script>
+</body>
+</html>

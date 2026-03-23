@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电力行业产业链全景图 v2</title>
+<style>
+:root {
+  --bg: #070c19;
+  --bg2: #0d1526;
+  --bg3: #131f35;
+  --text: #e8eef7;
+  --text2: #a8bdd4;
+  --text3: #6e8eac;
+  --border: rgba(255,255,255,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse at 15% 15%,rgba(99,102,241,.07) 0%,transparent 55%),
+                   radial-gradient(ellipse at 85% 85%,rgba(20,184,166,.05) 0%,transparent 55%);}
+.page{max-width:1700px;margin:0 auto;padding:28px 22px 52px;}
+
+/* ═══ HEADER ═══ */
+.hdr{text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.hdr h1{font-size:23px;font-weight:700;letter-spacing:4px;
+  background:linear-gradient(130deg,#60a5fa 0%,#a78bfa 45%,#34d399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:7px;}
+.hdr .meta{font-size:11.5px;color:var(--text3);letter-spacing:1.5px;}
+.hdr .meta em{color:#4ade80;font-style:normal;}
+
+/* ═══ NOTICE ═══ */
+.notice{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:8px;
+  padding:9px 16px;margin-bottom:18px;font-size:11.5px;color:#fbbf24;
+  display:flex;align-items:center;gap:8px;}
+.notice b{color:#fde68a;}
+
+/* ═══ LEGEND ═══ */
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:20px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+
+/* ═══ CALLOUT ═══ */
+.callout{background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.2);border-radius:8px;
+  padding:10px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.callout-lbl{font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:.5px;white-space:nowrap;}
+.callout-flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.ctag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  border:1px solid rgba(37,99,235,.3);color:#93c5fd;background:rgba(37,99,235,.1);}
+.carrow{color:#6a85a0;font-size:11px;}
+
+/* ═══ MAIN CHAIN ═══ */
+.chain-scroll{overflow-x:auto;padding-bottom:8px;margin-bottom:20px;}
+.chain-wrap{display:flex;align-items:flex-start;min-width:1300px;gap:0;}
+
+/* ═══ ARROW ═══ */
+.arr-col{flex-shrink:0;width:32px;display:flex;flex-direction:column;align-items:center;}
+.arr-sp{height:48px;flex-shrink:0;}
+.arr-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding-top:24px;}
+.arr-body svg{opacity:.35;}
+
+/* ═══ TIER BLOCK ═══ */
+.tb{flex:1;min-width:0;}
+.tb.wide{flex:1.4;}
+.tb.narrow{flex:.8;}
+
+.th{border-radius:10px 10px 0 0;padding:9px 13px;height:48px;
+  display:flex;flex-direction:column;justify-content:center;}
+.th-num{font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.6;line-height:1;}
+.th-title{font-size:12px;font-weight:700;letter-spacing:.8px;margin-top:2px;}
+
+.t-desc{font-size:10px;line-height:1.5;padding:8px 10px;border-radius:5px;
+  margin-bottom:10px;border-left:2px solid;}
+
+.tb-body{border-radius:0 0 10px 10px;padding:11px 9px;border:1px solid;border-top:none;}
+
+/* ═══ SUB LABEL ═══ */
+.sub-lbl{font-size:10px;font-weight:600;padding:4px 8px;border-radius:4px;
+  margin:10px 0 5px;letter-spacing:.3px;}
+.sub-lbl:first-child{margin-top:0;}
+.sub-val{font-size:9.5px;line-height:1.4;padding:4px 8px 6px;margin-bottom:6px;
+  border-radius:0 0 4px 4px;margin-top:-4px;opacity:.85;}
+
+/* ═══ COMPANY CARD ═══ */
+.cc{background:rgba(255,255,255,.033);border:1px solid rgba(255,255,255,.07);
+  border-left:3px solid;border-radius:0 6px 6px 0;
+  padding:7px 9px 7px 9px;margin-bottom:6px;transition:all .17s ease;cursor:default;position:relative;}
+.cc:last-child{margin-bottom:0;}
+.cc:hover{background:rgba(255,255,255,.07);transform:translateX(3px);
+  box-shadow:-3px 0 14px rgba(0,0,0,.3);}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
+.cc-info{flex:1;min-width:0;}
+.cc-ticker{font-weight:800;font-size:13px;letter-spacing:.4px;line-height:1;}
+.cc-name{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.2;}
+.cc-desc{font-size:9.5px;color:var(--text3);margin-top:3px;line-height:1.3;}
+.cc-links{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.cc-btn{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;
+  padding:2px 5px;border-radius:3px;text-decoration:none;transition:all .15s;white-space:nowrap;}
+.cc-btn.doc{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:#60a5fa;}
+.cc-btn.doc:hover{background:rgba(96,165,250,.25);color:#93c5fd;}
+.cc-btn.xls{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:#34d399;}
+.cc-btn.xls:hover{background:rgba(52,211,153,.25);color:#6ee7b7;}
+.cc-btn.pending{background:rgba(100,100,100,.08);border:1px solid rgba(100,100,100,.15);
+  color:var(--text3);cursor:default;}
+.researched-badge{position:absolute;top:4px;right:4px;font-size:8px;padding:1px 4px;
+  border-radius:3px;background:rgba(74,222,128,.12);color:#4ade80;
+  border:1px solid rgba(74,222,128,.2);font-weight:600;}
+
+/* ═══ TIER COLORS ═══ */
+/* T1 upstream purple */
+.t1 .th{background:linear-gradient(135deg,#3b0764,#6d28d9);}
+.t1 .tb-body{background:rgba(109,40,217,.08);border-color:rgba(109,40,217,.22);}
+.t1 .cc{border-left-color:#7c3aed;}
+.t1 .cc-ticker{color:#c4b5fd;}
+.t1 .t-desc{background:rgba(109,40,217,.1);border-left-color:#7c3aed;color:#c4b5fd;}
+
+/* T2 neutral container */
+.t2 .th{background:linear-gradient(135deg,#1a2535,#2d3f58);}
+.t2 .tb-body{background:rgba(45,63,88,.1);border-color:rgba(71,85,105,.28);}
+.t2 .t-desc{background:rgba(71,85,105,.15);border-left-color:#64748b;color:#94a3b8;}
+
+/* T3 grid blue */
+.t3 .th{background:linear-gradient(135deg,#0f1e3d,#1e40af);}
+.t3 .tb-body{background:rgba(30,64,175,.09);border-color:rgba(30,64,175,.25);}
+.t3 .cc{border-left-color:#2563eb;}
+.t3 .cc-ticker{color:#93c5fd;}
+.t3 .t-desc{background:rgba(30,64,175,.12);border-left-color:#2563eb;color:#93c5fd;}
+
+/* T4 epc amber */
+.t4 .th{background:linear-gradient(135deg,#3d1700,#92400e);}
+.t4 .tb-body{background:rgba(146,64,14,.09);border-color:rgba(146,64,14,.25);}
+.t4 .t-desc{background:rgba(146,64,14,.15);border-left-color:#b45309;color:#fcd34d;}
+
+/* T5 utility green */
+.t5 .th{background:linear-gradient(135deg,#052e16,#166534);}
+.t5 .tb-body{background:rgba(22,101,52,.09);border-color:rgba(22,101,52,.25);}
+.t5 .t-desc{background:rgba(22,101,52,.15);border-left-color:#16a34a;color:#86efac;}
+
+/* Sub-category colors */
+.s-trad .sub-lbl{background:rgba(234,88,12,.15);color:#fb923c;}
+.s-trad .sub-val{background:rgba(234,88,12,.07);color:#c4916a;}
+.s-trad .cc{border-left-color:#ea580c;}
+.s-trad .cc-ticker{color:#fb923c;}
+
+.s-solar .sub-lbl{background:rgba(217,119,6,.15);color:#fbbf24;}
+.s-solar .sub-val{background:rgba(217,119,6,.07);color:#c4a45c;}
+.s-solar .cc{border-left-color:#d97706;}
+.s-solar .cc-ticker{color:#fcd34d;}
+
+.s-stor .sub-lbl{background:rgba(5,150,105,.15);color:#34d399;}
+.s-stor .sub-val{background:rgba(5,150,105,.07);color:#5aad93;}
+.s-stor .cc{border-left-color:#059669;}
+.s-stor .cc-ticker{color:#4ade80;}
+
+.s-nuc .sub-lbl{background:rgba(37,99,235,.15);color:#93c5fd;}
+.s-nuc .sub-val{background:rgba(37,99,235,.07);color:#7098cc;}
+.s-nuc .cc{border-left-color:#2563eb;}
+.s-nuc .cc-ticker{color:#93c5fd;}
+
+.s-dist .sub-lbl{background:rgba(8,145,178,.15);color:#67e8f9;}
+.s-dist .sub-val{background:rgba(8,145,178,.07);color:#5ab5c8;}
+.s-dist .cc{border-left-color:#0891b2;}
+.s-dist .cc-ticker{color:#67e8f9;}
+
+.s-epca .sub-lbl{background:rgba(180,83,9,.15);color:#fbbf24;}
+.s-epca .cc{border-left-color:#b45309;}
+.s-epca .cc-ticker{color:#fcd34d;}
+
+.s-epcb .sub-lbl{background:rgba(120,53,15,.15);color:#fdba74;}
+.s-epcb .cc{border-left-color:#78350f;}
+.s-epcb .cc-ticker{color:#fdba74;}
+
+.s-reg .sub-lbl{background:rgba(22,101,52,.2);color:#86efac;}
+.s-reg .cc{border-left-color:#16a34a;}
+.s-reg .cc-ticker{color:#86efac;}
+
+.s-ipp .sub-lbl{background:rgba(5,150,105,.2);color:#6ee7b7;}
+.s-ipp .cc{border-left-color:#059669;}
+.s-ipp .cc-ticker{color:#6ee7b7;}
+
+/* ═══ DATA CENTER ═══ */
+.dc-row{background:rgba(3,105,161,.08);border:1px solid rgba(3,105,161,.25);
+  border-radius:12px;padding:15px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
+.dc-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,#0ea5e9,#38bdf8);border-radius:4px 0 0 4px;}
+.dc-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:11px;}
+.dc-title{font-size:13px;font-weight:700;color:#38bdf8;letter-spacing:1px;}
+.dc-sub{font-size:11px;color:var(--text3);}
+.dc-cards{display:flex;gap:12px;}
+.dc-card{flex:1;background:rgba(3,105,161,.1);border:1px solid rgba(3,105,161,.2);
+  border-left:3px solid #0284c7;border-radius:0 8px 8px 0;padding:10px 13px;transition:all .17s;}
+.dc-card:hover{background:rgba(3,105,161,.2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+.dc-card .cc-ticker{color:#38bdf8;font-size:14px;}
+.dc-card .cc-name{color:var(--text2);font-size:11px;margin-top:3px;}
+.dc-card .cc-desc{color:var(--text3);font-size:10px;margin-top:4px;line-height:1.4;}
+.dc-card .cc-links{flex-direction:row;margin-top:7px;}
+
+/* ═══ DIVIDER ═══ */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:22px 0;}
+
+/* ═══ MATRIX SECTION ═══ */
+.matrix-section{margin-top:4px;}
+.matrix-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;
+  text-transform:uppercase;margin-bottom:16px;}
+
+.matrix-wrap{overflow-x:auto;}
+.matrix-table{width:100%;border-collapse:separate;border-spacing:4px;min-width:1500px;}
+
+.matrix-table th{font-size:10px;font-weight:700;padding:7px 5px;text-align:center;
+  letter-spacing:.5px;white-space:nowrap;border-radius:5px;
+  background:rgba(255,255,255,.04);}
+.matrix-table th.seg{border-bottom:2px solid;}
+.matrix-table td.theme-info{width:250px;padding:10px 13px;border-radius:6px;vertical-align:top;
+  background:var(--bg3);border:1px solid var(--border);}
+.theme-info-name{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.theme-info-desc{font-size:10px;color:var(--text3);line-height:1.45;}
+
+.matrix-table td.cell{border-radius:5px;padding:6px 5px;text-align:center;vertical-align:top;
+  transition:all .15s;cursor:default;}
+.cell.none{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);}
+.cell-cos{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;}
+.cell-co{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);}
+.cell-empty{font-size:14px;opacity:.18;line-height:3;}
+
+.seg-header{font-size:9.5px;font-weight:700;letter-spacing:.5px;line-height:1.4;}
+.seg-header span{display:block;font-size:8.5px;opacity:.8;margin-top:1px;}
+
+/* ═══ FOOTNOTE ═══ */
+.footnote{text-align:center;font-size:11px;color:var(--text3);margin-top:30px;letter-spacing:1px;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="hdr">
+  <h1>电力行业产业链全景图</h1>
+  <div class="meta">覆盖 <em>30</em> 家上市公司 &nbsp;·&nbsp; 从铀矿到插座的完整价值链 &nbsp;·&nbsp; 2026-03 &nbsp;·&nbsp; 已深度研究 <em>29</em> 家</div>
+</div>
+
+<!-- NOTICE -->
+<div class="notice">
+  <span>📊</span>
+  <span>研究进度：<b id="research-progress">—</b> &nbsp;·&nbsp; 新增研究后运行 <b>python3 fetch_feishu_links.py</b> 自动同步飞书链接，刷新浏览器即可生效。</span>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#7c3aed"></div>燃料上游</div>
+  <div class="leg"><div class="leg-dot" style="background:#ea580c"></div>传统发电设备</div>
+  <div class="leg"><div class="leg-dot" style="background:#d97706"></div>光伏链</div>
+  <div class="leg"><div class="leg-dot" style="background:#059669"></div>储能系统</div>
+  <div class="leg"><div class="leg-dot" style="background:#2563eb"></div>新型核能</div>
+  <div class="leg"><div class="leg-dot" style="background:#0891b2"></div>分布式能源</div>
+  <div class="leg"><div class="leg-dot" style="background:#1d4ed8"></div>电网基础设施</div>
+  <div class="leg"><div class="leg-dot" style="background:#b45309"></div>EPC建设</div>
+  <div class="leg"><div class="leg-dot" style="background:#166534"></div>公用事业运营</div>
+  <div class="leg"><div class="leg-dot" style="background:#0369a1"></div>数据中心</div>
+</div>
+
+<!-- NUCLEAR CHAIN CALLOUT -->
+<div class="callout" style="flex-direction:column;align-items:flex-start;gap:8px;">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <div class="callout-lbl">☢ 核能：唯一纵向跨越全部 5 个 Tier 的主题</div>
+    <span style="font-size:10px;color:#6a85a0;">（主链路横向展示各Tier职能，核能是其中唯一从上游到运营端贯通的完整投资链条）</span>
+  </div>
+  <div class="callout-flow">
+    <span style="font-size:9px;color:#7c3aed;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);">T1 燃料上游</span>
+    <span class="ctag">CCJ</span><span class="carrow">铀矿开采</span>
+    <span class="ctag">LEU</span><span class="carrow">铀浓缩加工 →</span>
+    <span style="font-size:9px;color:#2563eb;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);">T2D 新型核能</span>
+    <span class="ctag">SMR</span><span class="carrow">/</span><span class="ctag">OKLO</span><span class="carrow">反应堆设备 →</span>
+    <span style="font-size:9px;color:#b45309;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(180,83,9,.1);border:1px solid rgba(180,83,9,.25);">T4 EPC建设</span>
+    <span class="ctag">GEV</span><span class="carrow">/</span><span class="ctag">FLR</span><span class="carrow">电站建造 →</span>
+    <span style="font-size:9px;color:#059669;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25);">T5B IPP运营</span>
+    <span class="ctag">CEG</span><span class="carrow">/</span><span class="ctag">VST</span><span class="carrow">发电销售</span>
+  </div>
+</div>
+
+<!-- MAIN CHAIN -->
+<div class="chain-scroll">
+<div class="chain-wrap">
+
+  <!-- T1: Upstream -->
+  <div class="tb narrow t1">
+    <div class="th"><div class="th-num">Tier 1</div><div class="th-title">燃料 / 资源上游</div></div>
+    <div class="tb-body">
+      <div class="t-desc">为核反应堆提供燃料原料，是核能产业链的资源基础。铀矿开采→浓缩加工→燃料组件，上游供应紧张将直接推高核电成本与铀价。</div>
+      <div class="cc" data-ticker="CCJ">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">CCJ</div>
+          <div class="cc-name">Cameco</div>
+          <div class="cc-desc">全球最大铀矿商，核燃料供应链源头</div>
+        </div><div class="cc-links" id="lnk-CCJ"></div></div>
+      </div>
+      <div class="cc" data-ticker="LEU">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">LEU</div>
+          <div class="cc-name">Centrus Energy</div>
+          <div class="cc-desc">美国唯一铀浓缩商，战略级核燃料加工</div>
+        </div><div class="cc-links" id="lnk-LEU"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div class="arr-col"><div class="arr-sp"></div><div class="arr-body">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></div>
+
+  <!-- T2: Equipment -->
+  <div class="tb wide t2">
+    <div class="th"><div class="th-num">Tier 2</div><div class="th-title">发电设备与技术</div></div>
+    <div class="tb-body">
+      <div class="t-desc">制造各类发电所需核心设备，覆盖传统化石能源、光伏、储能、新型核能及分布式能源五条技术路线，是能源系统的"硬件供应商"。</div>
+
+      <!-- 2A Traditional -->
+      <div class="s-trad">
+        <div class="sub-lbl">⚡ 传统 / 多元化发电设备</div>
+        <div class="sub-val">制造燃气轮机及风机，受益于新电厂建设与老旧机组替换；GEV同时提供电网设备，是本链路少数横跨多个Tier的公司。</div>
+        <div class="cc" data-ticker="GEV">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">GEV</div>
+            <div class="cc-name">GE Vernova</div>
+            <div class="cc-desc">燃气轮机 + 陆/海上风电 + 电网设备，横跨T2-T3</div>
+          </div><div class="cc-links" id="lnk-GEV"></div></div>
+        </div>
+      </div>
+
+      <!-- 2B Solar -->
+      <div class="s-solar">
+        <div class="sub-lbl">☀ 光伏全链条</div>
+        <div class="sub-val">从组件制造到逆变器，覆盖光伏系统完整价值链。组件端价格竞争激烈，逆变器/系统集成端技术壁垒更高、利润率更稳健。</div>
+        <div class="cc" data-ticker="FSLR">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">FSLR</div>
+            <div class="cc-name">First Solar</div>
+            <div class="cc-desc">薄膜CdTe光伏组件，美国本土制造</div>
+          </div><div class="cc-links" id="lnk-FSLR"></div></div>
+        </div>
+        <div class="cc" data-ticker="ENPH">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">ENPH</div>
+            <div class="cc-name">Enphase Energy</div>
+            <div class="cc-desc">微型逆变器 + 家用储能系统（IQ Battery）</div>
+          </div><div class="cc-links" id="lnk-ENPH"></div></div>
+        </div>
+        <div class="cc" data-ticker="SEDG">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">SEDG</div>
+            <div class="cc-name">SolarEdge</div>
+            <div class="cc-desc">组串逆变器 + 功率优化器，商用端强</div>
+          </div><div class="cc-links" id="lnk-SEDG"></div></div>
+        </div>
+      </div>
+
+      <!-- 2C Storage -->
+      <div class="s-stor">
+        <div class="sub-lbl">🔋 储能系统</div>
+        <div class="sub-val">解决可再生能源间歇性，锂电池成本曲线下移使储能从辅助角色转为主流基础设施。电网级储能是未来十年最大增量市场之一。</div>
+        <div class="cc" data-ticker="FLNC">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">FLNC</div>
+            <div class="cc-name">Fluence Energy</div>
+            <div class="cc-desc">电网级大型储能系统集成商（GE+西门子合资）</div>
+          </div><div class="cc-links" id="lnk-FLNC"></div></div>
+        </div>
+        <div class="cc" data-ticker="STEM">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">STEM</div>
+            <div class="cc-name">Stem Inc.</div>
+            <div class="cc-desc">AI驱动储能调度优化软件 + 硬件集成</div>
+          </div><div class="cc-links" id="lnk-STEM"></div></div>
+        </div>
+        <div class="cc" data-ticker="GNRC">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">GNRC</div>
+            <div class="cc-name">Generac</div>
+            <div class="cc-desc">备用发电机 + 家用/商用储能（PWRcell）</div>
+          </div><div class="cc-links" id="lnk-GNRC"></div></div>
+        </div>
+      </div>
+
+      <!-- 2D Nuclear Tech -->
+      <div class="s-nuc">
+        <div class="sub-lbl">☢ 新型核能技术</div>
+        <div class="sub-val">SMR/微堆商业化仍处早期，但契合数据中心对7×24稳定清洁电力的强需求；模块化设计大幅降低建设风险和工期，政策红利窗口明显。</div>
+        <div class="cc" data-ticker="SMR">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">SMR</div>
+            <div class="cc-name">NuScale Power</div>
+            <div class="cc-desc">小型模块化反应堆（60MW级），最接近商业化</div>
+          </div><div class="cc-links" id="lnk-SMR"></div></div>
+        </div>
+        <div class="cc" data-ticker="OKLO">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">OKLO</div>
+            <div class="cc-name">Oklo Inc.</div>
+            <div class="cc-desc">微型快中子堆（1–15MW），定向数据中心供电</div>
+          </div><div class="cc-links" id="lnk-OKLO"></div></div>
+        </div>
+      </div>
+
+      <!-- 2E Distributed -->
+      <div class="s-dist">
+        <div class="sub-lbl">🌐 替代 / 分布式发电</div>
+        <div class="sub-val">不依赖大电网，适合工业园区和数据中心就地供能，是"能源自主"趋势受益者。固体氧化物路线效率高，具备转型氢能的潜力。</div>
+        <div class="cc" data-ticker="BE">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">BE</div>
+            <div class="cc-name">Bloom Energy</div>
+            <div class="cc-desc">固体氧化物燃料电池，天然气/氢气分布式发电</div>
+          </div><div class="cc-links" id="lnk-BE"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div class="arr-col"><div class="arr-sp"></div><div class="arr-body">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></div>
+
+  <!-- T3: Grid Infrastructure -->
+  <div class="tb t3">
+    <div class="th"><div class="th-num">Tier 3</div><div class="th-title">电网基础设施设备</div></div>
+    <div class="tb-body">
+      <div class="t-desc">电力从发电厂传输至终端所需的全套硬件——变压器、开关柜、输电线路附件、智能电表等。美国电网平均设备龄超40年，叠加AI用电激增，T&D设备需求进入十年级超级周期。</div>
+      <div class="cc" data-ticker="ETN">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">ETN</div>
+          <div class="cc-name">Eaton</div>
+          <div class="cc-desc">变压器、断路器、中压配电系统，覆盖最全</div>
+        </div><div class="cc-links" id="lnk-ETN"></div></div>
+      </div>
+      <div class="cc" data-ticker="HUBB">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">HUBB</div>
+          <div class="cc-name">Hubbell</div>
+          <div class="cc-desc">电气连接器、线路硬件，公用事业采购主力</div>
+        </div><div class="cc-links" id="lnk-HUBB"></div></div>
+      </div>
+      <div class="cc" data-ticker="POWL">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">POWL</div>
+          <div class="cc-name">Powell Industries</div>
+          <div class="cc-desc">中压开关柜（switchgear），工业/油气/公用事业</div>
+        </div><div class="cc-links" id="lnk-POWL"></div></div>
+      </div>
+      <div class="cc" data-ticker="PLPC">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">PLPC</div>
+          <div class="cc-name">Preformed Line Products</div>
+          <div class="cc-desc">输电线路附件（线夹/接头/防护件），细分龙头</div>
+        </div><div class="cc-links" id="lnk-PLPC"></div></div>
+      </div>
+      <div class="cc" data-ticker="AMSC">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">AMSC</div>
+          <div class="cc-name">American Superconductor</div>
+          <div class="cc-desc">超导系统、电网稳定装置（STATCOM/SVC）</div>
+        </div><div class="cc-links" id="lnk-AMSC"></div></div>
+      </div>
+      <div class="cc" data-ticker="GLW">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">GLW</div>
+          <div class="cc-name">Corning</div>
+          <div class="cc-desc">光纤电缆，智能电网通信基础设施底层</div>
+        </div><div class="cc-links" id="lnk-GLW"></div></div>
+      </div>
+      <div class="cc" data-ticker="ITRI">
+        <div class="cc-top"><div class="cc-info">
+          <div class="cc-ticker">ITRI</div>
+          <div class="cc-name">Itron</div>
+          <div class="cc-desc">智能电表（AMI）+ 电网传感器与数据平台</div>
+        </div><div class="cc-links" id="lnk-ITRI"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div class="arr-col"><div class="arr-sp"></div><div class="arr-body">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></div>
+
+  <!-- T4: EPC -->
+  <div class="tb t4">
+    <div class="th"><div class="th-num">Tier 4</div><div class="th-title">电力工程建设 / EPC</div></div>
+    <div class="tb-body">
+      <div class="t-desc">将设备和材料转化为实际运行基础设施的"施工总包商"。IRA+IIJA双政策催化电网和发电投资，优质EPC公司订单能见度可达3–5年，属于政策驱动的确定性赛道。</div>
+      <div class="s-epca">
+        <div class="sub-lbl">🏗 输配电专项施工</div>
+        <div class="cc" data-ticker="PWR">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">PWR</div>
+            <div class="cc-name">Quanta Services</div>
+            <div class="cc-desc">美国最大输配电EPC，高压线路+变电站</div>
+          </div><div class="cc-links" id="lnk-PWR"></div></div>
+        </div>
+        <div class="cc" data-ticker="MYRG">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">MYRG</div>
+            <div class="cc-name">MYR Group</div>
+            <div class="cc-desc">输配电+商业电气施工，区域性深耕</div>
+          </div><div class="cc-links" id="lnk-MYRG"></div></div>
+        </div>
+        <div class="cc" data-ticker="EME">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">EME</div>
+            <div class="cc-name">EMCOR Group</div>
+            <div class="cc-desc">综合电气机械总包，工业+商业+基础设施</div>
+          </div><div class="cc-links" id="lnk-EME"></div></div>
+        </div>
+      </div>
+      <div class="s-epcb">
+        <div class="sub-lbl">⚙ 电站 / 综合大型EPC</div>
+        <div class="cc" data-ticker="AGX">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">AGX</div>
+            <div class="cc-name">Argan (Gemma Power)</div>
+            <div class="cc-desc">天然气联合循环电站EPC专项</div>
+          </div><div class="cc-links" id="lnk-AGX"></div></div>
+        </div>
+        <div class="cc" data-ticker="FLR">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">FLR</div>
+            <div class="cc-name">Fluor</div>
+            <div class="cc-desc">超大型综合EPC，涵盖核电/LNG/石化</div>
+          </div><div class="cc-links" id="lnk-FLR"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW -->
+  <div class="arr-col"><div class="arr-sp"></div><div class="arr-body">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></div>
+
+  <!-- T5: Utilities -->
+  <div class="tb t5">
+    <div class="th"><div class="th-num">Tier 5</div><div class="th-title">发电运营 / 公用事业</div></div>
+    <div class="tb-body">
+      <div class="t-desc">产业链终端，直接发电并销售。受监管公用事业（类债券）现金流稳定；独立发电商（IPP）收益与市场电价直接挂钩，是AI用电需求溢价的最直接承接方。</div>
+      <div class="s-reg">
+        <div class="sub-lbl">🏛 受监管公用事业（Regulated）</div>
+        <div class="cc" data-ticker="AEP">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">AEP</div>
+            <div class="cc-name">American Electric Power</div>
+            <div class="cc-desc">传统输配电公用事业，覆盖11州，费率基础扩张逻辑</div>
+          </div><div class="cc-links" id="lnk-AEP"></div></div>
+        </div>
+        <div class="cc" data-ticker="NEE">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">NEE</div>
+            <div class="cc-name">NextEra Energy</div>
+            <div class="cc-desc">全球最大风光运营商，兼有受监管+可再生能源IPP</div>
+          </div><div class="cc-links" id="lnk-NEE"></div></div>
+        </div>
+      </div>
+      <div class="s-ipp">
+        <div class="sub-lbl">⚡ 独立发电商（IPP）</div>
+        <div class="cc" data-ticker="CEG">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">CEG</div>
+            <div class="cc-name">Constellation Energy</div>
+            <div class="cc-desc">核电为主（>90%），全美最大清洁电力IPP，AI数据中心首选供电方</div>
+          </div><div class="cc-links" id="lnk-CEG"></div></div>
+        </div>
+        <div class="cc" data-ticker="VST">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker">VST</div>
+            <div class="cc-name">Vistra Corp</div>
+            <div class="cc-desc">多元化IPP，天然气+核能+可再生，电价弹性最大</div>
+          </div><div class="cc-links" id="lnk-VST"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end chain-wrap -->
+</div><!-- end chain-scroll -->
+
+<!-- DATA CENTER -->
+<div class="dc-row">
+  <div class="dc-hdr">
+    <div class="dc-title">⬡ 数据中心 / 工业电力基础设施（新型负载端）</div>
+    <div class="dc-sub">AI算力爆炸式增长催生史上最大电力需求缺口，VRT+MPWR是电力消费端的最直接硬件受益者，与 CEG·VST·PWR·AEP·BE·OKLO 高度协同</div>
+  </div>
+  <div class="dc-cards">
+    <div class="dc-card" data-ticker="VRT">
+      <div class="cc-ticker">VRT</div>
+      <div class="cc-name">Vertiv Holdings</div>
+      <div class="cc-desc">数据中心UPS · PDU · 精密冷却（风冷/液冷）· 机柜基础设施，AI算力扩张的基础电力保障层</div>
+      <div class="cc-links" id="lnk-VRT" style="flex-direction:row;margin-top:7px;"></div>
+    </div>
+    <div class="dc-card" data-ticker="MPWR">
+      <div class="cc-ticker">MPWR</div>
+      <div class="cc-name">Monolithic Power Systems</div>
+      <div class="cc-desc">AI服务器/GPU核心电源管理芯片（PMIC） · 高密度功率转换IC · 硅级别电力基础设施，直接受益于算力密度提升</div>
+      <div class="cc-links" id="lnk-MPWR" style="flex-direction:row;margin-top:7px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- INVESTMENT THEME MATRIX -->
+<div class="matrix-section">
+  <div class="matrix-title">投 资 主 题 × 产 业 链 对 应 关 系</div>
+  <div class="matrix-wrap">
+    <table class="matrix-table" id="matrix"></table>
+  </div>
+</div>
+
+<div class="footnote">
+  共 30 家上市公司 &nbsp;·&nbsp; 燃料上游 → 发电设备 → 电网设备 → EPC建设 → 发电运营 全产业链 &nbsp;·&nbsp; 2026-03
+</div>
+
+</div><!-- end page -->
+
+<script>
+/* ═══════════════════════════════════════════
+   飞书链接配置区
+   doc = 深度研究报告 (飞书文档链接)
+   val = 估值表格    (飞书表格/Excel链接)
+   researched = true 表示已完成深度研究
+   ► 将 "#" 替换为实际飞书链接后刷新生效
+═══════════════════════════════════════════ */
+const FEISHU = {
+  // ── 原始19家（已研究，请填入链接）──
+  GEV:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/VgEydEjLtoCjIKxTT7icck4InDc", val:"https://yvu9p5efwh6.feishu.cn/sheets/XrK8sF46DhlwMVt80EIcYIzgnje", researched:true },
+  BE:   { doc:"https://yvu9p5efwh6.feishu.cn/docx/TSVsdQ7VaosajJxVy8Nc0UK4n1b", val:"https://yvu9p5efwh6.feishu.cn/sheets/VmB6sEYSyhRt2otulkncrPEnndh", researched:true },
+  ETN:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/Akpbdz8SkoXzY1xC8p5ckovnnGf", val:"https://yvu9p5efwh6.feishu.cn/sheets/MkD7sPDTuhnGm0t7ZAzcN7mEnBX", researched:true },
+  FLR:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/WgzAdIG22ohAbOxu6FOcol41n3g", val:"https://yvu9p5efwh6.feishu.cn/sheets/VvAespbjThfEE6t0YswcLSPpn5b", researched:true },
+  VRT:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/Yar3daB2woOwAZx8ofycuoKQnQd", val:"https://yvu9p5efwh6.feishu.cn/sheets/Y5Vhsr49Qh9m09taGLYcBUken5c", researched:true },
+  PWR:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/UyQHdRiJKoQtpfxa9c7cpWE2ngd", val:"https://yvu9p5efwh6.feishu.cn/sheets/H4edsYrmGh970gtFTD7cAYA8n8b", researched:true },
+  HUBB: { doc:"https://yvu9p5efwh6.feishu.cn/docx/FaGIdNZojow8hLxjhDcc175inhc", val:"https://yvu9p5efwh6.feishu.cn/sheets/H7Xxsn6jWhmTvhtUEI2co8yanMe", researched:true },
+  POWL: { doc:"https://yvu9p5efwh6.feishu.cn/docx/IdM0dTj0hop9JRxySzBcduO0nke", val:"https://yvu9p5efwh6.feishu.cn/sheets/GMJWsK1PyhabIBt7XfWcpQwwnvf", researched:true },
+  AGX:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/KNc2doq2xoxgILxW9FDcVcaSnPf", val:"https://yvu9p5efwh6.feishu.cn/sheets/VpursUOE4htg8Ctr3Ejcd68lnzg", researched:true },
+  PLPC: { doc:"https://yvu9p5efwh6.feishu.cn/docx/NMmRduBP5ozdaXxwMAzcB71TnVK", val:"https://yvu9p5efwh6.feishu.cn/sheets/CwOksbxAKhf5ngtcztqcuBLvncc", researched:true },
+  CEG:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/Na32d61HyoljpCxPxlrc7vRSnxf", val:"https://yvu9p5efwh6.feishu.cn/sheets/EXets0zlAhlwpNtirP5cxS5xnFe", researched:true },
+  VST:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/OjRidyCfgoS5DTxq0X7cxO5EnFe", val:"https://yvu9p5efwh6.feishu.cn/sheets/IhNmsi83Thh78DtCb63cmBuhnld", researched:true },
+  MYRG: { doc:"https://yvu9p5efwh6.feishu.cn/docx/Wp2Hd8OH6oc25mxox1vcVQwanTw", val:"https://yvu9p5efwh6.feishu.cn/sheets/B7IqsY1NwhHYYGtE03vc9wNOn3d", researched:true },
+  AEP:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/KDjHdONVAoaZ5fxhLOacSeupnNc", val:"https://yvu9p5efwh6.feishu.cn/sheets/SRiTsZ5d1hRpW2t0wtNcL9xWnud", researched:true },
+  GLW:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/L1fEddXSZo0P9lxjXiXcNVIan0d", val:"https://yvu9p5efwh6.feishu.cn/sheets/U9OGsWC2phaq8Pta4vAcr8hsn8b", researched:true },
+  MPWR: { doc:"https://yvu9p5efwh6.feishu.cn/docx/VlJMdHtmzolvuRxy6qtctPubn3f", val:"https://yvu9p5efwh6.feishu.cn/sheets/YTApsYSJzhBSpqtISiCcXSsNnpi", researched:true },
+  FSLR: { doc:"https://yvu9p5efwh6.feishu.cn/docx/ROiqdp7gyovCoFxwjCqcAsdonCf", val:"https://yvu9p5efwh6.feishu.cn/sheets/K28Ss8yBQhXItntPLYKcI6u4nic", researched:true },
+  SMR:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/JmOYdng5ZoCA8dxkKFWcH9zznMg", val:"https://yvu9p5efwh6.feishu.cn/sheets/PJxjsLqlPhc2ibt5JCLcmdPinKe", researched:true },
+  OKLO: { doc:"https://yvu9p5efwh6.feishu.cn/docx/OLuGdbTiro1EvjxSyWLcZr9EnJd", val:"#", researched:true },
+  // ── 补充11家（10家已完成研究，NEE待研究）──
+  NEE:  { doc:"#", val:"#", researched:false },
+  CCJ:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/S9HZdLtMZoliQ2xPKJKcdnqRnkh", val:"https://yvu9p5efwh6.feishu.cn/sheets/CCmIs2WvGhix0RtZmAacQeySnAh", researched:true },
+  LEU:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/YvKTdyMSRoWcbzxu8JGcKNLAnnd", val:"https://yvu9p5efwh6.feishu.cn/sheets/KaPtsKmfxhy55htrMkZcQQp9nwf", researched:true },
+  FLNC: { doc:"https://yvu9p5efwh6.feishu.cn/docx/S1ORdjm18obwZfxyJIwcsP7Pntd", val:"https://yvu9p5efwh6.feishu.cn/sheets/Ue2Os20SPh9hbIttJYQcNmxontc", researched:true },
+  STEM: { doc:"https://yvu9p5efwh6.feishu.cn/docx/AWwMdofhPo2L13xJ5hdcDYwKnkg", val:"https://yvu9p5efwh6.feishu.cn/sheets/ISEusLQ8yhXMaUt73QfcqNBwnVc", researched:true },
+  ENPH: { doc:"https://yvu9p5efwh6.feishu.cn/docx/H5uFd3bBgo4V0px4r8ccaPhrnQh", val:"https://yvu9p5efwh6.feishu.cn/sheets/DmsisI0kUhUWoztJNL5cdBb6nBY", researched:true },
+  SEDG: { doc:"https://yvu9p5efwh6.feishu.cn/docx/GVVidVJpjoBGvGx4cQycYegFnJc", val:"https://yvu9p5efwh6.feishu.cn/sheets/VdhLsSWwhhrWxEt7A8hcNhVNnNb", researched:true },
+  EME:  { doc:"https://yvu9p5efwh6.feishu.cn/docx/NeZidNQF8oiFjuxeshdcmbjanwe", val:"https://yvu9p5efwh6.feishu.cn/sheets/EzfksqNLwh49dttkMsWcO0rznNe", researched:true },
+  ITRI: { doc:"https://yvu9p5efwh6.feishu.cn/docx/AJTGdCiIooqYuyxjm2tchO1Hnsc", val:"https://yvu9p5efwh6.feishu.cn/sheets/D0E9sckbnhsZmNtVqAEcIctRnjf", researched:true },
+  AMSC: { doc:"https://yvu9p5efwh6.feishu.cn/docx/T4KodZLxJo8qWpxDNikcqm3Dngg", val:"https://yvu9p5efwh6.feishu.cn/sheets/WiLhspRd3hQZW3tb4CZcculwnwd", researched:true },
+  GNRC: { doc:"https://yvu9p5efwh6.feishu.cn/docx/LKeTdoPs8oVwduxhNrwc9pBinYg", val:"https://yvu9p5efwh6.feishu.cn/sheets/AYvVsVwmmhR2G3t5CsIcv9ibnzh", researched:true },
+};
+
+/* ── Inject Feishu links into cards ── */
+function initLinks() {
+  const makeBtn = (href, cls, label) => {
+    const a = document.createElement('a');
+    const isReal = href && href !== '#';
+    if (isReal) {
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    } else {
+      a.href = 'javascript:void(0)';
+      a.title = '链接待配置';
+      a.style.opacity = '0.4';
+      a.style.cursor = 'default';
+      a.addEventListener('click', e => e.preventDefault());
+    }
+    a.className = 'cc-btn ' + cls;
+    a.innerHTML = label;
+    return a;
+  };
+
+  Object.entries(FEISHU).forEach(([ticker, info]) => {
+    const el = document.getElementById('lnk-' + ticker);
+    if (!el) return;
+    if (info.researched) {
+      el.appendChild(makeBtn(info.doc, 'doc', '📄 研报'));
+      el.appendChild(makeBtn(info.val, 'xls', '📊 估值'));
+    } else {
+      const sp = document.createElement('span');
+      sp.className = 'cc-btn pending';
+      sp.textContent = '待研究';
+      el.appendChild(sp);
+    }
+  });
+
+  // 动态显示研究进度
+  const total = Object.keys(FEISHU).length;
+  const done  = Object.values(FEISHU).filter(v => v.researched).length;
+  const prog  = document.getElementById('research-progress');
+  if (prog) prog.textContent = done + ' / ' + total + ' 家已完成深度研究';
+}
+
+/* ══════════════════════════════════════════
+   Theme × Chain Matrix Data
+══════════════════════════════════════════ */
+// 使用更亮的显示色，确保矩阵横轴可读
+const SEGMENTS = [
+  { id:'T1',  label:'T1',  sub:'燃料上游', color:'#b09ef8' },
+  { id:'T2A', label:'T2A', sub:'传统发电', color:'#fb923c' },
+  { id:'T2B', label:'T2B', sub:'光伏链',   color:'#fcd34d' },
+  { id:'T2C', label:'T2C', sub:'储能',     color:'#34d399' },
+  { id:'T2D', label:'T2D', sub:'新型核能', color:'#7cb8ff' },
+  { id:'T2E', label:'T2E', sub:'分布式',   color:'#38bdf8' },
+  { id:'T3',  label:'T3',  sub:'电网设备', color:'#93c5fd' },
+  { id:'T4',  label:'T4',  sub:'EPC建设',  color:'#fcd34d' },
+  { id:'T5A', label:'T5A', sub:'受监管',   color:'#4ade80' },
+  { id:'T5B', label:'T5B', sub:'IPP',      color:'#6ee7b7' },
+  { id:'DC',  label:'DC',  sub:'数据中心', color:'#38bdf8' },
+];
+
+// 优先级：lvl 1=最优先(红), 2=高优先(橙), 3=中关注(黄)
+const THEMES = [
+  {
+    color:'#60a5fa', icon:'⚡',
+    name:'电网扩容 / 升级',
+    priority:{ lvl:0, label:'P0 最优先', color:'#f87171' },
+    reason:'10年超级周期，政策+需求双驱，订单确定性最高',
+    desc:'美国电网设备龄超40年，叠加AI数据中心用电激增，输配电投资进入十年超级周期，订单高度确定。',
+    note:'核心逻辑在 T3（设备采购爆发）和 T4（施工需求传导），T5A 受益于费率基础扩张，GEV 通过电网设备业务延伸至 T3。',
+    segs:{
+      T1:null,
+      T2A:{ lvl:'med',  cos:['GEV'],                              desc:'电网设备业务直接受益' },
+      T2B:null, T2C:null, T2D:null, T2E:null,
+      T3: { lvl:'high', cos:['ETN','HUBB','POWL','PLPC','AMSC','GLW','ITRI'], desc:'变压器/开关柜供不应求，排单至2027' },
+      T4: { lvl:'high', cos:['PWR','MYRG','EME'],                 desc:'输配电施工量创历史新高' },
+      T5A:{ lvl:'med',  cos:['AEP','NEE'],                        desc:'费率基础扩张驱动CAPEX' },
+      T5B:null,
+      DC: { lvl:'low',  cos:['VRT'],                              desc:'园区配电基础设施需求' },
+    }
+  },
+  {
+    color:'#a78bfa', icon:'☢',
+    name:'核能复兴',
+    priority:{ lvl:1, label:'P1 高优先', color:'#fb923c' },
+    reason:'链条最完整，政策+PPA双驱，长期逻辑最扎实',
+    desc:'去碳政策+数据中心7×24清洁电力需求，核能定价权回归，SMR/微堆开启第四代商业化窗口。',
+    note:'本主题覆盖产业链最长，从 T1 铀矿→T2D 新型设备→T4 EPC建造→T5B IPP运营，形成完整闭环。GEV/FLR 是建造环节枢纽。',
+    segs:{
+      T1: { lvl:'high', cos:['CCJ','LEU'],   desc:'铀价受益，量价双升逻辑' },
+      T2A:{ lvl:'med',  cos:['GEV'],         desc:'核蒸汽机组+维护服务' },
+      T2B:null, T2C:null,
+      T2D:{ lvl:'high', cos:['SMR','OKLO'],  desc:'SMR商业化早期，期权价值大' },
+      T2E:null, T3:null,
+      T4: { lvl:'med',  cos:['FLR'],         desc:'核电站EPC，百亿量级大单' },
+      T5A:null,
+      T5B:{ lvl:'high', cos:['CEG','VST'],   desc:'持有核电资产，PPA溢价显著' },
+      DC:null,
+    }
+  },
+  {
+    color:'#34d399', icon:'🤖',
+    name:'AI / 数据中心用电',
+    priority:{ lvl:0, label:'P0 最优先', color:'#f87171' },
+    reason:'2030年占美国用电8-10%，需求端最强催化剂',
+    desc:'AI训练/推理驱动数据中心用电量指数级增长，2030年预计占美国总用电量8–10%，清洁稳定电力溢价显著。',
+    note:'DC层（VRT/MPWR）是最直接受益者；T5B（CEG/VST）因核电清洁稳定受科技公司长期PPA青睐；T2E（BE）适合就地供能；OKLO微堆是数据中心的"终极解法"。',
+    segs:{
+      T1:null, T2A:null, T2B:null,
+      T2C:{ lvl:'low',  cos:['FLNC'],        desc:'园区级大型储能配套' },
+      T2D:{ lvl:'med',  cos:['OKLO'],        desc:'定向供电微型核堆' },
+      T2E:{ lvl:'high', cos:['BE'],          desc:'燃料电池就地清洁供能' },
+      T3: { lvl:'low',  cos:['ITRI'],        desc:'园区智能用电监控' },
+      T4: { lvl:'med',  cos:['PWR'],         desc:'数据中心配套电力施工' },
+      T5A:{ lvl:'med',  cos:['AEP'],         desc:'与科技公司签企业PPA' },
+      T5B:{ lvl:'high', cos:['CEG','VST'],   desc:'MSFT/AMZN/GOOGL长期PPA首选' },
+      DC: { lvl:'high', cos:['VRT','MPWR'],  desc:'AI算力最直接硬件受益层' },
+    }
+  },
+  {
+    color:'#fb923c', icon:'🏗',
+    name:'EPC 建设景气',
+    priority:{ lvl:1, label:'P1 高优先', color:'#fb923c' },
+    reason:'IRA+IIJA政策催化，订单积压3-5年可见度高',
+    desc:'IRA（通胀削减法）+IIJA（基础设施法）双政策催化，电网、储能、光伏、核电项目同步启动，EPC公司订单积压创历史新高。',
+    note:'逻辑高度集中于 T4，但 T3 电网设备公司和 T2 设备制造商（FSLR/FLNC/GEV）共享建设景气的上游采购需求，属联动受益。',
+    segs:{
+      T1:null,
+      T2A:{ lvl:'low',  cos:['GEV'],                   desc:'设备+安装一体化订单' },
+      T2B:{ lvl:'low',  cos:['FSLR'],                  desc:'光伏组件采购拉动' },
+      T2C:{ lvl:'low',  cos:['FLNC'],                  desc:'储能建设采购拉动' },
+      T2D:null, T2E:null,
+      T3: { lvl:'med',  cos:['ETN','HUBB'],             desc:'建设采购量联动增长' },
+      T4: { lvl:'high', cos:['PWR','MYRG','EME','AGX','FLR'], desc:'订单积压历史最高，3-5年能见度' },
+      T5A:null, T5B:null, DC:null,
+    }
+  },
+  {
+    color:'#fbbf24', icon:'☀',
+    name:'光伏 + 储能生态',
+    priority:{ lvl:2, label:'P2 中关注', color:'#facc15' },
+    reason:'成本曲线最陡，需甄别竞争中的赛道胜者',
+    desc:'光伏度电成本持续下降至$0.02以下，储能解决消纳瓶颈，二者协同驱动可再生能源渗透率加速提升。',
+    note:'集中在 T2B-T2C 设备层，价值链相对集中。NEE 作为最大运营商在 T5A 形成需求端闭环。EPC 施工（T4 中的 PWR）也受益于光储项目建设。',
+    segs:{
+      T1:null, T2A:null,
+      T2B:{ lvl:'high', cos:['FSLR','ENPH','SEDG'], desc:'组件/逆变器需求持续扩张' },
+      T2C:{ lvl:'high', cos:['FLNC','STEM','GNRC'], desc:'储能装机加速，FLNC直接受益' },
+      T2D:null, T2E:null,
+      T3: { lvl:'low',  cos:['ITRI'],               desc:'智能电表辅助消纳管理' },
+      T4: { lvl:'low',  cos:['PWR'],                desc:'光储项目EPC施工' },
+      T5A:{ lvl:'high', cos:['NEE'],                desc:'最大可再生能源运营商' },
+      T5B:null, DC:null,
+    }
+  },
+  {
+    color:'#67e8f9', icon:'🌐',
+    name:'分布式 / 备用电源',
+    priority:{ lvl:2, label:'P2 中关注', color:'#facc15' },
+    reason:'电网可靠性下降驱动，标的甄别难度相对较大',
+    desc:'电网可靠性下降（极端天气频发）+ 碳中和目标，促使企业和居民加速部署分布式自发自用能源系统。',
+    note:'主要集中在 T2 的 T2E（BE）和 T2C（GNRC/ENPH）。OKLO 微堆是未来分布式核能方向。VRT 在数据中心备用电源端也高度相关。',
+    segs:{
+      T1:null, T2A:null,
+      T2B:{ lvl:'med',  cos:['ENPH'],        desc:'家用光储系统集成' },
+      T2C:{ lvl:'med',  cos:['GNRC','STEM'], desc:'家用/商用备用储能' },
+      T2D:{ lvl:'med',  cos:['OKLO'],        desc:'微型核堆就地部署' },
+      T2E:{ lvl:'high', cos:['BE'],          desc:'燃料电池分布式供能' },
+      T3:null, T4:null, T5A:null, T5B:null,
+      DC: { lvl:'med',  cos:['VRT'],         desc:'数据中心UPS备用系统' },
+    }
+  },
+];
+
+/* ── Render Matrix ── */
+function renderMatrix() {
+  const tbl = document.getElementById('matrix');
+  const lvlBg      = { high:'rgba(255,255,255,.11)', med:'rgba(255,255,255,.06)', low:'rgba(255,255,255,.03)' };
+  const lvlLabel   = { high:'核心', med:'协同', low:'边缘' };
+  const lvlOpacity = { high:1, med:0.88, low:0.62 };
+
+  // Header row — use bright segment colors for visibility
+  let headRow = '<tr><th style="width:250px;"></th>';
+  SEGMENTS.forEach(s => {
+    headRow += `<th class="seg" style="border-color:${s.color}99;color:${s.color};">
+      <div class="seg-header">${s.label}<span>${s.sub}</span></div></th>`;
+  });
+  headRow += '</tr>';
+  tbl.innerHTML = headRow;
+
+  // Theme rows
+  THEMES.forEach(th => {
+    const tr = document.createElement('tr');
+
+    // Left: Theme info cell with priority
+    const tdInfo = document.createElement('td');
+    tdInfo.className = 'theme-info';
+    tdInfo.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px;">
+        <div class="theme-info-name" style="color:${th.color};font-size:12px;">${th.icon} ${th.name}</div>
+        <span style="flex-shrink:0;font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;
+          background:${th.priority.color}20;border:1px solid ${th.priority.color}60;
+          color:${th.priority.color};">${th.priority.label}</span>
+      </div>
+      <div style="font-size:9px;font-weight:600;padding:3px 8px;margin-bottom:7px;border-radius:4px;
+        background:${th.priority.color}15;color:${th.priority.color}cc;">${th.reason}</div>
+      <div style="font-size:10px;color:#9ab8d0;line-height:1.45;margin-bottom:6px;">${th.desc}</div>
+      <div style="font-size:9.5px;color:#7a9ab8;border-top:1px solid rgba(255,255,255,.06);
+        padding-top:6px;line-height:1.45;">
+        <b style="color:#90b0cc;">链路对应：</b>${th.note}
+      </div>`;
+    tr.appendChild(tdInfo);
+
+    // Right: Segment cells
+    SEGMENTS.forEach(seg => {
+      const td = document.createElement('td');
+      const d = th.segs[seg.id];
+      if (!d) {
+        td.className = 'cell none';
+        td.innerHTML = '<div class="cell-empty">·</div>';
+      } else {
+        td.className = 'cell';
+        td.style.opacity  = String(lvlOpacity[d.lvl]);
+        td.style.background = lvlBg[d.lvl];
+        td.style.border   = `1px solid ${seg.color}55`;
+        td.style.verticalAlign = 'top';
+        td.style.padding  = '6px 5px';
+
+        // Level badge — bright & readable
+        const badge = `<div style="display:inline-block;font-size:8.5px;font-weight:700;
+          padding:2px 7px;border-radius:3px;margin-bottom:5px;
+          background:${seg.color}30;color:${seg.color};
+          border:1px solid ${seg.color}70;letter-spacing:.4px;">${lvlLabel[d.lvl]}</div>`;
+
+        // Ticker tags
+        const cosHtml = d.cos.map(c =>
+          `<span style="display:inline-block;font-size:9px;font-weight:700;
+            padding:1px 5px;border-radius:3px;margin:1px;
+            background:rgba(255,255,255,.07);border:1px solid ${seg.color}55;
+            color:${seg.color};">${c}</span>`
+        ).join('');
+
+        // Description
+        const descHtml = d.desc
+          ? `<div style="font-size:8px;color:${seg.color}cc;margin-top:5px;
+              line-height:1.35;text-align:left;padding:0 1px;">${d.desc}</div>`
+          : '';
+
+        td.innerHTML = `${badge}<div>${cosHtml}</div>${descHtml}`;
+      }
+      tr.appendChild(td);
+    });
+
+    tbl.appendChild(tr);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initLinks();
+  renderMatrix();
+});
+</script>
+</body>
+</html>
