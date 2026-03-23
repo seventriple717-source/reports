@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EME EMCOR Group - 价值投资深度分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2235; --bg4: #1e2d42;
+    --border: #1e3a5f; --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+    --blue: #3b82f6; --green: #10b981; --red: #ef4444; --yellow: #f59e0b;
+    --purple: #8b5cf6; --orange: #f97316; --cyan: #06b6d4;
+    --card-bg: #111827; --card-border: #1e3a5f;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; font-size:14px; line-height:1.6; }
+  a { color:var(--blue); text-decoration:none; }
+  .container { max-width:1400px; margin:0 auto; padding:24px 20px; }
+
+  /* ── Hero ── */
+  .hero { background:linear-gradient(135deg,#0d1b36 0%,#0a2a4a 50%,#0d1b36 100%);
+    border:1px solid var(--border); border-radius:16px; padding:40px; margin-bottom:28px; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; top:-60px; right:-60px; width:300px; height:300px;
+    background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%); border-radius:50%; }
+  .hero-top { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:20px; }
+  .hero-left h1 { font-size:2.8rem; font-weight:800; color:#fff; letter-spacing:-1px; }
+  .hero-left h2 { font-size:1.2rem; color:var(--text2); font-weight:400; margin-top:4px; }
+  .hero-left .date { font-size:.85rem; color:var(--text3); margin-top:8px; }
+  .hero-right { text-align:right; }
+  .hero-price { font-size:2.4rem; font-weight:700; color:var(--green); }
+  .hero-mktcap { font-size:1rem; color:var(--text2); margin-top:4px; }
+  .hero-range { font-size:.85rem; color:var(--text3); margin-top:4px; }
+  .rating-badge { display:inline-block; padding:6px 18px; border-radius:20px; font-weight:700;
+    font-size:.9rem; margin-top:12px; background:rgba(16,185,129,.15); color:var(--green); border:1px solid var(--green); }
+
+  /* ── KPI Grid ── */
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin-bottom:28px; }
+  .kpi-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px; padding:18px; }
+  .kpi-label { font-size:.78rem; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+  .kpi-value { font-size:1.6rem; font-weight:700; color:var(--text); }
+  .kpi-sub { font-size:.78rem; color:var(--text2); margin-top:4px; }
+  .kpi-up { color:var(--green); } .kpi-down { color:var(--red); }
+
+  /* ── Section ── */
+  .section { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:28px; margin-bottom:24px; }
+  .section-title { font-size:1.25rem; font-weight:700; color:var(--text); border-left:4px solid var(--blue);
+    padding-left:14px; margin-bottom:22px; }
+  .sub-title { font-size:1rem; font-weight:600; color:var(--text2); margin:20px 0 12px; }
+
+  /* ── Chart containers ── */
+  .chart-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); gap:20px; margin-bottom:20px; }
+  .chart-box { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .chart-title { font-size:.9rem; font-weight:600; color:var(--text2); margin-bottom:14px; }
+  .chart-wrap { position:relative; height:240px; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  th { background:var(--bg4); color:var(--text2); padding:10px 14px; text-align:right; border-bottom:1px solid var(--border); font-weight:600; }
+  th:first-child { text-align:left; }
+  td { padding:10px 14px; border-bottom:1px solid rgba(30,58,95,.5); text-align:right; color:var(--text); }
+  td:first-child { text-align:left; color:var(--text2); font-weight:500; }
+  tr:hover td { background:var(--bg4); }
+  .pos { color:var(--green); } .neg { color:var(--red); }
+
+  /* ── Two-col layout ── */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media(max-width:768px) { .two-col { grid-template-columns:1fr; } .chart-grid { grid-template-columns:1fr; } }
+
+  /* ── Segment bars ── */
+  .seg-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .seg-name { width:180px; font-size:.85rem; color:var(--text2); }
+  .seg-bar-bg { flex:1; height:10px; background:var(--bg4); border-radius:5px; overflow:hidden; }
+  .seg-bar-fill { height:100%; border-radius:5px; transition:width .6s; }
+  .seg-val { width:80px; text-align:right; font-size:.85rem; font-weight:600; }
+
+  /* ── Moat stars ── */
+  .moat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .moat-card { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .moat-title { font-size:.9rem; font-weight:600; color:var(--text); margin-bottom:8px; }
+  .moat-badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:.75rem; font-weight:600; margin-bottom:8px; }
+  .wide { background:rgba(16,185,129,.15); color:var(--green); border:1px solid var(--green); }
+  .narrow { background:rgba(245,158,11,.15); color:var(--yellow); border:1px solid var(--yellow); }
+  .none-badge { background:rgba(239,68,68,.15); color:var(--red); border:1px solid var(--red); }
+  .stars { color:var(--yellow); font-size:1rem; letter-spacing:2px; }
+  .moat-desc { font-size:.8rem; color:var(--text3); line-height:1.5; }
+  .progress-bar { height:6px; background:var(--bg4); border-radius:3px; margin-top:8px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:3px; }
+
+  /* ── Risk matrix ── */
+  .risk-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+  .risk-row { display:grid; grid-template-columns:2fr 1fr 1fr 3fr; gap:14px; align-items:center;
+    background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:12px 16px; font-size:.85rem; }
+  .risk-header { font-weight:600; color:var(--text3); font-size:.78rem; }
+  .risk-name { font-weight:600; color:var(--text); }
+  .risk-prob { text-align:center; }
+  .risk-impact { text-align:center; }
+  .risk-detail { color:var(--text2); font-size:.8rem; }
+  .badge-h { background:rgba(239,68,68,.15); color:var(--red); border:1px solid var(--red); padding:2px 8px; border-radius:8px; }
+  .badge-m { background:rgba(245,158,11,.15); color:var(--yellow); border:1px solid var(--yellow); padding:2px 8px; border-radius:8px; }
+  .badge-l { background:rgba(16,185,129,.15); color:var(--green); border:1px solid var(--green); padding:2px 8px; border-radius:8px; }
+
+  /* ── Valuation ── */
+  .val-row { display:flex; align-items:center; gap:14px; margin-bottom:10px; font-size:.9rem; }
+  .val-label { width:200px; color:var(--text2); }
+  .val-bar-wrap { flex:1; height:8px; background:var(--bg4); border-radius:4px; overflow:hidden; }
+  .val-bar-fill { height:100%; border-radius:4px; }
+  .val-num { width:100px; text-align:right; font-weight:600; }
+
+  /* ── Checklist ── */
+  .check-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(30,58,95,.4); font-size:.9rem; }
+  .check-icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; flex-shrink:0; }
+  .pass { background:rgba(16,185,129,.2); color:var(--green); border:1px solid var(--green); }
+  .fail { background:rgba(239,68,68,.2); color:var(--red); border:1px solid var(--red); }
+  .check-name { flex:1; color:var(--text); }
+  .check-actual { color:var(--text2); font-size:.85rem; }
+
+  /* ── Conclusion cards ── */
+  .conclusion-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:20px; }
+  @media(max-width:900px) { .conclusion-grid { grid-template-columns:1fr; } }
+  .conclusion-card { border-radius:12px; padding:22px; border:1px solid; }
+  .conclusion-card.red { background:rgba(239,68,68,.08); border-color:var(--red); }
+  .conclusion-card.yellow { background:rgba(245,158,11,.08); border-color:var(--yellow); }
+  .conclusion-card.green { background:rgba(16,185,129,.08); border-color:var(--green); }
+  .conc-framework { font-size:.8rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .conc-verdict { font-size:1.3rem; font-weight:700; margin-bottom:10px; }
+  .conc-detail { font-size:.82rem; color:var(--text2); line-height:1.6; }
+
+  .buy-range-box { background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(59,130,246,.08));
+    border:2px solid var(--green); border-radius:14px; padding:28px; text-align:center; margin-top:24px; }
+  .buy-range-label { font-size:.9rem; color:var(--text2); margin-bottom:8px; }
+  .buy-range-value { font-size:2.8rem; font-weight:800; color:var(--green); }
+  .buy-range-note { font-size:.85rem; color:var(--text3); margin-top:10px; }
+
+  /* ── KPI watch ── */
+  .kpi-watch-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+  .kpi-watch-card { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .kw-title { font-size:.85rem; font-weight:600; color:var(--text2); margin-bottom:6px; }
+  .kw-current { font-size:1.3rem; font-weight:700; color:var(--text); }
+  .kw-target { font-size:.8rem; color:var(--text3); margin-top:4px; }
+
+  /* ── Info row ── */
+  .info-row { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+  .info-item { background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+    padding:8px 16px; font-size:.85rem; }
+  .info-label { color:var(--text3); font-size:.78rem; }
+  .info-val { color:var(--text); font-weight:600; }
+
+  /* ── Source list ── */
+  .source-list { list-style:none; }
+  .source-list li { padding:6px 0; border-bottom:1px solid rgba(30,58,95,.3); font-size:.82rem; }
+  .source-list a { color:var(--blue); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-left">
+      <h1>EME</h1>
+      <h2>EMCOR Group, Inc.</h2>
+      <div class="date">分析日期：2026-03-23 &nbsp;|&nbsp; 数据截至 2026-03-20</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-price">$751.33</div>
+      <div class="hero-mktcap">市值：$33.4B &nbsp;|&nbsp; NYSE: EME</div>
+      <div class="hero-range">52周区间：$320.89 – $835.00</div>
+      <div class="rating-badge">综合评级：中性偏多 — 谨慎买入</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ KPI GRID ══════════════════════ -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">FY2025 营收</div>
+    <div class="kpi-value">$17.0B</div>
+    <div class="kpi-sub kpi-up">+16.6% YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">净利润（GAAP）</div>
+    <div class="kpi-value">$1.27B</div>
+    <div class="kpi-sub">净利率 7.49%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">自由现金流</div>
+    <div class="kpi-value">$1.19B</div>
+    <div class="kpi-sub">FCF率 7.00%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">毛利率</div>
+    <div class="kpi-value">19.33%</div>
+    <div class="kpi-sub kpi-up">+35bp YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">营业利润率</div>
+    <div class="kpi-value">10.09%</div>
+    <div class="kpi-sub kpi-up">+86bp YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">EPS（GAAP稀释）</div>
+    <div class="kpi-value">$28.19</div>
+    <div class="kpi-sub kpi-up">+30.9% YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">TTM P/E</div>
+    <div class="kpi-value">26.6x</div>
+    <div class="kpi-sub">10年均值 ~20x，溢价 33%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">前向 P/E（FY2026E）</div>
+    <div class="kpi-value">26.6x</div>
+    <div class="kpi-sub">中值指引 EPS $28.25</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">ROE</div>
+    <div class="kpi-value">38.5%</div>
+    <div class="kpi-sub">ROIC 38.0%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">RPO 剩余履约义务</div>
+    <div class="kpi-value">$13.25B</div>
+    <div class="kpi-sub kpi-up">+31.2% YoY，历史新高</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">净现金</div>
+    <div class="kpi-value">$637M</div>
+    <div class="kpi-sub">零长期债务</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">每股账面价值</div>
+    <div class="kpi-value">$81.38</div>
+    <div class="kpi-sub kpi-up">+29.7% YoY</div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 商业模式 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">商业模式分析</div>
+
+  <div class="two-col">
+    <div>
+      <div class="sub-title">收入分部结构（FY2025）</div>
+      <div class="seg-bar-row">
+        <span class="seg-name">机械建筑（MC）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:42%;background:var(--blue)"></div></div>
+        <span class="seg-val kpi-up">~$7.1B</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">电气建筑（EC）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:30%;background:var(--cyan)"></div></div>
+        <span class="seg-val kpi-up">~$5.1B</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">建筑服务（BS）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:18%;background:var(--purple)"></div></div>
+        <span class="seg-val" style="color:var(--purple)">~$3.1B</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">工业服务（IS）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:7%;background:var(--yellow)"></div></div>
+        <span class="seg-val" style="color:var(--yellow)">~$1.2B</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">英国业务（已剥离）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:3%;background:var(--text3)"></div></div>
+        <span class="seg-val" style="color:var(--text3)">~$0.5B</span>
+      </div>
+      <p style="font-size:.8rem;color:var(--text3);margin-top:12px;">注：英国业务已于2025年12月1日完成出售，2026年起纯美国业务</p>
+    </div>
+
+    <div>
+      <div class="sub-title">收入质量评分</div>
+      <div class="seg-bar-row">
+        <span class="seg-name">重复性/合同收入</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:65%;background:var(--green)"></div></div>
+        <span class="seg-val kpi-up">65%</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">RPO 覆盖率（次年）</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:75%;background:var(--blue)"></div></div>
+        <span class="seg-val kpi-up">~75%</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">数据中心 RPO 占比</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:30%;background:var(--cyan)"></div></div>
+        <span class="seg-val kpi-up">~30%</span>
+      </div>
+      <div class="seg-bar-row">
+        <span class="seg-name">EC+MC 合并利润率</span>
+        <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:12.5%;background:var(--orange)"></div></div>
+        <span class="seg-val" style="color:var(--orange)">12.5%</span>
+      </div>
+      <p style="font-size:.82rem;color:var(--text2);margin-top:14px;line-height:1.7;">
+        EMCOR 收入质量中等偏高：约65%来自长期合同和建筑服务框架协议，
+        RPO $13.25B 提供约9个月的营收能见度。数据中心相关 RPO 同比增长112%，
+        显示订单质量大幅提升。建筑服务分部提供稳定的设施管理和维护收入，
+        增强了整体收入的可预测性。
+      </p>
+    </div>
+  </div>
+
+  <div class="sub-title">客户集中度与定价权</div>
+  <div class="two-col" style="gap:20px">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-size:.9rem;font-weight:600;color:var(--text2);margin-bottom:12px;">客户分布</div>
+      <div style="font-size:.85rem;line-height:1.8;color:var(--text2);">
+        <div>超大规模数据中心运营商（微软/谷歌/AWS/Meta）<span style="color:var(--cyan);font-weight:600;float:right">~30% RPO</span></div>
+        <div>工业/制造业客户 <span style="color:var(--text);font-weight:600;float:right">~25%</span></div>
+        <div>政府/公共基础设施 <span style="color:var(--text);font-weight:600;float:right">~20%</span></div>
+        <div>商业建筑/写字楼 <span style="color:var(--text);font-weight:600;float:right">~15%</span></div>
+        <div>医疗/教育 <span style="color:var(--text);font-weight:600;float:right">~10%</span></div>
+        <p style="color:var(--text3);font-size:.78rem;margin-top:8px;">客户集中度风险中等；前5大客户预计占比低于30%（具体比例未披露）</p>
+      </div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-size:.9rem;font-weight:600;color:var(--text2);margin-bottom:12px;">定价权趋势</div>
+      <div style="font-size:.85rem;line-height:1.9;color:var(--text2);">
+        <div>毛利率（2022）: <span style="color:var(--red)">14.48%</span></div>
+        <div>毛利率（2023）: <span style="color:var(--yellow)">16.60%</span></div>
+        <div>毛利率（2024）: <span style="color:var(--yellow)">18.98%</span></div>
+        <div>毛利率（2025）: <span style="color:var(--green)">19.33%</span></div>
+        <p style="color:var(--text3);font-size:.78rem;margin-top:8px;">毛利率连续4年扩张，反映定价权提升与高利润项目组合改善（数据中心占比上升）</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 财务分析 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">财务分析</div>
+
+  <div class="chart-grid">
+    <div class="chart-box">
+      <div class="chart-title">季度营收趋势（百万美元）</div>
+      <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">利润率趋势（%）</div>
+      <div class="chart-wrap"><canvas id="marginChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-box">
+      <div class="chart-title">季度 EPS（GAAP 稀释，美元）</div>
+      <div class="chart-wrap"><canvas id="epsChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">年度自由现金流（百万美元）</div>
+      <div class="chart-wrap"><canvas id="fcfChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sub-title">近8季度财务数据</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>季度</th><th>营收（M）</th><th>YoY</th><th>毛利率</th><th>营业利润率</th><th>净利润（M）</th><th>EPS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Q4 2025</td><td>$4,513</td><td class="pos">+19.7%</td><td>19.75%</td><td class="pos">12.71%</td><td>$435</td><td>$9.68</td></tr>
+        <tr><td>Q3 2025</td><td>$4,302</td><td class="pos">+16.4%</td><td>19.42%</td><td>9.43%</td><td>$295</td><td>$6.57</td></tr>
+        <tr><td>Q2 2025</td><td>$4,304</td><td class="pos">+17.4%</td><td>19.37%</td><td>9.65%</td><td>$302</td><td>$6.72</td></tr>
+        <tr><td>Q1 2025</td><td>$3,867</td><td class="pos">+12.7%</td><td>18.69%</td><td>8.24%</td><td>$241</td><td>$5.26</td></tr>
+        <tr><td>Q4 2024</td><td>$3,770</td><td class="pos">+14.2%</td><td>20.08%</td><td>10.31%</td><td>$292</td><td>$6.32</td></tr>
+        <tr><td>Q3 2024</td><td>$3,697</td><td class="pos">+17.1%</td><td>19.87%</td><td>9.83%</td><td>$270</td><td>$5.80</td></tr>
+        <tr><td>Q2 2024</td><td>$3,667</td><td class="pos">+18.0%</td><td>18.65%</td><td>9.08%</td><td>$248</td><td>$5.25</td></tr>
+        <tr><td>Q1 2024</td><td>$3,432</td><td class="pos">+16.3%</td><td>17.17%</td><td>7.57%</td><td>$197</td><td>$4.17</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-title" style="margin-top:24px">年度财务摘要</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>年度</th><th>营收（M）</th><th>YoY</th><th>毛利率</th><th>营业利润率</th><th>净利润（M）</th><th>EPS</th><th>FCF（M）</th><th>ROE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>FY2025</td><td>$16,986</td><td class="pos">+16.6%</td><td>19.33%</td><td class="pos">10.09%</td><td>$1,273</td><td>$28.19</td><td>$1,189</td><td class="pos">38.5%</td></tr>
+        <tr><td>FY2024</td><td>$14,566</td><td class="pos">+15.8%</td><td>18.98%</td><td>9.23%</td><td>$1,007</td><td>$21.52</td><td>$1,333</td><td class="pos">40.8%</td></tr>
+        <tr><td>FY2023</td><td>$12,583</td><td class="pos">+13.6%</td><td>16.60%</td><td>6.96%</td><td>$633</td><td>$13.31</td><td>$821</td><td class="pos">32.1%</td></tr>
+        <tr><td>FY2022</td><td>$11,076</td><td class="pos">+11.1%</td><td>14.48%</td><td>5.10%</td><td>$406</td><td>$8.10</td><td>$449</td><td>20.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════ 增长驱动 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">增长驱动与关键追踪指标</div>
+
+  <div class="sub-title">主要增长引擎</div>
+  <div class="kpi-watch-grid">
+    <div class="kpi-watch-card">
+      <div class="kw-title">AI 数据中心 RPO</div>
+      <div class="kw-current" style="color:var(--cyan)">~$3.97B</div>
+      <div class="kw-target">占总 RPO 约 30%；同比+112% (Q1-Q2 2025)</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">总剩余履约义务（RPO）</div>
+      <div class="kw-current" style="color:var(--green)">$13.25B</div>
+      <div class="kw-target">历史新高，同比+31.2%；覆盖约9个月营收</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">Miller Electric 整合（2025年Q1收购）</div>
+      <div class="kw-current" style="color:var(--blue)">$865M</div>
+      <div class="kw-target">收购价；贡献RPO $755M，深化数据中心电气服务</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">2028 营收目标</div>
+      <div class="kw-current" style="color:var(--orange)">$20.6B</div>
+      <div class="kw-target">管理层规划；CAGR ~9.7%；EPS目标 $1.4B 利润</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">AI 数据中心市场 CAGR</div>
+      <div class="kw-current" style="color:var(--purple)">+26.8%</div>
+      <div class="kw-target">预测至 2032 年；EMCOR 核心受益标的</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">Q4 2025 数据中心订单增速</div>
+      <div class="kw-current" style="color:var(--green)">+200%</div>
+      <div class="kw-target">YoY；AI 基础设施投资加速的核心信号</div>
+    </div>
+  </div>
+
+  <div class="sub-title" style="margin-top:24px">云厂商 CapEx（EMCOR 直接受益）</div>
+  <div class="chart-box" style="max-width:700px">
+    <div class="chart-title">主要云厂商年度 CapEx（十亿美元，2022-2025E）</div>
+    <div class="chart-wrap"><canvas id="capexChart"></canvas></div>
+  </div>
+
+  <div class="sub-title" style="margin-top:24px">需持续追踪的关键 KPI</div>
+  <div class="kpi-watch-grid">
+    <div class="kpi-watch-card">
+      <div class="kw-title">季度营收 YoY 增速</div>
+      <div class="kw-current">12–20%</div>
+      <div class="kw-target">目标：维持 >10%；低于 8% 为预警信号</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">RPO 书订量 YoY</div>
+      <div class="kw-current">+31.2%</div>
+      <div class="kw-target">目标：维持 >15%；2026 新书订目标 40-45%</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">电气建筑分部利润率</div>
+      <div class="kw-current">11.8%</div>
+      <div class="kw-target">目标：维持 >10%；数据中心项目提升空间</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">建筑服务 YoY 增速</div>
+      <div class="kw-current" style="color:var(--text2)">数据不可用</div>
+      <div class="kw-target">建筑服务为稳定性收入支柱，监测是否流失客户</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">资本支出占营收比</div>
+      <div class="kw-current">0.67%</div>
+      <div class="kw-target">Fab-Lite 轻资产模式；CapEx/Rev 保持低位是优势</div>
+    </div>
+    <div class="kpi-watch-card">
+      <div class="kw-title">2026 EPS 指引中值</div>
+      <div class="kw-current">$28.25</div>
+      <div class="kw-target">区间 $27.25–$29.25；基本持平 FY2025 $28.19</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 竞争格局 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">竞争格局</div>
+
+  <div class="sub-title">主要同业对比</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>公司</th><th>股票代码</th><th>市值</th><th>FY2025 营收</th><th>营业利润率</th><th>ROE</th><th>TTM P/E</th><th>主要优势</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>EMCOR Group</strong></td><td>EME</td><td>$33.4B</td><td>$17.0B</td>
+          <td class="pos">10.09%</td><td class="pos">38.5%</td><td>26.6x</td><td>全国规模+数据中心电气</td>
+        </tr>
+        <tr>
+          <td>Quanta Services</td><td>PWR</td><td>~$45B</td><td>$28.5B</td>
+          <td>5.5%</td><td>数据不可用</td><td>~60-80x</td><td>输电线路+可再生能源</td>
+        </tr>
+        <tr>
+          <td>Comfort Systems USA</td><td>FIX</td><td>~$8B</td><td>~$8B</td>
+          <td>~8-9%</td><td class="pos">43.6%</td><td>~20x</td><td>HVAC 机械建筑</td>
+        </tr>
+        <tr>
+          <td>MYR Group</td><td>MYRG</td><td>~$1.5B</td><td>~$4.5B</td>
+          <td>~5-6%</td><td>~15%</td><td>~15x</td><td>输配电线路施工</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-title" style="margin-top:24px">竞争优势分析</div>
+  <div class="two-col">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-weight:600;color:var(--green);margin-bottom:10px;">EMCOR 核心优势</div>
+      <ul style="list-style:none;font-size:.85rem;color:var(--text2);line-height:2;">
+        <li>规模优势：全美最大电气+机械建筑承包商之一，超 80 个子公司</li>
+        <li>一站式服务：电气、机械、建筑服务垂直整合，大客户粘性强</li>
+        <li>数据中心专业能力：800V DC 配电、液冷、UPS 全栈电气方案</li>
+        <li>零长期债务 + $637M 净现金，财务极为稳健</li>
+        <li>历史毛利率连续4年扩张（14.5% → 19.3%）</li>
+        <li>ROE/ROIC 均接近 38-39%，资本效率突出</li>
+      </ul>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-weight:600;color:var(--yellow);margin-bottom:10px;">主要竞争风险</div>
+      <ul style="list-style:none;font-size:.85rem;color:var(--text2);line-height:2;">
+        <li>施工行业进入门槛偏低，地区性竞争对手较多</li>
+        <li>劳动力市场紧张：技术工人短缺可能推高成本压缩利润率</li>
+        <li>项目集中风险：大型数据中心项目占比提升，少数项目失误影响大</li>
+        <li>Quanta Services 正在加大电气建筑市场布局</li>
+        <li>FY2026 EPS 指引中值 $28.25 基本与 FY2025 持平，增长放缓</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 护城河 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">巴菲特护城河分析</div>
+
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-title">品牌与声誉</div>
+      <div class="moat-badge narrow">窄护城河</div>
+      <div class="stars">★★★★☆</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--yellow)"></div></div>
+      <div class="moat-desc" style="margin-top:8px">EMCOR 是全美知名的电气+机械建筑承包商，大型项目招标中品牌信誉显著降低客户选择风险。但建筑服务本质上仍以投标竞价为主，品牌溢价有限。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-title">转换成本</div>
+      <div class="moat-badge narrow">窄护城河</div>
+      <div class="stars">★★★☆☆</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--yellow)"></div></div>
+      <div class="moat-desc" style="margin-top:8px">建筑服务（BS）分部的设施管理合同形成一定转换成本；但建筑施工项目本身通常是一次性合同，客户可自由更换承包商。整合服务能力（电气+机械+运维）提升整体粘性。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-title">规模与成本优势</div>
+      <div class="moat-badge narrow">窄护城河</div>
+      <div class="stars">★★★★☆</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--yellow)"></div></div>
+      <div class="moat-desc" style="margin-top:8px">全国性规模允许跨地区调配人力与设备，采购成本优势明显。超 80 个子公司的分布式运营模型在大型基础设施项目中具有显著优势，中小竞争对手难以复制。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-title">无形资产（专业能力）</div>
+      <div class="moat-badge narrow">窄护城河</div>
+      <div class="stars">★★★★☆</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--yellow)"></div></div>
+      <div class="moat-desc" style="margin-top:8px">数据中心 800VDC、大型变电站、Mission Critical 电气系统的专业设计施工能力需要数年积累。Miller Electric 收购进一步加强了高压配电与数据中心专业能力。</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-title">网络效应</div>
+      <div class="moat-badge none-badge">无</div>
+      <div class="stars">★★☆☆☆</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--red)"></div></div>
+      <div class="moat-desc" style="margin-top:8px">建筑服务行业缺乏典型网络效应。客户增加不会直接使现有客户获益。长期建筑服务合同中的多地点覆盖能力是较弱的间接网络优势。</div>
+    </div>
+  </div>
+
+  <div style="background:var(--bg3);border:2px solid var(--yellow);border-radius:12px;padding:20px;margin-top:20px">
+    <div style="font-size:1rem;font-weight:700;color:var(--yellow);margin-bottom:8px;">综合护城河评级：窄护城河（Narrow Moat）</div>
+    <p style="font-size:.88rem;color:var(--text2);line-height:1.8;">
+      EMCOR 拥有显著但非不可逾越的竞争优势：规模优势、专业技术能力和整合服务模型构成较强的竞争壁垒，
+      但建筑行业固有的低毛利特性（~19%）和以竞标为主的项目获取方式限制了护城河宽度。
+      数据中心 AI 基础设施建设的高专业性要求正在提升护城河的质量。
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════ 周期与宏观 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">霍华德·马克斯周期分析</div>
+
+  <div class="two-col">
+    <div>
+      <div class="sub-title">周期阶段定位</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <div style="padding:6px 14px;border-radius:20px;font-size:.82rem;background:rgba(100,116,139,.15);color:var(--text3);border:1px solid var(--text3)">复苏期</div>
+          <div style="padding:6px 14px;border-radius:20px;font-size:.82rem;background:rgba(59,130,246,.15);color:var(--blue);border:1px solid var(--blue)">扩张期</div>
+          <div style="padding:6px 14px;border-radius:20px;font-size:.82rem;background:rgba(16,185,129,.25);color:var(--green);border:2px solid var(--green);font-weight:700">成长加速期 ← 当前</div>
+          <div style="padding:6px 14px;border-radius:20px;font-size:.82rem;background:rgba(100,116,139,.1);color:var(--text3);border:1px solid rgba(100,116,139,.3)">过热期</div>
+          <div style="padding:6px 14px;border-radius:20px;font-size:.82rem;background:rgba(100,116,139,.1);color:var(--text3);border:1px solid rgba(100,116,139,.3)">衰退期</div>
+        </div>
+        <p style="font-size:.85rem;color:var(--text2);line-height:1.8;">
+          <strong style="color:var(--text)">量化依据：</strong><br>
+          1. AI 数据中心建设投资处于指数增长阶段（CAGR 26.8%），EMCOR RPO 连续高速增长<br>
+          2. 营业利润率从 5.1%（2022）扩张至 10.1%（2025），处于历史高位但行业建设周期启动不足3年<br>
+          3. 大型云厂商 CapEx 仍处于加速阶段（微软 FY2026 CapEx 指引 $80B+），上游投资持续
+        </p>
+      </div>
+
+      <div class="sub-title">估值历史分位</div>
+      <div class="val-row">
+        <span class="val-label">TTM P/E（26.6x）</span>
+        <div class="val-bar-wrap"><div class="val-bar-fill" style="width:65%;background:var(--yellow)"></div></div>
+        <span class="val-num" style="color:var(--yellow)">65th 分位</span>
+      </div>
+      <div class="val-row">
+        <span class="val-label">P/B（9.23x）</span>
+        <div class="val-bar-wrap"><div class="val-bar-fill" style="width:85%;background:var(--red)"></div></div>
+        <span class="val-num" style="color:var(--red)">85th 分位</span>
+      </div>
+      <div class="val-row">
+        <span class="val-label">P/S（1.97x）</span>
+        <div class="val-bar-wrap"><div class="val-bar-fill" style="width:70%;background:var(--yellow)"></div></div>
+        <span class="val-num" style="color:var(--yellow)">70th 分位</span>
+      </div>
+      <div class="val-row">
+        <span class="val-label">P/E vs 10年均值（20x）</span>
+        <div class="val-bar-wrap"><div class="val-bar-fill" style="width:60%;background:var(--yellow)"></div></div>
+        <span class="val-num" style="color:var(--yellow)">溢价 +33%</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="sub-title">主要尾部风险矩阵</div>
+      <div class="risk-grid">
+        <div class="risk-row risk-header">
+          <span>风险类型</span><span style="text-align:center">概率</span><span style="text-align:center">潜在影响</span><span>量化估算</span>
+        </div>
+        <div class="risk-row">
+          <span class="risk-name">AI CapEx 收缩</span>
+          <span class="risk-prob"><span class="badge-m">中</span></span>
+          <span class="risk-impact"><span class="badge-h">高</span></span>
+          <span class="risk-detail">云厂商 CapEx 若下降 20%，数据中心 RPO 可能减少 $2-3B，拖累营收增速至低个位数</span>
+        </div>
+        <div class="risk-row">
+          <span class="risk-name">劳动力成本上升</span>
+          <span class="risk-prob"><span class="badge-h">高</span></span>
+          <span class="risk-impact"><span class="badge-m">中</span></span>
+          <span class="risk-detail">技术工人短缺导致工资通胀，毛利率每下降1pp影响净利润约$170M</span>
+        </div>
+        <div class="risk-row">
+          <span class="risk-name">宏观经济衰退</span>
+          <span class="risk-prob"><span class="badge-m">中</span></span>
+          <span class="risk-impact"><span class="badge-m">中</span></span>
+          <span class="risk-detail">工业/商业建筑需求可能下降10-20%，但政府+数据中心业务提供部分对冲</span>
+        </div>
+        <div class="risk-row">
+          <span class="risk-name">整合风险（Miller Electric）</span>
+          <span class="risk-prob"><span class="badge-l">低</span></span>
+          <span class="risk-impact"><span class="badge-m">中</span></span>
+          <span class="risk-detail">$865M 收购未能产生预期协同效应，摊薄回报；历史上 EMCOR 并购整合能力较强</span>
+        </div>
+        <div class="risk-row">
+          <span class="risk-name">估值压缩风险</span>
+          <span class="risk-prob"><span class="badge-m">中</span></span>
+          <span class="risk-impact"><span class="badge-m">中</span></span>
+          <span class="risk-detail">若 P/E 回归 10年均值 20x，对应目标价 $564，较当前 $751 下跌 25%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 三大框架估值 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">三大框架估值分析</div>
+
+  <!-- 格雷厄姆 -->
+  <div class="sub-title">一、格雷厄姆安全边际估值</div>
+  <div class="two-col">
+    <div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px">
+        <div style="font-weight:600;color:var(--text);margin-bottom:12px">格雷厄姆数计算</div>
+        <div style="font-size:.85rem;color:var(--text2);line-height:2">
+          <div>公式：√(22.5 × EPS × BVPS)</div>
+          <div>EPS（GAAP 稀释）= <strong style="color:var(--text)">$28.19</strong></div>
+          <div>每股账面价值 = <strong style="color:var(--text)">$81.38</strong></div>
+          <div>Graham Number = √(22.5 × $28.19 × $81.38) = √(51,628)</div>
+          <div style="color:var(--yellow);font-size:1.1rem;font-weight:700;margin-top:8px">= $227.22 / 股</div>
+          <div style="color:var(--red);margin-top:4px">当前价格 $751.33，溢价 <strong>+230.6%</strong></div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+        <div style="font-weight:600;color:var(--text);margin-bottom:12px">格雷厄姆安全检验清单</div>
+        <div class="check-row"><div class="check-icon fail">✗</div><span class="check-name">P/E ≤ 15x</span><span class="check-actual" style="color:var(--red)">实际 26.6x — 不通过</span></div>
+        <div class="check-row"><div class="check-icon fail">✗</div><span class="check-name">P/B ≤ 1.5x</span><span class="check-actual" style="color:var(--red)">实际 9.23x — 不通过</span></div>
+        <div class="check-row"><div class="check-icon fail">✗</div><span class="check-name">P/E × P/B ≤ 22.5</span><span class="check-actual" style="color:var(--red)">实际 245.5 — 不通过</span></div>
+        <div class="check-row"><div class="check-icon fail">✗</div><span class="check-name">流动比率 ≥ 2x</span><span class="check-actual" style="color:var(--red)">实际 1.22x — 不通过</span></div>
+        <div class="check-row"><div class="check-icon pass">✓</div><span class="check-name">负债/权益 ≤ 1x</span><span class="check-actual" style="color:var(--green)">实际 0.13x — 通过</span></div>
+        <div class="check-row"><div class="check-icon fail">✗</div><span class="check-name">资产/负债 ≥ 2x</span><span class="check-actual" style="color:var(--red)">实际 1.65x — 不通过</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+        <div style="font-weight:600;color:var(--text);margin-bottom:16px">DCF 三情景估值（折现率 10%，10年期）</div>
+        <div style="font-size:.82rem;color:var(--text3);margin-bottom:12px">基础 FCF：$1,189M（FY2025）| 流通股：44.53M</div>
+
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:6px">
+            <span style="color:var(--text2)">保守（15% → 8% → 3%）</span>
+            <span style="color:var(--yellow);font-weight:600">$758 / 股</span>
+          </div>
+          <div style="background:var(--bg4);height:8px;border-radius:4px;overflow:hidden">
+            <div style="width:55%;height:100%;background:var(--yellow);border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:6px">
+            <span style="color:var(--text2)">中性（25% → 12% → 3%）</span>
+            <span style="color:var(--blue);font-weight:600">$1,281 / 股</span>
+          </div>
+          <div style="background:var(--bg4);height:8px;border-radius:4px;overflow:hidden">
+            <div style="width:78%;height:100%;background:var(--blue);border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:6px">
+            <span style="color:var(--text2)">乐观（35% → 15% → 4%）</span>
+            <span style="color:var(--green);font-weight:600">$2,293 / 股</span>
+          </div>
+          <div style="background:var(--bg4);height:8px;border-radius:4px;overflow:hidden">
+            <div style="width:100%;height:100%;background:var(--green);border-radius:4px"></div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:12px">
+          <div style="font-size:.85rem;color:var(--text2);margin-bottom:4px">加权综合内在价值（30/45/25%）</div>
+          <div style="font-size:1.6rem;font-weight:700;color:var(--cyan)">$1,377 / 股</div>
+          <div style="font-size:.8rem;color:var(--green);margin-top:4px">当前价格折价约 45.4%</div>
+        </div>
+        <p style="font-size:.78rem;color:var(--text3);margin-top:10px;line-height:1.5">注：保守情景 $758 与当前价格 $751 基本持平，说明当前估值已基本消化保守增速预期</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 巴菲特 -->
+  <div class="sub-title" style="margin-top:28px">二、巴菲特护城河价值投资分析</div>
+  <div class="two-col">
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-weight:600;color:var(--text);margin-bottom:12px">ROE 可持续性评估（近4年）</div>
+      <div class="val-row"><span class="val-label">FY2022 ROE</span><div class="val-bar-wrap"><div class="val-bar-fill" style="width:21%;background:var(--text3)"></div></div><span class="val-num" style="color:var(--text3)">20.6%</span></div>
+      <div class="val-row"><span class="val-label">FY2023 ROE</span><div class="val-bar-wrap"><div class="val-bar-fill" style="width:32%;background:var(--yellow)"></div></div><span class="val-num" style="color:var(--yellow)">32.1%</span></div>
+      <div class="val-row"><span class="val-label">FY2024 ROE</span><div class="val-bar-wrap"><div class="val-bar-fill" style="width:41%;background:var(--green)"></div></div><span class="val-num" style="color:var(--green)">40.8%</span></div>
+      <div class="val-row"><span class="val-label">FY2025 ROE</span><div class="val-bar-wrap"><div class="val-bar-fill" style="width:38.5%;background:var(--green)"></div></div><span class="val-num" style="color:var(--green)">38.5%</span></div>
+      <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-top:12px;font-size:.85rem;color:var(--text2)">
+        3年平均 ROE：<strong style="color:var(--green)">~37%</strong>；ROIC ~38%；零长期债务驱动高资本效率
+      </div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-weight:600;color:var(--text);margin-bottom:14px">巴菲特内在价值估算</div>
+      <div style="font-size:.85rem;color:var(--text2);line-height:2">
+        <div>护城河评级：<span style="color:var(--yellow);font-weight:600">窄护城河（Narrow Moat）</span></div>
+        <div>ROE 均值：~37% → 合理 P/E 区间：<strong style="color:var(--text)">22-28x</strong></div>
+        <div>DCF 中性内在价值：$1,281</div>
+        <div>窄护城河折扣系数：0.85</div>
+        <div>调整后内在价值：<strong style="color:var(--cyan)">~$1,089 / 股</strong></div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+          理想买入区间（含20%安全边际）：<strong style="color:var(--green)">$650 – $870</strong>
+        </div>
+        <div>当前股价 $751 处于买入区间 <strong style="color:var(--green)">中下段</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 马克斯 -->
+  <div class="sub-title" style="margin-top:28px">三、霍华德·马克斯周期投资分析</div>
+  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;font-size:.85rem;color:var(--text2)">
+      <div><strong style="color:var(--text)">周期阶段</strong><br>AI 数据中心建设：成长加速期<br>股价已从低点 $320 上涨 +134%</div>
+      <div><strong style="color:var(--text)">情绪信号</strong><br>分析师评级：7 买入 / 0 卖出<br>平均目标价 $869（+15.7% 上行）</div>
+      <div><strong style="color:var(--text)">估值分位</strong><br>P/E 26.6x 处 10 年 65th 分位<br>相对合理但有溢价</div>
+      <div><strong style="color:var(--text)">马克斯结论</strong><br><span style="color:var(--green);font-weight:700">谨慎买入</span><br>当前价接近保守 DCF，具备合理安全边际</div>
+    </div>
+  </div>
+
+  <!-- 综合结论 -->
+  <div class="sub-title" style="margin-top:28px">三框架综合结论</div>
+  <div class="conclusion-grid">
+    <div class="conclusion-card red">
+      <div class="conc-framework" style="color:var(--red)">格雷厄姆 · 安全边际</div>
+      <div class="conc-verdict" style="color:var(--red)">减持</div>
+      <div class="conc-detail">Graham Number $227.22，溢价+230.6%；仅1项安全指标通过（负债/权益）；6项中5项不达标。格雷厄姆框架严重不适用于高增长工业服务公司。</div>
+    </div>
+    <div class="conclusion-card yellow">
+      <div class="conc-framework" style="color:var(--yellow)">巴菲特 · 护城河价值</div>
+      <div class="conc-verdict" style="color:var(--yellow)">谨慎买入</div>
+      <div class="conc-detail">窄护城河 + ROE ~37% + 零债务，内在价值约 $1,089，当前价 $751 折价 31%，处于20%安全边际买入区间内。数据中心 AI 基础设施需求是核心驱动。</div>
+    </div>
+    <div class="conclusion-card green">
+      <div class="conc-framework" style="color:var(--green)">马克斯 · 周期思维</div>
+      <div class="conc-verdict" style="color:var(--green)">谨慎买入</div>
+      <div class="conc-detail">AI 数据中心建设成长加速期，EMCOR 处于周期甜蜜点；股价较高点回调 10%，情绪退温；P/E 估值合理，当前价接近保守 DCF 提供下行保护。</div>
+    </div>
+  </div>
+
+  <div class="buy-range-box">
+    <div class="buy-range-label">建议买入区间（含 20% 安全边际）</div>
+    <div class="buy-range-value">$650 – $870</div>
+    <div class="buy-range-note">当前价格 $751.33 处于买入区间中段 | DCF 加权内在价值 $1,377 | 保守情景 $758</div>
+    <div class="buy-range-note" style="margin-top:6px">2026 FY 指引：营收 $17.75-18.50B | EPS $27.25-29.25 | 运营利润率 9.0-9.4%</div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 数据来源 ══════════════════════ -->
+<div class="section">
+  <div class="section-title">数据来源</div>
+  <ul class="source-list">
+    <li><a href="https://www.businesswire.com/news/home/20260226702092/en/EMCOR-Group-Inc.-Reports-Fourth-Quarter-and-Full-Year-2025-Results" target="_blank">BusinessWire — EMCOR Group Q4 & FY2025 Results (2026-02-26)</a></li>
+    <li><a href="https://stockanalysis.com/stocks/eme/financials/" target="_blank">StockAnalysis — EME Income Statement (Annual & Quarterly)</a></li>
+    <li><a href="https://stockanalysis.com/stocks/eme/financials/balance-sheet/" target="_blank">StockAnalysis — EME Balance Sheet</a></li>
+    <li><a href="https://stockanalysis.com/stocks/eme/financials/cash-flow-statement/" target="_blank">StockAnalysis — EME Cash Flow Statement</a></li>
+    <li><a href="https://www.macrotrends.net/stocks/charts/EME/emcor/pe-ratio" target="_blank">MacroTrends — EME Historical PE Ratio (2011-2025)</a></li>
+    <li><a href="https://finance.yahoo.com/news/investors-reacting-emcor-group-eme-211255724.html" target="_blank">Yahoo Finance — Investor Reaction to EME 2026 Guidance</a></li>
+    <li><a href="https://www.nasdaq.com/articles/will-rising-data-center-construction-continue-lift-emcors-rpos" target="_blank">Nasdaq — EMCOR Data Center RPO Analysis</a></li>
+    <li><a href="https://www.defenseworld.net/2026/02/28/emcor-group-q4-earnings-call-highlights.html" target="_blank">DefenseWorld — EMCOR Q4 2025 Earnings Call Highlights</a></li>
+    <li><a href="https://stockanalysis.com/stocks/eme/statistics/" target="_blank">StockAnalysis — EME Valuation Statistics (市值、P/B、P/S)</a></li>
+    <li><a href="https://www.gurufocus.com/stock/EME/summary" target="_blank">GuruFocus — EME ROE / ROIC Data</a></li>
+  </ul>
+  <div style="margin-top:16px;font-size:.8rem;color:var(--text3)">分析时间戳：2026-03-23 &nbsp;|&nbsp; 股价数据截至 2026-03-20 &nbsp;|&nbsp; 本报告仅供参考，不构成投资建议</div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+const COLORS = { blue:'#3b82f6', green:'#10b981', red:'#ef4444', yellow:'#f59e0b', purple:'#8b5cf6', cyan:'#06b6d4', orange:'#f97316' };
+const GRID = { color:'rgba(30,58,95,0.5)' };
+const TICK = { color:'#64748b', font:{size:11} };
+const baseOpts = { responsive:true, maintainAspectRatio:false, plugins:{ legend:{labels:{color:'#94a3b8',font:{size:11}}}, tooltip:{backgroundColor:'#1a2235',titleColor:'#e2e8f0',bodyColor:'#94a3b8'} } };
+
+// Revenue chart
+new Chart(document.getElementById('revenueChart'), {
+  type:'bar',
+  data: {
+    labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],
+    datasets:[
+      { label:'营收 (M)', data:[3432,3667,3697,3770,3867,4304,4302,4513], backgroundColor:'rgba(59,130,246,.7)', yAxisID:'y' },
+      { label:'YoY %', data:[16.3,18.0,17.1,14.2,12.7,17.4,16.4,19.7], type:'line', borderColor:COLORS.green, backgroundColor:'transparent', yAxisID:'y1', pointRadius:4, tension:.3 }
+    ]
+  },
+  options: { ...baseOpts, scales: {
+    x:{ticks:TICK,grid:GRID},
+    y:{ticks:{...TICK,callback:v=>'$'+v.toLocaleString()},grid:GRID,position:'left'},
+    y1:{ticks:{...TICK,callback:v=>v+'%'},grid:{display:false},position:'right'}
+  }}
+});
+
+// Margin chart
+new Chart(document.getElementById('marginChart'), {
+  type:'line',
+  data: {
+    labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],
+    datasets:[
+      { label:'毛利率 %', data:[17.17,18.65,19.87,20.08,18.69,19.37,19.42,19.75], borderColor:COLORS.blue, backgroundColor:'rgba(59,130,246,.1)', fill:true, tension:.3 },
+      { label:'营业利润率 %', data:[7.57,9.08,9.83,10.31,8.24,9.65,9.43,12.71], borderColor:COLORS.green, backgroundColor:'transparent', tension:.3 },
+      { label:'净利率 %', data:[5.74,6.77,7.30,7.75,6.23,7.02,6.86,9.64], borderColor:COLORS.yellow, backgroundColor:'transparent', tension:.3 }
+    ]
+  },
+  options: { ...baseOpts, scales: {
+    x:{ticks:TICK,grid:GRID},
+    y:{ticks:{...TICK,callback:v=>v+'%'},grid:GRID}
+  }}
+});
+
+// EPS chart
+new Chart(document.getElementById('epsChart'), {
+  type:'bar',
+  data: {
+    labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],
+    datasets:[{ label:'EPS (GAAP 稀释)', data:[4.17,5.25,5.80,6.32,5.26,6.72,6.57,9.68], backgroundColor:[
+      'rgba(59,130,246,.7)','rgba(59,130,246,.7)','rgba(59,130,246,.7)','rgba(59,130,246,.7)',
+      'rgba(16,185,129,.7)','rgba(16,185,129,.7)','rgba(16,185,129,.7)','rgba(16,185,129,.7)'
+    ]}]
+  },
+  options: { ...baseOpts, scales: {
+    x:{ticks:TICK,grid:GRID},
+    y:{ticks:{...TICK,callback:v=>'$'+v},grid:GRID}
+  }}
+});
+
+// FCF chart
+new Chart(document.getElementById('fcfChart'), {
+  type:'bar',
+  data: {
+    labels:['FY2022','FY2023','FY2024','FY2025'],
+    datasets:[
+      { label:'FCF (M)', data:[449,821,1333,1189], backgroundColor:'rgba(16,185,129,.7)' },
+      { label:'FCF 利润率 %', data:[4.05,6.52,9.15,7.00], type:'line', borderColor:COLORS.cyan, backgroundColor:'transparent', yAxisID:'y1', pointRadius:5, tension:.3 }
+    ]
+  },
+  options: { ...baseOpts, scales: {
+    x:{ticks:TICK,grid:GRID},
+    y:{ticks:{...TICK,callback:v=>'$'+v.toLocaleString()},grid:GRID,position:'left'},
+    y1:{ticks:{...TICK,callback:v=>v+'%'},grid:{display:false},position:'right'}
+  }}
+});
+
+// CapEx chart
+new Chart(document.getElementById('capexChart'), {
+  type:'bar',
+  data: {
+    labels:['2022','2023','2024','2025E'],
+    datasets:[
+      { label:'微软', data:[23.9,28.1,55.7,80], backgroundColor:'rgba(59,130,246,.8)', stack:'s' },
+      { label:'谷歌(Alphabet)', data:[31.5,32.3,52.5,75], backgroundColor:'rgba(16,185,129,.8)', stack:'s' },
+      { label:'亚马逊(AWS)', data:[63.6,52.7,74.5,104], backgroundColor:'rgba(245,158,11,.8)', stack:'s' },
+      { label:'Meta', data:[31.4,27.3,37.4,65], backgroundColor:'rgba(139,92,246,.8)', stack:'s' }
+    ]
+  },
+  options: { ...baseOpts, scales: {
+    x:{ticks:TICK,grid:GRID,stacked:true},
+    y:{ticks:{...TICK,callback:v=>'$'+v+'B'},grid:GRID,stacked:true}
+  }}
+});
+</script>
+</body>
+</html>
