@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUBB - Hubbell Incorporated 价值投资深度分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2235; --bg4: #1e293b;
+    --accent: #3b82f6; --accent2: #60a5fa; --gold: #f59e0b; --green: #10b981;
+    --red: #ef4444; --yellow: #f59e0b; --purple: #8b5cf6; --teal: #14b8a6;
+    --text: #e2e8f0; --muted: #94a3b8; --border: #1e3a5f;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #0a0e1a 0%, #0f1e3d 50%, #0a1628 100%);
+    border-bottom: 1px solid var(--border); padding: 40px 0 32px; }
+  .hero-inner { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 32px; }
+  .hero-left h1 { font-size: 2.8rem; font-weight: 800; color: #fff; letter-spacing: -1px; }
+  .hero-left h2 { font-size: 1.1rem; color: var(--muted); font-weight: 400; margin-top: 4px; }
+  .hero-price { font-size: 3rem; font-weight: 700; color: var(--accent2); margin-top: 12px; }
+  .hero-sub { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+  .badge-blue { background: rgba(59,130,246,0.2); color: var(--accent2); border: 1px solid var(--accent); }
+  .badge-yellow { background: rgba(245,158,11,0.2); color: var(--gold); border: 1px solid var(--gold); }
+  .badge-red { background: rgba(239,68,68,0.2); color: var(--red); border: 1px solid var(--red); }
+  .badge-green { background: rgba(16,185,129,0.2); color: var(--green); border: 1px solid var(--green); }
+  .hero-right { margin-left: auto; text-align: right; }
+  .hero-right .date { color: var(--muted); font-size: 0.85rem; }
+  .hero-meta { display: flex; gap: 24px; margin-top: 12px; flex-wrap: wrap; }
+  .hero-meta-item { text-align: center; }
+  .hero-meta-item .label { font-size: 0.75rem; color: var(--muted); }
+  .hero-meta-item .value { font-size: 1.1rem; font-weight: 700; color: #fff; }
+
+  /* SECTIONS */
+  .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 1.4rem; font-weight: 700; color: var(--accent2); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 24px;
+    background: var(--accent); border-radius: 2px; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .kpi-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 16px; }
+  .kpi-card .kpi-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.05em; }
+  .kpi-card .kpi-value { font-size: 1.6rem; font-weight: 700; color: #fff; margin-top: 4px; }
+  .kpi-card .kpi-sub { font-size: 0.8rem; margin-top: 4px; }
+  .kpi-up { color: var(--green); }
+  .kpi-down { color: var(--red); }
+  .kpi-neutral { color: var(--muted); }
+
+  /* CHARTS */
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; }
+  .chart-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .chart-card h3 { font-size: 0.95rem; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
+  .chart-wrap { position: relative; height: 260px; }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .data-table th { background: var(--bg4); color: var(--muted); text-align: right; padding: 10px 14px;
+    font-weight: 600; font-size: 0.78rem; text-transform: uppercase; }
+  .data-table th:first-child { text-align: left; }
+  .data-table td { padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); }
+  .data-table td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+  .data-table tr:hover td { background: var(--bg4); }
+  .data-table .highlight { color: var(--accent2); font-weight: 700; }
+  .table-wrap { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; overflow-x: auto; }
+
+  /* MOAT */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .moat-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .moat-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .moat-card .stars { font-size: 1.2rem; margin: 8px 0; }
+  .moat-bar { height: 6px; background: var(--bg4); border-radius: 3px; margin: 8px 0; }
+  .moat-bar-fill { height: 100%; border-radius: 3px; }
+  .moat-card .moat-desc { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+  .moat-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 0.75rem;
+    font-weight: 700; margin-top: 6px; }
+  .moat-wide { background: rgba(16,185,129,0.2); color: var(--green); }
+  .moat-narrow { background: rgba(245,158,11,0.2); color: var(--gold); }
+  .moat-none { background: rgba(239,68,68,0.2); color: var(--red); }
+
+  /* RISK MATRIX */
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .risk-card { background: var(--bg3); border-left: 4px solid; border-radius: 0 12px 12px 0; padding: 16px 20px; }
+  .risk-card h4 { font-size: 0.9rem; font-weight: 700; }
+  .risk-card p { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+  .risk-tags { display: flex; gap: 8px; margin-top: 8px; }
+  .risk-tag { font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+
+  /* VALUATION */
+  .val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; }
+  .val-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .val-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--accent2); margin-bottom: 16px; }
+  .checklist li { list-style: none; padding: 8px 0; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; }
+  .pass { color: var(--green); font-weight: 700; }
+  .fail { color: var(--red); font-weight: 700; }
+  .dcf-bar { margin: 10px 0; }
+  .dcf-bar label { font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; }
+  .dcf-bar-track { height: 28px; background: var(--bg4); border-radius: 4px; position: relative; margin-top: 4px; overflow: hidden; }
+  .dcf-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center;
+    padding-left: 10px; font-size: 0.8rem; font-weight: 700; color: #fff; }
+  .verdict-card { border-radius: 12px; padding: 20px; margin-top: 16px; }
+  .verdict-red { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); }
+  .verdict-yellow { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); }
+  .verdict-green { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); }
+  .verdict-title { font-size: 1.1rem; font-weight: 800; }
+  .verdict-detail { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+
+  /* FINAL SUMMARY */
+  .summary-box { background: linear-gradient(135deg, #0f1e3d, #0a1628);
+    border: 2px solid var(--accent); border-radius: 16px; padding: 32px; text-align: center; }
+  .summary-box h2 { font-size: 1.8rem; font-weight: 800; color: var(--accent2); }
+  .buy-range { font-size: 3rem; font-weight: 900; color: var(--gold); margin: 16px 0; }
+  .buy-range-label { color: var(--muted); font-size: 0.9rem; }
+  .three-verdict { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 24px; }
+  .three-verdict-item { text-align: center; padding: 16px 24px; border-radius: 12px; min-width: 160px; }
+
+  /* SEGMENT PIE */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* CYCLE */
+  .cycle-meter { display: flex; gap: 6px; margin: 16px 0; }
+  .cycle-seg { flex: 1; height: 14px; border-radius: 3px; }
+  .cycle-arrow { font-size: 1.2rem; text-align: center; margin-top: 4px; }
+  .cycle-labels { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+
+  /* SOURCES */
+  .sources-list { column-count: 2; column-gap: 24px; }
+  .sources-list li { font-size: 0.78rem; margin-bottom: 6px; break-inside: avoid; }
+  .sources-list a { color: var(--accent2); text-decoration: none; }
+  .sources-list a:hover { text-decoration: underline; }
+
+  @media(max-width: 600px) {
+    .hero-left h1 { font-size: 2rem; }
+    .hero-price { font-size: 2rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .sources-list { column-count: 1; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .val-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+<div class="container">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>HUBB</h1>
+      <h2>Hubbell Incorporated &nbsp;|&nbsp; NYSE &nbsp;|&nbsp; 电气设备与解决方案</h2>
+      <div class="hero-price">$489.07</div>
+      <div class="hero-sub">分析日期：2026-03-24 &nbsp;|&nbsp; 数据截至 2026-03-23</div>
+      <div class="hero-badges">
+        <span class="badge badge-blue">市值 $26.0B</span>
+        <span class="badge badge-blue">电网现代化受益标的</span>
+        <span class="badge badge-yellow">谨慎持有 / 等待买点</span>
+        <span class="badge badge-green">18年连续股息增长</span>
+        <span class="badge badge-blue">记录积压订单 $2.2B</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="date">分析师综合目标价</div>
+      <div style="font-size:2.2rem;font-weight:800;color:var(--green);">$529.75</div>
+      <div style="color:var(--green);font-size:0.85rem;">+8.3% 上行空间</div>
+      <div class="hero-meta" style="margin-top:20px;">
+        <div class="hero-meta-item">
+          <div class="label">52周高</div>
+          <div class="value" style="color:var(--red);">$533.80</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">52周低</div>
+          <div class="value" style="color:var(--green);">$299.43</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">空头比例</div>
+          <div class="value">4.99%</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">机构持仓</div>
+          <div class="value">88.2%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ KPI GRID ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">核心财务指标</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">FY2025 营收</div>
+      <div class="kpi-value">$5.84B</div>
+      <div class="kpi-sub kpi-up">+3.8% YoY</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">FY2025 净利润</div>
+      <div class="kpi-value">$892M</div>
+      <div class="kpi-sub kpi-up">净利率 15.3%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">GAAP EPS (FY25)</div>
+      <div class="kpi-value">$16.54</div>
+      <div class="kpi-sub kpi-up">调整后 $18.21</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">自由现金流</div>
+      <div class="kpi-value">$875M</div>
+      <div class="kpi-sub kpi-up">FCF转化率 90%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">毛利率</div>
+      <div class="kpi-value">35.3%</div>
+      <div class="kpi-sub kpi-up">+146bps YoY</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">调整后营业利润率</div>
+      <div class="kpi-value">22.7%</div>
+      <div class="kpi-sub kpi-up">+80bps YoY</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">TTM P/E</div>
+      <div class="kpi-value">29.6x</div>
+      <div class="kpi-sub kpi-neutral">5年均值 25.7x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">前向 P/E</div>
+      <div class="kpi-value">24.8x</div>
+      <div class="kpi-sub kpi-neutral">基于FY26指引</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ROE</div>
+      <div class="kpi-value">24.5%</div>
+      <div class="kpi-sub kpi-up">强于同业</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ROIC</div>
+      <div class="kpi-value">16.2%</div>
+      <div class="kpi-sub kpi-up">高于资本成本</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">净债务/权益</div>
+      <div class="kpi-value">0.60x</div>
+      <div class="kpi-sub kpi-neutral">净债务 $1.84B</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">股息收益率</div>
+      <div class="kpi-value">1.16%</div>
+      <div class="kpi-sub kpi-up">$5.68/股 年股息</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ BUSINESS MODEL ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">商业模式分析</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>营收分部构成 (FY2025)</h3>
+      <div class="chart-wrap">
+        <canvas id="segmentPie"></canvas>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">Utility Solutions</div>
+        <div class="kpi-value" style="color:var(--accent2);">$3,683M</div>
+        <div class="kpi-sub">占总营收 63%，Q4调整后营业利润率25.1%</div>
+        <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">
+          核心产品：变电站连接器、输配电设备、智能电网保护控制系统、通信基础设施配件。服务全美主要电力公司，受益于电网现代化资本支出。
+        </div>
+      </div>
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">Electrical Solutions</div>
+        <div class="kpi-value" style="color:var(--purple);">$2,162M</div>
+        <div class="kpi-sub">占总营收 37%，Q4调整后营业利润率20.5%，+10% YoY</div>
+        <div style="margin-top:8px;font-size:0.8rem;color:var(--muted);">
+          核心产品：工业连接器、数据中心电源基础设施（DMC Power）、线路器件、接地产品。受益于AI数据中心建设与轻工业电气化。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">收入质量评分</div>
+      <div class="kpi-value" style="color:var(--gold);">7.5 / 10</div>
+      <div class="kpi-sub">高度规格驱动（spec-driven），重复性采购比例高，但仍以硬件为主，软件/服务比例低于5%。DMC Power的引入提升了解决方案粘性。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">客户集中度风险</div>
+      <div class="kpi-value" style="color:var(--green);">低至中</div>
+      <div class="kpi-sub">客户高度分散——覆盖全美数百家电力公司与工业企业。电力公用事业监管属性使得长期采购关系稳定，无单一客户超过10%收入。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">定价权证明</div>
+      <div class="kpi-value" style="color:var(--green);">强</div>
+      <div class="kpi-sub">FY2025毛利率35.3%，较FY2022的29.7%扩张560bps；积压订单$2.2B（+14%YoY）显示供不应求；规格驱动使客户难以替换供应商。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">单位经济指标</div>
+      <div class="kpi-value" style="color:var(--accent2);">Fab-Lite</div>
+      <div class="kpi-sub">轻资产模式（固定资产占营收约7%），研发支出占比约3%，资本投入规律可预测。DMC Power带来$130M营收/$60M EBITDA（46%利润率）。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">积压订单（护城河信号）</div>
+      <div class="kpi-value" style="color:var(--green);">$2.2B</div>
+      <div class="kpi-sub kpi-up">+14% YoY 历史记录 — 提供2026年高能见度</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">DMC Power 协同价值</div>
+      <div class="kpi-value" style="color:var(--accent2);">$825M</div>
+      <div class="kpi-sub">2025年8月公告收购。预计2026年贡献$130M营收、~$60M EBITDA，专利360°径向压接技术强化数据中心电源基础设施壁垒。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ FINANCIALS ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">财务分析</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>季度营收趋势 ($M) 及 YoY 增速</h3>
+      <div class="chart-wrap">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>利润率趋势（季度）</h3>
+      <div class="chart-wrap">
+        <canvas id="marginChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>年度自由现金流趋势 ($M)</h3>
+      <div class="chart-wrap">
+        <canvas id="fcfChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>年度营收增长趋势 ($M)</h3>
+      <div class="chart-wrap">
+        <canvas id="annualRevChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">近6季度财务数据</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>季度</th><th>营收 ($M)</th><th>YoY增速</th><th>净利润 ($M)</th><th>净利率</th>
+            <th>毛利率</th><th>营业利润率</th><th>EPS (GAAP)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="highlight">Q4 2025</td><td>1,493</td><td class="kpi-up">+12%</td><td>224.2</td><td>15.0%</td><td>35.2%</td><td>20.9%</td><td>$4.19</td></tr>
+          <tr><td class="highlight">Q3 2025</td><td>1,502</td><td class="kpi-up">+4.1%</td><td>255.5</td><td>17.0%</td><td>36.2%</td><td>22.0%</td><td>$4.77</td></tr>
+          <tr><td class="highlight">Q2 2025</td><td>1,484</td><td class="kpi-up">+1.3%</td><td>244.2</td><td>16.5%</td><td>37.2%</td><td>22.7%</td><td>$4.56</td></tr>
+          <tr><td class="highlight">Q1 2025</td><td>1,365</td><td class="kpi-up">+0.4%</td><td>169.7</td><td>12.4%</td><td>33.1%</td><td>17.5%</td><td>$3.15</td></tr>
+          <tr><td>Q4 2024</td><td>1,334</td><td class="kpi-up">+11.0%</td><td>198.2</td><td>14.9%</td><td>33.9%</td><td>19.5%</td><td>$3.66</td></tr>
+          <tr><td>Q3 2024</td><td>1,443</td><td class="kpi-up">+14.6%</td><td>226.2</td><td>15.7%</td><td>35.1%</td><td>21.7%</td><td>$4.18</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">年度财务数据 (FY2021-2025)</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>财年</th><th>营收 ($M)</th><th>YoY</th><th>净利润 ($M)</th><th>毛利率</th><th>营业利润率</th><th>EPS GAAP</th><th>FCF ($M)</th><th>ROE</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="highlight">FY2025</td><td>5,845</td><td class="kpi-up">+3.8%</td><td>892</td><td>35.3%</td><td>20.7%</td><td>$16.54</td><td>875</td><td>24.5%</td></tr>
+          <tr><td>FY2024</td><td>5,629</td><td class="kpi-up">+4.8%</td><td>779</td><td>33.9%</td><td>19.4%</td><td>$14.39</td><td>811</td><td>22.8%</td></tr>
+          <tr><td>FY2023</td><td>5,373</td><td class="kpi-up">+8.6%</td><td>751</td><td>34.9%</td><td>19.1%</td><td>$13.89</td><td>715</td><td>26.0%</td></tr>
+          <tr><td>FY2022</td><td>4,948</td><td class="kpi-up">+18.0%</td><td>546</td><td>29.7%</td><td>14.3%</td><td>$9.43</td><td>454</td><td>20.3%</td></tr>
+          <tr><td>FY2021</td><td>4,194</td><td>—</td><td>400</td><td>27.5%</td><td>12.7%</td><td>$7.28</td><td>454</td><td>16.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ GROWTH DRIVERS ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">增长驱动与关键追踪指标</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px;">
+    <div class="kpi-card" style="border-left:3px solid var(--accent);">
+      <div class="kpi-label">驱动力 1 — 电网现代化</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:var(--accent2);">$1.2T 机遇</div>
+      <div class="kpi-sub" style="color:var(--muted);">2025年至2030年美国电网基础设施改造支出估算。州级强制可再生能源目标 + 联邦IRA法案补贴正加速老化设施更换周期。Hubbell约63%营收来自变电站、输电、配电市场。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--purple);">
+      <div class="kpi-label">驱动力 2 — 数据中心电源基础设施</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:var(--purple);">中-高 teens 增速</div>
+      <div class="kpi-sub" style="color:var(--muted);">管理层指引2025H2数据中心业务"中十几"增速。AI驱动超大规模机房建设持续扩张，DMC Power收购（$825M）新增专利电源连接方案，2026年预计贡献$130M营收。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--green);">
+      <div class="kpi-label">驱动力 3 — 记录积压订单能见度</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:var(--green);">$2.2B</div>
+      <div class="kpi-sub" style="color:var(--muted);">同比增长14%，历史最高。管理层表示此积压订单为2026年收入提供"高能见度"，支持7-9%总体增长指引落地，变电站与输电市场需求尤其强劲。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--gold);">
+      <div class="kpi-label">驱动力 4 — 轻工业电气化</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:var(--gold);">+10% Q4 YoY</div>
+      <div class="kpi-sub" style="color:var(--muted);">Electrical Solutions分部Q4营收同比增长14%，全年+10%。制造业回流（CHIPS法案、IRA）推动工厂新建与扩建，拉动工业电气设备需求，高于历史周期平均水平。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--teal);">
+      <div class="kpi-label">驱动力 5 — 电力可靠性 & 韧性支出</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:var(--teal);">持续多年</div>
+      <div class="kpi-sub" style="color:var(--muted);">极端天气频发推动电网弹性改造，NERC合规要求加速保护控制系统升级。Hubbell的电网保护与控制产品预计将"强劲增长"（管理层2026展望）。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid #e879f9;">
+      <div class="kpi-label">FY2026 指引</div>
+      <div class="kpi-value" style="font-size:1.2rem;color:#e879f9;">$6.3–6.4B</div>
+      <div class="kpi-sub" style="color:var(--muted);">总体增速7-9%（有机5-7%）。GAAP EPS $17.30–18.00，调整后EPS $19.15–19.85。FCF转化率≥90%。DMC Power贡献约$0.20调整后EPS增厚。</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;margin-top:8px;">需持续追踪的 KPI 清单</div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>KPI 指标</th><th>当前数值</th><th>目标/基准</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>积压订单余额</td><td>$2.2B (+14% YoY)</td><td>持续正增长</td><td class="kpi-up">健康</td></tr>
+        <tr><td>Utility Solutions 营业利润率（调整后）</td><td>25.1% (Q4 FY25)</td><td>&gt;25%</td><td class="kpi-up">达标</td></tr>
+        <tr><td>Electrical Solutions 营业利润率（调整后）</td><td>20.5% (Q4 FY25)</td><td>&gt;20%</td><td class="kpi-up">达标</td></tr>
+        <tr><td>FCF 转化率（调整后净利润）</td><td>90%</td><td>≥90%</td><td class="kpi-up">达标</td></tr>
+        <tr><td>有机增速（FY2026E）</td><td>5–7% 指引</td><td>4–6% 长期目标</td><td class="kpi-up">超目标</td></tr>
+        <tr><td>净债务 / EBITDA</td><td>1.3x</td><td>&lt;2.5x</td><td class="kpi-up">健康</td></tr>
+        <tr><td>DMC Power 整合进度</td><td>$130M 营收 2026E</td><td>$0.20 EPS 增厚</td><td class="kpi-neutral">跟踪中</td></tr>
+        <tr><td>毛利率扩张趋势</td><td>35.3% (+146bps)</td><td>持续扩张</td><td class="kpi-up">正向</td></tr>
+        <tr><td>数据中心分部增速</td><td>Mid-teens 2025H2</td><td>持续双位数</td><td class="kpi-up">健康</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ COMPETITIVE ANALYSIS ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">竞争格局分析</div>
+  <div class="chart-grid" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>ROE 对比（%）</h3>
+      <div class="chart-wrap" style="height:220px;">
+        <canvas id="roeChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>估值对比 — TTM P/E</h3>
+      <div class="chart-wrap" style="height:220px;">
+        <canvas id="peCompChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>指标</th>
+          <th>HUBB (Hubbell)</th>
+          <th>ETN (Eaton)</th>
+          <th>EMR (Emerson)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>营收 (TTM)</td><td class="highlight">$5.84B</td><td>$27.45B</td><td>$18.19B</td></tr>
+        <tr><td>营收增速 (YoY)</td><td class="highlight kpi-up">+3.8%</td><td class="kpi-up">~+10%</td><td class="kpi-up">~+7%</td></tr>
+        <tr><td>毛利率</td><td class="highlight">35.3%</td><td>~34%</td><td>~42%</td></tr>
+        <tr><td>调整后营业利润率</td><td class="highlight kpi-up">22.7%</td><td>~19%</td><td>~20%</td></tr>
+        <tr><td>净利率</td><td class="highlight">15.3%</td><td>~12%</td><td>~12%</td></tr>
+        <tr><td>ROE</td><td class="highlight kpi-up">24.5%</td><td>21.5%</td><td>9.7%</td></tr>
+        <tr><td>ROIC</td><td class="highlight">16.2%</td><td>~14%</td><td>~10%</td></tr>
+        <tr><td>TTM P/E</td><td class="highlight">29.4x</td><td>34.3x</td><td>33.0x</td></tr>
+        <tr><td>前向 P/E</td><td class="highlight">24.8x</td><td>~28x</td><td>~25x</td></tr>
+        <tr><td>P/B</td><td class="highlight">6.8x</td><td>6.8x</td><td>3.7x</td></tr>
+        <tr><td>EV/EBITDA</td><td class="highlight">19.8x</td><td>~22x</td><td>~20x</td></tr>
+        <tr><td>股息率</td><td class="highlight">1.16%</td><td>~1.0%</td><td>~2.1%</td></tr>
+        <tr><td>市值</td><td class="highlight">$26.0B</td><td>~$137B</td><td>~$62B</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">相对估值结论</div>
+      <div style="font-size:0.9rem;color:var(--text);margin-top:8px;">
+        HUBB TTM P/E (29.4x) 低于 ETN (34.3x) 和 EMR (33.0x)，但估值折价有其逻辑：HUBB规模较小（$26B vs $137B），营收增速相对低（+3.8% vs ETN +10%）。然而，HUBB的ROE（24.5%）和营业利润率（22.7%）显著优于同业，说明盈利质量更高，当前折价估值存在一定价值。
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">竞争壁垒来源</div>
+      <div style="font-size:0.9rem;color:var(--text);margin-top:8px;">
+        (1) 电力公司规格认证：一旦产品被写入工程规范，替换周期极长；(2) 130年品牌历史，NEMA/UL/IEEE标准深度参与；(3) DMC Power专利压接技术（360°径向工具）；(4) 广泛分销渠道网络（电气批发商+EPC承包商）；(5) 专业维修、培训与技术支持生态。
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">主要竞争威胁</div>
+      <div style="font-size:0.9rem;color:var(--text);margin-top:8px;">
+        Eaton（更大规模、更多产品线）、ABB/施耐德（全球影响力）、Legrand（民用电气）、Anixter/Wesco（分销竞争）。但在Hubbell核心的效用级/重型工业连接器细分市场，直接替代品有限。
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ MOAT SCORECARD ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">护城河评分卡（巴菲特框架）</div>
+  <div class="moat-grid">
+    <div class="moat-card">
+      <h4>品牌护城河</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:80%;background:var(--accent);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河 → 宽</span>
+      <div class="moat-desc">130年历史，电力行业标志性品牌。工程师默认以Hubbell作为设计规格依据（spec-and-pull）。品牌溢价稳定，但尚不及消费级品牌的定价无弹性。</div>
+    </div>
+    <div class="moat-card">
+      <h4>客户转换成本</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:92%;background:var(--green);"></div></div>
+      <span class="moat-badge moat-wide">宽护城河</span>
+      <div class="moat-desc">产品一旦写入电力公司/EPC规格书，更换需经历认证重测（12-24月）、运维培训、备品库存替换等，单次切换成本估算超过项目价值的20-30%。</div>
+    </div>
+    <div class="moat-card">
+      <h4>网络效应</h4>
+      <div class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:40%;background:var(--yellow);"></div></div>
+      <span class="moat-badge moat-none">弱护城河</span>
+      <div class="moat-desc">硬件产品无直接网络效应。但分销商-承包商-终端用户三方生态形成间接护城河：熟悉产品的工人队伍庞大，减少了终端的切换意愿。</div>
+    </div>
+    <div class="moat-card">
+      <h4>成本优势</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:60%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">规模采购优势、精益制造（持续毛利率扩张验证）。但仍受铜/铝等大宗商品价格影响。Fab-lite模式降低固定成本风险，提高ROIC。</div>
+    </div>
+    <div class="moat-card">
+      <h4>无形资产（专利+认证+人才）</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:80%;background:var(--accent);"></div></div>
+      <span class="moat-badge moat-narrow">窄至宽护城河</span>
+      <div class="moat-desc">数百项产品专利，深度参与NEMA/IEEE行业标准制定，DMC Power专有360°压接工具系统，电力公用事业工程认证构成技术壁垒。</div>
+    </div>
+    <div class="moat-card" style="background:linear-gradient(135deg,#0f1e3d,#0a1628);border:2px solid var(--accent);">
+      <h4 style="color:var(--accent2);">综合护城河评级</h4>
+      <div style="font-size:2rem;font-weight:800;color:var(--gold);margin:12px 0;">窄护城河</div>
+      <span class="moat-badge moat-narrow" style="font-size:0.85rem;padding:4px 14px;">Narrow Moat / 护城河拓宽趋势</span>
+      <div class="moat-desc" style="margin-top:12px;">ROE稳定在22-26%，高于资本成本；毛利率5年间扩张逾560bps；积压订单屡创新高。综合评定为窄护城河，但随数据中心电源基础设施布局深化，护城河有望加宽。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ CYCLE & MACRO ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">周期与宏观分析（霍华德·马克斯框架）</div>
+
+  <div class="two-col" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>P/E 历史分位（估算）</h3>
+      <div class="chart-wrap">
+        <canvas id="peHistChart"></canvas>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card">
+        <div class="kpi-label">周期定位</div>
+        <div class="kpi-value" style="font-size:1.1rem;color:var(--gold);">成长中期（非过热）</div>
+        <div class="cycle-meter" style="margin-top:12px;">
+          <div class="cycle-seg" style="background:#10b981;"></div>
+          <div class="cycle-seg" style="background:#10b981;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;border:2px solid white;box-shadow:0 0 8px white;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.4;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.4;"></div>
+        </div>
+        <div class="cycle-labels"><span>早期</span><span>成长</span><span>过热</span><span>衰退</span></div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:10px;">依据：积压$2.2B+14%（非顶峰信号）；有机增速5-7%（非减速）；管理层未发出预警；数据中心/电网趋势为多年期secular，非周期性顶峰。</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">估值分位</div>
+        <div style="font-size:0.9rem;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>当前 P/E</span><span style="color:var(--gold);">29.4x</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>5年均值</span><span>25.7x</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>10年均值</span><span>23.5x</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--gold);">估算分位</span><span style="color:var(--gold);">约65-70百分位</span></div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">略高于历史均值，但在行业同类中属合理区间。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;">五大尾部风险矩阵</div>
+  <div class="risk-grid">
+    <div class="risk-card" style="border-color:var(--red);">
+      <h4>估值风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">概率 35%</span>
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">影响 高</span>
+      </div>
+      <p>当前TTM P/E 29.4x，高于5年均值25.7x。若增长预期降温，倍数压缩至历史均值，潜在估值下行 ~13%（489→425）。若宏观走弱叠加预期下调，最大下行 25-30%。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>DMC Power整合风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 25%</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 中</span>
+      </div>
+      <p>$825M收购若整合不顺，可能产生商誉减值或收入预期落空。$130M收入贡献若低于预期，2026 EPS指引中值存在风险。潜在影响：EPS下调$0.20-0.50，股价-5%至-10%。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>工业周期下行风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 20%</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 中-高</span>
+      </div>
+      <p>若电力公司CapEx因利率高企或监管收紧而延迟，Utility Solutions有机增速可能从5-7%降至2-3%，导致全年EPS调整下调。历史上，工业周期下行期HUBB营收最大降幅约15%。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--purple);">
+      <h4>利率/再融资风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">概率 20%</span>
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">影响 低-中</span>
+      </div>
+      <p>净债务$1.84B，D/E 0.60x处于合理区间。但若利率维持高位，DCF折现率上升，公允价值将承压。每100bps折现率上升，DCF内在价值下调约10-15%。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--teal);">
+      <h4>关税与供应链风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(20,184,166,0.2);color:var(--teal);">概率 15%</span>
+        <span class="risk-tag" style="background:rgba(20,184,166,0.2);color:var(--teal);">影响 中</span>
+      </div>
+      <p>铜/铝等大宗商品及电子元件进口关税若进一步升级，对毛利率的冲击估计为100-200bps（历史经验），管理层有一定定价权可部分转移成本，但响应需要1-2个季度滞后。</p>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;" class="kpi-card">
+    <div class="kpi-label">市场情绪指标</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:12px;">
+      <div><div style="font-size:0.75rem;color:var(--muted);">分析师评级分布</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">5 买入 / 3 持有 / 0 卖出</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">一致目标价</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">$529.75（+8.3% 上行）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">空头比例</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">4.99%（中性）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">机构持仓</div><div style="font-size:0.95rem;font-weight:700;color:var(--accent2);">88.2%（高机构化）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">股息增长年限</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">18年连续增长</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">股价较52周低</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">+63.4%（强势）</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ VALUATION — THREE FRAMEWORKS ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">三大价值投资框架估值</div>
+
+  <!-- GRAHAM -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>格雷厄姆安全边际估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">安全检验清单</div>
+        <ul class="checklist">
+          <li><span>P/E ≤ 15x</span><span><span class="fail">不通过</span> &nbsp;实际 29.4x</span></li>
+          <li><span>P/B ≤ 1.5x</span><span><span class="fail">不通过</span> &nbsp;实际 6.8x</span></li>
+          <li><span>P/E × P/B ≤ 22.5</span><span><span class="fail">不通过</span> &nbsp;实际 199.1</span></li>
+          <li><span>流动比率 ≥ 2.0x</span><span><span class="fail">不通过</span> &nbsp;实际 1.72x</span></li>
+          <li><span>负债/权益 ≤ 1.0x</span><span><span class="pass">通过</span> &nbsp;实际 0.60x</span></li>
+          <li><span>资产/负债 ≥ 2.0x</span><span><span class="fail">不通过</span> &nbsp;实际 1.88x</span></li>
+        </ul>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">Graham Number 计算</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">= √(22.5 × EPS $16.54 × 账面值 $71.92)</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--red);margin-top:6px;">$163.64</div>
+          <div style="font-size:0.85rem;color:var(--red);margin-top:4px;">当前价格溢价 Graham Number +199%</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">DCF 三情景估值（折现率 10%，10年）</div>
+        <div class="dcf-bar">
+          <label><span>保守 (30%权重) — 前5年+15%, 后5年+8%, 终值3%</span><span style="color:var(--red);">$404</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:31%;background:var(--red);">$404</div>
+          </div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>中性 (45%权重) — 前5年+25%, 后5年+12%, 终值3%</span><span style="color:var(--gold);">$705</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:55%;background:var(--gold);">$705</div>
+          </div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>乐观 (25%权重) — 前5年+35%, 后5年+15%, 终值4%</span><span style="color:var(--green);">$1,286</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:100%;background:var(--green);">$1,286</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">加权综合内在价值 (30/45/25)</div>
+          <div style="font-size:2rem;font-weight:800;color:var(--accent2);margin-top:4px;">$760 / 股</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">当前价$489 较加权DCF折价 35.7%（相对中性情景偏低，相对保守情景溢价21%）</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">格雷厄姆结论：减持 / 观望</div>
+      <div class="verdict-detail">6项安全检验仅通过1项；股价溢价Graham Number +199%；保守DCF $404 低于当前价。纯格雷厄姆框架下，HUBB显著高于安全边际价格，建议等待价格大幅回调（目标 $163-250）再考虑建仓。</div>
+    </div>
+  </div>
+
+  <!-- BUFFETT -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>巴菲特护城河估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">ROE 持续性评估</div>
+        <div class="table-wrap">
+          <table class="data-table" style="font-size:0.82rem;">
+            <thead><tr><th>财年</th><th>净利润</th><th>股东权益</th><th>ROE</th></tr></thead>
+            <tbody>
+              <tr><td>FY2025</td><td>$892M</td><td>$3,858M</td><td class="kpi-up">24.5%</td></tr>
+              <tr><td>FY2024</td><td>$779M</td><td>$3,411M</td><td class="kpi-up">22.8%</td></tr>
+              <tr><td>FY2023</td><td>$751M</td><td>$2,889M</td><td class="kpi-up">26.0%</td></tr>
+              <tr><td>3年均值</td><td>—</td><td>—</td><td class="kpi-up">24.4%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">3年均值ROE 24.4%，远超一般15%的优质企业门槛，且呈稳定趋势，符合巴菲特高ROE可持续性要求。</div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">内在价值估算</div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;margin-bottom:12px;">
+          <div style="font-size:0.82rem;color:var(--muted);">方法：合理P/E × GAAP EPS</div>
+          <div style="margin-top:8px;font-size:0.85rem;">
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>ROE 24.5%，窄护城河 → 合理P/E</span><span style="color:var(--accent2);">20–24x</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 20x × GAAP EPS $16.54</span><span style="color:var(--gold);">$331</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 22x × GAAP EPS $16.54</span><span style="color:var(--gold);">$364</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 24x × GAAP EPS $16.54</span><span style="color:var(--gold);">$397</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>@ 25x × 调整EPS $18.21</span><span style="color:var(--green);">$455</span></div>
+          </div>
+        </div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">内在价值区间估算</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--gold);margin-top:6px;">$364 – $455</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">当前价 $489 高于该区间；含 20% 安全边际理想买入区间：</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:4px;">$291 – $364</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-yellow" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--gold);">巴菲特结论：持有 / 等待买入机会</div>
+      <div class="verdict-detail">HUBB是一家具有窄护城河的优质工业公司，ROE持续24%+，FCF转化90%，18年连续股息增长，管理层执行力优秀。但当前股价（$489）高于巴菲特框架内在价值上限（$455），需等待股价回落至$350-420范围，方具备足够安全边际。核心催化剂（电网现代化、数据中心）长期确定性强。</div>
+    </div>
+  </div>
+
+  <!-- MARKS -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>霍华德·马克斯周期分析</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">情景分析</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--green);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--green);">乐观情景（25%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">电网CapEx超预期、数据中心建设加速、DMC整合顺利、利率下行 → EPS $21+，目标价$550-600（+12-23%）</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--gold);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--gold);">基准情景（55%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">有机增长5-7%兑现、DMC贡献如期、PE维持25-28x → EPS $19.5，12月目标价$490-540（+0-10%）</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--red);">悲观情景（20%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">工业需求放缓、PE压缩至22x → EPS $18，目标价$395（-19%），若叠加系统性风险，下行至$350</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">周期信号与估值分位</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">积压订单增速</span><span style="font-size:0.85rem;color:var(--green);font-weight:700;">+14% YoY — 非顶峰</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">P/E 历史分位</span><span style="font-size:0.85rem;color:var(--gold);font-weight:700;">约65-70百分位 — 偏贵</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">分析师情绪</span><span style="font-size:0.85rem;color:var(--green);font-weight:700;">5买/3持/0卖 — 积极</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">空头比例</span><span style="font-size:0.85rem;color:var(--muted);font-weight:700;">4.99% — 中性</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">股价距52周高</span><span style="font-size:0.85rem;color:var(--gold);font-weight:700;">-8.4% — 近高位</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;">
+            <span style="font-size:0.85rem;">DCF加权内在价值</span><span style="font-size:0.85rem;color:var(--green);font-weight:700;">$760 — 有上行空间</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-yellow" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--gold);">马克斯结论：谨慎持有</div>
+      <div class="verdict-detail">HUBB处于长期secular趋势（电网现代化+AI数据中心）驱动的成长中期，并非周期性顶峰。但估值处于65-70百分位，高于历史均值，短期上行已被一致预期定价。建议现有持仓持有，新资金等待回调至$420-450区间（接近5年PE均值对应估值）再加仓。关注积压订单能否持续增长，这是最重要的前置指标。</div>
+    </div>
+  </div>
+
+  <!-- THREE FRAMEWORKS SUMMARY -->
+  <div class="summary-box">
+    <h2>三框架综合结论</h2>
+    <div class="three-verdict">
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">格雷厄姆</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/观望</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">Graham Number $163<br>溢价 +199%</div>
+      </div>
+      <div class="three-verdict-item verdict-yellow">
+        <div style="font-size:0.85rem;color:var(--muted);">巴菲特</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--gold);">持有/等待</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">内在价值 $364-455<br>ROE 24.5% 优质</div>
+      </div>
+      <div class="three-verdict-item verdict-yellow">
+        <div style="font-size:0.85rem;color:var(--muted);">霍华德·马克斯</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--gold);">谨慎持有</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">周期中期，估值偏高<br>secular趋势完好</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;">
+      <div class="buy-range-label">理想买入区间（含 20% 安全边际）</div>
+      <div class="buy-range">$350 – $420</div>
+      <div style="color:var(--muted);font-size:0.9rem;">当前价 $489.07 | 距目标区间上沿 -14.1% | 加权DCF $760 暗示中性情景下36%上行空间</div>
+    </div>
+    <div style="margin-top:20px;padding:16px;background:rgba(59,130,246,0.1);border-radius:10px;border:1px solid rgba(59,130,246,0.3);text-align:left;">
+      <div style="font-size:0.9rem;color:var(--accent2);font-weight:700;">核心投资逻辑摘要</div>
+      <div style="font-size:0.84rem;color:var(--muted);margin-top:8px;line-height:1.8;">
+        HUBB是美国电网现代化与AI数据中心电源基础设施的核心受益者，拥有130年品牌历史、窄护城河、持续扩张的利润率和18年股息增长记录。FY2025财务质量优异（ROE 24.5%，FCF转化90%，记录积压$2.2B），FY2026指引7-9%增长可信度高。然而，当前估值（TTM P/E 29.4x）高于历史均值，格雷厄姆框架下明显高估。对于长期价值投资者，理想策略是等待股价回落至$350-$420区间（对应23-27x FY26调整EPS），届时将获得优质资产+合理安全边际的最佳组合。
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ SOURCES ═══════════════════ -->
+<div class="section">
+<div class="container">
+  <div class="section-title">数据来源</div>
+  <ul class="sources-list">
+    <li><a href="https://hubbell.gcs-web.com/news-releases/news-release-details/hubbell-reports-fourth-quarter-and-full-year-2025-results" target="_blank">Hubbell Q4 & FY2025 官方新闻稿</a></li>
+    <li><a href="https://stockanalysis.com/stocks/hubb/" target="_blank">StockAnalysis.com — HUBB 财务数据</a></li>
+    <li><a href="https://stockanalysis.com/stocks/hubb/financials/" target="_blank">StockAnalysis — HUBB 年度利润表</a></li>
+    <li><a href="https://stockanalysis.com/stocks/hubb/financials/balance-sheet/" target="_blank">StockAnalysis — HUBB 资产负债表</a></li>
+    <li><a href="https://stockanalysis.com/stocks/hubb/financials/ratios/" target="_blank">StockAnalysis — HUBB 财务比率</a></li>
+    <li><a href="https://stockanalysis.com/stocks/hubb/statistics/" target="_blank">StockAnalysis — HUBB 统计数据</a></li>
+    <li><a href="https://www.sahmcapital.com/news/content/assessing-hubbell-hubb-valuation-after-strong-2025-results-and-upbeat-2026-growth-guidance-2026-02-18" target="_blank">SahmCapital — HUBB 2026 增长指引分析</a></li>
+    <li><a href="https://beyondspx.com/quote/HUBB/hubbell-s-electrified-future-powering-growth-through-grid-modernization-and-data-center-demand-nyse-hubb" target="_blank">BeyondSPX — 电网现代化与数据中心分析</a></li>
+    <li><a href="https://finance.yahoo.com/news/hubbell-hubb-q4-2025-earnings-163256151.html" target="_blank">Yahoo Finance — Q4 2025 Earnings Call Transcript</a></li>
+    <li><a href="https://www.dailypolitical.com/2026/03/03/hubbell-inc-nysehubb-receives-529-75-consensus-target-price-from-analysts.html" target="_blank">Daily Political — 分析师一致目标价 $529.75</a></li>
+    <li><a href="https://www.gurufocus.com/term/forward-pe-ratio/HUBB" target="_blank">GuruFocus — HUBB 前向PE</a></li>
+    <li><a href="https://www.globenewswire.com/news-release/2025/08/12/3131593/0/en/Hubbell-to-Acquire-DMC-Power.html" target="_blank">GlobeNewswire — DMC Power 收购公告</a></li>
+    <li><a href="https://finviz.com/news/298841/hubb-q4-deep-dive-data-center-and-grid-investments-drive-growth-cautious-outlook-for-2026" target="_blank">Finviz — Q4 深度分析：数据中心与电网投资</a></li>
+    <li><a href="https://danelfin.com/stocks/HUBB-hubbell-vs-ETN-eaton-compare" target="_blank">Danelfin — HUBB vs ETN 对比分析</a></li>
+    <li><a href="https://stockanalysis.com/stocks/etn/statistics/" target="_blank">StockAnalysis — ETN 统计数据</a></li>
+    <li><a href="https://stockanalysis.com/stocks/emr/financials/ratios/" target="_blank">StockAnalysis — EMR 财务比率</a></li>
+  </ul>
+  <div style="margin-top:20px;font-size:0.8rem;color:var(--muted);">
+    分析生成时间：2026-03-24 &nbsp;|&nbsp; 数据截至：2026-03-23 &nbsp;|&nbsp; 所有数据来源于公开渠道实时查询，仅供参考，不构成投资建议。
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ CHARTS JS ═══════════════════ -->
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e3a5f';
+
+// 1. Segment Pie
+new Chart(document.getElementById('segmentPie'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Utility Solutions', 'Electrical Solutions'],
+    datasets: [{
+      data: [63, 37],
+      backgroundColor: ['rgba(59,130,246,0.8)', 'rgba(139,92,246,0.8)'],
+      borderColor: ['#3b82f6', '#8b5cf6'],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` } }
+    },
+    cutout: '60%'
+  }
+});
+
+// 2. Revenue Chart
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q3 24', 'Q4 24', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25'],
+    datasets: [
+      {
+        label: '季度营收 ($M)',
+        data: [1443, 1334, 1365, 1484, 1502, 1493],
+        backgroundColor: 'rgba(59,130,246,0.7)',
+        borderColor: '#3b82f6', borderWidth: 1,
+        yAxisID: 'y'
+      },
+      {
+        label: 'YoY增速 (%)',
+        data: [14.6, 11.0, 0.4, 1.3, 4.1, 12.0],
+        type: 'line',
+        borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)',
+        borderWidth: 2, pointRadius: 4, tension: 0.3,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { grid: { color: '#1e3a5f' }, ticks: { color: '#94a3b8' } },
+      y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#f59e0b', callback: v => v+'%' } }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 3. Margin Chart
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q3 24', 'Q4 24', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25'],
+    datasets: [
+      { label: '毛利率', data: [35.1, 33.9, 33.1, 37.2, 36.2, 35.2], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', borderWidth: 2, tension: 0.3, pointRadius: 4 },
+      { label: '营业利润率', data: [21.7, 19.5, 17.5, 22.7, 22.0, 20.9], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', borderWidth: 2, tension: 0.3, pointRadius: 4 },
+      { label: '净利率', data: [15.7, 14.9, 12.4, 16.5, 17.0, 15.0], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', borderWidth: 2, tension: 0.3, pointRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { grid: { color: '#1e3a5f' }, ticks: { callback: v => v+'%', color: '#94a3b8' } } },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 4. FCF Chart
+new Chart(document.getElementById('fcfChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY21', 'FY22', 'FY23', 'FY24', 'FY25'],
+    datasets: [{
+      label: '自由现金流 ($M)',
+      data: [454, 454, 715, 811, 875],
+      backgroundColor: ['rgba(16,185,129,0.6)', 'rgba(16,185,129,0.6)', 'rgba(16,185,129,0.7)', 'rgba(16,185,129,0.8)', 'rgba(16,185,129,0.9)'],
+      borderColor: '#10b981', borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { grid: { color: '#1e3a5f' }, ticks: { color: '#94a3b8' } } },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 5. Annual Revenue Chart
+new Chart(document.getElementById('annualRevChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY21', 'FY22', 'FY23', 'FY24', 'FY25', 'FY26E'],
+    datasets: [{
+      label: '年度营收 ($M)',
+      data: [4194, 4948, 5373, 5629, 5845, 6350],
+      backgroundColor: ['rgba(59,130,246,0.5)', 'rgba(59,130,246,0.6)', 'rgba(59,130,246,0.7)', 'rgba(59,130,246,0.8)', 'rgba(59,130,246,0.9)', 'rgba(59,130,246,0.4)'],
+      borderColor: '#3b82f6', borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { grid: { color: '#1e3a5f' }, ticks: { color: '#94a3b8' } } },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 6. ROE Comparison
+new Chart(document.getElementById('roeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['HUBB', 'ETN', 'EMR'],
+    datasets: [{
+      label: 'ROE (%)',
+      data: [24.5, 21.5, 9.7],
+      backgroundColor: ['rgba(59,130,246,0.8)', 'rgba(16,185,129,0.6)', 'rgba(139,92,246,0.6)'],
+      borderColor: ['#3b82f6', '#10b981', '#8b5cf6'], borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    scales: { x: { grid: { color: '#1e3a5f' }, ticks: { callback: v => v+'%', color: '#94a3b8' } } },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// 7. PE Comparison
+new Chart(document.getElementById('peCompChart'), {
+  type: 'bar',
+  data: {
+    labels: ['HUBB', 'ETN', 'EMR'],
+    datasets: [{
+      label: 'TTM P/E',
+      data: [29.4, 34.3, 33.0],
+      backgroundColor: ['rgba(245,158,11,0.8)', 'rgba(239,68,68,0.6)', 'rgba(139,92,246,0.6)'],
+      borderColor: ['#f59e0b', '#ef4444', '#8b5cf6'], borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    scales: { x: { grid: { color: '#1e3a5f' }, ticks: { callback: v => v+'x', color: '#94a3b8' } } },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// 8. PE Historical Chart
+new Chart(document.getElementById('peHistChart'), {
+  type: 'line',
+  data: {
+    labels: ['FY17', 'FY18', 'FY19', 'FY20', 'FY21', 'FY22', 'FY23', 'FY24', 'FY25', '当前'],
+    datasets: [
+      { label: 'P/E', data: [24.5, 19.2, 25.1, 28.3, 30.1, 18.4, 24.2, 27.8, 29.8, 29.4], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', borderWidth: 2, tension: 0.3, pointRadius: 3 },
+      { label: '5年均值 25.7x', data: [25.7, 25.7, 25.7, 25.7, 25.7, 25.7, 25.7, 25.7, 25.7, 25.7], borderColor: '#f59e0b', borderWidth: 1.5, borderDash: [6, 3], pointRadius: 0 },
+      { label: '10年均值 23.5x', data: [23.5, 23.5, 23.5, 23.5, 23.5, 23.5, 23.5, 23.5, 23.5, 23.5], borderColor: '#ef4444', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: { y: { grid: { color: '#1e3a5f' }, ticks: { callback: v => v+'x', color: '#94a3b8' } } },
+    plugins: { legend: { labels: { color: '#94a3b8', boxWidth: 12 } } }
+  }
+});
+</script>
+</body>
+</html>
