@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMSC - American Superconductor 价值投资分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2235; --bg4: #1e2a42;
+    --border: #2d3f5e; --text: #e2e8f0; --muted: #94a3b8;
+    --accent: #3b82f6; --accent2: #6366f1; --green: #10b981;
+    --red: #ef4444; --yellow: #f59e0b; --orange: #f97316;
+    --teal: #14b8a6; --purple: #8b5cf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #0a0e1a 0%, #0f1d3d 50%, #0a0e1a 100%); border-bottom: 1px solid var(--border); padding: 40px 0 32px; }
+  .hero-inner { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; }
+  .hero-left { flex: 1; min-width: 280px; }
+  .hero-ticker { font-size: 48px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+  .hero-name { font-size: 18px; color: var(--muted); margin: 4px 0 12px; }
+  .hero-price-row { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .hero-price { font-size: 36px; font-weight: 700; color: var(--accent); }
+  .hero-cap { font-size: 16px; color: var(--muted); }
+  .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+  .badge-sector { background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.4); color: var(--accent); }
+  .badge-moat { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: var(--yellow); }
+  .badge-rating { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: var(--red); }
+  .badge-green { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: var(--green); }
+  .hero-right { min-width: 220px; }
+  .hero-meta { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .hero-meta-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .hero-meta-row:last-child { border-bottom: none; }
+  .hero-meta-label { color: var(--muted); font-size: 12px; }
+  .hero-meta-val { color: var(--text); font-weight: 600; font-size: 12px; }
+
+  /* SECTIONS */
+  section { padding: 32px 0; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 22px; background: var(--accent); border-radius: 2px; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .kpi-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color 0.2s; }
+  .kpi-card:hover { border-color: var(--accent); }
+  .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+  .kpi-value { font-size: 22px; font-weight: 700; margin: 4px 0; }
+  .kpi-sub { font-size: 11px; color: var(--muted); }
+  .kv-blue { color: var(--accent); }
+  .kv-green { color: var(--green); }
+  .kv-red { color: var(--red); }
+  .kv-yellow { color: var(--yellow); }
+  .kv-purple { color: var(--purple); }
+  .kv-orange { color: var(--orange); }
+
+  /* CHART CONTAINERS */
+  .charts-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .chart-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .chart-box h4 { font-size: 13px; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-wrap { position: relative; height: 220px; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--bg4); color: var(--muted); padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text); white-space: nowrap; }
+  tr:hover td { background: rgba(59,130,246,0.04); }
+  .td-g { color: var(--green); font-weight: 600; }
+  .td-r { color: var(--red); font-weight: 600; }
+  .td-y { color: var(--yellow); font-weight: 600; }
+  .td-b { color: var(--accent); font-weight: 600; }
+  .td-note { font-size: 11px; color: var(--muted); font-style: italic; }
+
+  /* SEGMENT CARDS */
+  .segment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .seg-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .seg-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .seg-rev { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .seg-bar-wrap { margin: 8px 0 4px; background: var(--bg4); border-radius: 4px; height: 6px; }
+  .seg-bar { height: 6px; border-radius: 4px; }
+  .seg-meta { font-size: 11px; color: var(--muted); }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+  .info-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .info-card h4 { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(45,63,94,0.5); font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: var(--muted); }
+  .info-val { font-weight: 600; }
+
+  /* MOAT */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+  .moat-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .moat-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .moat-stars { font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
+  .moat-bar-wrap { background: var(--bg4); border-radius: 4px; height: 6px; margin-bottom: 8px; }
+  .moat-bar { height: 6px; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .moat-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* RISK MATRIX */
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .risk-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .risk-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .risk-score { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .rs-high { background: rgba(239,68,68,0.2); color: var(--red); }
+  .rs-med { background: rgba(245,158,11,0.2); color: var(--yellow); }
+  .rs-low { background: rgba(16,185,129,0.2); color: var(--green); }
+  .risk-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .risk-impact { font-size: 11px; color: var(--orange); margin-top: 6px; font-weight: 600; }
+
+  /* VALUATION FRAMEWORK */
+  .framework-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .framework-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .fw-title { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .checklist-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(45,63,94,0.5); font-size: 12px; }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-pass { color: var(--green); font-weight: 700; }
+  .check-fail { color: var(--red); font-weight: 700; }
+  .dcf-bar-wrap { margin: 10px 0; }
+  .dcf-scenario { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dcf-label { font-size: 12px; color: var(--muted); width: 60px; flex-shrink: 0; }
+  .dcf-bar-outer { flex: 1; background: var(--bg4); border-radius: 4px; height: 20px; position: relative; overflow: hidden; }
+  .dcf-bar-inner { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 11px; font-weight: 700; color: #fff; }
+  .dcf-price-line { position: absolute; top: 0; height: 100%; width: 2px; background: var(--yellow); }
+
+  /* CONCLUSION */
+  .conclusion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .conclusion-card { border-radius: 10px; padding: 18px; text-align: center; }
+  .cc-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
+  .cc-yellow { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.4); }
+  .cc-green { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.4); }
+  .cc-framework { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .cc-verdict { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .cc-red .cc-verdict { color: var(--red); }
+  .cc-yellow .cc-verdict { color: var(--yellow); }
+  .cc-green .cc-verdict { color: var(--green); }
+  .cc-detail { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .buy-range-box { background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(99,102,241,0.1)); border: 2px solid var(--accent); border-radius: 14px; padding: 28px; text-align: center; margin: 20px 0; }
+  .buy-range-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .buy-range-price { font-size: 48px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+  .buy-range-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* GROWTH DRIVERS */
+  .driver-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .driver-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .driver-icon { font-size: 20px; margin-bottom: 8px; }
+  .driver-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .driver-val { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .driver-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* COMPETITOR TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th { background: var(--bg4); color: var(--muted); padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .comp-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .comp-table tr.highlight td { background: rgba(59,130,246,0.08); }
+  .comp-table tr.highlight td:first-child { border-left: 3px solid var(--accent); }
+
+  /* SOURCES */
+  .sources-list { list-style: none; }
+  .sources-list li { padding: 5px 0; border-bottom: 1px solid rgba(45,63,94,0.3); font-size: 12px; }
+  .sources-list a { color: var(--accent); text-decoration: none; }
+  .sources-list a:hover { text-decoration: underline; }
+
+  /* KPI WATCH */
+  .kpi-watch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .kpi-watch-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .kpw-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .kpw-current { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .kpw-target { font-size: 11px; color: var(--green); margin-top: 2px; }
+  .kpw-desc { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* CYCLE VISUAL */
+  .cycle-stages { display: flex; gap: 4px; margin-bottom: 16px; }
+  .cycle-stage { flex: 1; padding: 10px 6px; text-align: center; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid transparent; }
+  .cs-active { background: rgba(59,130,246,0.2); border-color: var(--accent); color: var(--accent); }
+  .cs-inactive { background: var(--bg4); color: var(--muted); }
+
+  .note-box { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--yellow); margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-ticker">AMSC</div>
+        <div class="hero-name">American Superconductor Corporation</div>
+        <div class="hero-price-row">
+          <div class="hero-price">$31.26</div>
+          <div class="hero-cap">市值 $1.49B &nbsp;|&nbsp; 47.61M 股</div>
+        </div>
+        <div class="hero-badges">
+          <span class="badge badge-sector">电力基础设施</span>
+          <span class="badge badge-sector">国防技术</span>
+          <span class="badge badge-moat">窄护城河</span>
+          <span class="badge badge-rating">综合评级: 减持/等待</span>
+          <span class="badge" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);color:var(--green)">积压订单 $250M+</span>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted)">分析日期: 2026-03-25 &nbsp;|&nbsp; 财年截止: 每年3月31日</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-meta">
+          <div class="hero-meta-row"><span class="hero-meta-label">52周高点</span><span class="hero-meta-val">$70.49</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">52周低点</span><span class="hero-meta-val">$13.98</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">较高点回撤</span><span class="hero-meta-val" style="color:var(--red)">-55.6%</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">分析师平均目标价</span><span class="hero-meta-val" style="color:var(--green)">$52-57</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">评级分布</span><span class="hero-meta-val" style="color:var(--green)">4买 0持 0卖</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">FY2025E 营收</span><span class="hero-meta-val">~$293M+</span></div>
+          <div class="hero-meta-row"><span class="hero-meta-label">12月积压订单</span><span class="hero-meta-val" style="color:var(--accent)">$250M+</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ KPI GRID ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">核心 KPI 指标</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">FY2024 营收</div>
+        <div class="kpi-value kv-blue">$222.8M</div>
+        <div class="kpi-sub">+53% YoY (FY结束2025-03-31)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025E 营收 (估)</div>
+        <div class="kpi-value kv-green">~$293M+</div>
+        <div class="kpi-sub">+31% YoY; Q4指引>$80M</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM 净利润</div>
+        <div class="kpi-value kv-yellow">$130.5M*</div>
+        <div class="kpi-sub">*含$113.1M一次性税务收益</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">标准化净利润 (TTM)</div>
+        <div class="kpi-value kv-blue">$17.4M</div>
+        <div class="kpi-sub">剔除税务收益后；净利率 6.2%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">毛利率 (Q3 FY2025)</div>
+        <div class="kpi-value kv-green">30.7%</div>
+        <div class="kpi-sub">较FY2022的8%大幅改善</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">自由现金流 (FY2024)</div>
+        <div class="kpi-value kv-blue">$16.0M</div>
+        <div class="kpi-sub">FCF利润率 7.2%；较FY2022 -$23.7M改善</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM P/E (标准化)</div>
+        <div class="kpi-value kv-red">~84x</div>
+        <div class="kpi-sub">前向P/E 31.3x (含税收益9.4x失真)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">P/B 比率</div>
+        <div class="kpi-value kv-yellow">2.79x</div>
+        <div class="kpi-sub">格雷厄姆标准 ≤1.5x; 每股净资产$12.83</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">P/S 比率</div>
+        <div class="kpi-value kv-yellow">5.5x</div>
+        <div class="kpi-sub">TTM营收$279M; EV/EBITDA 62.5x</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROE (FY2024)</div>
+        <div class="kpi-value kv-red">3.1%</div>
+        <div class="kpi-sub">低于巴菲特15%门槛; 前两年为负</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">净现金</div>
+        <div class="kpi-value kv-green">$129.7M</div>
+        <div class="kpi-sub">现金$141.1M - 债务$11.4M; D/E仅0.02x</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">12月积压订单</div>
+        <div class="kpi-value kv-purple">$250M+</div>
+        <div class="kpi-sub">占FY2024营收约112%; 可见度强</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 商业模式 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">商业模式分析</div>
+
+    <div style="margin-bottom:20px">
+      <div class="segment-grid">
+        <div class="seg-card">
+          <div class="seg-name">Grid 电网业务</div>
+          <div class="seg-rev">$63.2M</div>
+          <div style="font-size:12px;color:var(--muted);margin:4px 0">Q3 FY2025 | +21% YoY</div>
+          <div class="seg-bar-wrap"><div class="seg-bar" style="width:85%;background:linear-gradient(90deg,#3b82f6,#6366f1)"></div></div>
+          <div class="seg-meta">占季度营收 85% | 9月营收 $177.6M</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">
+            电力电子设备、无功补偿（SVC）、超导限流器、舰船防磁保护系统（HTS）。
+            核心客户：美国海军、公用事业公司、可再生能源开发商。
+          </div>
+        </div>
+        <div class="seg-card">
+          <div class="seg-name">Wind 风电业务</div>
+          <div class="seg-rev">$11.3M</div>
+          <div style="font-size:12px;color:var(--muted);margin:4px 0">Q3 FY2025 | +25% YoY</div>
+          <div class="seg-bar-wrap"><div class="seg-bar" style="width:15%;background:linear-gradient(90deg,#14b8a6,#10b981)"></div></div>
+          <div class="seg-meta">占季度营收 15% | 9月营收 $35.1M</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">
+            风力发电机电气控制系统（ECS）及电力变流器。主要面向亚洲风电OEM。
+            中国市场依赖度下降，印度市场逐步扩大。
+          </div>
+        </div>
+        <div class="seg-card" style="border-color:rgba(249,115,22,0.4)">
+          <div class="seg-name" style="color:var(--orange)">Comtrafo (新并入)</div>
+          <div class="seg-rev" style="color:var(--orange)">~$55M/年</div>
+          <div style="font-size:12px;color:var(--muted);margin:4px 0">2025年12月5日并购 | 巴西变压器制造商</div>
+          <div class="seg-bar-wrap"><div class="seg-bar" style="width:20%;background:linear-gradient(90deg,#f97316,#f59e0b)"></div></div>
+          <div class="seg-meta">全年贡献约$55M营收 | 毛利率~30%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">
+            收购价$162M（现金$84M + 股票$78M）。进入巴西及拉美电力变压器市场（$1.5B市场）。
+            2026年积压$85M。运营利润率约20%。
+          </div>
+        </div>
+        <div class="seg-card">
+          <div class="seg-name">收入质量评估</div>
+          <div style="margin-top:10px">
+            <div class="info-row"><span class="info-label">重复性收入比例</span><span class="info-val" style="color:var(--yellow)">中等 (~40%)</span></div>
+            <div class="info-row"><span class="info-label">订阅/软件收入</span><span class="info-val" style="color:var(--muted)">数据不可用</span></div>
+            <div class="info-row"><span class="info-label">客户集中度</span><span class="info-val" style="color:var(--red)">中高</span></div>
+            <div class="info-row"><span class="info-label">海军合同依赖</span><span class="info-val" style="color:var(--yellow)">显著</span></div>
+            <div class="info-row"><span class="info-label">收入可见度</span><span class="info-val" style="color:var(--green)">强 (积压$250M+)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-box">
+        <h4>Q3 FY2025 营收构成</h4>
+        <div class="chart-wrap"><canvas id="segPie"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>商业模式特征评估</h4>
+        <div style="padding:8px 0">
+          <div class="info-row"><span class="info-label">定价权</span><span class="info-val" style="color:var(--yellow)">中等 — 毛利率改善但低于40%</span></div>
+          <div class="info-row"><span class="info-label">资产轻重</span><span class="info-val" style="color:var(--yellow)">中等偏重 — Fab-less但Comtrafo工厂</span></div>
+          <div class="info-row"><span class="info-label">研发占营收</span><span class="info-val" style="color:var(--blue)">数据不可用</span></div>
+          <div class="info-row"><span class="info-label">军方认证壁垒</span><span class="info-val" style="color:var(--green)">高 — 20年独家供应商</span></div>
+          <div class="info-row"><span class="info-label">国际多元化</span><span class="info-val" style="color:var(--green)">改善中 — 巴西/拉美市场</span></div>
+          <div class="info-row"><span class="info-label">周期性</span><span class="info-val" style="color:var(--yellow)">中等 — 受电网CapEx周期影响</span></div>
+          <div class="info-row"><span class="info-label">前5大客户占比</span><span class="info-val" style="color:var(--red)">数据不可用 (估>50%)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="info-card">
+        <h4>定价权分析</h4>
+        <div class="info-row"><span class="info-label">FY2022 毛利率</span><span class="info-val" style="color:var(--red)">8.04%</span></div>
+        <div class="info-row"><span class="info-label">FY2023 毛利率</span><span class="info-val" style="color:var(--yellow)">24.23%</span></div>
+        <div class="info-row"><span class="info-label">FY2024 毛利率</span><span class="info-val" style="color:var(--yellow)">27.76%</span></div>
+        <div class="info-row"><span class="info-label">Q3 FY2025 毛利率</span><span class="info-val" style="color:var(--green)">30.66%</span></div>
+        <div class="info-row"><span class="info-label">长期目标</span><span class="info-val" style="color:var(--accent)">35%+</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+          毛利率持续改善，主要来自产品组合优化（更多高附加值Grid业务）
+          及规模效应。Comtrafo并入后短期或略微承压。
+        </div>
+      </div>
+      <div class="info-card">
+        <h4>客户与市场结构</h4>
+        <div class="info-row"><span class="info-label">美国海军（HTS系统）</span><span class="info-val" style="color:var(--red)">高度集中</span></div>
+        <div class="info-row"><span class="info-label">电力公用事业</span><span class="info-val" style="color:var(--yellow)">分散</span></div>
+        <div class="info-row"><span class="info-label">风电OEM（亚洲）</span><span class="info-val" style="color:var(--yellow)">中等集中</span></div>
+        <div class="info-row"><span class="info-label">数据中心（间接）</span><span class="info-val" style="color:var(--green)">新兴机会</span></div>
+        <div class="info-row"><span class="info-label">巴西/拉美（Comtrafo）</span><span class="info-val" style="color:var(--green)">新市场</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+          美国海军为AMSC最重要的单一客户，提供高度可见的合同收入，
+          但也带来集中度风险。Comtrafo收购有助于地理多元化。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 财务分析 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">财务数据分析</div>
+
+    <div class="note-box">
+      注意：AMSC 财年截止3月31日。Q3 FY2025指截至2025年12月31日的季度。
+      Q3 FY2025净利润$117.8M含$113.1M一次性税务收益（递延税资产估值准备释放），不代表经营性盈利能力。
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-box">
+        <h4>季度营收趋势 (百万美元)</h4>
+        <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>季度毛利率趋势 (%)</h4>
+        <div class="chart-wrap"><canvas id="marginChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-box">
+        <h4>年度营收增长 (百万美元)</h4>
+        <div class="chart-wrap"><canvas id="annualRevChart"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>年度自由现金流 (百万美元)</h4>
+        <div class="chart-wrap"><canvas id="fcfChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>季度 (AMSC)</th>
+            <th>结束日期</th>
+            <th>营收</th>
+            <th>YoY增速</th>
+            <th>毛利润</th>
+            <th>毛利率</th>
+            <th>营业利润</th>
+            <th>净利润</th>
+            <th>EPS (摊薄)</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-b">Q3 FY2025</td><td>Dec 31, 2025</td><td>$74.53M</td><td class="td-g">+21.4%</td><td>$22.85M</td><td class="td-g">30.66%</td><td>$3.36M</td><td class="td-y">$117.81M*</td><td class="td-y">$2.62*</td><td class="td-note">*含$113.1M税务收益</td>
+          </tr>
+          <tr>
+            <td>Q2 FY2025</td><td>Sep 30, 2025</td><td>$65.86M</td><td class="td-g">+20.9%</td><td>$20.44M</td><td class="td-g">31.03%</td><td>$2.97M</td><td>$4.75M</td><td>$0.11</td><td class="td-note">—</td>
+          </tr>
+          <tr>
+            <td>Q1 FY2025</td><td>Jun 30, 2025</td><td>$72.36M</td><td class="td-g">+79.6%</td><td>$24.49M</td><td class="td-g">33.84%</td><td>$5.64M</td><td>$6.72M</td><td>$0.17</td><td class="td-note">同期Comtrafo尚未并入</td>
+          </tr>
+          <tr>
+            <td>Q4 FY2024</td><td>Mar 31, 2025</td><td>$66.66M</td><td class="td-g">+58.5%</td><td>$17.69M</td><td class="td-y">26.54%</td><td>$1.65M</td><td>$1.21M</td><td>$0.03</td><td class="td-note">—</td>
+          </tr>
+          <tr>
+            <td>Q3 FY2024</td><td>Dec 31, 2024</td><td>$61.40M</td><td class="td-g">+12.8%</td><td>$16.33M</td><td class="td-y">26.59%</td><td>$1.32M</td><td>$2.47M</td><td>$0.06</td><td class="td-note">—</td>
+          </tr>
+          <tr>
+            <td>Q2 FY2024</td><td>Sep 30, 2024</td><td>$54.47M</td><td class="td-g">+35.2%</td><td>$15.61M</td><td class="td-y">28.66%</td><td class="td-r">-$0.75M</td><td>$4.89M</td><td>$0.13</td><td class="td-note">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" style="margin-top:20px">
+      <table>
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>FY2022 (Mar'23)</th>
+            <th>FY2023 (Mar'24)</th>
+            <th>FY2024 (Mar'25)</th>
+            <th>FY2025E (Mar'26)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>营收</td><td>$106.0M</td><td>$145.6M</td><td>$222.8M</td><td class="td-g">~$293M+</td></tr>
+          <tr><td>YoY增速</td><td>—</td><td class="td-g">+37.4%</td><td class="td-g">+53.0%</td><td class="td-g">+31%E</td></tr>
+          <tr><td>毛利率</td><td class="td-r">8.04%</td><td class="td-y">24.23%</td><td class="td-y">27.76%</td><td class="td-g">~31%E</td></tr>
+          <tr><td>营业利润率</td><td class="td-r">-31.15%</td><td class="td-r">-7.81%</td><td class="td-r">-0.48%</td><td class="td-g">~6%E</td></tr>
+          <tr><td>净利润 (GAAP)</td><td class="td-r">-$35.0M</td><td class="td-r">-$11.1M</td><td class="td-y">$6.0M</td><td class="td-g">~$18M+E</td></tr>
+          <tr><td>EPS (GAAP)</td><td class="td-r">-$1.26</td><td class="td-r">-$0.37</td><td class="td-y">$0.16</td><td class="td-g">~$0.38E</td></tr>
+          <tr><td>自由现金流</td><td class="td-r">-$23.7M</td><td class="td-g">$1.2M</td><td class="td-g">$16.0M</td><td class="td-g">~$20-25ME</td></tr>
+          <tr><td>现金及等价物</td><td>$23.4M</td><td>$90.5M</td><td>$79.5M</td><td class="td-g">$141.1M*</td></tr>
+          <tr><td>总债务</td><td>$3.1M</td><td>$2.7M</td><td>$3.4M</td><td class="td-g">$11.4M</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">*含Comtrafo并购后资产负债表；E=估算</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 增长驱动 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">增长驱动与关键追踪指标</div>
+
+    <div class="driver-grid" style="margin-bottom:20px">
+      <div class="driver-card">
+        <div class="driver-title">电网现代化</div>
+        <div class="driver-val">$250M+ 积压</div>
+        <div class="driver-desc">
+          美国电网老化、AI数据中心电力需求激增、清洁能源并网驱动大规模电网升级。
+          AMSC的无功补偿（SVC/STATCOM）、谐波滤波器直接受益。
+          美国《基础设施法案》投入超$65B用于电网现代化。
+        </div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">美国海军 HTS 系统</div>
+        <div class="driver-val">独家供应商</div>
+        <div class="driver-desc">
+          AMSC是美国海军HTS舰船防磁系统的唯一认证供应商，已为San Antonio级舰艇
+          （LPD-25至LPD-32等）提供系统，合同持续进行中。
+          可降低电耗60%、系统重量90%。NATO盟友市场正在拓展。
+        </div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">Comtrafo 巴西扩张</div>
+        <div class="driver-val">$55M+ 年营收</div>
+        <div class="driver-desc">
+          2025年12月5日完成收购，进入$1.5B巴西变压器市场。
+          Comtrafo 2026年积压$85M（12月积压$55M），营业利润率约20%。
+          可能是AMSC营收加速的重要催化剂。
+        </div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">风电业务复苏</div>
+        <div class="driver-val">+25% YoY</div>
+        <div class="driver-desc">
+          Q3 FY2025 Wind营收$11.3M，同比增长25%，主要来自额外的电气控制系统出货。
+          中国市场逐步降低依赖，印度和其他新兴市场增加。
+          全球风电装机加速有望推动持续增长。
+        </div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">数据中心电力需求</div>
+        <div class="driver-val">间接受益</div>
+        <div class="driver-desc">
+          AI数据中心建设导致美国电力需求激增，带动电网基础设施投资。
+          AWS、Microsoft、Google等2025年CapEx合计超$300B，
+          数据中心供电侧对AMSC的电力调节设备有间接需求。
+        </div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">超导线缆市场</div>
+        <div class="driver-val">$1.32B→$2.19B</div>
+        <div class="driver-desc">
+          全球超导线缆市场预计2025-2030年CAGR 10.6%，从$1.32B增至$2.19B。
+          AMSC作为主要美国厂商，在HTS技术方面拥有20年+积累的专利组合。
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="font-size:16px;margin-bottom:14px">需持续追踪的 KPI 清单</div>
+    <div class="kpi-watch-grid">
+      <div class="kpi-watch-card">
+        <div class="kpw-label">季度营收 QoQ 增速</div>
+        <div class="kpw-current">Q3: $74.5M (+13% QoQ)</div>
+        <div class="kpw-target">目标: 持续 >$70M/季</div>
+        <div class="kpw-desc">需关注Comtrafo是否如期贡献增量；Q4指引>$80M</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">毛利率扩张</div>
+        <div class="kpw-current">Q3 FY2025: 30.66%</div>
+        <div class="kpw-target">目标: 35%+（长期）</div>
+        <div class="kpw-desc">持续改善是盈利能力提升的关键；Comtrafo整合可能短期承压</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">12月积压订单</div>
+        <div class="kpw-current">$250M+</div>
+        <div class="kpw-target">目标: 持续增长或维持</div>
+        <div class="kpw-desc">最重要的收入可见度指标；需关注订单转化速度</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">自由现金流转化率</div>
+        <div class="kpw-current">FY2024: 7.2% FCF率</div>
+        <div class="kpw-target">目标: >12%</div>
+        <div class="kpw-desc">低FCF率是当前估值偏高的核心原因；需跟踪改善轨迹</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">Comtrafo营收贡献</div>
+        <div class="kpw-current">Q3(19天): $4.6M</div>
+        <div class="kpw-target">目标: >$15M/季</div>
+        <div class="kpw-desc">Q4起将完整体现；是否达到$55M年营收目标</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">海军合同进展</div>
+        <div class="kpw-current">LPD-32等多艘在建</div>
+        <div class="kpw-target">目标: 新合同获取</div>
+        <div class="kpw-desc">HTS系统的独家地位需通过持续合同订单验证；NATO盟友拓展</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">营业利润率</div>
+        <div class="kpw-current">Q3 FY2025: 4.5%</div>
+        <div class="kpw-target">目标: >10%</div>
+        <div class="kpw-desc">从负转正的关键阶段；规模效应是否充分显现</div>
+      </div>
+      <div class="kpi-watch-card">
+        <div class="kpw-label">ROE 改善轨迹</div>
+        <div class="kpw-current">FY2024: 3.1%</div>
+        <div class="kpw-target">目标: >15%（巴菲特标准）</div>
+        <div class="kpw-desc">Comtrafo大幅扩充股东权益，短期ROE提升面临挑战</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 竞争格局 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">竞争格局分析</div>
+
+    <div class="table-wrap" style="margin-bottom:20px">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>公司</th>
+            <th>主营领域</th>
+            <th>年营收</th>
+            <th>毛利率</th>
+            <th>P/S</th>
+            <th>市值</th>
+            <th>竞争维度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><strong>AMSC</strong></td><td>电力电子/HTS/变压器</td><td>$279M (TTM)</td><td class="td-y">30.7%</td><td class="td-y">5.5x</td><td>$1.49B</td><td class="td-b">HTS独家、海军认证</td>
+          </tr>
+          <tr>
+            <td>ABB</td><td>电力/自动化</td><td>~$35B</td><td class="td-g">~35%</td><td>—</td><td>~$100B+</td><td class="td-muted">综合平台，资金雄厚</td>
+          </tr>
+          <tr>
+            <td>Siemens Energy</td><td>电网/变压器</td><td>~$20B</td><td class="td-y">~25%</td><td>—</td><td>~$40B</td><td class="td-muted">欧洲主导，全球覆盖</td>
+          </tr>
+          <tr>
+            <td>GE Vernova</td><td>电力/风能/电网</td><td>~$20B</td><td class="td-y">~15%</td><td>—</td><td>~$100B</td><td class="td-muted">广泛产品线，质量不稳</td>
+          </tr>
+          <tr>
+            <td>Sumitomo Electric (超导线)</td><td>超导线缆</td><td>~$25B</td><td>—</td><td>—</td><td>—</td><td class="td-muted">日本HTS线缆主要竞争者</td>
+          </tr>
+          <tr>
+            <td>Bruker</td><td>超导磁体/科学仪器</td><td>~$3B</td><td class="td-g">~45%</td><td>—</td><td>~$6B</td><td class="td-muted">聚焦科学领域，非直接竞品</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box">
+      竞争优势核心：AMSC是美国海军HTS舰船防磁保护系统的唯一认证供应商，这一地位在未来10+年内具有高度确定性。
+      在商业电网领域，AMSC与ABB/Siemens竞争，但体量差距巨大；差异化在于HTS专项技术。
+    </div>
+
+    <div class="two-col">
+      <div class="info-card">
+        <h4>竞争优势</h4>
+        <div class="info-row"><span class="info-label">HTS 海军系统</span><span class="info-val" style="color:var(--green)">独家 / 无竞争</span></div>
+        <div class="info-row"><span class="info-label">20年+ HTS专利组合</span><span class="info-val" style="color:var(--green)">强壁垒</span></div>
+        <div class="info-row"><span class="info-label">军方认证壁垒</span><span class="info-val" style="color:var(--green)">极高门槛</span></div>
+        <div class="info-row"><span class="info-label">巴西变压器（Comtrafo）</span><span class="info-val" style="color:var(--yellow)">区域性优势</span></div>
+        <div class="info-row"><span class="info-label">电网SVC/STATCOM</span><span class="info-val" style="color:var(--yellow)">中等竞争力</span></div>
+      </div>
+      <div class="info-card">
+        <h4>竞争劣势与威胁</h4>
+        <div class="info-row"><span class="info-label">vs ABB/Siemens（资金）</span><span class="info-val" style="color:var(--red)">体量悬殊</span></div>
+        <div class="info-row"><span class="info-label">规模经济劣势</span><span class="info-val" style="color:var(--red)">显著</span></div>
+        <div class="info-row"><span class="info-label">风电依赖中国OEM</span><span class="info-val" style="color:var(--yellow)">地缘风险</span></div>
+        <div class="info-row"><span class="info-label">新兴HTS竞争者</span><span class="info-val" style="color:var(--yellow)">中期威胁</span></div>
+        <div class="info-row"><span class="info-label">客户集中度高</span><span class="info-val" style="color:var(--red)">Navy依赖</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 护城河 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">护城河评分卡 — 窄护城河 (Narrow Moat)</div>
+
+    <div class="moat-grid">
+      <div class="moat-card">
+        <div class="moat-label">品牌护城河</div>
+        <div class="moat-stars">★★☆☆☆</div>
+        <div class="moat-bar-wrap"><div class="moat-bar" style="width:40%"></div></div>
+        <div class="moat-desc">
+          在HTS/超导领域知名度高，但无消费品牌溢价。
+          在国防和电网工程师圈子内认可度强，不具备大众品牌效应。
+          定价权有限，受采购竞争影响。
+        </div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-label">转换成本</div>
+        <div class="moat-stars">★★★★☆</div>
+        <div class="moat-bar-wrap"><div class="moat-bar" style="width:80%"></div></div>
+        <div class="moat-desc">
+          <strong style="color:var(--green)">最强护城河维度。</strong>
+          海军HTS系统深度嵌入舰艇设计，更换需重新认证（费用极高）。
+          Sole-source合同地位意味着实质上无竞争。
+          Comtrafo在巴西电力公司关系嵌入深。
+        </div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-label">网络效应</div>
+        <div class="moat-stars">★★☆☆☆</div>
+        <div class="moat-bar-wrap"><div class="moat-bar" style="width:40%"></div></div>
+        <div class="moat-desc">
+          有限的网络效应。随装机量增加，技术支持、备件、工程服务有一定粘性。
+          无平台型网络效应；不同于软件或双边市场企业。
+        </div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-label">成本优势</div>
+        <div class="moat-stars">★★★☆☆</div>
+        <div class="moat-bar-wrap"><div class="moat-bar" style="width:60%"></div></div>
+        <div class="moat-desc">
+          AMSC采用轻资产（Fab-less）模式生产HTS线材相关产品。
+          Comtrafo并入后，拥有100+英亩工厂（实物资产），部分降低轻资产属性。
+          规模远小于ABB/Siemens，成本优势受限。
+        </div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-label">无形资产</div>
+        <div class="moat-stars">★★★★☆</div>
+        <div class="moat-bar-wrap"><div class="moat-bar" style="width:80%"></div></div>
+        <div class="moat-desc">
+          <strong style="color:var(--green)">第二强护城河维度。</strong>
+          20年+HTS专利积累；美国海军认证体系准入壁垒（非AMSC难以进入）；
+          NATO盟友拓展优先资质；巴西Comtrafo本地市场准入证。
+          专业工程人才积累难以复制。
+        </div>
+      </div>
+      <div class="moat-card" style="background:rgba(245,158,11,0.05);border-color:rgba(245,158,11,0.3)">
+        <div class="moat-label" style="color:var(--yellow)">综合护城河评级</div>
+        <div style="font-size:28px;font-weight:800;color:var(--yellow);margin:8px 0">窄护城河</div>
+        <div class="moat-desc">
+          AMSC在HTS海军系统领域具有真实且不可替代的壁垒（事实上的垄断）。
+          但在商业电网和风电领域竞争激烈，规模显著弱于大型工业竞争对手。
+          整体护城河窄，但防御性比表面看来更强。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 周期与宏观 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">周期定位与宏观风险</div>
+
+    <div style="margin-bottom:20px">
+      <div class="section-title" style="font-size:15px;margin-bottom:12px">行业周期阶段</div>
+      <div class="cycle-stages">
+        <div class="cycle-stage cs-inactive">早期 (Early)</div>
+        <div class="cycle-stage cs-active">成长期 (Growth) ▶</div>
+        <div class="cycle-stage cs-inactive">成熟期 (Mature)</div>
+        <div class="cycle-stage cs-inactive">过热 (Peak)</div>
+        <div class="cycle-stage cs-inactive">衰退 (Decline)</div>
+      </div>
+      <div class="two-col">
+        <div class="info-card">
+          <h4>周期定位依据</h4>
+          <div class="info-row"><span class="info-label">营收CAGR (3年)</span><span class="info-val" style="color:var(--green)">+27% CAGR（FY2022-FY2025E）</span></div>
+          <div class="info-row"><span class="info-label">积压订单增速</span><span class="info-val" style="color:var(--green)">$250M+ 创历史新高</span></div>
+          <div class="info-row"><span class="info-label">公司利润状态</span><span class="info-val" style="color:var(--yellow)">刚转正 (FY2024第一年盈利)</span></div>
+          <div class="info-row"><span class="info-label">市场渗透率</span><span class="info-val" style="color:var(--green)">HTS尚在早期推广</span></div>
+          <div class="info-row"><span class="info-label">股价位置</span><span class="info-val" style="color:var(--red)">较52周高点 -55.6%（恐慌区）</span></div>
+        </div>
+        <div class="info-card">
+          <h4>估值分位参考</h4>
+          <div class="info-row"><span class="info-label">标准化P/E (TTM)</span><span class="info-val" style="color:var(--red)">~84x — 历史极高位</span></div>
+          <div class="info-row"><span class="info-label">前向P/E</span><span class="info-val" style="color:var(--yellow)">31.3x — 仍显偏高</span></div>
+          <div class="info-row"><span class="info-label">P/S</span><span class="info-val" style="color:var(--yellow)">5.5x — 成长溢价</span></div>
+          <div class="info-row"><span class="info-label">P/B</span><span class="info-val" style="color:var(--yellow)">2.79x — 温和</span></div>
+          <div class="info-row"><span class="info-label">分析师共识</span><span class="info-val" style="color:var(--green)">4 Buy, 0 Hold, PT $52-57</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="font-size:15px;margin-bottom:12px">五大尾部风险</div>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">客户集中与海军依赖</div>
+          <div class="risk-score rs-high">高</div>
+        </div>
+        <div class="risk-desc">
+          美国海军是AMSC最重要的单一客户，HTS合同占Grid业务重要比例。
+          国防预算削减、项目推迟或新兴竞争技术（如磁体替代方案）
+          可能显著影响营收。
+        </div>
+        <div class="risk-impact">量化影响估算: 海军合同损失可能导致营收下降15-25%</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">Comtrafo 整合风险</div>
+          <div class="risk-score rs-high">高</div>
+        </div>
+        <div class="risk-desc">
+          $162M收购是AMSC历史上最大并购，跨文化整合（巴西vs美国）、
+          供应链管理、财务报告标准化均存在执行风险。
+          若不达目标，将对估值造成重大冲击。
+        </div>
+        <div class="risk-impact">量化影响估算: 整合失败可能导致商誉减值$40-80M</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">FCF 质量与盈利可持续性</div>
+          <div class="risk-score rs-med">中</div>
+        </div>
+        <div class="risk-desc">
+          FY2024 FCF仅$16M，FCF利润率7.2%。Q3 FY2025净利润$117.8M
+          主要来自一次性税务收益，不代表经营盈利能力。
+          市场若重新定价，当前估值承压明显。
+        </div>
+        <div class="risk-impact">量化影响估算: 按正常化15-20x FCF估值，内在价值约$15-22</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">电网CapEx周期风险</div>
+          <div class="risk-score rs-med">中</div>
+        </div>
+        <div class="risk-desc">
+          若美国利率再次上升导致公用事业推迟电网升级，
+          或联邦基础设施拨款缩减，AMSC的Grid业务（85%营收）将受冲击。
+          Comtrafo的巴西业务也受拉美经济周期影响。
+        </div>
+        <div class="risk-impact">量化影响估算: CapEx缩减10%可导致AMSC营收下降8-12%</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">内部人减持信号</div>
+          <div class="risk-score rs-med">中</div>
+        </div>
+        <div class="risk-desc">
+          CEO和CFO在Q3 FY2025（股价历史高位附近）合计出售约$15.8M股票。
+          短期内部人大规模减持通常是负面信号，
+          尽管可能涉及个人财务规划而非业务判断。
+        </div>
+        <div class="risk-impact">量化影响估算: 内部人持股降至~6.6%，监督动力减弱</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 三大框架估值 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">三大框架估值分析</div>
+
+    <!-- 格雷厄姆 -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+        I. 格雷厄姆安全边际估值
+      </div>
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="framework-card">
+          <div class="fw-title">格雷厄姆数 (Graham Number)</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">公式: √(22.5 × EPS_GAAP × 每股净资产)</div>
+          <div class="info-row"><span class="info-label">标准化EPS (TTM)</span><span class="info-val">$0.37/股</span></div>
+          <div class="info-row"><span class="info-label">每股净资产</span><span class="info-val">$12.83</span></div>
+          <div class="info-row"><span class="info-label">Graham Number</span><span class="info-val" style="color:var(--yellow);font-size:18px">$10.34</span></div>
+          <div class="info-row"><span class="info-label">当前股价 $31.26</span><span class="info-val" style="color:var(--red)">+202% 溢价</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            注: EPS采用TTM标准化值（剔除$113.1M税务收益）。
+            若用FY2024年度GAAP EPS $0.16，Graham Number仅为$6.80，溢价更高。
+            格雷厄姆框架明确指向大幅高估。
+          </div>
+        </div>
+        <div class="framework-card">
+          <div class="fw-title">格雷厄姆六项安全检验</div>
+          <div class="checklist-item"><span>P/E ≤ 15x</span><span class="check-fail">不通过 (~84x标准化)</span></div>
+          <div class="checklist-item"><span>P/B ≤ 1.5x</span><span class="check-fail">不通过 (2.79x)</span></div>
+          <div class="checklist-item"><span>P/E × P/B ≤ 22.5</span><span class="check-fail">不通过 (~234)</span></div>
+          <div class="checklist-item"><span>流动比率 ≥ 2x</span><span class="check-pass">通过 (2.66x)</span></div>
+          <div class="checklist-item"><span>负债/权益 ≤ 1x</span><span class="check-pass">通过 (0.02x)</span></div>
+          <div class="checklist-item"><span>资产/负债 ≥ 2x</span><span class="check-pass">通过 (3.94x)</span></div>
+          <div style="margin-top:12px;padding:8px;background:rgba(239,68,68,0.1);border-radius:6px;font-size:12px;color:var(--red)">
+            通过: 3/6 项 — 财务结构稳健，但估值严重偏高
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-box" style="margin-bottom:16px">
+        <h4>DCF 三情景估值 (基准FCF: $16.0M, 折现率10%, 10年期, 47.61M股)</h4>
+        <div class="dcf-bar-wrap" style="padding:10px 0">
+          <div class="dcf-scenario">
+            <div class="dcf-label">保守 (30%)</div>
+            <div class="dcf-bar-outer" style="position:relative">
+              <div class="dcf-bar-inner" style="width:33%;background:linear-gradient(90deg,#6366f1,#3b82f6)">$9.54</div>
+              <div class="dcf-price-line" style="left:calc(31.26/30*100%)"></div>
+            </div>
+            <div style="font-size:12px;width:60px;color:var(--muted)">$9.54</div>
+          </div>
+          <div class="dcf-scenario">
+            <div class="dcf-label">中性 (45%)</div>
+            <div class="dcf-bar-outer" style="position:relative">
+              <div class="dcf-bar-inner" style="width:54%;background:linear-gradient(90deg,#f59e0b,#f97316)">$16.13</div>
+              <div class="dcf-price-line" style="left:95%"></div>
+            </div>
+            <div style="font-size:12px;width:60px;color:var(--muted)">$16.13</div>
+          </div>
+          <div class="dcf-scenario">
+            <div class="dcf-label">乐观 (25%)</div>
+            <div class="dcf-bar-outer" style="position:relative">
+              <div class="dcf-bar-inner" style="width:96%;background:linear-gradient(90deg,#10b981,#14b8a6)">$28.85</div>
+            </div>
+            <div style="font-size:12px;width:60px;color:var(--muted)">$28.85</div>
+          </div>
+          <div class="dcf-scenario" style="margin-top:8px;border-top:1px solid var(--border);padding-top:10px">
+            <div class="dcf-label" style="color:var(--text);font-weight:700">加权综合</div>
+            <div class="dcf-bar-outer" style="position:relative">
+              <div class="dcf-bar-inner" style="width:58%;background:linear-gradient(90deg,#8b5cf6,#6366f1)">$17.33</div>
+              <div class="dcf-price-line" style="left:calc(100% - 2px)"></div>
+            </div>
+            <div style="font-size:13px;width:60px;color:var(--purple);font-weight:700">$17.33</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">
+          黄色竖线代表当前股价$31.26。保守/中性情景：当前价高于DCF内在价值。乐观情景接近当前价。
+          注: 3年FCF从负转正，增速计算使用最低门槛(15/25/35%)。
+        </div>
+      </div>
+
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:16px">
+        <div style="font-weight:700;color:var(--red);margin-bottom:8px">格雷厄姆结论: 减持/等待</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">
+          Graham Number $10.34 vs 当前价 $31.26 (+202%溢价)。DCF加权内在价值$17.33，
+          当前价高出80%。三项估值检验均不通过。唯一亮点是资产负债表健康（无实质债务）。
+          格雷厄姆会将AMSC归类为"成长型投机股"而非"价值股"。
+        </div>
+      </div>
+    </div>
+
+    <!-- 巴菲特 -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:16px;font-weight:700;color:var(--yellow);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+        II. 巴菲特护城河估值
+      </div>
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="framework-card">
+          <div class="fw-title">ROE 持续性评估</div>
+          <div class="info-row"><span class="info-label">FY2022 ROE</span><span class="info-val" style="color:var(--red)">负值</span></div>
+          <div class="info-row"><span class="info-label">FY2023 ROE</span><span class="info-val" style="color:var(--red)">负值</span></div>
+          <div class="info-row"><span class="info-label">FY2024 ROE</span><span class="info-val" style="color:var(--red)">3.1%</span></div>
+          <div class="info-row"><span class="info-label">3年均值 ROE</span><span class="info-val" style="color:var(--red)">~1% (不符合)</span></div>
+          <div class="info-row"><span class="info-label">巴菲特标准 ≥15%</span><span class="info-val" style="color:var(--red)">不通过</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            Comtrafo收购发行新股$78M，大幅扩充股本，
+            短期内ROE进一步承压。需要净利润大幅提升才能达标。
+          </div>
+        </div>
+        <div class="framework-card">
+          <div class="fw-title">合理估值与买入区间</div>
+          <div class="info-row"><span class="info-label">护城河评级</span><span class="info-val" style="color:var(--yellow)">窄护城河</span></div>
+          <div class="info-row"><span class="info-label">合理P/E范围</span><span class="info-val">15-20x (FY2026E)</span></div>
+          <div class="info-row"><span class="info-label">FY2026E EPS</span><span class="info-val">~$0.45-0.55</span></div>
+          <div class="info-row"><span class="info-label">内在价值估算</span><span class="info-val" style="color:var(--yellow)">$7-11 (当前盈利基础)</span></div>
+          <div class="info-row"><span class="info-label">含20%安全边际</span><span class="info-val" style="color:var(--red)">$6-9</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            若AMSC在3-5年内将ROE提升至15%，对应EPS约$1.5+，
+            则合理估值可达$22-30。这需要营收达$400M+且净利润率>8%。
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:16px">
+        <div style="font-weight:700;color:var(--red);margin-bottom:8px">巴菲特结论: 减持/等待</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">
+          AMSC目前不符合巴菲特的核心质量标准（ROE持续>15%）。窄护城河来自HTS技术专有性和军方认证，
+          但尚未转化为足够的资本回报率。公司处于从亏损到盈利的早期过渡阶段，
+          不是典型的"以合理价格买入优质公司"场景。
+          若ROE在2-3年内上升至12%+，重新评估吸引力。
+        </div>
+      </div>
+    </div>
+
+    <!-- 马克斯 -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:16px;font-weight:700;color:var(--teal);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+        III. 霍华德·马克斯周期分析
+      </div>
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="framework-card">
+          <div class="fw-title">周期与情绪信号</div>
+          <div class="info-row"><span class="info-label">股价较52周高位</span><span class="info-val" style="color:var(--green)">-55.6%（恐慌已发生）</span></div>
+          <div class="info-row"><span class="info-label">空头比例</span><span class="info-val" style="color:var(--green)">6.2%（下降中-23% MoM）</span></div>
+          <div class="info-row"><span class="info-label">分析师情绪</span><span class="info-val" style="color:var(--green)">4 Buy / 0 Hold / 0 Sell</span></div>
+          <div class="info-row"><span class="info-label">内部人情绪</span><span class="info-val" style="color:var(--red)">CEO/CFO卖出$15.8M</span></div>
+          <div class="info-row"><span class="info-label">机构持仓</span><span class="info-val" style="color:var(--green)">52%（Vanguard+20%）</span></div>
+          <div class="info-row"><span class="info-label">积压订单</span><span class="info-val" style="color:var(--green)">$250M+（历史最强）</span></div>
+        </div>
+        <div class="framework-card">
+          <div class="fw-title">风险/收益不对称分析</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px">当前价 $31.26</div>
+          <div class="info-row"><span class="info-label">分析师目标价 (均值)</span><span class="info-val" style="color:var(--green)">$52-57 (+65-82%)</span></div>
+          <div class="info-row"><span class="info-label">分析师目标价 (低)</span><span class="info-val" style="color:var(--yellow)">$40 (+28%)</span></div>
+          <div class="info-row"><span class="info-label">分析师目标价 (高)</span><span class="info-val" style="color:var(--green)">$68 (+118%)</span></div>
+          <div class="info-row"><span class="info-label">DCF乐观情景</span><span class="info-val" style="color:var(--yellow)">$28.85 (-8%)</span></div>
+          <div class="info-row"><span class="info-label">下行风险 (Graham)</span><span class="info-val" style="color:var(--red)">$10-15 (-52/-68%)</span></div>
+        </div>
+      </div>
+      <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:16px">
+        <div style="font-weight:700;color:var(--yellow);margin-bottom:8px">马克斯结论: 谨慎买入 / 持有</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">
+          股价已从高点下跌56%，大量负面预期已被定价。业务基本面继续改善（积压订单$250M+，营收加速），
+          分析师一致看多（4 Buy, PT $52-57）。从周期角度，当前市场情绪偏悲观，
+          潜在呈现逆向买入机会。但FCF生成能力薄弱和内部人减持是重要风险信号。
+          <strong style="color:var(--yellow)">结论：比格雷厄姆/巴菲特框架更乐观，但需等待FCF趋势确认。</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 综合结论 -->
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px">三框架综合结论</div>
+      <div class="conclusion-grid">
+        <div class="conclusion-card cc-red">
+          <div class="cc-framework">格雷厄姆</div>
+          <div class="cc-verdict">减持/等待</div>
+          <div class="cc-detail">Graham Number $10.34，当前溢价+202%；DCF加权$17.33；P/E~84x，P/B 2.79x，均不达格雷厄姆标准。</div>
+        </div>
+        <div class="conclusion-card cc-red">
+          <div class="cc-framework">巴菲特</div>
+          <div class="cc-verdict">减持/等待</div>
+          <div class="cc-detail">ROE持续低于1%（3年均值），远不达15%门槛。盈利转正刚起步，尚非"高质量合理价格"投资标的。</div>
+        </div>
+        <div class="conclusion-card cc-yellow">
+          <div class="cc-framework">马克斯</div>
+          <div class="cc-verdict">谨慎买入</div>
+          <div class="cc-detail">股价已较高点-56%；分析师全线看多PT $52-57；积压订单$250M+历史最高；周期情绪偏悲观，逆向机会值得关注。</div>
+        </div>
+      </div>
+
+      <div class="buy-range-box">
+        <div class="buy-range-label">建议买入区间（含安全边际）</div>
+        <div class="buy-range-price">$22 – $26</div>
+        <div class="buy-range-note">
+          基于DCF乐观情景$28.85打9折；含20-25%安全边际。<br>
+          适合愿意承受成长期不确定性的投资者，需接受FCF薄弱的现状。<br>
+          保守投资者应等待 $15-18（接近DCF中性情景含安全边际）。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 数据来源 ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-title">数据来源</div>
+    <ul class="sources-list">
+      <li><a href="https://www.globenewswire.com/news-release/2026/02/04/3232490/18367/en/AMSC-Reports-Third-Quarter-Fiscal-Year-2025-Financial-Results-and-Business-Outlook.html">GlobeNewswire — AMSC Q3 FY2025 财务结果与业务展望</a></li>
+      <li><a href="https://stockanalysis.com/stocks/amsc/financials/">StockAnalysis — AMSC 财务报表（季度与年度）</a></li>
+      <li><a href="https://stockanalysis.com/stocks/amsc/statistics/">StockAnalysis — AMSC 估值与统计数据</a></li>
+      <li><a href="https://stockanalysis.com/stocks/amsc/financials/balance-sheet/">StockAnalysis — AMSC 资产负债表</a></li>
+      <li><a href="https://stockanalysis.com/stocks/amsc/financials/cash-flow-statement/">StockAnalysis — AMSC 现金流量表</a></li>
+      <li><a href="https://www.globenewswire.com/news-release/2025/12/10/3203504/18367/en/AMSC-Accelerates-the-Business-Expands-Product-Portfolio-and-Enters-Brazil-with-Comtrafo-Acquisition.html">GlobeNewswire — Comtrafo收购公告</a></li>
+      <li><a href="https://www.sahmcapital.com/news/content/is-american-superconductors-amsc-pivot-to-grid-and-naval-power-systems-redefining-its-investment-story-2026-03-07">SahmCapital — AMSC Grid与海军电力系统转型分析</a></li>
+      <li><a href="https://seekingalpha.com/article/4866541-american-superconductor-corporation-amsc-q3-2025-earnings-call-transcript">Seeking Alpha — AMSC Q3 FY2025 业绩会议记录</a></li>
+      <li><a href="https://pitchgrade.com/companies/american-superconductor-corp">PitchGrade — AMSC 商业模式与竞争分析 2026</a></li>
+      <li><a href="https://www.marketsandmarkets.com/ResearchInsight/superconducting-wire-market.asp">MarketsandMarkets — 超导线缆市场预测 2025-2030</a></li>
+      <li><a href="https://ir.amsc.com/news-releases/news-release-details/amsc-awarded-us-navy-contract-engineering-and-technical-services">AMSC IR — 美国海军合同公告</a></li>
+      <li>数据采集时间: 2026-03-25</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+// ── Segment Pie ──
+new Chart(document.getElementById('segPie'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Grid ($63.2M)', 'Wind ($11.3M)'],
+    datasets: [{
+      data: [63.2, 11.3],
+      backgroundColor: ['#3b82f6', '#14b8a6'],
+      borderWidth: 0, hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '60%',
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 12 }, padding: 10 } }
+    }
+  }
+});
+
+// ── Revenue Chart ──
+const revLabels = ['Q2 FY2024\nSep\'24', 'Q3 FY2024\nDec\'24', 'Q4 FY2024\nMar\'25', 'Q1 FY2025\nJun\'25', 'Q2 FY2025\nSep\'25', 'Q3 FY2025\nDec\'25'];
+new Chart(document.getElementById('revChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25'],
+    datasets: [{
+      label: '营收 ($M)',
+      data: [54.47, 61.40, 66.66, 72.36, 65.86, 74.53],
+      backgroundColor: (ctx) => ctx.dataIndex === 5 ? '#3b82f6' : '#1e3a5f',
+      borderColor: '#3b82f6', borderWidth: 1.5, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } },
+      y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' },
+           min: 0, max: 90 }
+    }
+  }
+});
+
+// ── Margin Chart ──
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25'],
+    datasets: [{
+      label: '毛利率 (%)',
+      data: [28.66, 26.59, 26.54, 33.84, 31.03, 30.66],
+      borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)',
+      tension: 0.4, fill: true, pointRadius: 5, pointBackgroundColor: '#10b981'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+    scales: {
+      x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } },
+      y: { ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => v + '%' },
+           grid: { color: '#1a2235' }, min: 20, max: 40 }
+    }
+  }
+});
+
+// ── Annual Rev Chart ──
+new Chart(document.getElementById('annualRevChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY2022\n(Mar\'23)', 'FY2023\n(Mar\'24)', 'FY2024\n(Mar\'25)', 'FY2025E\n(Mar\'26)'],
+    datasets: [{
+      label: '年度营收 ($M)',
+      data: [106.0, 145.6, 222.8, 293],
+      backgroundColor: ['#1e3a5f', '#1e3a5f', '#3b82f6', 'rgba(59,130,246,0.5)'],
+      borderColor: '#3b82f6', borderWidth: 1.5, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } },
+      y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } }
+    }
+  }
+});
+
+// ── FCF Chart ──
+new Chart(document.getElementById('fcfChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY2022\n(Mar\'23)', 'FY2023\n(Mar\'24)', 'FY2024\n(Mar\'25)'],
+    datasets: [{
+      label: '自由现金流 ($M)',
+      data: [-23.7, 1.2, 16.0],
+      backgroundColor: (ctx) => ctx.raw < 0 ? 'rgba(239,68,68,0.7)' : '#10b981',
+      borderColor: (ctx) => ctx.raw < 0 ? '#ef4444' : '#10b981',
+      borderWidth: 1.5, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } },
+      y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1a2235' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
