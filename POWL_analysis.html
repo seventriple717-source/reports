@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POWL - Powell Industries 价值投资深度分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;--bg4:#1e293b;
+    --accent:#3b82f6;--accent2:#60a5fa;--gold:#f59e0b;--green:#10b981;
+    --red:#ef4444;--yellow:#f59e0b;--purple:#8b5cf6;--teal:#14b8a6;
+    --orange:#f97316;--text:#e2e8f0;--muted:#94a3b8;--border:#1e3a5f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;}
+  .container{max-width:1400px;margin:0 auto;padding:0 20px;}
+
+  .hero{background:linear-gradient(135deg,#0a0e1a 0%,#0f1e3d 50%,#0a1628 100%);border-bottom:1px solid var(--border);padding:40px 0 32px;}
+  .hero-inner{display:flex;flex-wrap:wrap;align-items:flex-start;gap:32px;}
+  .hero-left h1{font-size:2.8rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+  .hero-left h2{font-size:1.05rem;color:var(--muted);font-weight:400;margin-top:4px;}
+  .hero-price{font-size:3rem;font-weight:700;color:var(--accent2);margin-top:12px;}
+  .hero-sub{color:var(--muted);font-size:0.88rem;margin-top:4px;}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .badge{padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;}
+  .badge-blue{background:rgba(59,130,246,0.2);color:var(--accent2);border:1px solid var(--accent);}
+  .badge-yellow{background:rgba(245,158,11,0.2);color:var(--gold);border:1px solid var(--gold);}
+  .badge-red{background:rgba(239,68,68,0.2);color:var(--red);border:1px solid var(--red);}
+  .badge-green{background:rgba(16,185,129,0.2);color:var(--green);border:1px solid var(--green);}
+  .badge-orange{background:rgba(249,115,22,0.2);color:var(--orange);border:1px solid var(--orange);}
+  .hero-right{margin-left:auto;text-align:right;}
+  .hero-meta{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap;}
+  .hero-meta-item .label{font-size:0.75rem;color:var(--muted);}
+  .hero-meta-item .value{font-size:1.1rem;font-weight:700;color:#fff;}
+
+  /* SPLIT BANNER */
+  .split-banner{background:linear-gradient(135deg,rgba(249,115,22,0.15),rgba(249,115,22,0.05));border:1px solid rgba(249,115,22,0.4);border-radius:10px;padding:14px 20px;margin:20px 0;display:flex;align-items:center;gap:12px;}
+  .split-banner .split-icon{font-size:1.4rem;}
+  .split-banner .split-text{font-size:0.9rem;}
+  .split-banner .split-text strong{color:var(--orange);}
+
+  .section{padding:40px 0;border-bottom:1px solid var(--border);}
+  .section-title{font-size:1.4rem;font-weight:700;color:var(--accent2);margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:block;width:4px;height:24px;background:var(--accent);border-radius:2px;}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
+  .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px 16px;}
+  .kpi-card .kpi-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .kpi-card .kpi-value{font-size:1.6rem;font-weight:700;color:#fff;margin-top:4px;}
+  .kpi-card .kpi-sub{font-size:0.8rem;margin-top:4px;}
+  .kpi-up{color:var(--green);}
+  .kpi-down{color:var(--red);}
+  .kpi-neutral{color:var(--muted);}
+
+  .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px;}
+  .chart-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;}
+  .chart-card h3{font-size:0.95rem;color:var(--muted);margin-bottom:16px;font-weight:600;}
+  .chart-wrap{position:relative;height:260px;}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  .data-table th{background:var(--bg4);color:var(--muted);text-align:right;padding:10px 14px;font-weight:600;font-size:0.78rem;text-transform:uppercase;}
+  .data-table th:first-child{text-align:left;}
+  .data-table td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--border);}
+  .data-table td:first-child{text-align:left;color:var(--text);font-weight:500;}
+  .data-table tr:hover td{background:var(--bg4);}
+  .data-table .highlight{color:var(--accent2);font-weight:700;}
+  .table-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;}
+
+  .moat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .moat-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .moat-card h4{font-size:0.95rem;font-weight:700;color:var(--text);}
+  .moat-card .stars{font-size:1.2rem;margin:8px 0;}
+  .moat-bar{height:6px;background:var(--bg4);border-radius:3px;margin:8px 0;}
+  .moat-bar-fill{height:100%;border-radius:3px;}
+  .moat-card .moat-desc{font-size:0.8rem;color:var(--muted);margin-top:8px;}
+  .moat-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.75rem;font-weight:700;margin-top:6px;}
+  .moat-wide{background:rgba(16,185,129,0.2);color:var(--green);}
+  .moat-narrow{background:rgba(245,158,11,0.2);color:var(--gold);}
+  .moat-none{background:rgba(239,68,68,0.2);color:var(--red);}
+
+  .risk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+  .risk-card{background:var(--bg3);border-left:4px solid;border-radius:0 12px 12px 0;padding:16px 20px;}
+  .risk-card h4{font-size:0.9rem;font-weight:700;}
+  .risk-card p{font-size:0.8rem;color:var(--muted);margin-top:6px;}
+  .risk-tags{display:flex;gap:8px;margin-top:8px;}
+  .risk-tag{font-size:0.72rem;padding:2px 8px;border-radius:10px;font-weight:600;}
+
+  .val-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;}
+  .val-card h3{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:16px;}
+  .checklist li{list-style:none;padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.875rem;}
+  .pass{color:var(--green);font-weight:700;}
+  .fail{color:var(--red);font-weight:700;}
+  .dcf-bar{margin:10px 0;}
+  .dcf-bar label{font-size:0.8rem;color:var(--muted);display:flex;justify-content:space-between;}
+  .dcf-bar-track{height:28px;background:var(--bg4);border-radius:4px;position:relative;margin-top:4px;overflow:hidden;}
+  .dcf-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.8rem;font-weight:700;color:#fff;}
+  .verdict-card{border-radius:12px;padding:20px;margin-top:16px;}
+  .verdict-red{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);}
+  .verdict-yellow{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);}
+  .verdict-green{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);}
+  .verdict-title{font-size:1.1rem;font-weight:800;}
+  .verdict-detail{font-size:0.85rem;color:var(--muted);margin-top:6px;}
+
+  .summary-box{background:linear-gradient(135deg,#0f1e3d,#0a1628);border:2px solid var(--accent);border-radius:16px;padding:32px;text-align:center;}
+  .summary-box h2{font-size:1.8rem;font-weight:800;color:var(--accent2);}
+  .buy-range{font-size:3rem;font-weight:900;color:var(--gold);margin:16px 0;}
+  .three-verdict{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:24px;}
+  .three-verdict-item{text-align:center;padding:16px 24px;border-radius:12px;min-width:160px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .cycle-meter{display:flex;gap:6px;margin:16px 0;}
+  .cycle-seg{flex:1;height:14px;border-radius:3px;}
+  .cycle-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:4px;}
+
+  .sources-list{column-count:2;column-gap:24px;}
+  .sources-list li{font-size:0.78rem;margin-bottom:6px;break-inside:avoid;}
+  .sources-list a{color:var(--accent2);text-decoration:none;}
+  .sources-list a:hover{text-decoration:underline;}
+
+  @media(max-width:700px){
+    .hero-left h1{font-size:2rem;}.hero-price{font-size:2rem;}
+    .two-col{grid-template-columns:1fr;}.sources-list{column-count:1;}
+    .chart-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+<div class="container">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>POWL</h1>
+      <h2>Powell Industries, Inc. &nbsp;|&nbsp; NASDAQ &nbsp;|&nbsp; 定制化电气开关设备与配电系统</h2>
+      <div class="hero-price">$560.46</div>
+      <div class="hero-sub">分析日期：2026-03-25 &nbsp;|&nbsp; 数据截至 2026-03-24 &nbsp;|&nbsp; 注意：3合1股票拆分生效日 2026-04-06</div>
+      <div class="hero-badges">
+        <span class="badge badge-blue">市值 $6.81B</span>
+        <span class="badge badge-orange">3合1拆股 → 拆后约 $187</span>
+        <span class="badge badge-red">分析师共识 $427（-23.8%）</span>
+        <span class="badge badge-green">积压订单 $1.6B（+16%）</span>
+        <span class="badge badge-yellow">短仓比例 9.49%（高于平均）</span>
+        <span class="badge badge-red">谨慎减持 / 等待更低买点</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div style="font-size:0.85rem;color:var(--muted);">分析师一致目标价</div>
+      <div style="font-size:2.2rem;font-weight:800;color:var(--red);">$427.00</div>
+      <div style="color:var(--red);font-size:0.85rem;">-23.8% 下行风险</div>
+      <div class="hero-meta" style="margin-top:20px;">
+        <div class="hero-meta-item"><div class="label">52周高</div><div class="value" style="color:var(--red);">$612.50</div></div>
+        <div class="hero-meta-item"><div class="label">52周低</div><div class="value" style="color:var(--green);">$152.89</div></div>
+        <div class="hero-meta-item"><div class="label">短仓比例</div><div class="value" style="color:var(--red);">9.49%</div></div>
+        <div class="hero-meta-item"><div class="label">机构持仓</div><div class="value">79.72%</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="split-banner">
+    <div class="split-icon">&#9888;</div>
+    <div class="split-text">
+      <strong>重要提示：3合1股票拆分（2026-04-06 生效）</strong> — 拆分后股价将从约 $560 降至约 $187，EPS 从 $15.39 降至约 $5.13，书面价值从 $54.95 降至 $18.32。所有本报告中的数据均为拆分前原始数据，估值分析以拆分前价格为基准。
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- KPI GRID -->
+<div class="section">
+<div class="container">
+  <div class="section-title">核心财务指标（TTM / FY2025）</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-label">TTM 营收</div><div class="kpi-value">$1.11B</div><div class="kpi-sub kpi-up">+10.0% YoY</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM 净利润</div><div class="kpi-value">$187M</div><div class="kpi-sub kpi-up">净利率 16.8%</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM EPS（GAAP）</div><div class="kpi-value">$15.39</div><div class="kpi-sub kpi-neutral">拆后约 $5.13</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM 自由现金流</div><div class="kpi-value">$162M</div><div class="kpi-sub kpi-up">FCF率 14.6%</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM 毛利率</div><div class="kpi-value">30.2%</div><div class="kpi-sub kpi-up">历史峰值（FY21: 16%）</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM 营业利润率</div><div class="kpi-value">20.2%</div><div class="kpi-sub kpi-up">FY21 时仅 0.2%</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM P/E</div><div class="kpi-value">36.4x</div><div class="kpi-sub kpi-down">工业股偏高</div></div>
+    <div class="kpi-card"><div class="kpi-label">前向 P/E（FY26E）</div><div class="kpi-value">32.9x</div><div class="kpi-sub kpi-neutral">基于市场预期</div></div>
+    <div class="kpi-card"><div class="kpi-label">ROE（3年均值）</div><div class="kpi-value">28.7%</div><div class="kpi-sub kpi-up">资本效率优秀</div></div>
+    <div class="kpi-card"><div class="kpi-label">净现金</div><div class="kpi-value">$499M</div><div class="kpi-sub kpi-up">$41.13/股（零有息债务）</div></div>
+    <div class="kpi-card"><div class="kpi-label">积压订单</div><div class="kpi-value">$1.6B</div><div class="kpi-sub kpi-up">+16% YoY，账单比 1.7x</div></div>
+    <div class="kpi-card"><div class="kpi-label">52周涨幅</div><div class="kpi-value">+204%</div><div class="kpi-sub kpi-down">估值已大幅重估</div></div>
+  </div>
+</div>
+</div>
+
+<!-- BUSINESS MODEL -->
+<div class="section">
+<div class="container">
+  <div class="section-title">商业模式分析</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>终端市场营收构成（FY2025 估算）</h3>
+      <div class="chart-wrap"><canvas id="segPie"></canvas></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">成长市场（FY2025 YoY）</div>
+        <div style="font-size:0.9rem;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>电力公用事业（Electric Utility）</span><span class="kpi-up">+50% YoY</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>轻轨牵引电源（Light Rail）</span><span class="kpi-up">+87% YoY</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>数据中心（Data Center）</span><span class="kpi-up">强劲增长</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>LNG 出口项目</span><span class="kpi-up">新增机遇</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>商业与其他工业</span><span class="kpi-up">+19% YoY</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>石油天然气（Oil & Gas）</span><span class="kpi-down">-3% YoY</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>石化（Petrochemical）</span><span class="kpi-down">-19% YoY</span></div>
+        </div>
+      </div>
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">Q1 FY2026 新订单爆发</div>
+        <div class="kpi-value" style="color:var(--green);">$439M</div>
+        <div class="kpi-sub kpi-up">+63% YoY — 积压订单 $1.6B（+16%）</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">账单比 1.7x 表明未来12个月收入能见度极高；约60%积压预计在FY2026内转化。驱动因素：电网现代化、AI数据中心电源需求、美国能源出口基础设施建设。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">商业模式核心</div>
+      <div style="font-size:0.9rem;color:var(--text);margin-top:8px;">定制工程驱动：为石化、电力、LNG、数据中心等复杂电力环境设计和制造中高压开关柜（Switchgear）及配电系统。每个项目均为客户专属定制，项目周期6-24个月，预收款结构为主。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">收入质量评分</div>
+      <div class="kpi-value" style="color:var(--gold);">6.5 / 10</div>
+      <div class="kpi-sub">以工程项目型硬件收入为主（一次性），无软件/服务重复性收入。收购Remsdaq（SCADA远程终端单元）是提升收入质量的初步尝试，但尚未规模化。积压订单提供较高能见度。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">客户集中度风险</div>
+      <div class="kpi-value" style="color:var(--gold);">中-高</div>
+      <div class="kpi-sub">能源（油气+电力）约占营收60-70%，历史上单一行业CapEx周期对公司影响显著。2021年时石化/油气需求萎缩直接导致收入腰斩、利润率崩溃。但当前转向电力公用事业+数据中心，集中度风险有所优化。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">毛利率扩张轨迹</div>
+      <div class="kpi-value" style="color:var(--green);">16%→30%</div>
+      <div class="kpi-sub">FY2021毛利率仅16%（产能闲置），FY2025达29.4%（历史峰值）。扩张来源：①产能利用率提升（固定成本摊薄）；②定价改善（高通胀期顺利提价）；③项目组合从低利润率石化转向高利润率电力/LNG。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">资本结构</div>
+      <div class="kpi-value" style="color:var(--green);">极轻资产</div>
+      <div class="kpi-sub">净现金$499M，零有息债务，CapEx仅$2M/季（占营收不足1%）。轻资产+重订单模式：客户预付款驱动的负营运资本天然为公司提供免费融资。ROIC高达30%+。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Remsdaq 收购（$18.4M）</div>
+      <div class="kpi-value" style="color:var(--accent2);">战略价值</div>
+      <div class="kpi-sub">2025年收购英国SCADA远程终端单元制造商，进入电气自动化领域，布局电网智能化趋势。规模尚小但方向正确，有助于从纯硬件制造商转型为"硬件+软件"解决方案提供商。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">财务分析</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>季度营收趋势 ($M) 及 YoY 增速</h3>
+      <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>利润率趋势（季度）</h3>
+      <div class="chart-wrap"><canvas id="marginChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>年度自由现金流趋势 ($M)</h3>
+      <div class="chart-wrap"><canvas id="fcfChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>年度营收与净利润 ($M)</h3>
+      <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">近6季度财务数据（拆分前数据）</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>季度</th><th>营收 ($M)</th><th>YoY</th><th>净利润 ($M)</th><th>净利率</th><th>毛利率</th><th>营业利润率</th><th>EPS（GAAP）</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight">Q1 FY2026</td><td>251.2</td><td class="kpi-up">+4.0%</td><td>41.4</td><td>16.5%</td><td>28.4%</td><td>17.0%</td><td>$3.40</td></tr>
+          <tr><td class="highlight">Q4 FY2025</td><td>298.0</td><td class="kpi-up">+8.3%</td><td>51.4</td><td>17.2%</td><td>31.4%</td><td>21.2%</td><td>$4.22</td></tr>
+          <tr><td class="highlight">Q3 FY2025</td><td>286.3</td><td class="kpi-up">+5.5%</td><td>48.2</td><td>16.8%</td><td>30.7%</td><td>21.0%</td><td>$3.96</td></tr>
+          <tr><td class="highlight">Q2 FY2025</td><td>278.6</td><td class="kpi-up">+6.2%</td><td>46.3</td><td>16.6%</td><td>29.9%</td><td>21.2%</td><td>$3.81</td></tr>
+          <tr><td>Q1 FY2025</td><td>241.4</td><td class="kpi-up">+17.6%</td><td>34.8</td><td>14.4%</td><td>24.7%</td><td>14.7%</td><td>$2.86</td></tr>
+          <tr><td>Q4 FY2024</td><td>275.1</td><td class="kpi-up">+29.1%</td><td>46.1</td><td>16.7%</td><td>29.2%</td><td>20.4%</td><td>$3.77</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">年度财务数据（FY2021–2025）</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>财年</th><th>营收 ($M)</th><th>YoY</th><th>净利润 ($M)</th><th>毛利率</th><th>营业利润率</th><th>EPS GAAP</th><th>FCF ($M)</th><th>净现金 ($M)</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight">FY2025</td><td>1,104</td><td class="kpi-up">+9.1%</td><td>181</td><td class="kpi-up">29.4%</td><td class="kpi-up">19.7%</td><td>$14.86</td><td>155</td><td>474</td></tr>
+          <tr><td>FY2024</td><td>1,012</td><td class="kpi-up">+44.8%</td><td>150</td><td>27.0%</td><td>17.7%</td><td>$12.29</td><td>97</td><td>358</td></tr>
+          <tr><td>FY2023</td><td>699</td><td class="kpi-up">+31.1%</td><td>55</td><td>21.1%</td><td>8.9%</td><td>$4.50</td><td>175</td><td>—</td></tr>
+          <tr><td>FY2022</td><td>533</td><td class="kpi-up">+13.3%</td><td>14</td><td>16.0%</td><td>1.4%</td><td>$1.15</td><td>-6</td><td>—</td></tr>
+          <tr><td>FY2021</td><td>471</td><td>—</td><td>0.6</td><td>16.0%</td><td>0.2%</td><td>$0.05</td><td>-33</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- GROWTH DRIVERS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">增长驱动与关键追踪指标</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px;">
+    <div class="kpi-card" style="border-left:3px solid var(--accent);">
+      <div class="kpi-label">驱动力 1 — 电网现代化</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--accent2);">+50% YoY FY2025</div>
+      <div class="kpi-sub">电力公用事业是POWL最大的增长引擎。美国电网老化设施替换（数千亿级别改造周期）推动中压开关柜需求。POWL的变电站及配电中心设备直接受益于IRA法案补贴下的电网投资加速。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--purple);">
+      <div class="kpi-label">驱动力 2 — 数据中心电力基础设施</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--purple);">机会"高度令人鼓舞"</div>
+      <div class="kpi-sub">AI超算中心需要大量中压配电开关设备（变电站级别）。管理层称数据中心业务机会"在规模和体量上都在增长"，POWL正积极扩大在此战略市场的存在。Q1 FY2026新订单+63%部分来自数据中心。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--green);">
+      <div class="kpi-label">驱动力 3 — LNG 出口项目</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--green);">新增战略市场</div>
+      <div class="kpi-sub">美国LNG出口扩张（Sabine Pass、Corpus Christi等项目）需要大型电力基础设施建设。POWL投资$12.4M扩建JacintoPort工厂专门服务LNG项目，FY2026管理层明确提及LNG为"强劲"增长领域。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--gold);">
+      <div class="kpi-label">驱动力 4 — 轻轨与交通电气化</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--gold);">+87% YoY FY2025</div>
+      <div class="kpi-sub">城市轨道交通牵引供电系统是高增速细分市场，增速超预期。虽然绝对体量尚小，但代表了POWL多元化终端市场布局的成功，减少对石化周期的依赖。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--teal);">
+      <div class="kpi-label">驱动力 5 — 积压订单驱动的高能见度</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--teal);">$1.6B 积压</div>
+      <div class="kpi-sub">Q1 FY2026积压$1.6B（+16%），约60%预计在FY2026内执行，为全年收入增长提供坚实支撑。账单比1.7x说明新订单速度仍高于营收确认速度，积压仍在累积而非消耗。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--red);">
+      <div class="kpi-label">逆风 — 传统市场收缩</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--red);">石化 -19%</div>
+      <div class="kpi-sub">石化（Petrochemical）FY2025下降19%，石油天然气（Oil & Gas）下降3%。这两个传统市场历史上占营收40%+，受全球能源转型和CapEx纪律影响而持续萎缩，构成结构性逆风。</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;">需持续追踪的 KPI 清单</div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>KPI 指标</th><th>当前数值</th><th>目标/基准</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>季度新订单（账单比）</td><td>$439M，1.7x（Q1 FY26）</td><td>≥1.0x（维持积压增长）</td><td class="kpi-up">极强</td></tr>
+        <tr><td>积压订单余额</td><td>$1.6B（+16% YoY）</td><td>持续正增长</td><td class="kpi-up">健康</td></tr>
+        <tr><td>毛利率水平</td><td>28-31%（近4季度）</td><td>管理层目标28-29%可持续</td><td class="kpi-up">符合</td></tr>
+        <tr><td>电力公用事业占比</td><td>~30%+（估算）</td><td>持续提升（降低周期性风险）</td><td class="kpi-up">正向</td></tr>
+        <tr><td>数据中心订单增速</td><td>双位数增长（未披露具体数字）</td><td>持续增长</td><td class="kpi-neutral">跟踪中</td></tr>
+        <tr><td>石化/油气营收占比趋势</td><td>下降中（-3%/-19% FY25）</td><td>持续下降（结构优化）</td><td class="kpi-up">正向</td></tr>
+        <tr><td>净现金水平</td><td>$499M（无有息债务）</td><td>维持正净现金</td><td class="kpi-up">优秀</td></tr>
+        <tr><td>Remsdaq 整合进展</td><td>$18.4M收购，整合中</td><td>SCADA收入实质性贡献</td><td class="kpi-neutral">跟踪中</td></tr>
+        <tr><td>JacintoPort 产能扩张</td><td>$12.4M投资，建设中</td><td>LNG项目按时交付</td><td class="kpi-neutral">跟踪中</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- COMPETITIVE ANALYSIS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">竞争格局分析</div>
+  <div class="chart-grid" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>ROE 对比（%）</h3>
+      <div class="chart-wrap" style="height:200px;"><canvas id="roeChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>TTM P/E 对比</h3>
+      <div class="chart-wrap" style="height:200px;"><canvas id="peChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="table-wrap" style="margin-bottom:20px;">
+    <table class="data-table">
+      <thead><tr><th>指标</th><th>POWL（本公司）</th><th>ETN（Eaton）</th><th>VRT（Vertiv）</th><th>全球开关设备市场</th></tr></thead>
+      <tbody>
+        <tr><td>主营业务</td><td class="highlight">定制中压开关柜</td><td>电气产品/电力管理</td><td>数据中心电源冷却</td><td>ABB/Siemens/Schneider</td></tr>
+        <tr><td>营收（TTM）</td><td class="highlight">$1.11B</td><td>$27.45B</td><td>~$9B</td><td>市场规模$113B</td></tr>
+        <tr><td>营收增速</td><td class="highlight kpi-up">+10% YoY</td><td>~+10%</td><td>~+20%</td><td>CAGR 7.4%</td></tr>
+        <tr><td>毛利率</td><td class="highlight kpi-up">30.2%</td><td>~34%</td><td>~36%</td><td>数据不可用</td></tr>
+        <tr><td>营业利润率</td><td class="highlight">20.2%</td><td>~19%</td><td>~18%</td><td>数据不可用</td></tr>
+        <tr><td>ROE</td><td class="highlight kpi-up">28.7%</td><td>21.5%</td><td>较高（高杠杆）</td><td>数据不可用</td></tr>
+        <tr><td>TTM P/E</td><td class="highlight kpi-down">36.4x</td><td>34.3x</td><td>~45x</td><td>数据不可用</td></tr>
+        <tr><td>P/S</td><td class="highlight">6.11x</td><td>~4.4x</td><td>~5x</td><td>数据不可用</td></tr>
+        <tr><td>净现金/净债务</td><td class="highlight kpi-up">净现金 +$499M</td><td>净债务 较大</td><td>净债务 较大</td><td>数据不可用</td></tr>
+        <tr><td>市值</td><td class="highlight">$6.81B</td><td>~$137B</td><td>~$45B</td><td>数据不可用</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">竞争定位</div>
+      <div style="font-size:0.9rem;margin-top:8px;">POWL是中高压定制开关柜的专精细分市场领导者。ABB、Siemens、Schneider是直接竞争对手但规模远大，其重点在标准化产品；POWL的差异化在于复杂/安全关键环境的定制工程能力（爆炸危险区域、油气平台、超大型LNG工厂）。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">规模限制与机遇</div>
+      <div style="font-size:0.9rem;margin-top:8px;">全球开关柜市场规模$113B，POWL仅占约1%，在北美特种工业开关柜细分市场中占比估计20-30%。规模小是限制也是机遇——具备成长空间，但也使其对大型竞争对手的定价竞争更敏感。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">数据中心市场进入</div>
+      <div style="font-size:0.9rem;margin-top:8px;">POWL正从传统石化/油气切换至数据中心电力基础设施，与Vertiv、Eaton等形成直接竞争。这是高增速细分市场，但也是竞争最激烈的领域，大型竞争对手资源更丰富，POWL需要靠定制能力和关系胜出。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MOAT SCORECARD -->
+<div class="section">
+<div class="container">
+  <div class="section-title">护城河评分卡（巴菲特框架）</div>
+  <div class="moat-grid">
+    <div class="moat-card">
+      <h4>品牌护城河</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:60%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">在北美工业电气领域具有专业声誉，70年历史品牌。但知名度局限于专业工业客户群体，非大众消费品牌，溢价能力有限。大型项目中主要凭技术能力而非品牌溢价竞标。</div>
+    </div>
+    <div class="moat-card">
+      <h4>转换成本</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:80%;background:var(--accent);"></div></div>
+      <span class="moat-badge moat-narrow">窄至宽护城河</span>
+      <div class="moat-desc">定制工程项目一旦设计锁定，更换供应商需要重新设计（时间+成本极高）。长期关系与技术规格认证形成天然壁垒。然而，每个新项目仍需重新竞标，护城河仅限于同一设施的后续订单。</div>
+    </div>
+    <div class="moat-card">
+      <h4>网络效应</h4>
+      <div class="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:20%;background:var(--red);"></div></div>
+      <span class="moat-badge moat-none">无护城河</span>
+      <div class="moat-desc">工业设备制造商几乎不存在网络效应。装机量越多不会带来对后续用户的直接竞争优势。这是POWL护城河评分中最弱的一环。</div>
+    </div>
+    <div class="moat-card">
+      <h4>成本优势</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:60%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">零债务+净现金$499M带来极低资本成本。轻资产运营（CapEx不足营收1%），客户预收款为主（负营运资本），ROIC 30%+。但不具备规模成本优势，制造成本不比大型竞争对手低。</div>
+    </div>
+    <div class="moat-card">
+      <h4>无形资产（专利+工程认证+关系）</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:75%;background:var(--accent);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">危险区域（Hazardous Location）认证、IEEE/UL安全标准认证、70年积累的工程图纸库与项目经验。Remsdaq收购引入SCADA专利技术。这些认证在资质壁垒高的石化/LNG市场形成重要门槛。</div>
+    </div>
+    <div class="moat-card" style="background:linear-gradient(135deg,#0f1e3d,#0a1628);border:2px solid var(--gold);">
+      <h4 style="color:var(--accent2);">综合护城河评级</h4>
+      <div style="font-size:2rem;font-weight:800;color:var(--gold);margin:12px 0;">窄护城河</div>
+      <span class="moat-badge moat-narrow" style="font-size:0.85rem;padding:4px 14px;">Narrow Moat</span>
+      <div class="moat-desc" style="margin-top:12px;">POWL凭借专业工程能力、危险区域认证和长期客户关系构建了适度的专业化壁垒，但这些护城河并不稳固——大型竞争对手（ABB/Eaton）完全有能力进入其细分市场。护城河的可持续性高度依赖于管理团队的项目执行能力和持续的技术创新投入。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CYCLE & MACRO -->
+<div class="section">
+<div class="container">
+  <div class="section-title">周期与宏观分析（霍华德·马克斯框架）</div>
+  <div class="two-col" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>P/E 历史分位（估算，拆分前）</h3>
+      <div class="chart-wrap"><canvas id="peHistChart"></canvas></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card">
+        <div class="kpi-label">周期定位</div>
+        <div class="kpi-value" style="font-size:1rem;color:var(--gold);">成长中后期 / 积压驱动新一轮</div>
+        <div class="cycle-meter" style="margin-top:12px;">
+          <div class="cycle-seg" style="background:#10b981;"></div>
+          <div class="cycle-seg" style="background:#10b981;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;border:2px solid white;box-shadow:0 0 8px white;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.5;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.3;"></div>
+        </div>
+        <div class="cycle-labels"><span>早期</span><span>成长</span><span>过热</span><span>衰退</span></div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:10px;">
+          量化依据：① 营收增速从+45%(FY24)降至+9%(FY25)、+4%(Q1 FY26)，增速放缓；② 但账单比1.7x + 新订单+63%暗示下一波增长已蓄势；③ 毛利率处于历史峰值（29-31%），均值回归风险较高。
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">估值分位 vs 历史</div>
+        <div style="font-size:0.9rem;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>当前 P/E（TTM）</span><span style="color:var(--red);font-weight:700;">36.4x</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>当前 P/S</span><span style="color:var(--red);font-weight:700;">6.11x（历史极高）</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>当前 P/B</span><span style="color:var(--red);font-weight:700;">10.17x</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>分析师目标价</span><span style="color:var(--red);font-weight:700;">$427（-23.8%）</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--red);">综合估值分位</span><span style="color:var(--red);font-weight:700;">约85-90百分位（历史高位）</span></div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">POWL过去5年P/E均值约25-30x（基于正常盈利年份）。当前36.4x处于历史高位，短仓9.49%和分析师-23.8%目标均印证市场对估值的顾虑。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;">五大尾部风险矩阵</div>
+  <div class="risk-grid">
+    <div class="risk-card" style="border-color:var(--red);">
+      <h4>毛利率均值回归风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">概率 40%</span>
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">影响 极高</span>
+      </div>
+      <p>当前毛利率29-31%是历史的近2倍（FY2021仅16%）。一旦积压高价订单消化完毕、竞争加剧或需求放缓，毛利率可能回归20%以下，EPS可能从$15跌至$7-9，触发股价50%+下跌。短仓9.49%的主要押注即此逻辑。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--red);">
+      <h4>估值泡沫风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">概率 35%</span>
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">影响 高</span>
+      </div>
+      <p>股票52周上涨204%，已完全定价乐观预期。P/E 36x对于年营收$1B的工业制造商而言极高。若任何季度业绩低于预期，市场可能将P/E重置至22-25x区间，对应股价$340-$385，潜在下行30-40%。分析师共识目标价$427印证高估判断。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>行业周期下行风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 25%</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 高</span>
+      </div>
+      <p>历史上POWL营收经历过从$1.1B（2014年前高峰）→$400M级别（2019-2021）的深度萎缩。若能源CapEx、电力公用事业投资同步放缓，当前$1.6B积压可能面临推迟/取消，营收可能下滑20-35%，伴随利润率大幅压缩。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>拆股后流动性变化风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 中性</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 中</span>
+      </div>
+      <p>3合1拆股（2026-04-06）将吸引更多散户资金流入，但也可能使机构投资者在流动性改善时减仓。短期波动性可能上升。拆股后约$187的价格更具"可接触性"，但不改变公司内在价值。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--purple);">
+      <h4>竞争加剧风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">概率 20%</span>
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">影响 中-高</span>
+      </div>
+      <p>数据中心电力基础设施的高增长吸引Vertiv、Eaton等规模更大的企业加大投入，可能挤压POWL的市场空间。大型竞争对手可以提供"一站式"解决方案（开关柜+UPS+冷却），而POWL仅有开关柜，面临被束包采购排除在外的风险。</p>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;" class="kpi-card">
+    <div class="kpi-label">市场情绪指标</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:12px;">
+      <div><div style="font-size:0.75rem;color:var(--muted);">分析师共识</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">Buy（但目标价-23.8%）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">空头比例</div><div style="font-size:0.95rem;font-weight:700;color:var(--red);">9.49%（高空头）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">内部人持股</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">21.18%（高度对齐）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">机构持仓</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">79.72%</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">52周涨幅</div><div style="font-size:0.95rem;font-weight:700;color:var(--red);">+204%（极度热门）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">Beta</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">0.83（低于市场波动）</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- VALUATION -->
+<div class="section">
+<div class="container">
+  <div class="section-title">三大价值投资框架估值</div>
+
+  <!-- GRAHAM -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>格雷厄姆安全边际估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">安全检验清单（拆分前数据）</div>
+        <ul class="checklist">
+          <li><span>P/E ≤ 15x</span><span><span class="fail">不通过</span> &nbsp;实际 36.4x</span></li>
+          <li><span>P/B ≤ 1.5x</span><span><span class="fail">不通过</span> &nbsp;实际 10.17x</span></li>
+          <li><span>P/E × P/B ≤ 22.5</span><span><span class="fail">不通过</span> &nbsp;实际 370.2</span></li>
+          <li><span>流动比率 ≥ 2.0x</span><span><span class="pass">通过</span> &nbsp;实际 2.29x</span></li>
+          <li><span>负债/权益 ≤ 1.0x</span><span><span class="pass">通过</span> &nbsp;实际 ~0.002x（无债务）</span></li>
+          <li><span>资产/负债 ≥ 2.0x</span><span><span class="pass">通过</span> &nbsp;实际 2.57x</span></li>
+        </ul>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">Graham Number 计算</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">= √(22.5 × EPS $15.39 × BV/Share $54.95)</div>
+          <div style="font-size:0.78rem;color:var(--muted);">= √(22.5 × $845.97) = √$19,034</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--red);margin-top:6px;">$138.04</div>
+          <div style="font-size:0.85rem;color:var(--red);margin-top:4px;">当前价格溢价 Graham Number +306%</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">拆分后等价 Graham Number ≈ $46（拆分后价$187 溢价+307%）</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">DCF 三情景估值（折现率10%，10年，基准FCF $162M）</div>
+        <div class="dcf-bar">
+          <label><span>保守 (30%权重) — 前5年+15%, 后5年+8%, 终值3%</span><span style="color:var(--red);">$420</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:33%;background:var(--red);">$420</div>
+          </div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>中性 (45%权重) — 前5年+25%, 后5年+12%, 终值3%</span><span style="color:var(--gold);">$681</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:53%;background:var(--gold);">$681</div>
+          </div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>乐观 (25%权重) — 前5年+35%, 后5年+15%, 终值4%</span><span style="color:var(--green);">$1,186</span></label>
+          <div class="dcf-bar-track">
+            <div class="dcf-bar-fill" style="width:92%;background:var(--green);">$1,186</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">加权综合内在价值 (30/45/25)</div>
+          <div style="font-size:2rem;font-weight:800;color:var(--accent2);margin-top:4px;">$729 / 股</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">当前价$560 较加权DCF折价 23.2%（中性/乐观情景支持，但保守情景认为高估25%）</div>
+          <div style="font-size:0.78rem;color:var(--orange);margin-top:4px;">注：DCF依赖高FCF增长假设（25-35%），对于已处利润率峰值的工业公司风险较大</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">格雷厄姆结论：减持 / 卖出</div>
+      <div class="verdict-detail">6项安全检验仅通过3项（均为资产负债表强健指标），估值指标全线不通过；股价溢价Graham Number +306%；保守DCF $420 低于当前价$560。格雷厄姆眼中，POWL是财务质量优良但价格严重高估的公司，需要等待价格大幅回落（目标区间$138-$250）再考虑建仓。</div>
+    </div>
+  </div>
+
+  <!-- BUFFETT -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>巴菲特护城河估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">ROE 持续性评估</div>
+        <div class="table-wrap">
+          <table class="data-table" style="font-size:0.82rem;">
+            <thead><tr><th>财年</th><th>EPS</th><th>期末BV/股</th><th>ROE（估）</th></tr></thead>
+            <tbody>
+              <tr><td>FY2025</td><td>$14.86</td><td>$52.66</td><td class="kpi-up">32.2%</td></tr>
+              <tr><td>FY2024</td><td>$12.29</td><td>$39.64</td><td class="kpi-up">36.1%</td></tr>
+              <tr><td>FY2023</td><td>$4.50</td><td>$28.47</td><td class="kpi-neutral">17.9%</td></tr>
+              <tr><td>3年均值</td><td>—</td><td>—</td><td class="kpi-up">28.7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">ROE 28.7%（3年均值）表现优秀，但需注意FY2023以前ROE极低甚至接近零，当前高ROE主要反映利润率周期性改善，而非稳定结构性优势。</div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">内在价值估算</div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;margin-bottom:12px;">
+          <div style="font-size:0.82rem;color:var(--muted);">方法：可持续EPS × 合理P/E（窄护城河，周期性业务）</div>
+          <div style="margin-top:8px;font-size:0.85rem;">
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>可持续EPS估算（考虑利润率压缩）</span><span style="color:var(--gold);">$12-15</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>合理P/E（窄护城河+周期性）</span><span style="color:var(--gold);">18-22x</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 18x × $12 = （悲观）</span><span style="color:var(--red);">$216</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 20x × $13.5 = （基准）</span><span style="color:var(--gold);">$270</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>@ 22x × $15.39 = （乐观）</span><span style="color:var(--green);">$338</span></div>
+          </div>
+        </div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">内在价值区间估算（加净现金溢价）</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--gold);margin-top:6px;">$270 – $380</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">+净现金$499M（$41/股）溢价后上调</div>
+          <div style="font-size:0.82rem;color:var(--red);margin-top:4px;">当前$560 高于上限$380，溢价47%；含20%安全边际理想买入：</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:4px;">$216 – $304</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">巴菲特结论：减持 / 等待大幅回调</div>
+      <div class="verdict-detail">POWL具备一定护城河（窄），ROE 28.7%尚可，净现金$499M彰显财务实力。但当前股价$560显著高于巴菲特框架内在价值上限$380（溢价47%），且利润率处于历史峰值，可持续性存在较大不确定性。巴菲特框架要求等待价格回落至$280-$340区间，方具备充分安全边际。高达9.49%的空头比例来自对利润率逆转的正确认知。</div>
+    </div>
+  </div>
+
+  <!-- MARKS -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>霍华德·马克斯周期分析</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">情景分析（12个月）</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--green);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--green);">乐观（20%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">积压高速转化 + 数据中心订单爆发 + 毛利率维持30%，EPS FY26 $17+，拆后$5.67，PE保持30x → 拆后目标$170（拆前$510）。当前价格已部分定价此情景。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--gold);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--gold);">基准（50%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">稳定执行积压，毛利率25-28%，EPS FY26约$13-15，PE压缩至25-28x → 拆后目标$108-140（拆前$325-420）。分析师目标$427与此基本吻合。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--red);">悲观（30%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">利润率均值回归至22-25% + PE压缩至20-22x → EPS FY26约$8-10，拆后目标$53-73（拆前$160-220）。空头9.49%押注的核心逻辑。</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">关键周期指标</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">营收增速趋势</span><span style="font-size:0.85rem;color:var(--gold);font-weight:700;">+45%→+9%→+4%（放缓）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">账单比（需求信号）</span><span style="font-size:0.85rem;color:var(--green);font-weight:700;">1.7x（强势新周期）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">毛利率位置</span><span style="font-size:0.85rem;color:var(--red);font-weight:700;">29-31%（历史峰值）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">P/E 历史分位</span><span style="font-size:0.85rem;color:var(--red);font-weight:700;">约85-90百分位（极贵）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">52周股价涨幅</span><span style="font-size:0.85rem;color:var(--red);font-weight:700;">+204%（极度热门）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">加权预期回报</span><span style="font-size:0.85rem;color:var(--red);font-weight:700;">负（基准-24%，悲观-60%）</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">马克斯结论：减持 / 谨慎持有</div>
+      <div class="verdict-detail">POWL正处于"好消息已被充分定价、坏消息尚未显现"的危险阶段：股价+204%、P/E达36x、利润率处于13年峰值。账单比1.7x提供了一定的基本面支撑，但与此同时空头9.49%表明专业投资者对估值持有强烈保留意见，分析师目标价-23.8%进一步印证价格过度偏高。马克斯框架下，当前市场情绪过于乐观，风险/回报不对称不利于多头。新资金应等待股价回落至$280-$360（拆后$93-$120）方可建仓。</div>
+    </div>
+  </div>
+
+  <!-- FINAL SUMMARY -->
+  <div class="summary-box">
+    <h2>三框架综合结论</h2>
+    <div class="three-verdict">
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">格雷厄姆</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/卖出</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">Graham Number $138<br>溢价+306%，3/6通过</div>
+      </div>
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">巴菲特</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/等待</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">窄护城河<br>内在价值$270-380<br>当前溢价47%+</div>
+      </div>
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">霍华德·马克斯</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/谨慎持有</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">估值85-90百分位<br>空头9.49%<br>分析师-23.8%</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;">
+      <div class="buy-range-label" style="color:var(--muted);font-size:0.9rem;">理想买入区间（含 20-30% 安全边际）</div>
+      <div class="buy-range">$280 – $360</div>
+      <div style="color:var(--muted);font-size:0.9rem;">拆分后等价（2026-04-06）：$93 – $120 | 当前价$560.46（拆后约$187）</div>
+    </div>
+    <div style="margin-top:20px;padding:16px;background:rgba(239,68,68,0.1);border-radius:10px;border:1px solid rgba(239,68,68,0.3);text-align:left;">
+      <div style="font-size:0.9rem;color:var(--red);font-weight:700;">核心投资逻辑：优质公司，当前价格不具安全边际</div>
+      <div style="font-size:0.84rem;color:var(--muted);margin-top:8px;line-height:1.8;">
+        POWL是一家质地优秀的工业公司：净现金$499M（无债务）、ROE 30%+、积压订单$1.6B（+16%）、Q1 FY2026新订单+63%，长期受益于电网现代化和AI数据中心电力基础设施需求。然而，当前股价$560（TTM P/E 36.4x）已将过度乐观的预期充分定价，三大框架均指向减持。核心风险在于毛利率均值回归：当前29-31%的利润率是历史16%均值的近2倍，短仓9.49%和分析师-23.8%共识均押注利润率压缩。对于长期价值投资者，等待价格回落至$280-$360（拆后$93-$120）后再建仓，方可在优质业务基础上获得合理的安全边际。
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SOURCES -->
+<div class="section">
+<div class="container">
+  <div class="section-title">数据来源</div>
+  <ul class="sources-list">
+    <li><a href="https://www.globenewswire.com/news-release/2025/11/18/3190488/0/en/Powell-Industries-Announces-Fourth-Quarter-and-Full-Year-Fiscal-2025-Results.html" target="_blank">GlobeNewsWire — Powell Industries Q4 & FY2025 官方新闻稿</a></li>
+    <li><a href="https://www.globenewswire.com/news-release/2026/02/03/3231619/0/en/Powell-Industries-Announces-First-Quarter-Fiscal-2026-Results.html" target="_blank">GlobeNewsWire — Powell Industries Q1 FY2026 官方新闻稿</a></li>
+    <li><a href="https://stockanalysis.com/stocks/powl/" target="_blank">StockAnalysis.com — POWL 财务数据总览</a></li>
+    <li><a href="https://stockanalysis.com/stocks/powl/financials/" target="_blank">StockAnalysis — POWL 年度利润表</a></li>
+    <li><a href="https://stockanalysis.com/stocks/powl/financials/balance-sheet/" target="_blank">StockAnalysis — POWL 资产负债表</a></li>
+    <li><a href="https://stockanalysis.com/stocks/powl/financials/?p=quarterly" target="_blank">StockAnalysis — POWL 季度财务数据</a></li>
+    <li><a href="https://stockanalysis.com/stocks/powl/statistics/" target="_blank">StockAnalysis — POWL 统计与估值数据</a></li>
+    <li><a href="https://seekingalpha.com/article/4852015-powell-industries-record-margins-and-strong-backlog-set-up-a-solid-fy2026" target="_blank">Seeking Alpha — Record Margins & Strong Backlog分析</a></li>
+    <li><a href="https://www.ainvest.com/news/powell-industries-record-margins-1-4-billion-backlog-signal-strong-setup-fiscal-2026-growth-2512/" target="_blank">AInvest — POWL FY2026 增长前景分析</a></li>
+    <li><a href="https://www.gurufocus.com/term/forward-pe-ratio/POWL" target="_blank">GuruFocus — POWL 前向PE比率</a></li>
+    <li><a href="https://www.nasdaq.com/press-release/powell-industries-announces-first-quarter-fiscal-2026-results-2026-02-03" target="_blank">Nasdaq — Q1 FY2026 正式新闻稿</a></li>
+    <li><a href="https://www.gminsights.com/industry-analysis/switchgears-market" target="_blank">GM Insights — 全球开关柜市场规模预测</a></li>
+    <li><a href="https://www.marketsandmarkets.com/ResearchInsight/switchgear-market.asp" target="_blank">MarketsAndMarkets — 开关柜市场竞争格局</a></li>
+  </ul>
+  <div style="margin-top:20px;font-size:0.8rem;color:var(--muted);">
+    分析生成时间：2026-03-25 &nbsp;|&nbsp; 数据截至：2026-03-24 &nbsp;|&nbsp; 所有数据来源于公开渠道实时查询，仅供参考，不构成投资建议。<br>
+    <strong style="color:var(--orange);">注意：POWL将于2026-04-06实施3合1股票拆分，拆分后所有每股指标除以3。</strong>
+  </div>
+</div>
+</div>
+
+<script>
+Chart.defaults.color='#94a3b8';
+Chart.defaults.borderColor='#1e3a5f';
+
+// 1. Segment Pie (estimated)
+new Chart(document.getElementById('segPie'),{
+  type:'doughnut',
+  data:{
+    labels:['电力公用事业','商业与其他工业','石油天然气','石化','数据中心/LNG/轻轨(估)'],
+    datasets:[{
+      data:[30,18,20,15,17],
+      backgroundColor:['rgba(59,130,246,0.8)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(139,92,246,0.7)','rgba(249,115,22,0.7)'],
+      borderColor:['#3b82f6','#10b981','#f59e0b','#8b5cf6','#f97316'],
+      borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom',labels:{color:'#94a3b8',padding:12,font:{size:11}}},
+      tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ~${ctx.raw}%（估算）`}}
+    },
+    cutout:'60%'
+  }
+});
+
+// 2. Revenue Chart
+new Chart(document.getElementById('revenueChart'),{
+  type:'bar',
+  data:{
+    labels:['Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26'],
+    datasets:[
+      {label:'季度营收 ($M)',data:[275.1,241.4,278.6,286.3,298.0,251.2],backgroundColor:'rgba(59,130,246,0.7)',borderColor:'#3b82f6',borderWidth:1,yAxisID:'y'},
+      {label:'YoY增速 (%)',data:[29.1,17.6,6.2,5.5,8.3,4.0],type:'line',borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.1)',borderWidth:2,pointRadius:4,tension:0.3,yAxisID:'y1'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{
+      y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}},
+      y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#f59e0b',callback:v=>v+'%'}}
+    },
+    plugins:{legend:{labels:{color:'#94a3b8'}}}
+  }
+});
+
+// 3. Margin Chart
+new Chart(document.getElementById('marginChart'),{
+  type:'line',
+  data:{
+    labels:['Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26'],
+    datasets:[
+      {label:'毛利率',data:[29.2,24.7,29.9,30.7,31.4,28.4],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.1)',borderWidth:2,tension:0.3,pointRadius:4},
+      {label:'营业利润率',data:[20.4,14.7,21.2,21.0,21.2,17.0],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,tension:0.3,pointRadius:4},
+      {label:'净利率',data:[16.7,14.4,16.6,16.8,17.2,16.5],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.1)',borderWidth:2,tension:0.3,pointRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'%',color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}
+  }
+});
+
+// 4. FCF Chart
+new Chart(document.getElementById('fcfChart'),{
+  type:'bar',
+  data:{
+    labels:['FY21','FY22','FY23','FY24','FY25','TTM'],
+    datasets:[{
+      label:'FCF ($M)',
+      data:[-33,-6,175,97,155,162],
+      backgroundColor:[v=>v.raw<0?'rgba(239,68,68,0.7)':'rgba(16,185,129,0.7)'],
+      backgroundColor:['rgba(239,68,68,0.7)','rgba(239,68,68,0.7)','rgba(16,185,129,0.7)','rgba(16,185,129,0.6)','rgba(16,185,129,0.8)','rgba(16,185,129,0.9)'],
+      borderColor:['#ef4444','#ef4444','#10b981','#10b981','#10b981','#10b981'],
+      borderWidth:1
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}
+  }
+});
+
+// 5. Annual revenue + net income
+new Chart(document.getElementById('annualChart'),{
+  type:'bar',
+  data:{
+    labels:['FY21','FY22','FY23','FY24','FY25'],
+    datasets:[
+      {label:'营收 ($M)',data:[471,533,699,1012,1104],backgroundColor:'rgba(59,130,246,0.6)',borderColor:'#3b82f6',borderWidth:1,yAxisID:'y'},
+      {label:'净利润 ($M)',data:[0.6,14,55,150,181],backgroundColor:'rgba(16,185,129,0.6)',borderColor:'#10b981',borderWidth:1,yAxisID:'y'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}
+  }
+});
+
+// 6. ROE Comparison
+new Chart(document.getElementById('roeChart'),{
+  type:'bar',
+  data:{
+    labels:['POWL','ETN','VRT'],
+    datasets:[{
+      label:'ROE (%)',
+      data:[28.7,21.5,20],
+      backgroundColor:['rgba(59,130,246,0.8)','rgba(16,185,129,0.6)','rgba(139,92,246,0.6)'],
+      borderColor:['#3b82f6','#10b981','#8b5cf6'],borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    scales:{x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'%',color:'#94a3b8'}}},
+    plugins:{legend:{display:false}}
+  }
+});
+
+// 7. PE Comparison
+new Chart(document.getElementById('peChart'),{
+  type:'bar',
+  data:{
+    labels:['POWL','ETN','VRT'],
+    datasets:[{
+      label:'TTM P/E',
+      data:[36.4,34.3,45],
+      backgroundColor:['rgba(239,68,68,0.8)','rgba(245,158,11,0.6)','rgba(239,68,68,0.5)'],
+      borderColor:['#ef4444','#f59e0b','#ef4444'],borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    scales:{x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'x',color:'#94a3b8'}}},
+    plugins:{legend:{display:false}}
+  }
+});
+
+// 8. PE Historical
+new Chart(document.getElementById('peHistChart'),{
+  type:'line',
+  data:{
+    labels:['FY22','FY23','FY24 Q1','FY24 Q2','FY24 Q3','FY24 Q4','FY25 Q1','FY25 Q2','FY25 Q3','FY25 Q4','当前'],
+    datasets:[
+      {label:'P/E（估算）',data:[52,29,22,25,28,33,35,36,38,36,36.4],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,tension:0.3,pointRadius:3},
+      {label:'工业股均值 ~22x',data:[22,22,22,22,22,22,22,22,22,22,22],borderColor:'#10b981',borderWidth:1.5,borderDash:[6,3],pointRadius:0},
+      {label:'当前 36.4x',data:[36.4,36.4,36.4,36.4,36.4,36.4,36.4,36.4,36.4,36.4,36.4],borderColor:'#ef4444',borderWidth:1.5,borderDash:[4,4],pointRadius:0}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'x',color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8',boxWidth:12}}}
+  }
+});
+</script>
+</body>
+</html>
