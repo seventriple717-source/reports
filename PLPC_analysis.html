@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLPC - Preformed Line Products 价值投资深度分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;--bg4:#1e293b;
+    --accent:#3b82f6;--accent2:#60a5fa;--gold:#f59e0b;--green:#10b981;
+    --red:#ef4444;--yellow:#f59e0b;--purple:#8b5cf6;--teal:#14b8a6;
+    --orange:#f97316;--text:#e2e8f0;--muted:#94a3b8;--border:#1e3a5f;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;}
+  .container{max-width:1400px;margin:0 auto;padding:0 20px;}
+  .hero{background:linear-gradient(135deg,#0a0e1a 0%,#0f1e3d 50%,#0a1628 100%);border-bottom:1px solid var(--border);padding:40px 0 32px;}
+  .hero-inner{display:flex;flex-wrap:wrap;align-items:flex-start;gap:32px;}
+  .hero-left h1{font-size:2.8rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+  .hero-left h2{font-size:1.05rem;color:var(--muted);font-weight:400;margin-top:4px;}
+  .hero-price{font-size:3rem;font-weight:700;color:var(--accent2);margin-top:12px;}
+  .hero-sub{color:var(--muted);font-size:0.88rem;margin-top:4px;}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .badge{padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;}
+  .badge-blue{background:rgba(59,130,246,0.2);color:var(--accent2);border:1px solid var(--accent);}
+  .badge-yellow{background:rgba(245,158,11,0.2);color:var(--gold);border:1px solid var(--gold);}
+  .badge-red{background:rgba(239,68,68,0.2);color:var(--red);border:1px solid var(--red);}
+  .badge-green{background:rgba(16,185,129,0.2);color:var(--green);border:1px solid var(--green);}
+  .hero-right{margin-left:auto;text-align:right;}
+  .hero-meta{display:flex;gap:24px;margin-top:12px;flex-wrap:wrap;}
+  .hero-meta-item .label{font-size:0.75rem;color:var(--muted);}
+  .hero-meta-item .value{font-size:1.1rem;font-weight:700;color:#fff;}
+  .section{padding:40px 0;border-bottom:1px solid var(--border);}
+  .section-title{font-size:1.4rem;font-weight:700;color:var(--accent2);margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+  .section-title::before{content:'';display:block;width:4px;height:24px;background:var(--accent);border-radius:2px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
+  .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px 16px;}
+  .kpi-card .kpi-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .kpi-card .kpi-value{font-size:1.6rem;font-weight:700;color:#fff;margin-top:4px;}
+  .kpi-card .kpi-sub{font-size:0.8rem;margin-top:4px;}
+  .kpi-up{color:var(--green);}.kpi-down{color:var(--red);}.kpi-neutral{color:var(--muted);}
+  .chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px;}
+  .chart-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;}
+  .chart-card h3{font-size:0.95rem;color:var(--muted);margin-bottom:16px;font-weight:600;}
+  .chart-wrap{position:relative;height:260px;}
+  .data-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  .data-table th{background:var(--bg4);color:var(--muted);text-align:right;padding:10px 14px;font-weight:600;font-size:0.78rem;text-transform:uppercase;}
+  .data-table th:first-child{text-align:left;}
+  .data-table td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--border);}
+  .data-table td:first-child{text-align:left;color:var(--text);font-weight:500;}
+  .data-table tr:hover td{background:var(--bg4);}
+  .data-table .highlight{color:var(--accent2);font-weight:700;}
+  .table-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;}
+  .moat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .moat-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .moat-card h4{font-size:0.95rem;font-weight:700;color:var(--text);}
+  .moat-card .stars{font-size:1.2rem;margin:8px 0;}
+  .moat-bar{height:6px;background:var(--bg4);border-radius:3px;margin:8px 0;}
+  .moat-bar-fill{height:100%;border-radius:3px;}
+  .moat-card .moat-desc{font-size:0.8rem;color:var(--muted);margin-top:8px;}
+  .moat-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:0.75rem;font-weight:700;margin-top:6px;}
+  .moat-wide{background:rgba(16,185,129,0.2);color:var(--green);}
+  .moat-narrow{background:rgba(245,158,11,0.2);color:var(--gold);}
+  .moat-none{background:rgba(239,68,68,0.2);color:var(--red);}
+  .risk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+  .risk-card{background:var(--bg3);border-left:4px solid;border-radius:0 12px 12px 0;padding:16px 20px;}
+  .risk-card h4{font-size:0.9rem;font-weight:700;}
+  .risk-card p{font-size:0.8rem;color:var(--muted);margin-top:6px;}
+  .risk-tags{display:flex;gap:8px;margin-top:8px;}
+  .risk-tag{font-size:0.72rem;padding:2px 8px;border-radius:10px;font-weight:600;}
+  .val-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;}
+  .val-card h3{font-size:1.05rem;font-weight:700;color:var(--accent2);margin-bottom:16px;}
+  .checklist li{list-style:none;padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:0.875rem;}
+  .pass{color:var(--green);font-weight:700;}.fail{color:var(--red);font-weight:700;}
+  .dcf-bar{margin:10px 0;}
+  .dcf-bar label{font-size:0.8rem;color:var(--muted);display:flex;justify-content:space-between;}
+  .dcf-bar-track{height:28px;background:var(--bg4);border-radius:4px;position:relative;margin-top:4px;overflow:hidden;}
+  .dcf-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.8rem;font-weight:700;color:#fff;}
+  .verdict-card{border-radius:12px;padding:20px;margin-top:16px;}
+  .verdict-red{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);}
+  .verdict-yellow{background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);}
+  .verdict-green{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);}
+  .verdict-title{font-size:1.1rem;font-weight:800;}
+  .verdict-detail{font-size:0.85rem;color:var(--muted);margin-top:6px;}
+  .summary-box{background:linear-gradient(135deg,#0f1e3d,#0a1628);border:2px solid var(--accent);border-radius:16px;padding:32px;text-align:center;}
+  .summary-box h2{font-size:1.8rem;font-weight:800;color:var(--accent2);}
+  .buy-range{font-size:3rem;font-weight:900;color:var(--gold);margin:16px 0;}
+  .three-verdict{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:24px;}
+  .three-verdict-item{text-align:center;padding:16px 24px;border-radius:12px;min-width:160px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .cycle-meter{display:flex;gap:6px;margin:16px 0;}
+  .cycle-seg{flex:1;height:14px;border-radius:3px;}
+  .cycle-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:4px;}
+  .sources-list{column-count:2;column-gap:24px;}
+  .sources-list li{font-size:0.78rem;margin-bottom:6px;break-inside:avoid;}
+  .sources-list a{color:var(--accent2);text-decoration:none;}
+  .sources-list a:hover{text-decoration:underline;}
+  @media(max-width:700px){.hero-left h1{font-size:2rem;}.hero-price{font-size:2rem;}.two-col{grid-template-columns:1fr;}.sources-list{column-count:1;}.chart-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+<div class="container">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1>PLPC</h1>
+      <h2>Preformed Line Products Company &nbsp;|&nbsp; NASDAQ &nbsp;|&nbsp; 电力/通信/太阳能线路硬件</h2>
+      <div class="hero-price">$275.51</div>
+      <div class="hero-sub">分析日期：2026-03-25 &nbsp;|&nbsp; 数据截至 2026-03-24</div>
+      <div class="hero-badges">
+        <span class="badge badge-blue">市值 $1.35B（小盘）</span>
+        <span class="badge badge-blue">FY2025营收 $669M +13%</span>
+        <span class="badge badge-blue">积压 $232.8M +22%</span>
+        <span class="badge badge-yellow">P/E 38.7x 高于同类</span>
+        <span class="badge badge-red">谨慎减持 / 等待回调</span>
+        <span class="badge badge-green">连续股息增长，净现金正</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div style="font-size:0.85rem;color:var(--muted);">分析师目标价（Loop Capital）</div>
+      <div style="font-size:2.2rem;font-weight:800;color:var(--green);">$275.00</div>
+      <div style="color:var(--muted);font-size:0.85rem;">与当前价基本持平</div>
+      <div class="hero-meta" style="margin-top:20px;">
+        <div class="hero-meta-item"><div class="label">52周高</div><div class="value" style="color:var(--red);">$287.97</div></div>
+        <div class="hero-meta-item"><div class="label">52周低</div><div class="value" style="color:var(--green);">$128.00</div></div>
+        <div class="hero-meta-item"><div class="label">短仓比例</div><div class="value">3.95%</div></div>
+        <div class="hero-meta-item"><div class="label">机构持仓</div><div class="value">65.35%</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- KPI GRID -->
+<div class="section">
+<div class="container">
+  <div class="section-title">核心财务指标（FY2025）</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-label">FY2025 营收</div><div class="kpi-value">$669M</div><div class="kpi-sub kpi-up">+12.7% YoY</div></div>
+    <div class="kpi-card"><div class="kpi-label">GAAP 净利润</div><div class="kpi-value">$35.3M</div><div class="kpi-sub kpi-neutral">调整后 $43.0M</div></div>
+    <div class="kpi-card"><div class="kpi-label">GAAP EPS（FY25）</div><div class="kpi-value">$7.14</div><div class="kpi-sub kpi-up">调整后 $8.70（+16%）</div></div>
+    <div class="kpi-card"><div class="kpi-label">FY2025 FCF</div><div class="kpi-value">$33.3M</div><div class="kpi-sub kpi-down">FCF率 5.0%（下降）</div></div>
+    <div class="kpi-card"><div class="kpi-label">毛利率</div><div class="kpi-value">31.2%</div><div class="kpi-sub kpi-down">FY2023峰值 35.1%</div></div>
+    <div class="kpi-card"><div class="kpi-label">营业利润率</div><div class="kpi-value">8.2%</div><div class="kpi-sub kpi-down">FY2023峰值 12.6%</div></div>
+    <div class="kpi-card"><div class="kpi-label">TTM P/E（GAAP）</div><div class="kpi-value">38.7x</div><div class="kpi-sub kpi-down">调整后 ~31.7x</div></div>
+    <div class="kpi-card"><div class="kpi-label">P/B</div><div class="kpi-value">2.85x</div><div class="kpi-sub kpi-neutral">账面价值 $96.22/股</div></div>
+    <div class="kpi-card"><div class="kpi-label">ROE（3年均值）</div><div class="kpi-value">10.9%</div><div class="kpi-sub kpi-down">FY2025仅 7.9%</div></div>
+    <div class="kpi-card"><div class="kpi-label">净现金</div><div class="kpi-value">$36.3M</div><div class="kpi-sub kpi-neutral">现金$83.4M - 债务$47.1M</div></div>
+    <div class="kpi-card"><div class="kpi-label">积压订单</div><div class="kpi-value">$232.8M</div><div class="kpi-sub kpi-up">+22% YoY，将于2026兑现</div></div>
+    <div class="kpi-card"><div class="kpi-label">股息</div><div class="kpi-value">$0.84</div><div class="kpi-sub kpi-neutral">收益率 0.31%，长期增长</div></div>
+  </div>
+</div>
+</div>
+
+<!-- BUSINESS MODEL -->
+<div class="section">
+<div class="container">
+  <div class="section-title">商业模式分析</div>
+  <div class="two-col">
+    <div class="chart-card">
+      <h3>地理分部营收构成（FY2025 估算）</h3>
+      <div class="chart-wrap"><canvas id="segPie"></canvas></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">终端市场分布</div>
+        <div style="font-size:0.9rem;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>能源（电网硬件）</span><span class="kpi-up">最大市场，+强劲增长</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>通信（光纤/铜缆接头）</span><span class="kpi-up">受益宽带扩张政策</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);"><span>太阳能（安装硬件）</span><span class="kpi-up">高速增长（市场CAGR 15.2%）</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>EV充电站地基</span><span class="kpi-up">新兴市场，早期阶段</span></div>
+        </div>
+      </div>
+      <div class="kpi-card" style="flex:1;">
+        <div class="kpi-label">产品线</div>
+        <div style="font-size:0.85rem;margin-top:8px;line-height:1.8;">
+          成型线产品（Formed Wire Solutions）· 连接器 · 光纤/铜缆拼接盒 · 太阳能安装系统 · EV充电站地基 · SCADA兼容配件。70年历史专注于电力线路和通信线路物理基础设施硬件。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">收入质量评分</div>
+      <div class="kpi-value" style="color:var(--gold);">6.0 / 10</div>
+      <div class="kpi-sub">以项目/耗材型硬件销售为主，无软件或订阅收入。但电力硬件具有较强的重复消耗性（老化替换、扩容改造），客户粘性来自规格认证而非合同锁定。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">客户集中度</div>
+      <div class="kpi-value" style="color:var(--green);">低</div>
+      <div class="kpi-sub">全球4个地理分部（PLP-USA/美洲/EMEA/亚太），客户覆盖全球100+国家的电力公司、电信运营商和EPC总包商。高度分散的客户结构降低了单一客户集中度风险。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">利润率压缩问题</div>
+      <div class="kpi-value" style="color:var(--red);">趋势恶化</div>
+      <div class="kpi-sub">毛利率从FY2023峰值35.1%下降至FY2025的31.2%，营业利润率从12.6%降至8.2%。原因：原材料成本上升（铜/铝）、JAP Telecom整合成本、波兰新工厂投资期摊薄。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">JAP Telecom 收购（2025）</div>
+      <div class="kpi-value" style="color:var(--accent2);">战略价值</div>
+      <div class="kpi-sub">2025年5月收购巴西通信硬件公司，增强美洲地区通信市场覆盖。亚太地区销售增长和JAP Telecom增量通信收入共同拉动FY2025国际分部增长，但短期整合成本压制了利润率。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">波兰新工厂扩建（2026开放）</div>
+      <div class="kpi-value" style="color:var(--accent2);">产能提升30%</div>
+      <div class="kpi-sub">波兰Wieprz新设施2026年启用，生产面积+30%、仓储+50%，替代现有Bielsko-Biala工厂。西班牙塞维利亚设施同期扩建（运营面积+250%）。欧洲能源基础设施投资加速将提升这些产能利用率。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">FCF 趋势警示</div>
+      <div class="kpi-value" style="color:var(--red);">快速下降</div>
+      <div class="kpi-sub">FCF从FY2023的$72.3M降至FY2024的$52.8M再到FY2025的$33.3M。CapEx从FY2024的$3.4M飙升至FY2025的$10.6M（+209%），反映产能扩张期的资本占用。FCF恢复依赖新产能利用率提升。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FINANCIALS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">财务分析</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>季度营收趋势 ($M) 及 YoY 增速</h3>
+      <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>利润率趋势（季度）</h3>
+      <div class="chart-wrap"><canvas id="marginChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>年度自由现金流趋势 ($M)</h3>
+      <div class="chart-wrap"><canvas id="fcfChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>年度营收与净利润 ($M)</h3>
+      <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">近5季度财务数据</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>季度</th><th>营收 ($M)</th><th>YoY</th><th>净利润 ($M)</th><th>净利率</th><th>毛利率</th><th>营业利润率</th><th>EPS GAAP</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight">Q4 2025</td><td>173.1</td><td class="kpi-up">+3.6%</td><td>8.4</td><td>4.9%</td><td>29.8%</td><td>6.8%</td><td>$1.72</td></tr>
+          <tr><td class="highlight">Q3 2025</td><td>178.1</td><td class="kpi-up">+21.1%</td><td>2.6</td><td>1.5%</td><td>29.7%</td><td>7.4%</td><td>$0.53*</td></tr>
+          <tr><td class="highlight">Q2 2025</td><td>169.6</td><td class="kpi-up">+22.0%</td><td>12.7</td><td>7.5%</td><td>32.7%</td><td>10.1%</td><td>$2.56</td></tr>
+          <tr><td class="highlight">Q1 2025</td><td>148.5</td><td class="kpi-up">+5.6%</td><td>11.5</td><td>7.7%</td><td>32.8%</td><td>8.8%</td><td>$2.33</td></tr>
+          <tr><td>Q4 2024</td><td>167.1</td><td class="kpi-up">+17.3%</td><td>10.5</td><td>6.2%</td><td>33.3%</td><td>10.5%</td><td>$2.13</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted);margin-top:8px;">* Q3 2025 GAAP EPS受$11.7M税前养老金终止一次性费用影响；调整后EPS $2.09（+36% YoY）</div>
+  </div>
+
+  <div style="margin-top:24px;">
+    <div class="section-title" style="font-size:1rem;">年度财务数据（FY2021–2025）</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>财年</th><th>营收 ($M)</th><th>YoY</th><th>净利润 ($M)</th><th>毛利率</th><th>营业利润率</th><th>EPS GAAP</th><th>FCF ($M)</th><th>ROE</th></tr></thead>
+        <tbody>
+          <tr><td class="highlight">FY2025</td><td>669.3</td><td class="kpi-up">+12.7%</td><td>35.3</td><td class="kpi-down">31.2%</td><td class="kpi-down">8.2%</td><td>$7.14</td><td>33.3</td><td class="kpi-down">7.9%</td></tr>
+          <tr><td>FY2024</td><td>593.7</td><td class="kpi-down">-11.3%</td><td>37.1</td><td>32.0%</td><td>8.6%</td><td>$7.50</td><td>52.8</td><td>8.9%</td></tr>
+          <tr><td>FY2023</td><td>669.7</td><td class="kpi-up">+5.1%</td><td>63.3</td><td class="kpi-up">35.1%</td><td class="kpi-up">12.6%</td><td>$12.68</td><td>72.3</td><td class="kpi-up">15.9%</td></tr>
+          <tr><td>FY2022</td><td>637.0</td><td class="kpi-up">+23.1%</td><td>54.4</td><td>33.8%</td><td>10.9%</td><td>$10.88</td><td>-14.5</td><td>—</td></tr>
+          <tr><td>FY2021</td><td>517.4</td><td>—</td><td>35.7</td><td>32.1%</td><td>9.2%</td><td>$7.19</td><td>15.2</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- GROWTH DRIVERS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">增长驱动与关键追踪指标</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px;">
+    <div class="kpi-card" style="border-left:3px solid var(--accent);">
+      <div class="kpi-label">驱动力 1 — 电网现代化</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--accent2);">最大增长引擎</div>
+      <div class="kpi-sub">美国、欧洲、澳大利亚电力公用事业的输配电基础设施替换更新是PLPC能源端市场的核心驱动。架空线路金具、变电站连接硬件、防雷接地系统均受益于IRA和各国电网现代化政策。PLP-USA能源市场是FY2025增长核心。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--purple);">
+      <div class="kpi-label">驱动力 2 — 光纤宽带政策推动</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--purple);">$42.5B BEAD 计划</div>
+      <div class="kpi-sub">美国BEAD计划（宽带互联网接入基础设施补贴）$42.5B正在推动农村光纤铺设。PLPC的光纤/铜缆拼接盒、接续配件是光纤部署的必需耗材。JAP Telecom收购增强了拉美通信市场覆盖。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--green);">
+      <div class="kpi-label">驱动力 3 — 全球太阳能快速增长</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--green);">市场 CAGR 15.2%</div>
+      <div class="kpi-sub">全球太阳能市场从2024年$0.4T预计到2034年达$1.6T（CAGR 15.2%）。PLPC的太阳能安装硬件受益于这一超长周期趋势，IRA法案下美国太阳能CapEx加速，欧洲绿色协议进一步强化需求。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--gold);">
+      <div class="kpi-label">驱动力 4 — 欧洲能源安全投资</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--gold);">新增战略机遇</div>
+      <div class="kpi-sub">俄乌冲突后欧洲大幅加速能源基础设施投资，波兰、德国、北欧的输配电网改造提速。PLPC的波兰新工厂（2026年开业，生产面积+30%）战略布局恰逢欧洲能源基础设施建设高峰期。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--teal);">
+      <div class="kpi-label">驱动力 5 — 亚太基础设施扩张</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--teal);">亚太分部 FY2025 超预期</div>
+      <div class="kpi-sub">东南亚、印度、澳大利亚的电力和通信基础设施快速扩张。PLPC亚太分部FY2025超预期增长，中国市场具有挑战性但其他亚太市场保持增长。印度太阳能目标（500GW by 2030）是重要机遇。</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid var(--red);">
+      <div class="kpi-label">逆风 — 关税与原材料成本</div>
+      <div class="kpi-value" style="font-size:1.1rem;color:var(--red);">毛利率压力来源</div>
+      <div class="kpi-sub">公司10-K报告明确提及"尽管面临关税成本（despite tariff costs）"仍实现增长。铜铝等原材料价格上涨以及潜在的贸易关税（跨境供应链影响）是FY2025毛利率从35.1%降至31.2%的重要因素。</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;">需持续追踪的 KPI 清单</div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>KPI 指标</th><th>当前数值</th><th>目标/基准</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>积压订单余额</td><td>$232.8M（+22% YoY）</td><td>持续正增长</td><td class="kpi-up">健康</td></tr>
+        <tr><td>毛利率水平</td><td>29.8-32.8%（近4季度）</td><td>恢复至FY2023水平 35%</td><td class="kpi-down">偏低</td></tr>
+        <tr><td>营业利润率</td><td>6.8-10.1%（近4季度，波动大）</td><td>稳定在11%+</td><td class="kpi-down">压力中</td></tr>
+        <tr><td>FCF 恢复趋势</td><td>$33.3M（FY2025，大幅下降）</td><td>恢复至$55M+</td><td class="kpi-down">待观察</td></tr>
+        <tr><td>波兰新工厂投产进度</td><td>2026年开业（建设中）</td><td>按时投产，提升EMEA产能利用率</td><td class="kpi-neutral">跟踪中</td></tr>
+        <tr><td>JAP Telecom 整合进展</td><td>2025年5月收购，整合中</td><td>通信分部收入增厚，利润率改善</td><td class="kpi-neutral">跟踪中</td></tr>
+        <tr><td>调整后EPS增速</td><td>$8.70（+16% YoY）</td><td>持续双位数增长</td><td class="kpi-up">达标</td></tr>
+        <tr><td>PLP-USA 能源市场增速</td><td>强劲增长（具体数字未披露）</td><td>持续增长</td><td class="kpi-up">正向</td></tr>
+        <tr><td>关税影响量化</td><td>成本压力，未完全披露</td><td>定价能力转移关税成本</td><td class="kpi-neutral">待评估</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- COMPETITIVE ANALYSIS -->
+<div class="section">
+<div class="container">
+  <div class="section-title">竞争格局分析</div>
+  <div class="chart-grid" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>ROE 对比（%）— FY2025</h3>
+      <div class="chart-wrap" style="height:200px;"><canvas id="roeChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>P/E 对比（GAAP TTM）</h3>
+      <div class="chart-wrap" style="height:200px;"><canvas id="peCompChart"></canvas></div>
+    </div>
+  </div>
+  <div class="table-wrap" style="margin-bottom:20px;">
+    <table class="data-table">
+      <thead><tr><th>指标</th><th>PLPC（本公司）</th><th>HUBB（Hubbell）</th><th>Prysmian</th><th>Belden</th></tr></thead>
+      <tbody>
+        <tr><td>主营市场</td><td class="highlight">线路硬件/光纤/太阳能</td><td>电气设备/开关柜</td><td>电缆与管线系统</td><td>信号传输线缆</td></tr>
+        <tr><td>营收（TTM）</td><td class="highlight">$669M</td><td>$5.84B</td><td>~$17B</td><td>~$2.1B</td></tr>
+        <tr><td>营收增速</td><td class="highlight kpi-up">+12.7%</td><td class="kpi-up">+3.8%</td><td>数据不可用</td><td>数据不可用</td></tr>
+        <tr><td>毛利率</td><td class="highlight kpi-down">31.2%</td><td>35.3%</td><td>数据不可用</td><td>~35%</td></tr>
+        <tr><td>营业利润率</td><td class="highlight kpi-down">8.2%</td><td>20.7%</td><td>数据不可用</td><td>~12%</td></tr>
+        <tr><td>ROE（TTM）</td><td class="highlight kpi-down">7.9%</td><td>24.5%</td><td>数据不可用</td><td>数据不可用</td></tr>
+        <tr><td>TTM P/E（GAAP）</td><td class="highlight kpi-down">38.7x</td><td>29.4x</td><td>数据不可用</td><td>~18x</td></tr>
+        <tr><td>P/B</td><td class="highlight">2.85x</td><td>6.8x</td><td>数据不可用</td><td>数据不可用</td></tr>
+        <tr><td>P/S</td><td class="highlight">2.02x</td><td>4.45x</td><td>数据不可用</td><td>数据不可用</td></tr>
+        <tr><td>市值</td><td class="highlight">$1.35B</td><td>$26.0B</td><td>数据不可用</td><td>~$3.8B</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+    <div class="kpi-card">
+      <div class="kpi-label">竞争定位</div>
+      <div style="font-size:0.9rem;margin-top:8px;">PLPC在成型线产品这一高度专业化细分市场中具有领先地位，其70年历史形成的工程know-how、全球化分销网络和对特定安装方法的深度理解构成差异化优势。主要竞争对手包括Prysmian、Belden、Huber+Suhner、Optical Cable和Hyperline Systems等。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">竞争优势</div>
+      <div style="font-size:0.9rem;margin-top:8px;">在能源基础设施线路硬件领域，PLPC的成型线技术、压接工具和安装系统是一体化解决方案，客户切换成本包括重新培训线路工人和重新认证施工工艺。但这并非不可逾越的壁垒，ABB、Hubbell/Burndy等大型公司具有更强的资源进行竞争。</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">与Hubbell（HUBB）的对比</div>
+      <div style="font-size:0.9rem;margin-top:8px;">Hubbell在类似市场（电力基础设施硬件）但规模大8.7倍，营业利润率高得多（20.7% vs 8.2%），ROE强得多（24.5% vs 7.9%），护城河更宽。从业务质量角度，HUBB显著优于PLPC，但PLPC的P/B更低（2.85x vs 6.8x）和规模小带来的潜在增长弹性是其相对优势。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MOAT SCORECARD -->
+<div class="section">
+<div class="container">
+  <div class="section-title">护城河评分卡（巴菲特框架）</div>
+  <div class="moat-grid">
+    <div class="moat-card">
+      <h4>品牌护城河</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:55%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">在工程技术人员和电力公司采购员群体中有良好口碑，但知名度局限于高度专业化的工业圈。品牌带来的是技术信任而非定价溢价。对终端消费者完全不可见。</div>
+    </div>
+    <div class="moat-card">
+      <h4>转换成本</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:55%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">线路工人熟悉特定工具和安装方法，切换到竞品需要额外培训。但相比软件或数据库，硬件切换成本较低。电力公司的安装规范中可能指定PLPC产品，但不具有法律上的排他性。</div>
+    </div>
+    <div class="moat-card">
+      <h4>网络效应</h4>
+      <div class="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:15%;background:var(--red);"></div></div>
+      <span class="moat-badge moat-none">无护城河</span>
+      <div class="moat-desc">硬件制造商不具备网络效应。每个新项目都是独立竞争，安装基数的扩大不会带来对新用户的竞争优势。这是PLPC最薄弱的护城河维度。</div>
+    </div>
+    <div class="moat-card">
+      <h4>成本优势</h4>
+      <div class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:35%;background:var(--red);"></div></div>
+      <span class="moat-badge moat-none">无至窄护城河</span>
+      <div class="moat-desc">在多个国家设有制造基地（美国、波兰、西班牙、巴西等），但非低成本制造商。原材料（铜铝）价格波动直接影响利润率，无法完全控制成本。规模相对竞争对手Prysmian等仍偏小。</div>
+    </div>
+    <div class="moat-card">
+      <h4>无形资产（专利+技术+关系）</h4>
+      <div class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+      <div class="moat-bar"><div class="moat-bar-fill" style="width:60%;background:var(--gold);"></div></div>
+      <span class="moat-badge moat-narrow">窄护城河</span>
+      <div class="moat-desc">70年积累的成型线技术know-how、安装系统知识产权和国际认证（UL、CE等）构成技术壁垒。与主要电力公司的长期合作关系是重要无形资产，但不具有排他性合同保护。</div>
+    </div>
+    <div class="moat-card" style="background:linear-gradient(135deg,#0f1e3d,#0a1628);border:2px solid var(--gold);">
+      <h4 style="color:var(--accent2);">综合护城河评级</h4>
+      <div style="font-size:2rem;font-weight:800;color:var(--gold);margin:12px 0;">窄至无护城河</div>
+      <span class="moat-badge moat-none" style="font-size:0.85rem;padding:4px 14px;">Narrow/No Moat</span>
+      <div class="moat-desc" style="margin-top:12px;">PLPC具备一定的专业技术壁垒和客户关系护城河，但力度弱于真正具有宽护城河的企业。ROE仅7-9%（FY2024-2025）是护城河薄弱的直接证明——优秀的护城河通常会体现在持续高于资本成本的回报上。相比之下，Hubbell（HUBB）同类市场但ROE 24.5%，差距显著。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CYCLE & MACRO -->
+<div class="section">
+<div class="container">
+  <div class="section-title">周期与宏观分析（霍华德·马克斯框架）</div>
+  <div class="two-col" style="margin-bottom:24px;">
+    <div class="chart-card">
+      <h3>P/E 历史分位（估算）</h3>
+      <div class="chart-wrap"><canvas id="peHistChart"></canvas></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="kpi-card">
+        <div class="kpi-label">周期定位</div>
+        <div class="kpi-value" style="font-size:1rem;color:var(--gold);">能源/通信基建投资早中期</div>
+        <div class="cycle-meter" style="margin-top:12px;">
+          <div class="cycle-seg" style="background:#10b981;"></div>
+          <div class="cycle-seg" style="background:#10b981;border:2px solid white;box-shadow:0 0 8px white;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;"></div>
+          <div class="cycle-seg" style="background:#f59e0b;opacity:0.5;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.3;"></div>
+          <div class="cycle-seg" style="background:#ef4444;opacity:0.2;"></div>
+        </div>
+        <div class="cycle-labels"><span>早期</span><span>成长</span><span>过热</span><span>衰退</span></div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:10px;">量化依据：①积压+22%，FY2025销售+13%，增长动能转正；②太阳能/光纤/电网secular趋势仍处早期；③FY2024是低谷年（-11.3%收入），FY2025是复苏年。但股价已提前大幅定价（+95%）。</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">估值分位分析</div>
+        <div style="font-size:0.9rem;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>当前 P/E（GAAP）</span><span style="color:var(--red);font-weight:700;">38.7x（历史极高）</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>调整后 P/E</span><span style="color:var(--gold);font-weight:700;">31.7x（仍偏高）</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>P/B</span><span style="color:var(--muted);font-weight:700;">2.85x（历史较高）</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>P/S</span><span style="color:var(--muted);font-weight:700;">2.02x（合理）</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--red);">估算分位（vs 5年）</span><span style="color:var(--red);font-weight:700;">约80-85百分位</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:1rem;">五大尾部风险矩阵</div>
+  <div class="risk-grid">
+    <div class="risk-card" style="border-color:var(--red);">
+      <h4>利润率持续压缩风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">概率 35%</span>
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">影响 高</span>
+      </div>
+      <p>FY2023→FY2025毛利率从35.1%降至31.2%，营业利润率从12.6%降至8.2%。若原材料成本继续上升+竞争加剧+新工厂整合期拉长，利润率可能进一步压缩至7-8%。EPS从$8.70降至$6，估值从38.7x压缩至25x → 股价约$150，潜在下行-45%。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--red);">
+      <h4>估值重估风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">概率 30%</span>
+        <span class="risk-tag" style="background:rgba(239,68,68,0.2);color:var(--red);">影响 高</span>
+      </div>
+      <p>P/E 38.7x对于一家ROE 7.9%的工业小盘股而言极度偏高（合理PE约15-20x）。任何季度业绩低于预期均可能触发倍数收缩至20x → EPS $7.14 × 20x = $143（潜在下行-48%）。52周涨幅+95%已透支大量盈利预期。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>FCF 持续下滑风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 30%</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 中</span>
+      </div>
+      <p>FCF三年连续下降（$72M→$53M→$33M），若波兰/西班牙扩建持续消耗CapEx而新产能利用率不及预期，FCF可能进一步压缩。低FCF限制回购和分红提升空间，影响对价值型投资者的吸引力。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--gold);">
+      <h4>关税与贸易政策风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">概率 25%</span>
+        <span class="risk-tag" style="background:rgba(245,158,11,0.2);color:var(--gold);">影响 中</span>
+      </div>
+      <p>PLPC具有全球多国制造基地，受贸易关税影响较大（10-K中明确提及关税成本）。若中美贸易关税升级或欧美贸易摩擦加剧，亚太分部的跨境供应链成本上升，毛利率可能受到额外100-200bps压力。</p>
+    </div>
+    <div class="risk-card" style="border-color:var(--purple);">
+      <h4>JAP Telecom 整合失败风险</h4>
+      <div class="risk-tags">
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">概率 15%</span>
+        <span class="risk-tag" style="background:rgba(139,92,246,0.2);color:var(--purple);">影响 低-中</span>
+      </div>
+      <p>2025年5月收购JAP Telecom（巴西），整合跨境文化和运营体系存在挑战。若整合成本超预期或收入协同低于预期，将进一步压制美洲分部利润率。潜在商誉减值风险（收购溢价未知）。</p>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;" class="kpi-card">
+    <div class="kpi-label">市场情绪指标</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:12px;">
+      <div><div style="font-size:0.75rem;color:var(--muted);">分析师目标价</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">$275（Loop Capital），平均$225</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">短仓比例</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">3.95%（中性）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">机构持仓</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">65.35%</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">52周涨幅</div><div style="font-size:0.95rem;font-weight:700;color:var(--red);">+115%（极度强势）</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">股息增长历史</div><div style="font-size:0.95rem;font-weight:700;color:var(--green);">长期稳定增长</div></div>
+      <div><div style="font-size:0.75rem;color:var(--muted);">流动性</div><div style="font-size:0.95rem;font-weight:700;color:var(--muted);">仅490万股（小盘，流动性差）</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- VALUATION -->
+<div class="section">
+<div class="container">
+  <div class="section-title">三大价值投资框架估值</div>
+
+  <!-- GRAHAM -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>格雷厄姆安全边际估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">安全检验清单</div>
+        <ul class="checklist">
+          <li><span>P/E ≤ 15x</span><span><span class="fail">不通过</span> &nbsp;实际 38.7x</span></li>
+          <li><span>P/B ≤ 1.5x</span><span><span class="fail">不通过</span> &nbsp;实际 2.85x</span></li>
+          <li><span>P/E × P/B ≤ 22.5</span><span><span class="fail">不通过</span> &nbsp;实际 110.3</span></li>
+          <li><span>流动比率 ≥ 2.0x</span><span><span class="pass">通过</span> &nbsp;实际 3.17x（优秀）</span></li>
+          <li><span>负债/权益 ≤ 1.0x</span><span><span class="pass">通过</span> &nbsp;实际 0.10x（极低）</span></li>
+          <li><span>资产/负债 ≥ 2.0x</span><span><span class="pass">通过</span> &nbsp;实际 3.67x（优秀）</span></li>
+        </ul>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">Graham Number 计算</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:4px;">= √(22.5 × EPS $7.14 × BV/Share $96.22)</div>
+          <div style="font-size:0.78rem;color:var(--muted);">= √(22.5 × $687.01) = √$15,458</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--red);margin-top:6px;">$124.33</div>
+          <div style="font-size:0.85rem;color:var(--red);margin-top:4px;">当前价格溢价 Graham Number +121.6%</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">DCF 三情景估值（折现率10%，基准FCF $33.3M）</div>
+        <div style="font-size:0.75rem;color:var(--orange);padding:8px;background:rgba(249,115,22,0.1);border-radius:6px;margin-bottom:12px;">注意：FY2023→FY2025 FCF呈下降趋势，3年CAGR为负，DCF使用框架最低增速假设</div>
+        <div class="dcf-bar">
+          <label><span>保守 (30%) — 前5年+15%, 后5年+8%, 终值3%</span><span style="color:var(--red);">$201</span></label>
+          <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:34%;background:var(--red);">$201</div></div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>中性 (45%) — 前5年+25%, 后5年+12%, 终值3%</span><span style="color:var(--gold);">$334</span></label>
+          <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:56%;background:var(--gold);">$334</div></div>
+        </div>
+        <div class="dcf-bar" style="margin-top:12px;">
+          <label><span>乐观 (25%) — 前5年+35%, 后5年+15%, 终值4%</span><span style="color:var(--green);">$592</span></label>
+          <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:100%;background:var(--green);">$592</div></div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">加权综合内在价值 (30/45/25)</div>
+          <div style="font-size:2rem;font-weight:800;color:var(--accent2);margin-top:4px;">$359 / 股</div>
+          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">当前价$275.51 较加权DCF折价 23.3%（但DCF依赖FCF强力反弹假设，基准FCF $33M偏低）</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">格雷厄姆结论：减持 / 等待回调</div>
+      <div class="verdict-detail">6项安全检验仅通过3项（资产负债表指标），估值指标全部不通过；Graham Number $124，当前价溢价+122%；保守DCF $201 远低于现价$275。格雷厄姆框架下，PLPC的财务结构健康（无杠杆、流动性强），但价格已大幅超出安全边际。理想买入价格在$125-$180区间。</div>
+    </div>
+  </div>
+
+  <!-- BUFFETT -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>巴菲特护城河估值</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">ROE 持续性评估</div>
+        <div class="table-wrap">
+          <table class="data-table" style="font-size:0.82rem;">
+            <thead><tr><th>财年</th><th>GAAP EPS</th><th>期末BV/股</th><th>ROE（估）</th></tr></thead>
+            <tbody>
+              <tr><td>FY2025</td><td>$7.14</td><td>$96.22</td><td class="kpi-down">7.9%</td></tr>
+              <tr><td>FY2024</td><td>$7.50</td><td>$85.37</td><td class="kpi-down">8.9%</td></tr>
+              <tr><td>FY2023</td><td>$12.68</td><td>$83.28</td><td class="kpi-up">15.9%</td></tr>
+              <tr><td>3年均值</td><td>—</td><td>—</td><td class="kpi-neutral">10.9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:8px;">ROE 10.9%（3年均值）低于巴菲特偏好的15%阈值。FY2023异常高ROE系利润率短暂高峰，FY2024-2025回落至8-9%更接近正常水平。这是护城河薄弱的直接体现。</div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">内在价值估算</div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;margin-bottom:12px;">
+          <div style="font-size:0.82rem;color:var(--muted);">方法：可持续EPS × 合理P/E（窄/无护城河 + 低ROE）</div>
+          <div style="margin-top:8px;font-size:0.85rem;">
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>可持续EPS（GAAP均值 $7-9）</span><span style="color:var(--gold);">~$8.00</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>合理P/E（ROE 10%，窄护城河）</span><span style="color:var(--gold);">14-18x</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 15x × $8.00</span><span style="color:var(--red);">$120</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>@ 17x × $8.70（调整后）</span><span style="color:var(--gold);">$148</span></div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>@ 20x × $8.70（乐观）</span><span style="color:var(--green);">$174</span></div>
+          </div>
+        </div>
+        <div style="padding:14px;background:var(--bg4);border-radius:8px;">
+          <div style="font-size:0.85rem;color:var(--muted);">内在价值区间（+净现金 $7.4/股溢价）</div>
+          <div style="font-size:1.8rem;font-weight:800;color:var(--gold);margin-top:6px;">$127 – $181</div>
+          <div style="font-size:0.82rem;color:var(--red);margin-top:4px;">当前$275.51 高于上限$181，溢价52%+；含20%安全边际理想买入：</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:4px;">$102 – $145</div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">巴菲特结论：减持 / 等待价格大幅回调</div>
+      <div class="verdict-detail">PLPC的资产负债表健康（低债务、强流动性），在专业工业细分市场有70年历史积累，受益于能源/通信/太阳能secular趋势。然而，ROE仅7.9-10.9%未能达到巴菲特15%+的标准，护城河评级为窄/无，当前股价$275.51显著高于内在价值上限$181（溢价52%）。巴菲特框架下需要等待股价回落至$100-$145区间（含安全边际），方具备足够的安全边际。</div>
+    </div>
+  </div>
+
+  <!-- MARKS -->
+  <div class="val-card" style="margin-bottom:24px;">
+    <h3>霍华德·马克斯周期分析</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">情景分析（12个月）</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--green);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--green);">乐观（25%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">积压$232M顺利转化+波兰工厂提升EMEA毛利率+太阳能订单爆发，EPS FY26 $10+，PE维持28x → 目标$280（约持平）。此情景已被部分定价。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--gold);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--gold);">基准（45%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">稳健执行、利润率略改善、EPS FY26 $8-9，PE压缩至22-25x → 目标$176-$225（下行15-36%）。分析师平均目标$225接近此区间上沿。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg4);border-radius:8px;border-left:3px solid var(--red);">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--red);">悲观（30%概率）</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">利润率持续压缩+FCF不恢复+关税影响加剧，EPS FY26 $6-7，PE压缩至15-18x → 目标$90-$126（下行54-67%）。Graham Number $124是自然支撑位。</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:var(--muted);margin-bottom:12px;">加权预期分析</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">乐观目标（25%权重）</span><span style="font-size:0.85rem;color:var(--green);font-weight:700;">$280 × 25% = $70</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">基准目标（45%权重）</span><span style="font-size:0.85rem;color:var(--gold);font-weight:700;">$200 × 45% = $90</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg4);border-radius:8px;"><span style="font-size:0.85rem;">悲观目标（30%权重）</span><span style="font-size:0.85rem;color:var(--red);font-weight:700;">$107 × 30% = $32</span></div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg4);border-radius:8px;border:1px solid var(--red);"><span style="font-size:0.9rem;font-weight:700;">加权预期价格</span><span style="font-size:0.9rem;color:var(--red);font-weight:700;">$192（-30% vs 当前）</span></div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:12px;">马克斯框架下风险/回报不对称：下行30-67%（悲观/基准），上行仅约1.6%（乐观），预期回报为负。</div>
+      </div>
+    </div>
+    <div class="verdict-card verdict-red" style="margin-top:16px;">
+      <div class="verdict-title" style="color:var(--red);">马克斯结论：减持</div>
+      <div class="verdict-detail">PLPC的基本面趋势（积压+22%，收入+13%）尚可，但股价已过度反映乐观预期（52周+115%）。估值处于历史高位（P/E 80-85百分位），ROE偏低（7.9%），FCF三年连降，利润率持续受压，这些都是不利于长期持有的信号。分析师平均目标价$225低于当前价$275，进一步印证市场已提前过度定价。马克斯逻辑：当好消息人尽皆知且已充分定价时，是减仓而非加仓的时机。</div>
+    </div>
+  </div>
+
+  <!-- FINAL SUMMARY -->
+  <div class="summary-box">
+    <h2>三框架综合结论</h2>
+    <div class="three-verdict">
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">格雷厄姆</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/等待</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">Graham Number $124<br>溢价+122%<br>3/6通过</div>
+      </div>
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">巴菲特</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持/等待</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">窄/无护城河<br>ROE 7.9%（低）<br>内在价值$127-181</div>
+      </div>
+      <div class="three-verdict-item verdict-red">
+        <div style="font-size:0.85rem;color:var(--muted);">霍华德·马克斯</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--red);">减持</div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">预期回报负(-30%)<br>估值80-85百分位<br>+115%已透支预期</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;">
+      <div style="color:var(--muted);font-size:0.9rem;">理想买入区间（含 20-30% 安全边际）</div>
+      <div class="buy-range">$145 – $195</div>
+      <div style="color:var(--muted);font-size:0.9rem;">当前价 $275.51 | 距目标区间上沿 -29.2% | Graham Number $124 | DCF加权 $359（依赖FCF大幅反弹）</div>
+    </div>
+    <div style="margin-top:20px;padding:16px;background:rgba(239,68,68,0.1);border-radius:10px;border:1px solid rgba(239,68,68,0.3);text-align:left;">
+      <div style="font-size:0.9rem;color:var(--red);font-weight:700;">核心投资逻辑：业务质地一般，价格严重偏高</div>
+      <div style="font-size:0.84rem;color:var(--muted);margin-top:8px;line-height:1.8;">
+        PLPC是一家在全球能源/通信/太阳能基础设施硬件市场运营70年的小盘工业公司，受益于多个secular增长趋势（电网现代化、光纤扩张、太阳能爆发、EV基础设施）。资产负债表稳健（流动比率3.17x，零实质性债务）。但三大框架一致认为当前价格缺乏安全边际：① ROE 7.9%远低于巴菲特15%标准；② 护城河薄弱（无定价权，竞争对手众多）；③ P/E 38.7x对8% ROE企业极度偏贵；④ FCF三年连降；⑤ 股价52周+115%已大幅超越基本面改善速度。对于价值投资者，需要耐心等待股价回落至$145-$195区间，届时基本面支撑与安全边际将共同构成合理的风险/回报结构。
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SOURCES -->
+<div class="section">
+<div class="container">
+  <div class="section-title">数据来源</div>
+  <ul class="sources-list">
+    <li><a href="https://www.stocktitan.net/news/PLPC/preformed-line-products-announces-fourth-quarter-and-full-year-2025-jnee1efeoa79.html" target="_blank">StockTitan — PLPC Q4 & FY2025 官方新闻稿摘要</a></li>
+    <li><a href="https://www.prnewswire.com/news-releases/preformed-line-products-announces-third-quarter-2025-financial-results-302598864.html" target="_blank">PRNewswire — PLPC Q3 2025 财务业绩新闻稿</a></li>
+    <li><a href="https://stockanalysis.com/stocks/plpc/financials/" target="_blank">StockAnalysis.com — PLPC 年度财务数据</a></li>
+    <li><a href="https://stockanalysis.com/stocks/plpc/financials/?p=quarterly" target="_blank">StockAnalysis — PLPC 季度财务数据</a></li>
+    <li><a href="https://stockanalysis.com/stocks/plpc/financials/balance-sheet/" target="_blank">StockAnalysis — PLPC 资产负债表</a></li>
+    <li><a href="https://stockanalysis.com/stocks/plpc/statistics/" target="_blank">StockAnalysis — PLPC 统计与估值数据</a></li>
+    <li><a href="https://www.quiverquant.com/news/Preformed+Line+Products+Company+(PLPC)+Releases+Q4+2025+Earnings:+Revenue+Up+3.6%25+but+EPS+Down+19.3%25" target="_blank">QuiverQuant — Q4 2025 盈利分析</a></li>
+    <li><a href="https://www.stocktitan.net/sec-filings/PLPC/10-k-preformed-line-products-co-files-annual-report-08025e7d7a3c.html" target="_blank">StockTitan — PLPC 2025年10-K年报摘要</a></li>
+    <li><a href="https://www.gurufocus.com/news/3168883/preformed-line-products-co-reports-q3-2025-earnings-eps-at-053-revenue-hits-1781-million" target="_blank">GuruFocus — Q3 2025 业绩深度分析</a></li>
+    <li><a href="https://www.macrotrends.net/stocks/charts/PLPC/preformed-line-products/market-cap" target="_blank">MacroTrends — PLPC 历史市值数据</a></li>
+    <li><a href="https://www.marketbeat.com/stocks/NASDAQ/PLPC/competitors-and-alternatives/" target="_blank">MarketBeat — PLPC 竞争对手分析</a></li>
+    <li><a href="https://www.gminsights.com/industry-analysis/solar-energy-market" target="_blank">GM Insights — 全球太阳能市场规模预测</a></li>
+  </ul>
+  <div style="margin-top:20px;font-size:0.8rem;color:var(--muted);">
+    分析生成时间：2026-03-25 &nbsp;|&nbsp; 数据截至：2026-03-24 &nbsp;|&nbsp; 所有数据来源于公开渠道实时查询，仅供参考，不构成投资建议。
+  </div>
+</div>
+</div>
+
+<script>
+Chart.defaults.color='#94a3b8';Chart.defaults.borderColor='#1e3a5f';
+
+// Segment Pie (geo)
+new Chart(document.getElementById('segPie'),{
+  type:'doughnut',
+  data:{
+    labels:['PLP-USA','EMEA','亚太','美洲（含JAP）'],
+    datasets:[{data:[42,25,20,13],
+      backgroundColor:['rgba(59,130,246,0.8)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)','rgba(139,92,246,0.7)'],
+      borderColor:['#3b82f6','#10b981','#f59e0b','#8b5cf6'],borderWidth:2}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+    plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12,font:{size:11}}},
+      tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ~${ctx.raw}%（估算）`}}}}
+});
+
+// Revenue chart
+new Chart(document.getElementById('revenueChart'),{
+  type:'bar',
+  data:{
+    labels:['Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],
+    datasets:[
+      {label:'季度营收 ($M)',data:[167.1,148.5,169.6,178.1,173.1],backgroundColor:'rgba(59,130,246,0.7)',borderColor:'#3b82f6',borderWidth:1,yAxisID:'y'},
+      {label:'YoY增速 (%)',data:[17.3,5.6,22.0,21.1,3.6],type:'line',borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,0.1)',borderWidth:2,pointRadius:4,tension:0.3,yAxisID:'y1'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}},
+      y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#f59e0b',callback:v=>v+'%'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}}
+});
+
+// Margin chart
+new Chart(document.getElementById('marginChart'),{
+  type:'line',
+  data:{
+    labels:['Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],
+    datasets:[
+      {label:'毛利率',data:[33.3,32.8,32.7,29.7,29.8],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.1)',borderWidth:2,tension:0.3,pointRadius:4},
+      {label:'营业利润率',data:[10.5,8.8,10.1,7.4,6.8],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,tension:0.3,pointRadius:4},
+      {label:'净利率',data:[6.2,7.7,7.5,1.5,4.9],borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.1)',borderWidth:2,tension:0.3,pointRadius:4}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'%',color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}}
+});
+
+// FCF chart
+new Chart(document.getElementById('fcfChart'),{
+  type:'bar',
+  data:{
+    labels:['FY21','FY22','FY23','FY24','FY25'],
+    datasets:[{label:'FCF ($M)',
+      data:[15.2,-14.5,72.3,52.8,33.3],
+      backgroundColor:['rgba(16,185,129,0.7)','rgba(239,68,68,0.7)','rgba(16,185,129,0.9)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)'],
+      borderColor:['#10b981','#ef4444','#10b981','#10b981','#f59e0b'],borderWidth:1}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}}
+});
+
+// Annual chart
+new Chart(document.getElementById('annualChart'),{
+  type:'bar',
+  data:{
+    labels:['FY21','FY22','FY23','FY24','FY25'],
+    datasets:[
+      {label:'营收 ($M)',data:[517,637,670,594,669],backgroundColor:'rgba(59,130,246,0.6)',borderColor:'#3b82f6',borderWidth:1,yAxisID:'y'},
+      {label:'净利润 ($M)',data:[35.7,54.4,63.3,37.1,35.3],backgroundColor:'rgba(16,185,129,0.6)',borderColor:'#10b981',borderWidth:1,yAxisID:'y'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8'}}}}
+});
+
+// ROE comparison
+new Chart(document.getElementById('roeChart'),{
+  type:'bar',
+  data:{
+    labels:['PLPC','HUBB（参考）'],
+    datasets:[{label:'ROE (%)',data:[7.9,24.5],
+      backgroundColor:['rgba(239,68,68,0.7)','rgba(16,185,129,0.6)'],
+      borderColor:['#ef4444','#10b981'],borderWidth:2}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    scales:{x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'%',color:'#94a3b8'}}},
+    plugins:{legend:{display:false}}}
+});
+
+// PE comparison
+new Chart(document.getElementById('peCompChart'),{
+  type:'bar',
+  data:{
+    labels:['PLPC（GAAP）','PLPC（调整后）','HUBB（参考）'],
+    datasets:[{label:'P/E',data:[38.7,31.7,29.4],
+      backgroundColor:['rgba(239,68,68,0.8)','rgba(245,158,11,0.7)','rgba(59,130,246,0.6)'],
+      borderColor:['#ef4444','#f59e0b','#3b82f6'],borderWidth:2}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    scales:{x:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'x',color:'#94a3b8'}}},
+    plugins:{legend:{display:false}}}
+});
+
+// PE Historical
+new Chart(document.getElementById('peHistChart'),{
+  type:'line',
+  data:{
+    labels:['FY20','FY21','FY22','FY23','FY24','FY25 Q1','FY25 Q2','FY25 Q3','FY25 Q4','当前'],
+    datasets:[
+      {label:'P/E（GAAP 估算）',data:[18,22,12,15,20,28,34,42,40,38.7],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,tension:0.3,pointRadius:3},
+      {label:'历史均值 ~18x',data:[18,18,18,18,18,18,18,18,18,18],borderColor:'#10b981',borderWidth:1.5,borderDash:[6,3],pointRadius:0},
+      {label:'当前 38.7x',data:[38.7,38.7,38.7,38.7,38.7,38.7,38.7,38.7,38.7,38.7],borderColor:'#ef4444',borderWidth:1.5,borderDash:[4,4],pointRadius:0}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{y:{grid:{color:'#1e3a5f'},ticks:{callback:v=>v+'x',color:'#94a3b8'}}},
+    plugins:{legend:{labels:{color:'#94a3b8',boxWidth:12}}}}
+});
+</script>
+</body>
+</html>
