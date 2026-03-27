@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VRT Vertiv Holdings - 价值投资深度分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: #1a2236;
+    --bg-card-hover: #1e2a42;
+    --border: #2a3a5c;
+    --text-primary: #e8eaf6;
+    --text-secondary: #8899bb;
+    --text-muted: #556688;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-green: #10b981;
+    --accent-yellow: #f59e0b;
+    --accent-orange: #f97316;
+    --accent-red: #ef4444;
+    --accent-purple: #8b5cf6;
+    --gradient-blue: linear-gradient(135deg, #1e3a5f, #0f2035);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1b35 0%, #0a1628 50%, #091220 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
+  .hero-left {}
+  .hero-ticker { font-size: 13px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .hero-title { font-size: 38px; font-weight: 700; color: #fff; letter-spacing: -0.5px; line-height: 1.1; }
+  .hero-subtitle { font-size: 16px; color: var(--text-secondary); margin-top: 4px; }
+  .hero-tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+  .tag-yellow { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+  .tag-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+  .tag-red { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .tag-orange { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); }
+
+  .hero-right { text-align: right; }
+  .hero-price { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; }
+  .hero-price-change { font-size: 15px; color: var(--accent-red); margin-top: 4px; }
+  .hero-meta { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+  .hero-rating {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 12px;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.4);
+    color: #fbbf24;
+  }
+
+  /* SECTIONS */
+  section { padding: 40px 0; border-bottom: 1px solid rgba(42,58,92,0.5); }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--accent-blue);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -18px;
+    margin-bottom: 20px;
+    padding-left: 14px;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .kpi-card:hover { border-color: var(--accent-blue); background: var(--bg-card-hover); }
+  .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+  .kpi-sub { font-size: 11px; margin-top: 4px; }
+  .kpi-up { color: var(--accent-green); }
+  .kpi-down { color: var(--accent-red); }
+  .kpi-neutral { color: var(--text-secondary); }
+
+  /* CHARTS */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) {
+    .chart-grid, .chart-grid-3 { grid-template-columns: 1fr; }
+  }
+  .chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .chart-card h4 { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap-sm { position: relative; height: 200px; }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    background: rgba(59,130,246,0.1);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 12px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .data-table th:first-child { text-align: left; }
+  .data-table td {
+    padding: 10px 12px;
+    text-align: right;
+    border-bottom: 1px solid rgba(42,58,92,0.4);
+    color: var(--text-primary);
+  }
+  .data-table td:first-child { text-align: left; color: var(--text-secondary); font-size: 12px; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(59,130,246,0.04); }
+  .positive { color: var(--accent-green) !important; }
+  .negative { color: var(--accent-red) !important; }
+  .neutral { color: var(--text-secondary) !important; }
+
+  /* ANALYSIS CARDS */
+  .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .analysis-grid { grid-template-columns: 1fr; } }
+  .analysis-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .analysis-card h4 { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; }
+  .analysis-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(42,58,92,0.3); font-size: 13px; }
+  .analysis-item:last-child { border-bottom: none; }
+  .analysis-key { color: var(--text-secondary); }
+  .analysis-val { font-weight: 600; color: var(--text-primary); }
+
+  /* MOAT SCORES */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .moat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .moat-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+  .moat-stars { color: var(--accent-yellow); font-size: 16px; letter-spacing: 2px; }
+  .moat-stars .empty { color: var(--border); }
+  .moat-bar-bg { background: rgba(42,58,92,0.6); border-radius: 4px; height: 6px; margin: 10px 0; }
+  .moat-bar { height: 6px; border-radius: 4px; background: var(--accent-blue); }
+  .moat-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* VALUATION */
+  .valuation-row { display: flex; flex-direction: column; gap: 12px; }
+  .val-scenario {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .val-scenario-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-scenario-name { font-size: 13px; font-weight: 600; }
+  .val-scenario-price { font-size: 18px; font-weight: 700; }
+  .val-bar-bg { background: rgba(42,58,92,0.5); border-radius: 4px; height: 8px; position: relative; }
+  .val-bar { height: 8px; border-radius: 4px; }
+  .val-bar-marker {
+    position: absolute;
+    top: -4px;
+    width: 3px;
+    height: 16px;
+    background: #fff;
+    border-radius: 2px;
+  }
+  .val-details { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(42,58,92,0.3);
+    font-size: 13px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .check-pass { background: rgba(16,185,129,0.2); color: var(--accent-green); border: 1px solid rgba(16,185,129,0.4); }
+  .check-fail { background: rgba(239,68,68,0.2); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.4); }
+  .check-text { flex: 1; color: var(--text-primary); }
+  .check-value { color: var(--text-secondary); font-size: 12px; }
+
+  /* RISK MATRIX */
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 700px) { .risk-grid { grid-template-columns: 1fr; } }
+  .risk-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .risk-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .risk-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .risk-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .risk-high { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+  .risk-medium { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
+  .risk-low { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+  .risk-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .risk-metrics { display: flex; gap: 16px; margin-top: 10px; }
+  .risk-metric { font-size: 11px; }
+  .risk-metric-label { color: var(--text-muted); }
+  .risk-metric-val { color: var(--text-secondary); font-weight: 600; }
+
+  /* VERDICT */
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .verdict-grid { grid-template-columns: 1fr; } }
+  .verdict-card {
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .verdict-framework { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .verdict-rating { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .verdict-detail { font-size: 12px; line-height: 1.5; }
+  .verdict-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); }
+  .verdict-red .verdict-framework, .verdict-red .verdict-rating { color: var(--accent-red); }
+  .verdict-yellow { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.4); }
+  .verdict-yellow .verdict-framework, .verdict-yellow .verdict-rating { color: var(--accent-yellow); }
+  .verdict-green { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.4); }
+  .verdict-green .verdict-framework, .verdict-green .verdict-rating { color: var(--accent-green); }
+
+  .buy-range-card {
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(6,182,212,0.08));
+    border: 2px solid rgba(59,130,246,0.4);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .buy-range-label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .buy-range-value { font-size: 36px; font-weight: 700; color: #60a5fa; }
+  .buy-range-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+  /* SOURCES */
+  .sources-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .sources-list li { display: flex; align-items: flex-start; gap: 8px; }
+  .sources-list li::before { content: 'URL'; font-size: 9px; font-weight: 700; color: var(--accent-blue); background: rgba(59,130,246,0.1); padding: 2px 5px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+  .sources-list a { color: var(--text-secondary); font-size: 12px; text-decoration: none; word-break: break-all; }
+  .sources-list a:hover { color: var(--accent-blue); }
+
+  /* COMPETITOR TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th {
+    background: rgba(59,130,246,0.1);
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .comp-table th:first-child { text-align: left; }
+  .comp-table td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(42,58,92,0.4);
+  }
+  .comp-table td:first-child { text-align: left; font-weight: 600; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table .highlight { background: rgba(59,130,246,0.08); }
+
+  /* KPI LIST */
+  .kpi-list { display: flex; flex-direction: column; gap: 8px; }
+  .kpi-list-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(42,58,92,0.2); border-radius: 6px; }
+  .kpi-list-label { font-size: 12px; color: var(--text-secondary); }
+  .kpi-list-val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .kpi-list-status { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+
+  /* CYCLE INDICATOR */
+  .cycle-bar {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 32px;
+    margin: 16px 0;
+  }
+  .cycle-seg {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: default;
+    transition: opacity 0.2s;
+    opacity: 0.4;
+  }
+  .cycle-seg.active { opacity: 1; }
+  .cycle-early { background: rgba(16,185,129,0.7); }
+  .cycle-growth { background: rgba(59,130,246,0.7); }
+  .cycle-peak { background: rgba(245,158,11,0.7); }
+  .cycle-decline { background: rgba(239,68,68,0.7); }
+
+  /* SENTIMENT GAUGE */
+  .sentiment-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+  .sentiment-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .sentiment-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+  .sentiment-value { font-size: 20px; font-weight: 700; }
+  .sentiment-desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* GROWTH DRIVERS */
+  .driver-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .driver-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .driver-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+  .driver-metric { font-size: 24px; font-weight: 700; color: var(--accent-cyan); margin-bottom: 4px; }
+  .driver-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* PIE LABEL */
+  .pie-wrap { display: flex; align-items: center; gap: 20px; }
+  .pie-wrap canvas { max-width: 180px; }
+  .pie-legend { display: flex; flex-direction: column; gap: 8px; }
+  .pie-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .pie-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* SEPARATOR */
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* OVERFLOW TABLE WRAPPER */
+  .table-wrap { overflow-x: auto; }
+
+  .col-note { font-size: 11px; color: var(--text-muted); margin-top: 8px; font-style: italic; }
+
+  /* FOOTER */
+  .footer { padding: 30px 0; text-align: center; color: var(--text-muted); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ======================== HERO ======================== -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-ticker">NYSE: VRT &nbsp;·&nbsp; 数据中心基础设施</div>
+        <div class="hero-title">Vertiv Holdings Co.</div>
+        <div class="hero-subtitle">AI数据中心电源、冷却与基础设施解决方案领军企业</div>
+        <div class="hero-tags">
+          <span class="tag tag-blue">数据中心 80%</span>
+          <span class="tag tag-yellow">窄护城河</span>
+          <span class="tag tag-orange">AI基础设施纯播</span>
+          <span class="tag tag-green">强增长势头</span>
+          <span class="tag tag-red">高估值风险</span>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="hero-rating">综合评级：谨慎持有 / 等待回调买入</div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-price">$252.40</div>
+        <div class="hero-price-change">-8.60% (2026-03-26收盘)</div>
+        <div class="hero-meta">52周区间: $53.60 – $282.05</div>
+        <div class="hero-meta">市值: $96.6B &nbsp;·&nbsp; 流通股: ~383M</div>
+        <div class="hero-meta">分析日期: 2026-03-27</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== KPI GRID ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">核心指标总览</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 营收</div>
+        <div class="kpi-value">$10.23B</div>
+        <div class="kpi-sub kpi-up">+27.7% YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 净利润</div>
+        <div class="kpi-value">$1.33B</div>
+        <div class="kpi-sub kpi-up">净利率 13.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 毛利率</div>
+        <div class="kpi-value">36.3%</div>
+        <div class="kpi-sub kpi-up">较2024 +0.0ppt</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 营业利润率</div>
+        <div class="kpi-value">17.9%</div>
+        <div class="kpi-sub kpi-up">调整后约22.3%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 EPS (GAAP)</div>
+        <div class="kpi-value">$3.41</div>
+        <div class="kpi-sub kpi-up">调整后 $4.10</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 自由现金流</div>
+        <div class="kpi-value">$1.89B</div>
+        <div class="kpi-sub kpi-up">FCF率 18.5%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM P/E</div>
+        <div class="kpi-value">74.0x</div>
+        <div class="kpi-sub kpi-neutral">远高于历史均值</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">前向 P/E (FY2026E)</div>
+        <div class="kpi-value">41.1x</div>
+        <div class="kpi-sub kpi-neutral">基于EPS $6.02E</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROE (FY2025)</div>
+        <div class="kpi-value">41.8%</div>
+        <div class="kpi-sub kpi-up">5年均值 21.7%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROIC (FY2025)</div>
+        <div class="kpi-value">20.2%</div>
+        <div class="kpi-sub kpi-up">较2024 +5ppt</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">净债务</div>
+        <div class="kpi-value">$1.33B</div>
+        <div class="kpi-sub kpi-up">D/E 0.80x（改善中）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">订单积压</div>
+        <div class="kpi-value">$15.0B</div>
+        <div class="kpi-sub kpi-up">Q4'25 同比 +109%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== BUSINESS MODEL ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">商业模式分析</div>
+    <div class="section-subtitle">收入结构、客户集中度、定价权与生态系统竞争优势</div>
+
+    <div class="chart-grid" style="margin-bottom:24px;">
+      <!-- Revenue by Segment Pie -->
+      <div class="chart-card">
+        <h4>收入结构 — 终端市场 (FY2025)</h4>
+        <div class="pie-wrap" style="justify-content:center; padding:16px 0;">
+          <div style="position:relative;width:180px;height:180px;flex-shrink:0;">
+            <canvas id="marketSegChart"></canvas>
+          </div>
+          <div class="pie-legend" style="margin-left:24px;">
+            <div class="pie-item"><span class="pie-dot" style="background:#3b82f6;"></span>数据中心 80%</div>
+            <div class="pie-item"><span class="pie-dot" style="background:#06b6d4;"></span>通信网络 10%</div>
+            <div class="pie-item"><span class="pie-dot" style="background:#8b5cf6;"></span>工商业 10%</div>
+          </div>
+        </div>
+      </div>
+      <!-- Revenue by Geography Pie -->
+      <div class="chart-card">
+        <h4>收入结构 — 地理分部 (FY2025)</h4>
+        <div class="pie-wrap" style="justify-content:center; padding:16px 0;">
+          <div style="position:relative;width:180px;height:180px;flex-shrink:0;">
+            <canvas id="geoSegChart"></canvas>
+          </div>
+          <div class="pie-legend" style="margin-left:24px;">
+            <div class="pie-item"><span class="pie-dot" style="background:#3b82f6;"></span>Americas 56% ($5.73B)</div>
+            <div class="pie-item"><span class="pie-dot" style="background:#10b981;"></span>APAC 22% ($2.25B)</div>
+            <div class="pie-item"><span class="pie-dot" style="background:#f59e0b;"></span>EMEA 22% ($2.25B)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>收入质量评分</h4>
+        <div class="analysis-item"><span class="analysis-key">一次性 vs 重复性收入</span><span class="analysis-val kpi-neutral">约70% 项目制 / 30% 服务</span></div>
+        <div class="analysis-item"><span class="analysis-key">服务收入占比趋势</span><span class="analysis-val kpi-up">持续提升（目标20%+）</span></div>
+        <div class="analysis-item"><span class="analysis-key">积压订单可见度</span><span class="analysis-val kpi-up">$15B（约1.5年营收）</span></div>
+        <div class="analysis-item"><span class="analysis-key">Book-to-Bill (Q4'25)</span><span class="analysis-val kpi-up">2.9x（极强订单入流）</span></div>
+        <div class="analysis-item"><span class="analysis-key">收入质量综合评分</span><span class="analysis-val kpi-yellow">中等偏高（7/10）</span></div>
+      </div>
+      <div class="analysis-card">
+        <h4>客户集中度分析</h4>
+        <div class="analysis-item"><span class="analysis-key">数据中心客户占比</span><span class="analysis-val kpi-up">80%（高度专注）</span></div>
+        <div class="analysis-item"><span class="analysis-key">超大规模云厂商估计占比</span><span class="analysis-val kpi-neutral">约40-50%</span></div>
+        <div class="analysis-item"><span class="analysis-key">前5大客户集中度</span><span class="analysis-val kpi-down">估计超40%（高风险）</span></div>
+        <div class="analysis-item"><span class="analysis-key">Americas Q3'25增速</span><span class="analysis-val kpi-up">+43% YoY</span></div>
+        <div class="analysis-item"><span class="analysis-key">APAC Q3'25增速</span><span class="analysis-val kpi-up">+20% YoY</span></div>
+      </div>
+      <div class="analysis-card">
+        <h4>定价权分析</h4>
+        <div class="analysis-item"><span class="analysis-key">液冷产品单价</span><span class="analysis-val">$2,000–$4,000/kW</span></div>
+        <div class="analysis-item"><span class="analysis-key">毛利率趋势</span><span class="analysis-val kpi-up">28.4%(2022)→36.3%(2025)</span></div>
+        <div class="analysis-item"><span class="analysis-key">供应约束议价能力</span><span class="analysis-val kpi-up">强（客户等待期存在）</span></div>
+        <div class="analysis-item"><span class="analysis-key">竞争对手定价对比</span><span class="analysis-val kpi-neutral">Schneider贵10-15%</span></div>
+        <div class="analysis-item"><span class="analysis-key">定价权综合评级</span><span class="analysis-val kpi-green">强（4/5）</span></div>
+      </div>
+      <div class="analysis-card">
+        <h4>单位经济模型</h4>
+        <div class="analysis-item"><span class="analysis-key">研发投入占营收比</span><span class="analysis-val">约2.5%（$255M）</span></div>
+        <div class="analysis-item"><span class="analysis-key">资本支出（FY2025）</span><span class="analysis-val">$220M（占营收2.1%）</span></div>
+        <div class="analysis-item"><span class="analysis-key">Capex/营收比</span><span class="analysis-val kpi-up">轻资产倾向（服务为主）</span></div>
+        <div class="analysis-item"><span class="analysis-key">全球服务中心</span><span class="analysis-val">255个</span></div>
+        <div class="analysis-item"><span class="analysis-key">全球员工数</span><span class="analysis-val">27,000人，130国</span></div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-top:20px;">
+      <h4>生态系统竞争飞轮</h4>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:16px 0;text-align:center;">
+        <div style="padding:16px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:8px;">
+          <div style="font-size:18px;margin-bottom:8px;">🏗️</div>
+          <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:6px;">AI算力爆发</div>
+          <div style="font-size:11px;color:var(--text-muted);">超大规模云厂商2026年CapEx合计$660-690B，AI基础设施占75%</div>
+        </div>
+        <div style="padding:16px;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:8px;">
+          <div style="font-size:18px;margin-bottom:8px;">⚡</div>
+          <div style="font-size:13px;font-weight:700;color:#22d3ee;margin-bottom:6px;">电源密度提升</div>
+          <div style="font-size:11px;color:var(--text-muted);">AI机架从10kW升至数百kW，液冷成为必需</div>
+        </div>
+        <div style="padding:16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;">
+          <div style="font-size:18px;margin-bottom:8px;">❄️</div>
+          <div style="font-size:13px;font-weight:700;color:#34d399;margin-bottom:6px;">冷却技术护城河</div>
+          <div style="font-size:11px;color:var(--text-muted);">ZutaCore两相冷却+CoolIT合作，23%精准冷却全球市占率</div>
+        </div>
+        <div style="padding:16px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:8px;">
+          <div style="font-size:18px;margin-bottom:8px;">🌐</div>
+          <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:6px;">服务网络优势</div>
+          <div style="font-size:11px;color:var(--text-muted);">255个服务中心+3,000名工程师，4小时响应承诺</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== FINANCIALS ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">财务深度分析</div>
+    <div class="section-subtitle">Q1 2024 — Q4 2025 完整8季度数据</div>
+
+    <!-- Quarterly Revenue Chart -->
+    <div class="chart-grid" style="margin-bottom:24px;">
+      <div class="chart-card">
+        <h4>季度营收趋势（百万美元）</h4>
+        <div class="chart-wrap">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>季度利润率趋势</h4>
+        <div class="chart-wrap">
+          <canvas id="marginChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FCF Chart -->
+    <div class="chart-grid" style="margin-bottom:24px;">
+      <div class="chart-card">
+        <h4>年度自由现金流（百万美元）</h4>
+        <div class="chart-wrap">
+          <canvas id="fcfChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>年度营收与净利润（百万美元）</h4>
+        <div class="chart-wrap">
+          <canvas id="annualChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quarterly Financial Table -->
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>季度</th>
+            <th>营收 (M)</th>
+            <th>YoY增速</th>
+            <th>毛利润 (M)</th>
+            <th>毛利率</th>
+            <th>营业利润 (M)</th>
+            <th>营业利润率</th>
+            <th>净利润 (M)</th>
+            <th>净利率</th>
+            <th>EPS (GAAP)</th>
+            <th>自由现金流 (M)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Q4 2025</td>
+            <td>$2,880</td>
+            <td class="positive">+22.7%</td>
+            <td>$1,121</td>
+            <td>38.9%</td>
+            <td>$580</td>
+            <td>20.1%</td>
+            <td>$446</td>
+            <td>15.5%</td>
+            <td class="positive">$1.14</td>
+            <td class="positive">$886</td>
+          </tr>
+          <tr>
+            <td>Q3 2025</td>
+            <td>$2,676</td>
+            <td class="positive">+29.1%</td>
+            <td>$1,011</td>
+            <td>37.8%</td>
+            <td>$517</td>
+            <td>19.3%</td>
+            <td>$399</td>
+            <td>14.9%</td>
+            <td class="positive">$1.02</td>
+            <td class="positive">$464</td>
+          </tr>
+          <tr>
+            <td>Q2 2025</td>
+            <td>$2,638</td>
+            <td class="positive">+35.1%</td>
+            <td>$897</td>
+            <td>34.0%</td>
+            <td>$442</td>
+            <td>16.8%</td>
+            <td>$324</td>
+            <td>12.3%</td>
+            <td class="positive">$0.83</td>
+            <td class="positive">$278</td>
+          </tr>
+          <tr>
+            <td>Q1 2025</td>
+            <td>$2,036</td>
+            <td class="positive">+24.2%</td>
+            <td>$687</td>
+            <td>33.7%</td>
+            <td>$291</td>
+            <td>14.3%</td>
+            <td>$165</td>
+            <td>8.1%</td>
+            <td class="positive">$0.42</td>
+            <td class="positive">$267</td>
+          </tr>
+          <tr style="background:rgba(42,58,92,0.15);">
+            <td>Q4 2024</td>
+            <td>$2,346</td>
+            <td class="positive">+25.8%</td>
+            <td>$870</td>
+            <td>37.1%</td>
+            <td>$457</td>
+            <td>19.5%</td>
+            <td>$147</td>
+            <td>6.3%</td>
+            <td class="positive">$0.38</td>
+            <td class="positive">$365</td>
+          </tr>
+          <tr style="background:rgba(42,58,92,0.15);">
+            <td>Q3 2024</td>
+            <td>$2,074</td>
+            <td class="positive">+19.3%</td>
+            <td>$756</td>
+            <td>36.5%</td>
+            <td>$372</td>
+            <td>17.9%</td>
+            <td>$177</td>
+            <td>8.5%</td>
+            <td class="positive">$0.46</td>
+            <td class="positive">$339</td>
+          </tr>
+          <tr style="background:rgba(42,58,92,0.15);">
+            <td>Q2 2024</td>
+            <td>$1,953</td>
+            <td class="positive">+13.3%</td>
+            <td>$741</td>
+            <td>38.0%</td>
+            <td>$336</td>
+            <td>17.2%</td>
+            <td>$178</td>
+            <td>9.1%</td>
+            <td class="positive">$0.46</td>
+            <td class="positive">$347</td>
+          </tr>
+          <tr style="background:rgba(42,58,92,0.15);">
+            <td>Q1 2024</td>
+            <td>$1,639</td>
+            <td class="positive">+8.6%</td>
+            <td>$566</td>
+            <td>34.6%</td>
+            <td>$203</td>
+            <td>12.4%</td>
+            <td>($6)</td>
+            <td class="negative">-0.4%</td>
+            <td class="negative">($0.02)</td>
+            <td class="positive">$102</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="col-note">浅色行 = 2024年数据（对比期）</p>
+
+    <hr class="divider">
+
+    <!-- Balance Sheet & Returns -->
+    <div class="section-title" style="font-size:16px;margin-bottom:16px;">资产负债表与回报率</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>FY2025</th>
+            <th>FY2024</th>
+            <th>FY2023</th>
+            <th>FY2022</th>
+            <th>FY2021</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>总资产</td><td>$12,212M</td><td>$9,133M</td><td>$7,999M</td><td>$7,096M</td><td>$6,940M</td></tr>
+          <tr><td>总负债</td><td>$8,271M</td><td>$6,698M</td><td>$5,984M</td><td>$5,654M</td><td>$5,522M</td></tr>
+          <tr><td>股东权益</td><td>$3,941M</td><td>$2,434M</td><td>$2,015M</td><td>$1,442M</td><td>$1,418M</td></tr>
+          <tr><td>现金及等价物</td><td>$1,728M</td><td>$1,228M</td><td>$780M</td><td>$261M</td><td>$439M</td></tr>
+          <tr><td>长期债务</td><td>$2,892M</td><td>$2,907M</td><td>$2,919M</td><td>$3,169M</td><td>$2,951M</td></tr>
+          <tr><td>净债务</td><td class="negative">$1,330M</td><td class="negative">$1,872M</td><td class="negative">$2,303M</td><td class="negative">$3,062M</td><td class="negative">$2,649M</td></tr>
+          <tr><td>每股账面价值</td><td>$10.09</td><td>$6.30</td><td>$5.22</td><td>$3.81</td><td>$3.94</td></tr>
+          <tr><td>ROE</td><td class="positive">41.8%</td><td class="positive">22.3%</td><td class="positive">26.6%</td><td class="neutral">5.4%</td><td class="positive">12.4%</td></tr>
+          <tr><td>ROIC</td><td class="positive">20.2%</td><td class="positive">15.3%</td><td class="positive">13.7%</td><td class="neutral">2.0%</td><td class="neutral">4.9%</td></tr>
+          <tr><td>负债/权益比</td><td class="positive">0.80x</td><td class="neutral">1.26x</td><td class="neutral">1.52x</td><td class="negative">2.29x</td><td class="negative">2.16x</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== GROWTH DRIVERS ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">增长驱动与关键追踪指标</div>
+    <div class="section-subtitle">AI数据中心超级周期量化数据与Vertiv核心受益逻辑</div>
+
+    <div class="driver-grid" style="margin-bottom:24px;">
+      <div class="driver-card">
+        <div class="driver-title">超大规模云厂商2026年CapEx合计</div>
+        <div class="driver-metric">$660-690B</div>
+        <div class="driver-desc">AWS ~$200B / Alphabet ~$180B / Meta ~$125B / Microsoft ~$120B / Oracle ~$50B；较2025年增约36%；其中~75%（$495B）用于AI基础设施</div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">全球数据中心冷却市场规模</div>
+        <div class="driver-metric">$40.7B (2030E)</div>
+        <div class="driver-desc">2024年$16.3B→2030年$40.7B，CAGR 16.5%；Vertiv精准冷却市占率约23%；直接液冷（DLC）占47%市场份额，增速最快</div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">数据中心基础设施整体市场</div>
+        <div class="driver-metric">$1.01T (2030E)</div>
+        <div class="driver-desc">2024年$290B→2030年$1.01T；AI驱动的CapEx推动IT和设施设备支出加速</div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">Vertiv订单积压</div>
+        <div class="driver-metric">$15.0B</div>
+        <div class="driver-desc">Q4'25同比+109%；Q4'25有机订单+252% YoY，环比+117%；Book-to-Bill比率约2.9x，收入能见度极高</div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">2026年有机营收指引</div>
+        <div class="driver-metric">$13.5B (+28%)</div>
+        <div class="driver-desc">Americas增速高30%+；APAC增速中20%+；EMEA持平至下降中个位数；调整后EPS $6.02（+43% YoY）</div>
+      </div>
+      <div class="driver-card">
+        <div class="driver-title">液冷技术优势</div>
+        <div class="driver-metric">1,500kW/单元</div>
+        <div class="driver-desc">Vertiv Liebert XDC单台液冷容量1,500kW；ZutaCore两相冷却技术合作；AI机架密度从10kW提升至数百kW，液冷需求急剧扩张</div>
+      </div>
+    </div>
+
+    <!-- KPI Tracker -->
+    <div class="chart-card">
+      <h4>关键追踪指标 (KPIs to Watch)</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div class="kpi-list">
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">Q4'25数据中心营收 QoQ增速</span>
+            <span class="kpi-list-val positive">+7.7%</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">有机订单增速 Q4'25 YoY</span>
+            <span class="kpi-list-val positive">+252%</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">Book-to-Bill 比率</span>
+            <span class="kpi-list-val positive">2.9x (目标: &gt;1.5x)</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">毛利率扩张趋势</span>
+            <span class="kpi-list-val positive">Q4'25 38.9% (+高)</span>
+          </div>
+        </div>
+        <div class="kpi-list">
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">调整后营业利润率</span>
+            <span class="kpi-list-val positive">Q3'25 22.3% (+220bps)</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">FCF转化率 (FY2025)</span>
+            <span class="kpi-list-val positive">$1.89B (+64% YoY)</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">净债务削减</span>
+            <span class="kpi-list-val positive">$1.33B (-$542M YoY)</span>
+          </div>
+          <div class="kpi-list-item">
+            <span class="kpi-list-label">EMEA增速（风险指标）</span>
+            <span class="kpi-list-val negative">2026E 持平至下降</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hyperscaler CapEx Chart -->
+    <div class="chart-card" style="margin-top:20px;">
+      <h4>超大规模云厂商资本支出趋势（十亿美元）</h4>
+      <div class="chart-wrap">
+        <canvas id="capexChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== COMPETITION ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">竞争格局深度分析</div>
+    <div class="section-subtitle">市场地位、竞争对手对比与护城河量化</div>
+
+    <div class="chart-grid" style="margin-bottom:24px;">
+      <div class="chart-card">
+        <h4>数据中心电源市场份额</h4>
+        <div class="chart-wrap-sm">
+          <canvas id="mktShareChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h4>数据中心冷却市场规模预测（十亿美元）</h4>
+        <div class="chart-wrap-sm">
+          <canvas id="coolingMktChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Competitor Table -->
+    <div class="table-wrap" style="margin-bottom:20px;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th class="highlight">Vertiv (VRT)</th>
+            <th>Schneider Electric</th>
+            <th>Eaton (ETN)</th>
+            <th>ABB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>总营收（最近年度）</td>
+            <td class="highlight">$10.2B (2025)</td>
+            <td>$34.2B (多元化)</td>
+            <td>$23.2B (多元化)</td>
+            <td>$32B+ (多元化)</td>
+          </tr>
+          <tr>
+            <td>数据中心收入占比</td>
+            <td class="highlight positive">80%</td>
+            <td class="neutral">约15%</td>
+            <td class="neutral">约20%</td>
+            <td class="neutral">约10%</td>
+          </tr>
+          <tr>
+            <td>精准冷却市场份额</td>
+            <td class="highlight positive">23%（全球）</td>
+            <td class="neutral">约20%（并列第一）</td>
+            <td class="neutral">约15%</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+          <tr>
+            <td>北美市场份额（合计）</td>
+            <td class="highlight">62%为前5厂商共享</td>
+            <td>62%为前5厂商共享</td>
+            <td>62%为前5厂商共享</td>
+            <td>62%为前5厂商共享</td>
+          </tr>
+          <tr>
+            <td>旗舰液冷产品容量</td>
+            <td class="highlight positive">1,500kW/单元</td>
+            <td class="positive">2.4MW/回路</td>
+            <td class="neutral">80kW/机架</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+          <tr>
+            <td>服务中心数量</td>
+            <td class="highlight positive">255个</td>
+            <td class="positive">200个+</td>
+            <td class="neutral">分散模式</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+          <tr>
+            <td>研发投入（年度）</td>
+            <td class="highlight">$255M (2.5%营收)</td>
+            <td class="positive">$800M</td>
+            <td class="positive">$600M</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+          <tr>
+            <td>液冷响应时间</td>
+            <td class="highlight positive">4小时保证</td>
+            <td>预测性维护</td>
+            <td class="positive">2小时紧急</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+          <tr>
+            <td>数据中心专注度</td>
+            <td class="highlight positive">纯播专家</td>
+            <td class="neutral">多元化综合体</td>
+            <td class="neutral">多元化综合体</td>
+            <td class="neutral">多元化综合体</td>
+          </tr>
+          <tr>
+            <td>液冷TCO优势</td>
+            <td class="highlight">$2,000-4,000/kW</td>
+            <td class="negative">贵10-15%</td>
+            <td class="positive">模块化低成本</td>
+            <td class="neutral">数据不可用</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4>Vertiv 核心竞争优势</h4>
+        <div class="analysis-item"><span class="analysis-key">数据中心纯播专注</span><span class="analysis-val kpi-up">80%+收入，深度专业化</span></div>
+        <div class="analysis-item"><span class="analysis-key">液冷技术领先</span><span class="analysis-val kpi-up">ZutaCore两相冷却专利</span></div>
+        <div class="analysis-item"><span class="analysis-key">全球服务网络</span><span class="analysis-val kpi-up">255中心，4h响应</span></div>
+        <div class="analysis-item"><span class="analysis-key">与超大规模客户深度绑定</span><span class="analysis-val kpi-up">整体解决方案交付</span></div>
+        <div class="analysis-item"><span class="analysis-key">产品组合广度</span><span class="analysis-val kpi-up">电源+冷却+管理一体化</span></div>
+      </div>
+      <div class="analysis-card">
+        <h4>主要竞争风险</h4>
+        <div class="analysis-item"><span class="analysis-key">Schneider规模优势</span><span class="analysis-val kpi-down">$800M研发 vs $255M</span></div>
+        <div class="analysis-item"><span class="analysis-key">Eaton液冷追赶</span><span class="analysis-val kpi-neutral">收购Boyd快速补齐</span></div>
+        <div class="analysis-item"><span class="analysis-key">客户自研风险</span><span class="analysis-val kpi-neutral">超大规模厂商定制</span></div>
+        <div class="analysis-item"><span class="analysis-key">EMEA市场压力</span><span class="analysis-val kpi-down">2026E增速持平/负</span></div>
+        <div class="analysis-item"><span class="analysis-key">亚洲竞争（华为/Delta）</span><span class="analysis-val kpi-neutral">本地化价格竞争</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== MOAT ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">巴菲特护城河评分卡</div>
+    <div class="section-subtitle">五维度护城河量化评估 — 综合评级：窄护城河（Narrow Moat）</div>
+
+    <div class="moat-grid" style="margin-bottom:24px;">
+      <div class="moat-card">
+        <div class="moat-title">品牌护城河</div>
+        <div class="moat-stars">★★★★<span class="empty">★</span></div>
+        <div class="moat-bar-bg"><div class="moat-bar" style="width:80%;background:var(--accent-blue);"></div></div>
+        <div class="moat-desc">在数据中心电源与冷却领域品牌认可度极高；与超大规模云厂商深度合作建立信任；4小时全球响应服务承诺强化品牌溢价</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">转换成本</div>
+        <div class="moat-stars">★★★★<span class="empty">★</span></div>
+        <div class="moat-bar-bg"><div class="moat-bar" style="width:80%;background:var(--accent-cyan);"></div></div>
+        <div class="moat-desc">数据中心基础设施深度集成，更换厂商需要重新工程化适配（成本高昂）；长期服务合同产生粘性；智能管理软件生态强化锁定</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">网络效应</div>
+        <div class="moat-stars">★★★<span class="empty">★★</span></div>
+        <div class="moat-bar-bg"><div class="moat-bar" style="width:60%;background:var(--accent-green);"></div></div>
+        <div class="moat-desc">255个全球服务网络本身具备一定网络效应；但非平台型网络效应，无法做到"更多用户→更好产品→更多用户"的正反馈循环</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">成本优势</div>
+        <div class="moat-stars">★★★<span class="empty">★★</span></div>
+        <div class="moat-bar-bg"><div class="moat-bar" style="width:60%;background:var(--accent-yellow);"></div></div>
+        <div class="moat-desc">规模效应推动成本摊薄；非Fab-less纯轻资产，工厂制造成本存在；液冷单位成本$2,000-4,000/kW仍有规模降本空间</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-title">无形资产</div>
+        <div class="moat-stars">★★★★<span class="empty">★</span></div>
+        <div class="moat-bar-bg"><div class="moat-bar" style="width:80%;background:var(--accent-purple);"></div></div>
+        <div class="moat-desc">强专利组合（液冷技术）；ZutaCore两相冷却独家合作；CoolIT直接液冷合作；50年以上技术积累；27,000名专业人才壁垒</div>
+      </div>
+    </div>
+
+    <div class="analysis-card" style="background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.3);">
+      <h4 style="color:#60a5fa;">综合护城河结论：窄护城河（Narrow Moat）</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:14px;">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">护城河宽度</div>
+          <div style="font-size:16px;font-weight:700;color:#fbbf24;">窄护城河</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">具备可持续竞争优势，但面临来自Schneider等大型多元化集团的侵蚀风险</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">ROE 5年均值</div>
+          <div style="font-size:16px;font-weight:700;color:#34d399;">21.7%</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">2025年达41.8%峰值，持续高ROE印证护城河质量</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">ROIC (FY2025)</div>
+          <div style="font-size:16px;font-weight:700;color:#34d399;">20.2%</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">远超WACC，说明投资资本产生正向超额回报</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== CYCLE & MACRO ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">霍华德·马克斯周期与宏观分析</div>
+    <div class="section-subtitle">行业周期定位、估值历史分位、市场情绪与尾部风险</div>
+
+    <!-- Cycle Indicator -->
+    <div class="chart-card" style="margin-bottom:20px;">
+      <h4>行业周期阶段定位</h4>
+      <div class="cycle-bar">
+        <div class="cycle-seg cycle-early">早期</div>
+        <div class="cycle-seg cycle-growth active">成长期</div>
+        <div class="cycle-seg cycle-peak active" style="opacity:0.75;">过热/峰值</div>
+        <div class="cycle-seg cycle-decline">衰退</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+        <div style="padding:14px;background:rgba(42,58,92,0.3);border-radius:8px;">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">周期信号1</div>
+          <div style="font-size:13px;color:var(--text-primary);">CapEx爆发：2026年超大规模云厂商合计$690B（+36% YoY），处历史最高位</div>
+        </div>
+        <div style="padding:14px;background:rgba(42,58,92,0.3);border-radius:8px;">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">周期信号2</div>
+          <div style="font-size:13px;color:var(--text-primary);">订单积压：$15B backlog同比+109%，Book-to-Bill 2.9x，处于历史最高</div>
+        </div>
+        <div style="padding:14px;background:rgba(42,58,92,0.3);border-radius:8px;">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">周期信号3</div>
+          <div style="font-size:13px;color:var(--text-primary);">股价：52周+173%（$53.6→$252），VRT估值倍数处历史高位</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:12px;color:var(--text-secondary);">
+        <strong style="color:#fbbf24;">马克斯结论：</strong>AI基础设施超级周期处于成长中后段，资本支出强度处于历史峰值区间。该阶段往往伴随最强财务数据，但也是市场情绪最为乐观、反转风险最大的时期。
+      </div>
+    </div>
+
+    <!-- Valuation Percentile -->
+    <div class="chart-card" style="margin-bottom:20px;">
+      <h4>估值历史分位</h4>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>估值指标</th>
+              <th>当前值</th>
+              <th>2023年值</th>
+              <th>2022年值</th>
+              <th>5年区间</th>
+              <th>历史分位估算</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>P/E (TTM)</td><td class="negative">74.0x</td><td class="neutral">40.4x</td><td class="positive">N/A(亏损)</td><td>40x–90x</td><td class="negative">偏高（约75%分位）</td></tr>
+            <tr><td>P/S</td><td class="negative">9.4x</td><td class="neutral">2.7x</td><td class="positive">0.9x</td><td>0.9x–9.4x</td><td class="negative">历史最高区间</td></tr>
+            <tr><td>P/B</td><td class="negative">24.5x</td><td class="neutral">9.1x</td><td class="positive">3.6x</td><td>3.6x–24.5x</td><td class="negative">历史最高区间</td></tr>
+            <tr><td>EV/EBITDA</td><td class="neutral">44.4x</td><td class="neutral">18.0x</td><td class="positive">15.6x</td><td>15.6x–44.4x</td><td class="negative">历史最高区间</td></tr>
+            <tr><td>前向P/E (FY2026E)</td><td class="neutral">41.1x</td><td>数据不可用</td><td>数据不可用</td><td>数据不可用</td><td class="neutral">中性（取决于增速）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sentiment -->
+    <div class="chart-card" style="margin-bottom:20px;">
+      <h4>市场情绪指标</h4>
+      <div class="sentiment-grid">
+        <div class="sentiment-card">
+          <div class="sentiment-label">分析师评级</div>
+          <div class="sentiment-value" style="color:var(--accent-green);">强买入</div>
+          <div class="sentiment-desc">18名分析师一致强买入</div>
+        </div>
+        <div class="sentiment-card">
+          <div class="sentiment-label">机构持股比例</div>
+          <div class="sentiment-value" style="color:var(--accent-blue);">80.1%</div>
+          <div class="sentiment-desc">机构高持仓</div>
+        </div>
+        <div class="sentiment-card">
+          <div class="sentiment-label">空头比例</div>
+          <div class="sentiment-value" style="color:var(--accent-yellow);">2.33%</div>
+          <div class="sentiment-desc">891万股空仓</div>
+        </div>
+        <div class="sentiment-card">
+          <div class="sentiment-label">内部人持股</div>
+          <div class="sentiment-value" style="color:var(--accent-orange);">2.6%</div>
+          <div class="sentiment-desc">近期有减持</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:rgba(42,58,92,0.3);border-radius:8px;font-size:12px;color:var(--text-secondary);">
+        内部人减持信号：CTO Stephen Liang于2025年11月出售5,501股（约$93.8万）；Director Jakki Haussler于2025年9月出售15,680股（约$194.2万）。目标价均值$223.63，低于当前价$252.40（-11.4%），表明分析师认为当前价格已充分反映短期增长。
+      </div>
+    </div>
+
+    <!-- Risk Matrix -->
+    <div class="section-title" style="font-size:16px;margin-bottom:16px;">五大尾部风险矩阵</div>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">1. 出口管制/地缘政治风险</div>
+          <span class="risk-badge risk-high">高风险</span>
+        </div>
+        <div class="risk-desc">美国对华AI芯片出口管制升级，可能导致中国数据中心投资放缓，影响APAC（22%营收）增长。若中国市场大幅萎缩，APAC增速可能从+20%降至个位数。</div>
+        <div class="risk-metrics">
+          <div class="risk-metric"><div class="risk-metric-label">概率</div><div class="risk-metric-val">中等 30%</div></div>
+          <div class="risk-metric"><div class="risk-metric-label">影响</div><div class="risk-metric-val">营收-10-15%</div></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">2. 超大规模云厂商CapEx收缩</div>
+          <span class="risk-badge risk-high">高风险</span>
+        </div>
+        <div class="risk-desc">若AI ROI不及预期，超大规模云厂商可能削减资本支出，将直接冲击Vertiv 40-50%收入来源。CapEx周期反转时订单可能迅速冻结，股价将面临估值重估。</div>
+        <div class="risk-metrics">
+          <div class="risk-metric"><div class="risk-metric-label">概率</div><div class="risk-metric-val">低中 20%</div></div>
+          <div class="risk-metric"><div class="risk-metric-val">营收-20-30%</div></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">3. 竞争加剧/市场份额丢失</div>
+          <span class="risk-badge risk-medium">中风险</span>
+        </div>
+        <div class="risk-desc">Schneider Electric技术追赶、Eaton收购Boyd补齐液冷、亚洲厂商（华为/Delta）本地化价格竞争，可能导致毛利率承压（每下降100bps影响净利约$100M）。</div>
+        <div class="risk-metrics">
+          <div class="risk-metric"><div class="risk-metric-label">概率</div><div class="risk-metric-val">中等 35%</div></div>
+          <div class="risk-metric"><div class="risk-metric-val">毛利率-100-200bps</div></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">4. 客户集中度风险</div>
+          <span class="risk-badge risk-medium">中风险</span>
+        </div>
+        <div class="risk-desc">前5大超大规模云厂商预计占营收40-50%。若任一主要客户削减采购或转向自研定制解决方案，将对季度业绩产生重大冲击，并引发估值重新定价。</div>
+        <div class="risk-metrics">
+          <div class="risk-metric"><div class="risk-metric-label">概率</div><div class="risk-metric-val">低 15%</div></div>
+          <div class="risk-metric"><div class="risk-metric-val">营收-15-25%</div></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">5. 估值重置风险</div>
+          <span class="risk-badge risk-high">高风险</span>
+        </div>
+        <div class="risk-desc">当前P/S处历史最高区间（9.4x），P/B 24.5x。若增速放缓或利率上升，估值倍数收缩风险极高。P/S从9.4x→5x意味着股价腰斩（即使不发生业绩下滑）。</div>
+        <div class="risk-metrics">
+          <div class="risk-metric"><div class="risk-metric-label">概率</div><div class="risk-metric-val">中高 40%</div></div>
+          <div class="risk-metric"><div class="risk-metric-val">股价-30-50%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== VALUATION ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">三大框架综合估值</div>
+    <div class="section-subtitle">格雷厄姆·巴菲特·马克斯三维度价值评估体系</div>
+
+    <!-- Graham -->
+    <div class="chart-card" style="margin-bottom:20px;">
+      <h4>格雷厄姆框架 — 安全边际估值</h4>
+      <div class="analysis-grid" style="margin-bottom:20px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;">GRAHAM NUMBER 计算</div>
+          <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:16px;">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">公式：√(22.5 × EPS_GAAP × BVPS)</div>
+            <div style="font-size:12px;color:var(--text-secondary);">= √(22.5 × $3.41 × $10.09)</div>
+            <div style="font-size:24px;font-weight:700;color:#f87171;margin:8px 0;">$27.82</div>
+            <div style="font-size:13px;color:var(--text-muted);">当前股价 $252.40 较Graham Number<br><strong style="color:#f87171;">溢价 +807%</strong></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;">安全检验清单</div>
+          <ul class="checklist">
+            <li>
+              <span class="check-icon check-fail">✕</span>
+              <span class="check-text">P/E ≤ 15x</span>
+              <span class="check-value">实际: 74.0x</span>
+            </li>
+            <li>
+              <span class="check-icon check-fail">✕</span>
+              <span class="check-text">P/B ≤ 1.5x</span>
+              <span class="check-value">实际: 24.5x</span>
+            </li>
+            <li>
+              <span class="check-icon check-fail">✕</span>
+              <span class="check-text">P/E × P/B ≤ 22.5</span>
+              <span class="check-value">实际: 1,814</span>
+            </li>
+            <li>
+              <span class="check-icon check-fail">✕</span>
+              <span class="check-text">流动比率 ≥ 2x</span>
+              <span class="check-value">实际: 1.55x</span>
+            </li>
+            <li>
+              <span class="check-icon check-pass">✓</span>
+              <span class="check-text">负债/权益 ≤ 1x</span>
+              <span class="check-value">实际: 0.80x</span>
+            </li>
+            <li>
+              <span class="check-icon check-fail">✕</span>
+              <span class="check-text">资产/负债 ≥ 2x</span>
+              <span class="check-value">实际: 1.48x</span>
+            </li>
+          </ul>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">通过 1/6 项（仅负债/权益比通过）</div>
+        </div>
+      </div>
+
+      <!-- DCF Scenarios -->
+      <div style="font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px;">DCF三情景估值（折现率10%，基准FCF $1,894M，10年期）</div>
+      <div class="valuation-row">
+        <div class="val-scenario">
+          <div class="val-scenario-header">
+            <span class="val-scenario-name" style="color:#34d399;">保守情景（30%权重）</span>
+            <span class="val-scenario-price" style="color:#34d399;">$136.98</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">前5年增速15% | 后5年8% | 终值3% | 较现价低46%</div>
+          <div class="val-bar-bg">
+            <div class="val-bar" style="width:33%;background:var(--accent-green);"></div>
+            <div class="val-bar-marker" style="left:60%;"></div>
+          </div>
+          <div class="val-details">$136.98 → 当前价 $252.40</div>
+        </div>
+        <div class="val-scenario">
+          <div class="val-scenario-header">
+            <span class="val-scenario-name" style="color:#fbbf24;">中性情景（45%权重）</span>
+            <span class="val-scenario-price" style="color:#fbbf24;">$233.76</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">前5年增速25% | 后5年12% | 终值3% | 较现价低7%</div>
+          <div class="val-bar-bg">
+            <div class="val-bar" style="width:56%;background:var(--accent-yellow);"></div>
+            <div class="val-bar-marker" style="left:60%;"></div>
+          </div>
+          <div class="val-details">$233.76 → 当前价 $252.40</div>
+        </div>
+        <div class="val-scenario">
+          <div class="val-scenario-header">
+            <span class="val-scenario-name" style="color:#60a5fa;">乐观情景（25%权重）</span>
+            <span class="val-scenario-price" style="color:#60a5fa;">$421.05</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">前5年增速35% | 后5年15% | 终值4% | 较现价高67%</div>
+          <div class="val-bar-bg">
+            <div class="val-bar" style="width:100%;background:var(--accent-blue);"></div>
+            <div class="val-bar-marker" style="left:60%;"></div>
+          </div>
+          <div class="val-details">$421.05 → 当前价 $252.40</div>
+        </div>
+        <div class="val-scenario" style="background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.3);">
+          <div class="val-scenario-header">
+            <span class="val-scenario-name" style="color:#e8eaf6;font-size:14px;">加权综合内在价值</span>
+            <span class="val-scenario-price" style="color:#60a5fa;font-size:22px;">$251.55</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);">权重：30%保守 + 45%中性 + 25%乐观 | 当前股价 $252.40 ≈ 综合价值，几乎没有安全边际</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buffett -->
+    <div class="chart-card" style="margin-bottom:20px;">
+      <h4>巴菲特框架 — 护城河与内在价值</h4>
+      <div class="analysis-grid">
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">护城河评级与ROE分析</div>
+          <div class="analysis-item"><span class="analysis-key">综合护城河评级</span><span class="analysis-val" style="color:#fbbf24;">窄护城河</span></div>
+          <div class="analysis-item"><span class="analysis-key">ROE 5年均值 (2021-2025)</span><span class="analysis-val kpi-up">21.7%</span></div>
+          <div class="analysis-item"><span class="analysis-key">ROE FY2025</span><span class="analysis-val kpi-up">41.8%（上升趋势）</span></div>
+          <div class="analysis-item"><span class="analysis-key">ROIC FY2025</span><span class="analysis-val kpi-up">20.2%（远超WACC）</span></div>
+          <div class="analysis-item"><span class="analysis-key">合理P/E区间</span><span class="analysis-val">35-45x（基于增速+护城河）</span></div>
+          <div class="analysis-item"><span class="analysis-key">内在价值估算</span><span class="analysis-val" style="color:#60a5fa;">约$257（DCF中性+溢价）</span></div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">理想买入价格分析</div>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:16px;">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">内在价值: ~$257 × (1 - 20%安全边际)</div>
+            <div style="font-size:26px;font-weight:700;color:#34d399;margin-bottom:4px;">$180 – $210</div>
+            <div style="font-size:11px;color:var(--text-muted);">该区间对应前向PE约30-35x（FY2026E EPS $6.02），提供20%安全边际</div>
+          </div>
+          <div style="margin-top:12px;padding:12px;background:rgba(245,158,11,0.08);border-radius:8px;font-size:12px;color:var(--text-secondary);">
+            <strong style="color:#fbbf24;">巴菲特结论：持有</strong> — 优质资产，增长势头极强，护城河窄但在加固中。当前价格几乎等于中性DCF价值，没有安全边际。等待$180-$210区间再建仓。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marks -->
+    <div class="chart-card" style="margin-bottom:24px;">
+      <h4>霍华德·马克斯框架 — 周期与风险分析</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">周期阶段评估</div>
+          <div class="analysis-item"><span class="analysis-key">行业周期阶段</span><span class="analysis-val" style="color:#fbbf24;">成长中后段</span></div>
+          <div class="analysis-item"><span class="analysis-key">CapEx周期</span><span class="analysis-val kpi-down">处历史最高位（警告信号）</span></div>
+          <div class="analysis-item"><span class="analysis-key">P/S历史分位</span><span class="analysis-val kpi-down">历史最高区间</span></div>
+          <div class="analysis-item"><span class="analysis-key">分析师情绪</span><span class="analysis-val kpi-neutral">极度乐观（18/18强买入）</span></div>
+          <div class="analysis-item"><span class="analysis-key">空头比例</span><span class="analysis-val kpi-up">2.33%（市场无恐慌）</span></div>
+          <div class="analysis-item"><span class="analysis-key">内部人操作</span><span class="analysis-val kpi-down">高管减持（负面信号）</span></div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">情景分析</div>
+          <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px;margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:700;color:#f87171;margin-bottom:6px;">悲观情景（概率30%）</div>
+            <div style="font-size:11px;color:var(--text-muted);">CapEx周期放缓，增速降至15%，PE压缩至30x → 目标价 $120-150，较现价-40-52%</div>
+          </div>
+          <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:14px;margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:700;color:#fbbf24;margin-bottom:6px;">基准情景（概率50%）</div>
+            <div style="font-size:11px;color:var(--text-muted);">2026年实现$13.5B指引，PE维持40x → 目标价 $240-280，与现价基本持平</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:14px;">
+            <div style="font-size:12px;font-weight:700;color:#34d399;margin-bottom:6px;">乐观情景（概率20%）</div>
+            <div style="font-size:11px;color:var(--text-muted);">AI超级周期加速，2027-2028年持续爆发增长 → 目标价 $380-420，较现价+50-67%</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:12px;color:var(--text-secondary);">
+        <strong style="color:#fbbf24;">马克斯结论：谨慎持有</strong> — 基本面极强，但估值已充分甚至部分透支未来预期。周期位置处于中后段，做坏消息的预期管理：若订单增速放缓或云厂商CapEx预期下调，股价将有30-50%回调风险。理性投资者应在$180-210区间分批建仓，而非追高。
+      </div>
+    </div>
+
+    <!-- Three Framework Summary -->
+    <div class="verdict-grid">
+      <div class="verdict-card verdict-red">
+        <div class="verdict-framework">格雷厄姆框架</div>
+        <div class="verdict-rating">卖出/减持</div>
+        <div class="verdict-detail" style="color:#fca5a5;">Graham Number $27.82，股价溢价807%；安全检验6项仅通过1项；低于安全边际标准；适合纯价值投资者回避</div>
+      </div>
+      <div class="verdict-card verdict-yellow">
+        <div class="verdict-framework">巴菲特框架</div>
+        <div class="verdict-rating">持有 · 等待</div>
+        <div class="verdict-detail" style="color:#fde68a;">窄护城河，ROE 41.8%，ROIC 20.2%，增长势头极强；当前价格≈DCF中性价值，无安全边际；理想买入区间$180-210（含20%安全边际）</div>
+      </div>
+      <div class="verdict-card verdict-yellow">
+        <div class="verdict-framework">霍华德·马克斯框架</div>
+        <div class="verdict-rating">谨慎持有</div>
+        <div class="verdict-detail" style="color:#fde68a;">成长中后段，估值历史高位；CapEx周期处峰值，分析师极度乐观；内部高管减持；建议$180-210区间分批建仓，避免追高</div>
+      </div>
+    </div>
+
+    <!-- Buy Range Highlight -->
+    <div class="buy-range-card" style="margin-top:20px;">
+      <div class="buy-range-label">三框架综合建议买入区间（含20%安全边际）</div>
+      <div class="buy-range-value">$180 – $210</div>
+      <div class="buy-range-note">当前价格 $252.40 / 目标价区间对应前向PE 30-35x（FY2026E EPS $6.02）/ 较当前价低17-29%<br>建议在市场回调时分批建仓，切勿追高；若2026年业绩持续超预期，可上调至$210-230区间</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================== SOURCES ======================== -->
+<section>
+  <div class="container">
+    <div class="section-title">数据来源</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <ul class="sources-list">
+        <li><a href="https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Fourth-Quarter-with-Organic-Orders-Growth-of-252-and-Diluted-EPS-Growth-of-200-Adjusted-Diluted-EPS-37/default.aspx">Vertiv Q4 2025 官方新闻稿 — investors.vertiv.com</a></li>
+        <li><a href="https://investors.vertiv.com/news/news-details/2025/Vertiv-Reports-Strong-Third-Quarter-Results-including-Organic-Orders-60-Diluted-EPS-122-Adjusted-EPS-63-Raises-2025-Guidance/default.aspx">Vertiv Q3 2025 新闻稿 — investors.vertiv.com</a></li>
+        <li><a href="https://investors.vertiv.com/news/news-details/2025/Vertiv-Reports-Strong-Fourth-Quarter-2024-Results/default.aspx">Vertiv Q4 2024 新闻稿 — investors.vertiv.com</a></li>
+        <li><a href="https://stockanalysis.com/stocks/vrt/financials/">VRT 财务报表 — StockAnalysis.com</a></li>
+        <li><a href="https://stockanalysis.com/stocks/vrt/financials/balance-sheet/">VRT 资产负债表 — StockAnalysis.com</a></li>
+        <li><a href="https://stockanalysis.com/stocks/vrt/statistics/">VRT 估值统计 — StockAnalysis.com</a></li>
+        <li><a href="https://stockanalysis.com/stocks/vrt/financials/ratios/">VRT 财务比率 — StockAnalysis.com</a></li>
+      </ul>
+      <ul class="sources-list">
+        <li><a href="https://introl.com/blog/vertiv-schneider-eaton-cooling-solutions-comparison-ai-data-centers">Vertiv vs Schneider vs Eaton 竞争对比 — Introl.com</a></li>
+        <li><a href="https://www.gurufocus.com/term/roic/VRT">VRT ROIC数据 — GuruFocus.com</a></li>
+        <li><a href="https://techblog.comsoc.org/2025/12/22/hyperscaler-capex-600-bn-in-2026-a-36-increase-over-2025-while-global-spending-on-cloud-infrastructure-services-skyrockets/">超大规模云厂商CapEx预测 — IEEE ComSoc</a></li>
+        <li><a href="https://www.marketsandmarkets.com/ResearchInsight/data-center-power-market.asp">数据中心电源市场 — MarketsandMarkets</a></li>
+        <li><a href="https://simplywall.st/stocks/us/capital-goods/nyse-vrt/vertiv-holdings-co/news/vertiv-holdings-co-vrt-is-up-175-after-ai-backlog-drives-str">VRT 2025年业绩与2026年展望 — SimplyWallSt</a></li>
+        <li><a href="https://ts2.tech/en/vertiv-holdings-vrt-stock-on-november-29-2025-institutional-moves-insider-selling-and-ai-data-center-tailwinds/">VRT机构持仓与内部人交易 — ts2.tech</a></li>
+        <li><a href="https://www.datacenterdynamics.com/en/news/vertiv-revenue-jumps-29-percent-on-booming-data-center-demand/">Vertiv营收增长报道 — DataCenterDynamics</a></li>
+      </ul>
+    </div>
+    <div style="margin-top:16px;padding:12px 16px;background:rgba(42,58,92,0.3);border-radius:8px;font-size:11px;color:var(--text-muted);">
+      分析时间戳：2026-03-27 &nbsp;·&nbsp; 数据截止：2026-03-26 &nbsp;·&nbsp; 所有数据来自实时WebSearch/WebFetch &nbsp;·&nbsp; 本报告仅供参考，不构成投资建议
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="container">
+    <p>VRT Vertiv Holdings Co. 价值投资深度分析报告 &nbsp;·&nbsp; 生成日期 2026-03-27 &nbsp;·&nbsp; 仅供研究参考</p>
+  </div>
+</div>
+
+<script>
+// Chart defaults
+Chart.defaults.color = '#8899bb';
+Chart.defaults.borderColor = 'rgba(42,58,92,0.5)';
+Chart.defaults.font.family = "'Segoe UI', sans-serif";
+
+// ── Market Segment Pie ──
+new Chart(document.getElementById('marketSegChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['数据中心', '通信网络', '工商业'],
+    datasets: [{
+      data: [80, 10, 10],
+      backgroundColor: ['#3b82f6', '#06b6d4', '#8b5cf6'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    cutout: '65%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── Geo Segment Pie ──
+new Chart(document.getElementById('geoSegChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Americas', 'APAC', 'EMEA'],
+    datasets: [{
+      data: [56, 22, 22],
+      backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    cutout: '65%',
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── Quarterly Revenue Chart ──
+const revenueCtx = document.getElementById('revenueChart');
+new Chart(revenueCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q1\'24', 'Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25'],
+    datasets: [
+      {
+        label: '季度营收 ($M)',
+        data: [1639, 1953, 2074, 2346, 2036, 2638, 2676, 2880],
+        backgroundColor: ['rgba(59,130,246,0.4)','rgba(59,130,246,0.4)','rgba(59,130,246,0.4)','rgba(59,130,246,0.4)',
+                          'rgba(6,182,212,0.7)','rgba(6,182,212,0.7)','rgba(6,182,212,0.7)','rgba(6,182,212,0.7)'],
+        borderColor: ['#3b82f6','#3b82f6','#3b82f6','#3b82f6','#06b6d4','#06b6d4','#06b6d4','#06b6d4'],
+        borderWidth: 1,
+        yAxisID: 'y',
+      },
+      {
+        label: 'YoY增速 (%)',
+        data: [8.6, 13.3, 19.3, 25.8, 24.2, 35.1, 29.1, 22.7],
+        type: 'line',
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#f59e0b',
+        yAxisID: 'y1',
+        tension: 0.3,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      y: { position: 'left', grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => '$'+v.toLocaleString() } },
+      y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v+'%' }, min: 0, max: 45 }
+    },
+    plugins: { legend: { labels: { padding: 16, boxWidth: 12 } } }
+  }
+});
+
+// ── Margin Chart ──
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q1\'24', 'Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25'],
+    datasets: [
+      {
+        label: '毛利率 %',
+        data: [34.6, 38.0, 36.5, 37.1, 33.7, 34.0, 37.8, 38.9],
+        borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)',
+        borderWidth: 2, pointRadius: 4, tension: 0.3, fill: false,
+      },
+      {
+        label: '营业利润率 %',
+        data: [12.4, 17.2, 17.9, 19.5, 14.3, 16.8, 19.3, 20.1],
+        borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)',
+        borderWidth: 2, pointRadius: 4, tension: 0.3, fill: false,
+      },
+      {
+        label: '净利率 %',
+        data: [-0.4, 9.1, 8.5, 6.3, 8.1, 12.3, 14.9, 15.5],
+        borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)',
+        borderWidth: 2, pointRadius: 4, tension: 0.3, fill: false,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => v+'%' } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { labels: { padding: 16, boxWidth: 12 } } }
+  }
+});
+
+// ── FCF Chart ──
+new Chart(document.getElementById('fcfChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'],
+    datasets: [{
+      label: '自由现金流 ($M)',
+      data: [137.5, -252.8, 772.6, 1152, 1894],
+      backgroundColor: [
+        'rgba(59,130,246,0.6)', 'rgba(239,68,68,0.6)',
+        'rgba(59,130,246,0.6)', 'rgba(6,182,212,0.7)', 'rgba(6,182,212,1)'
+      ],
+      borderWidth: 0,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => '$'+v.toLocaleString()+'M' } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── Annual Revenue & Net Income ──
+new Chart(document.getElementById('annualChart'), {
+  type: 'bar',
+  data: {
+    labels: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'],
+    datasets: [
+      {
+        label: '营收 ($M)',
+        data: [4998, 5692, 6863, 8012, 10230],
+        backgroundColor: 'rgba(59,130,246,0.6)',
+        borderWidth: 0, borderRadius: 4, yAxisID: 'y',
+      },
+      {
+        label: '净利润 ($M)',
+        data: [119.6, 76.6, 460.2, 495.8, 1333],
+        backgroundColor: 'rgba(16,185,129,0.7)',
+        borderWidth: 0, borderRadius: 4, yAxisID: 'y',
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => '$'+v.toLocaleString()+'M' } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { labels: { padding: 16, boxWidth: 12 } } }
+  }
+});
+
+// ── Hyperscaler CapEx ──
+new Chart(document.getElementById('capexChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023', '2024', '2025E', '2026E'],
+    datasets: [
+      { label: 'Amazon AWS', data: [55, 75, 100, 200], backgroundColor: '#f97316', borderWidth: 0, borderRadius: 4 },
+      { label: 'Alphabet', data: [32, 52, 75, 180], backgroundColor: '#3b82f6', borderWidth: 0, borderRadius: 4 },
+      { label: 'Microsoft', data: [28, 44, 70, 120], backgroundColor: '#06b6d4', borderWidth: 0, borderRadius: 4 },
+      { label: 'Meta', data: [27, 38, 60, 125], backgroundColor: '#8b5cf6', borderWidth: 0, borderRadius: 4 },
+      { label: 'Oracle', data: [8, 12, 20, 50], backgroundColor: '#10b981', borderWidth: 0, borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => '$'+v+'B' } }
+    },
+    plugins: { legend: { labels: { padding: 12, boxWidth: 10 } } }
+  }
+});
+
+// ── Market Share ──
+new Chart(document.getElementById('mktShareChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Schneider Electric', 'Vertiv', 'Eaton', 'ABB', '其他'],
+    datasets: [{
+      data: [24, 23, 10, 6, 37],
+      backgroundColor: ['#3b82f6', '#06b6d4', '#f59e0b', '#8b5cf6', '#556688'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '55%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 10, boxWidth: 10, font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Cooling Market Growth ──
+new Chart(document.getElementById('coolingMktChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2024', '2026E', '2028E', '2030E'],
+    datasets: [{
+      label: '数据中心冷却市场 ($B)',
+      data: [16.3, 22, 30, 40.7],
+      backgroundColor: ['rgba(6,182,212,0.5)','rgba(6,182,212,0.6)','rgba(6,182,212,0.8)','rgba(6,182,212,1)'],
+      borderWidth: 0, borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { grid: { color: 'rgba(42,58,92,0.4)' }, ticks: { callback: v => '$'+v+'B' } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+</script>
+</body>
+</html>
