@@ -292,8 +292,8 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 
   <!-- 中国供应链 -->
   <div class="cn-section" id="cn-section">
-    <div class="cn-title">🇨🇳 中国供应链竞争格局 — 哪些环节已构成实质威胁</div>
-    <div class="cn-subtitle">中国企业在T4光模块已达到全球顶级水准，T1光纤位居全球前三；但T3硅光芯片/DSP受出口管制和技术差距双重制约，短期内难以突破。</div>
+    <div class="cn-title">🇨🇳 中国供应链 — 各环节威胁等级与竞争详情</div>
+    <div class="cn-subtitle">↑ 上方产业链图中每个 Tier 已标注中国参与方位置。下方为详细竞争分析：T4光模块威胁最高（中际旭创已全球TOP2）；T3硅光/DSP受出口管制制约，是美股标的护城河最稳固环节。</div>
     <div class="cn-threat-bar" id="cn-threat-bar"></div>
     <div class="cn-grid" id="cn-grid"></div>
   </div>
@@ -819,6 +819,31 @@ function renderLegend() {
   });
 }
 
+/* ── 各 Tier 对应中国企业 ── */
+const CN_BY_TIER = {
+  T1: [
+    { ticker:'601869.SH', name:'长飞光纤 YOFC', desc:'中国最大光纤制造商，全球前三，国内AI DC建设核心受益', threat:'高', tc:'#f87171' }
+  ],
+  T2: [
+    { ticker:'688498.SH', name:'源杰科技', desc:'国内少数可量产EML/DFB芯片，800G器件攻坚中，国产替代先锋', threat:'中↑', tc:'#fbbf24' },
+    { ticker:'000988.SZ', name:'华工正源（华工科技）', desc:'DFB激光芯片+通信光器件，国内光芯片前三', threat:'中', tc:'#fbbf24' },
+    { ticker:'002281.SZ', name:'光迅科技 Accelink', desc:'DFB/PIN光芯片完整产线，中国电信级光器件龙头', threat:'中', tc:'#fbbf24' }
+  ],
+  T3: [
+    { ticker:'⚠ 空白', name:'硅光/DSP尚无规模标的', desc:'受出口管制（EDA工具+先进制程）+技术代差双重制约，华为内部有布局但不对外；是美股T3护城河最稳固的原因', threat:'低', tc:'#34d399' }
+  ],
+  T4: [
+    { ticker:'300308.SZ', name:'中际旭创 Innolight', desc:'全球光模块出货量TOP2，Meta/微软主供，400G/800G领先量产', threat:'极高', tc:'#f43f5e' },
+    { ticker:'300502.SZ', name:'新易盛 Eoptolink', desc:'400G/800G全系列，全球前五，亚马逊主要供应商', threat:'高', tc:'#f87171' },
+    { ticker:'300394.SZ', name:'天孚通信', desc:'光纤阵列FAU+精密陶瓷组件，CPO时代关键零部件', threat:'中高', tc:'#fb923c' },
+    { ticker:'002281.SZ', name:'光迅科技（模块线）', desc:'100G/400G光模块，中国电信级模块综合龙头', threat:'中', tc:'#fbbf24' }
+  ],
+  T5: [
+    { ticker:'600498.SH', name:'烽火通信', desc:'中国电信WDM/OTN主力，国内运营商市场前三', threat:'中（境内）', tc:'#fbbf24' },
+    { ticker:'000063.SZ', name:'中兴通讯 ZTE', desc:'5G+光网络综合厂商，运营商光传输全球前四', threat:'高（境内）', tc:'#f87171' }
+  ]
+};
+
 function renderChain() {
   const wrap = document.getElementById('chain-wrap');
   if (!wrap) return;
@@ -845,6 +870,30 @@ function renderChain() {
           ${cosHtml}
         </div>`;
     });
+
+    // 注入中国企业
+    const cnCos = CN_BY_TIER[t.id];
+    if (cnCos && cnCos.length) {
+      const cnCardsHtml = cnCos.map(c => `
+        <div class="cc" style="border-left-color:#dc2626;background:rgba(220,38,38,.04);border-color:rgba(220,38,38,.15);">
+          <div class="cc-top"><div class="cc-info">
+            <div style="display:flex;align-items:center;gap:5px;line-height:1;">
+              <span class="cc-ticker" style="color:#fca5a5;font-size:12px;">${c.ticker}</span>
+              <span style="font-size:7.5px;font-weight:700;padding:1px 4px;border-radius:2px;
+                background:${c.tc}20;color:${c.tc};border:1px solid ${c.tc}50;white-space:nowrap;">${c.threat}</span>
+            </div>
+            <div class="cc-name">${c.name}</div>
+            <div class="cc-desc">${c.desc}</div>
+          </div></div>
+        </div>`).join('');
+      subsHtml += `
+        <div style="margin-top:10px;">
+          <div style="font-size:10px;font-weight:600;padding:4px 8px;border-radius:4px;margin-bottom:5px;
+            background:rgba(220,38,38,.1);color:#fca5a5;border:1px solid rgba(220,38,38,.25);
+            letter-spacing:.3px;">🇨🇳 中国参与方</div>
+          ${cnCardsHtml}
+        </div>`;
+    }
 
     wrap.innerHTML += `
       <div class="tb ${t.width||''}" id="${t.id}">
