@@ -237,6 +237,31 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .ibox{border-radius:8px;padding:11px 13px;border:1px solid;}
 .ibox-title{font-size:10px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .ibox-body{font-size:9.5px;color:var(--text3);line-height:1.6;}
+
+/* ── 信号链路流程图 ── */
+.sfdiag-wrap{background:rgba(13,21,38,.7);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:18px 20px;margin-bottom:20px;}
+.sfdiag-head{font-size:13px;font-weight:700;color:#7dd3fc;letter-spacing:2px;margin-bottom:4px;display:flex;align-items:center;gap:7px;}
+.sfdiag-sub{font-size:10px;color:var(--text3);margin-bottom:14px;line-height:1.5;}
+.sfdiag-scen{margin-bottom:12px;}
+.sfdiag-scen-title{font-size:10px;font-weight:700;color:var(--text2);margin-bottom:7px;padding:4px 10px;border-left:3px solid;border-radius:0 4px 4px 0;background:rgba(255,255,255,.03);display:inline-block;}
+.sfdiag-flow{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;gap:0;padding:8px 6px;background:rgba(0,0,0,.25);border-radius:8px;border:1px solid rgba(255,255,255,.06);scrollbar-width:thin;}
+.sfb{flex-shrink:0;text-align:center;padding:6px 9px;border-radius:6px;min-width:72px;border:1px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.sfb-tier{font-size:7.5px;font-weight:800;padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:3px;}
+.sfb-name{font-size:8.5px;font-weight:600;line-height:1.3;color:var(--text);}
+.sfb-sub{font-size:7.5px;color:var(--text3);line-height:1.25;margin-top:2px;}
+.sfarr{flex-shrink:0;color:#4b5563;font-size:15px;padding:0 3px;align-self:center;}
+.sfdiag-tier-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:14px;}
+.sfdiag-tc{border-radius:8px;padding:11px 13px;border:1px solid rgba(255,255,255,.07);border-top-width:3px;background:rgba(255,255,255,.02);}
+.sfdiag-tc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sfdiag-tc-badge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:4px;}
+.sfdiag-tc-name{font-size:11px;font-weight:700;}
+.sfdiag-io-row{display:flex;align-items:flex-start;gap:4px;margin-bottom:8px;}
+.sfio-box{flex:1;font-size:8.5px;padding:5px 7px;border-radius:5px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);}
+.sfio-lbl{font-weight:700;color:var(--text3);letter-spacing:.3px;font-size:7.5px;text-transform:uppercase;margin-bottom:2px;}
+.sfio-val{color:var(--text2);line-height:1.4;}
+.sfio-arr{flex-shrink:0;align-self:center;color:#374151;font-size:13px;padding-bottom:2px;}
+.sfdiag-tc-why{font-size:8.5px;color:var(--text3);line-height:1.55;padding-top:7px;border-top:1px solid rgba(255,255,255,.06);}
+.sfdiag-tc-why b{color:var(--text2);}
 </style>
 </head>
 <body>
@@ -244,7 +269,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 
 <div class="hdr">
   <h1>光 互 连 产 业 链 全 景 图</h1>
-  <div class="meta">覆盖 <em>27</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 → 以太网交换 &nbsp;·&nbsp; 2026-03 v4 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
+  <div class="meta">覆盖 <em>28</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 → 以太网交换 &nbsp;·&nbsp; 2026-03 v5 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
 </div>
 
 <div class="notice">
@@ -378,6 +403,311 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
       <div class="ibox-title" style="color:#fb923c;">⚛️ 关键洞察二：CPO 的本质是 T3 正在"吃掉"T4 的价值</div>
       <div class="ibox-body">传统架构：ASIC → PCB 走线(10cm 损耗) → <b style="color:#fcd34d;">T4 插拔模块外壳</b> → 光纤。CPO 架构：ASIC 与<b style="color:#7dd3fc;">T3 硅光 PIC 光引擎</b>直接共封装(1-3mm)，省去 T4 的机械外壳和 PCB 损耗，功耗降 75%。价值迁移结果：T4 中光引擎部分的价值从 $15 → $80+ 直接归属 T3；传统纯组装 T4 厂商价值收缩。<b style="color:#fb923c;">FN（Fabrinet）专注代工制造，不承担技术路线风险，因此反而在 CPO 时代持续受益。</b></div>
     </div>
+  </div>
+</div>
+
+<!-- ── 信号链路流程图 ── -->
+<div class="sfdiag-wrap">
+  <div class="sfdiag-head">📡 信号链路流程图 — 每个环节在干什么</div>
+  <div class="sfdiag-sub">光互连的本质是"两次变身"：电信号 → 光信号（发端 T2/T3）→ 光纤传输 → 光信号 → 电信号（收端 T2/T3）。以下两个场景展示完整链路，每个方块对应产业链中一个真实的投资标的。</div>
+
+  <!-- 场景一 -->
+  <div class="sfdiag-scen">
+    <div class="sfdiag-scen-title" style="border-left-color:#7dd3fc;">📦 场景一：AI 训练集群内部互连 — GPU A → 交换机 → GPU B（距离 &lt;100m）</div>
+    <div class="sfdiag-flow">
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">DC</span>
+        <div class="sfb-name">GPU A</div>
+        <div class="sfb-sub">ASIC 产生<br>高速电信号</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(3,105,161,.4);background:rgba(3,105,161,.1);">
+        <span class="sfb-tier" style="background:rgba(3,105,161,.25);color:#7dd3fc;">T3B</span>
+        <div class="sfb-name">DSP 编码</div>
+        <div class="sfb-sub">PAM4 调制<br>FEC 纠错码</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.1);">
+        <span class="sfb-tier" style="background:rgba(37,99,235,.25);color:#93c5fd;">T2</span>
+        <div class="sfb-name">激光器</div>
+        <div class="sfb-sub">电流 → 光子<br>1310nm DFB</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(3,105,161,.3);background:rgba(3,105,161,.08);">
+        <span class="sfb-tier" style="background:rgba(3,105,161,.2);color:#7dd3fc;">T3A</span>
+        <div class="sfb-name">硅光 PIC</div>
+        <div class="sfb-sub">MZM 调制<br>WDM 合波</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(180,83,9,.4);background:rgba(180,83,9,.1);">
+        <span class="sfb-tier" style="background:rgba(180,83,9,.25);color:#fcd34d;">T4A</span>
+        <div class="sfb-name">光模块封装</div>
+        <div class="sfb-sub">OSFP 外壳<br>T2+T3 集成</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(120,53,15,.35);background:rgba(120,53,15,.08);">
+        <span class="sfb-tier" style="background:rgba(120,53,15,.2);color:#fef08a;">T4C</span>
+        <div class="sfb-name">OSFP Cage</div>
+        <div class="sfb-sub">物理插槽<br>APH / TEL</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.07);">
+        <span class="sfb-tier" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div class="sfb-name">光纤</div>
+        <div class="sfb-sub">GLW SMF-28<br>&lt;50m 跳线</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(6,95,70,.5);background:rgba(6,95,70,.12);">
+        <span class="sfb-tier" style="background:rgba(6,95,70,.3);color:#34d399;">T5C</span>
+        <div class="sfb-name">以太网交换机</div>
+        <div class="sfb-sub">ANET 512×800G<br>转发 + 路由</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.07);">
+        <span class="sfb-tier" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div class="sfb-name">光纤</div>
+        <div class="sfb-sub">返回路径</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.1);">
+        <span class="sfb-tier" style="background:rgba(37,99,235,.25);color:#93c5fd;">T2</span>
+        <div class="sfb-name">探测器</div>
+        <div class="sfb-sub">光子 → 电流<br>TIA 跨阻放大</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(3,105,161,.4);background:rgba(3,105,161,.1);">
+        <span class="sfb-tier" style="background:rgba(3,105,161,.25);color:#7dd3fc;">T3B</span>
+        <div class="sfb-name">DSP 解码</div>
+        <div class="sfb-sub">PAM4 解调<br>FEC 纠错恢复</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">DC</span>
+        <div class="sfb-name">GPU B</div>
+        <div class="sfb-sub">接收完整<br>数据包</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 场景二 -->
+  <div class="sfdiag-scen">
+    <div class="sfdiag-scen-title" style="border-left-color:#fde68a;">🌐 场景二：跨数据中心 DCI 长途相干传输 — DC-A → DC-B（80km–2000km）</div>
+    <div class="sfdiag-flow">
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">DC-A</span>
+        <div class="sfb-name">数据中心 A</div>
+        <div class="sfb-sub">路由器出口</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(146,64,14,.4);background:rgba(146,64,14,.1);">
+        <span class="sfb-tier" style="background:rgba(146,64,14,.25);color:#fde68a;">T4B</span>
+        <div class="sfb-name">相干光模块</div>
+        <div class="sfb-sub">QAM16 编码<br>窄线宽激光</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(22,101,52,.4);background:rgba(22,101,52,.1);">
+        <span class="sfb-tier" style="background:rgba(22,101,52,.25);color:#86efac;">T5A</span>
+        <div class="sfb-name">WDM 复用器</div>
+        <div class="sfb-sub">96波 C-Band<br>合入单根光纤</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.07);">
+        <span class="sfb-tier" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div class="sfb-name">长途光纤</div>
+        <div class="sfb-sub">GLW LEAF<br>每段 80km</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(22,101,52,.35);background:rgba(22,101,52,.09);">
+        <span class="sfb-tier" style="background:rgba(22,101,52,.2);color:#86efac;">T5A</span>
+        <div class="sfb-name">EDFA 放大</div>
+        <div class="sfb-sub">全光放大<br>无 O-E-O</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(21,128,61,.4);background:rgba(21,128,61,.1);">
+        <span class="sfb-tier" style="background:rgba(21,128,61,.25);color:#bbf7d0;">T5B</span>
+        <div class="sfb-name">ROADM</div>
+        <div class="sfb-sub">波长级路由<br>全光不变电</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.07);">
+        <span class="sfb-tier" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div class="sfb-name">长途光纤</div>
+        <div class="sfb-sub">继续传输</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(22,101,52,.4);background:rgba(22,101,52,.1);">
+        <span class="sfb-tier" style="background:rgba(22,101,52,.25);color:#86efac;">T5A</span>
+        <div class="sfb-name">WDM 解复用</div>
+        <div class="sfb-sub">96波拆分<br>分配各端口</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(146,64,14,.4);background:rgba(146,64,14,.1);">
+        <span class="sfb-tier" style="background:rgba(146,64,14,.25);color:#fde68a;">T4B</span>
+        <div class="sfb-name">相干光模块</div>
+        <div class="sfb-sub">ICR 相干接收<br>DSP 均衡补偿</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">DC-B</span>
+        <div class="sfb-name">数据中心 B</div>
+        <div class="sfb-sub">完整信号<br>恢复</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 各环节详解卡片 -->
+  <div class="sfdiag-tier-grid">
+
+    <div class="sfdiag-tc" style="border-top-color:#7c3aed;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <span class="sfdiag-tc-name">基础材料</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">In、P、Ga、As 化学元素；SiO₂（沙子）；Si 晶体</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">MOCVD 外延生长；光纤拉制（2000°C）；SOI 键合</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">InP/GaAs 晶圆；光纤预制棒（GLW）；SOI 晶圆</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>为什么不可替代：</b>III-V 族半导体（InP/GaAs）是目前唯一能高效发光的材料——硅不发光，无法制造激光器。单模光纤损耗仅 0.2dB/km，是铜缆的千分之一，是长距传输的物理基础。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#2563eb;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">T2 ★</span>
+        <span class="sfdiag-tc-name">激光器 / 探测器（光子器件）</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">电驱动电流（发端）/ 入射光子（收端）；InP 晶圆基底</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">激光器：受激辐射产生相干光；探测器：光电效应将光子→电流</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">相干光束（1310/1550nm）/ 微弱模拟电流</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>产业链唯一的"变身"器件：</b>光纤只传光不传电，所有通信必须经过 T2 完成电↔光转换。硅无法发光，必须用 InP III-V 材料，全球只有少数厂商掌握批量制造工艺（COHR/LITE/MTSI）。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#0369a1;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(3,105,161,.2);color:#7dd3fc;">T3A</span>
+        <span class="sfdiag-tc-name">硅光平台（SiPh PIC）</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">T2 激光器的连续光（CW light）+ 高速电信号</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">MZM 调制器将数据"写入"光波；多路 WDM 合波；集成分束/合束无源器件</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">承载数据的调制光信号（PAM4 / QPSK / QAM16）</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>为什么重要：</b>InP 光芯片昂贵（$50+/片），SiPh 用 CMOS 晶圆厂（TSMC/GFS）制造，成本降 1/3。CPO 时代 PIC 价值从 $15→$80+ 每模块，T3A 是"吃掉 T4 价值"的核心路径。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#0284c7;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(2,132,199,.2);color:#7dd3fc;">T3B</span>
+        <span class="sfdiag-tc-name">DSP / TIA / SerDes 芯片</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">高速原始比特流（来自 ASIC）/ 微弱模拟光电流（来自探测器）</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">FEC 前向纠错；PAM4/QAM 编解码；SerDes 并串转换；TIA 跨阻放大</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">可靠低误码数字信号（BER &lt;10⁻¹⁵）；SerDes 标准电口</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>AI 互连的"大脑"：</b>800G 原始信号经 100m 光纤后误码率高到无法使用；DSP 用算法从噪声中恢复信号。MRVL 外部市占率 >60% 来自数代 IP 积累和 3–5 年客户 co-design 周期，壁垒极深。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#b45309;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(180,83,9,.2);color:#fcd34d;">T4A</span>
+        <span class="sfdiag-tc-name">数据中心光模块（400G / 800G / 1.6T）</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">T2 激光器裸片 + T3A SiPh PIC + T3B DSP 芯片（散件）</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">精密组装封装；sub-μm 光路对准；热管理；DMI 接口；MSA 标准认证</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">QSFP-DD / OSFP 标准插拔模块（买来直接插进交换机）</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>本质是精密组装：</b>核心器件来自 T2/T3，T4 仅提供标准化接口和封装良率。定价权最弱——中国厂商（中际旭创/新易盛）已能复制，ASP 持续承压。CPO 2026 年商用后将部分替代此形态。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#92400e;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(146,64,14,.2);color:#fde68a;">T4B</span>
+        <span class="sfdiag-tc-name">相干光模块（ZR / ZR+ / 长途相干）</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">窄线宽 CW 激光源 + 先进相干 DSP（MRVL/COHR）+ ICR 相干接收机</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">QAM16/64 相位+幅度双编码；ICR 干涉感知光的相位；DSP 色散补偿均衡</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">400ZR / ZR+ CFP2 / QSFP-DD（$800–$2000+ ASP，无中继 80km+）</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>vs T4A 区别：</b>T4A 用简单 PAM4（强度编码），只能传 2km；T4B 相干调制感知光的相位，同样带宽下传 80km+，频谱效率 10× 提升。ICR + 先进 DSP 组合是中国暂时无法追赶的壁垒。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#78350f;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(120,53,15,.2);color:#fef08a;">T4C</span>
+        <span class="sfdiag-tc-name">连接器 / Cage / AOC 线缆</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">T4A/T4B 光模块 + 精密金属/塑料机械件 + 高频电气触点</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">OSFP Cage 标准化机械接口；高频信号完整性；散热管理；AOC 内嵌收发器</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">OSFP / QSFP-DD Cage 总成；AOC 主动光缆；高密背板连接器</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>最被忽视但最确定的环节：</b>AI DC 每台 512 端口交换机需 512 个 OSFP Cage；端口密度每代翻倍，Cage 需求刚性正比增长。APH/TEL 供给高度集中，与光模块价格战完全无关，确定性极高。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#166534;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(22,101,52,.2);color:#86efac;">T5A</span>
+        <span class="sfdiag-tc-name">WDM / 相干传输系统</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">多路 T4B 相干模块输出（每路不同波长，96 路 C-Band）</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">WDM 复用器合 96 波入单根光纤；EDFA 掺铒光纤放大（全光，无 O-E-O）；NMS 网管</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">单对光纤承载 96×400G = 38.4Tbps；完整运营商 / DCI 骨干传输网</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>价值在"系统集成"：</b>WDM 让一根光纤同时传 96 个波长，省去 95 对光纤；EDFA 全光放大无需 O-E-O 转换，功耗降 70%。CIEN 的 WaveLogic DSP 领先同业约 2 年，是其毛利率 50%+ 护城河的核心。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#15803d;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(21,128,61,.2);color:#bbf7d0;">T5B</span>
+        <span class="sfdiag-tc-name">ROADM / OXC 光交换</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">多方向 WDM 信号（东西南北各方向光纤汇聚）</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">WSS 波长选择开关（LCOS 芯片）按波长路由；全光域不经 O-E-O；可远程重配置</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">各波长按需路由到不同出口方向（整条 100Gbps 光管道级调度）</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>vs 电路由器：</b>电路由器对每个包做 O-E-O（功耗巨大）；ROADM 把整条波长"一刀切"路由，光子全程不变为电子，功耗降约 70%。AI 工厂能耗压力是 ROADM 替代电交换的长期驱动力。LITE 的 WSS 市占率 >50%。</div>
+    </div>
+
+    <div class="sfdiag-tc" style="border-top-color:#065f46;">
+      <div class="sfdiag-tc-head">
+        <span class="sfdiag-tc-badge" style="background:rgba(6,95,70,.25);color:#34d399;">T5C</span>
+        <span class="sfdiag-tc-name">以太网交换机 / AI 集群网络集成</span>
+      </div>
+      <div class="sfdiag-io-row">
+        <div class="sfio-box"><div class="sfio-lbl">输入</div><div class="sfio-val">数百–数千台 GPU 服务器的 800G 光端口；BGP / ECMP 路由配置</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">过程</div><div class="sfio-val">L2/L3 Ethernet 包交换；Clos 网络拓扑；超低延迟（&lt;1μs）；512×800G 端口密度</div></div>
+        <div class="sfio-arr">→</div>
+        <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">数万 GPU 全互连 AI 集群；"超级计算机"级分布式训练网络</div></div>
+      </div>
+      <div class="sfdiag-tc-why">💡 <b>光模块最大的单体需求方：</b>ANET 每卖出一台 512 端口交换机，直接带动 512 个 800G 光模块出货（约 $20 万模块价值/台）。2026 年 ANET+AVGO 联合推 CPO 交换机，将从"买模块"转变为"卖含光引擎的整机"。</div>
+    </div>
+
   </div>
 </div>
 
@@ -665,7 +995,8 @@ const TIERS = [
         desc: '2025年800G为主战场（ASP约$400-500），1.6T开始测试；Coherent市占率~30%全球第一；CPO若2026年商业化将部分替代插拔模块，需持续跟踪架构迁移节奏。',
         companies: [
           { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '数据中心光模块全球市占率第一（~30%），400G/800G量产，CPO同步布局' },
-          { ticker: 'FN', mcap:'mid', name: 'Fabrinet', desc: '全球最大光电合同制造商，毛利稳健（~12%净利），客户粘性极高' },
+          { ticker: 'FN', mcap:'mid', name: 'Fabrinet', desc: '全球最大光电合同制造商，毛利稳健（~12%净利），专注光电精密制造，CPO时代反而持续受益' },
+          { ticker: 'CLS', mcap:'large', name: 'Celestica Inc', desc: '加拿大EMS龙头，AI网络驱动营收$69亿(2022)→$97亿(2024)；高密交换机+光模块代工，客户含CSCO/ANET/超大规模云厂商；与FN互补——FN专注光电制造，CLS更擅长整机系统级集成' },
           { ticker: 'AAOI', mcap:'small', name: 'Applied Optoelectronics', desc: '100G/400G数据中心模块，弹性最大但波动性最高，适合波段操作' },
           { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: '泵浦激光器+光模块双主线，积极向CPO光引擎转型布局' }
         ]
