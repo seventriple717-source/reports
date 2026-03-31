@@ -84,6 +84,8 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .researched-badge{position:absolute;top:4px;right:4px;font-size:8px;padding:1px 4px;
   border-radius:3px;background:rgba(74,222,128,.12);color:#4ade80;
   border:1px solid rgba(74,222,128,.2);font-weight:600;}
+.mcap-badge{font-size:7px;font-weight:700;padding:1px 4px;border-radius:3px;
+  white-space:nowrap;vertical-align:middle;margin-left:4px;display:inline-block;letter-spacing:.3px;}
 .special-row{border-radius:12px;padding:15px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
 .special-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
 .special-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:11px;flex-wrap:wrap;}
@@ -221,7 +223,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 
 <div class="hdr">
   <h1>光 互 连 产 业 链 全 景 图</h1>
-  <div class="meta">覆盖 <em>20</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光芯片 → 光模块 → 光网络系统 &nbsp;·&nbsp; 2026-03 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
+  <div class="meta">覆盖 <em>25</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 &nbsp;·&nbsp; 2026-03 v2 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
 </div>
 
 <div class="notice">
@@ -246,6 +248,13 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
   </div>
 </div>
 
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:10px;font-size:10.5px;color:var(--text3);">
+  <span style="font-weight:700;color:var(--text2);">市值层级：</span>
+  <span><span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(249,115,22,.15);color:#f97316;border:1px solid rgba(249,115,22,.4);margin-right:4px;">超大盘</span>$200B+</span>
+  <span><span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.4);margin-right:4px;">大盘</span>$10B–200B</span>
+  <span><span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.4);margin-right:4px;">中盘</span>$2B–10B</span>
+  <span><span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(148,163,184,.15);color:#94a3b8;border:1px solid rgba(148,163,184,.4);margin-right:4px;">小盘</span>&lt;$2B</span>
+</div>
 <div class="legend" id="legend"></div>
 
 <div class="chain-scroll">
@@ -352,7 +361,7 @@ const TIERS = [
         tickerColor: '#c4b5fd',
         desc: '全球CR3约70%（Corning/住友/古河），AI数据中心内部光纤用量是传统DC的10倍，BEAD补贴$425亿拉动宽带建设，供给刚性（新产能2-3年）保护价格。',
         companies: [
-          { ticker: 'GLW', name: 'Corning Inc', desc: '光纤预制棒全球龙头，市占率~27%，特种玻璃+光纤双引擎，AI周期最强受益' }
+          { ticker: 'GLW', mcap:'large', name: 'Corning Inc', desc: '光纤预制棒全球龙头，市占率~27%，特种玻璃+光纤双引擎，AI周期最强受益' }
         ]
       },
       {
@@ -367,8 +376,8 @@ const TIERS = [
         tickerColor: '#d8b4fe',
         desc: 'InP晶圆是800G EML激光器和相干探测器的必备基底，全球仅少数厂商可供应，随800G放量供应趋紧，价格具弹性。AXTI是美股稀缺纯正上游标的。',
         companies: [
-          { ticker: 'AXTI', name: 'AXT Inc', desc: 'InP/GaAs/Ge单晶基板，光互连稀缺纯正上游，收入规模小但弹性极大' },
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '自产InP外延片/晶圆，垂直整合最深厂商，保障供应链安全' }
+          { ticker: 'AXTI', mcap:'small', name: 'AXT Inc', desc: 'InP/GaAs/Ge单晶基板，光互连稀缺纯正上游，收入规模小但弹性极大' },
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '自产InP外延片/晶圆，垂直整合最深厂商，保障供应链安全' }
         ]
       }
     ]
@@ -401,10 +410,10 @@ const TIERS = [
         tickerColor: '#93c5fd',
         desc: 'VCSEL主导短距(<500m)，EML/DFB主导中长距；800G需要单通道EML实现更高调制速率，扩产周期长(18-24个月)，2025-2026年供应持续紧张。',
         companies: [
-          { ticker: 'LITE', name: 'Lumentum Holdings', desc: 'VCSEL全球第一，DFB/EML+3D感测+光网络多点布局，ROE改善周期' },
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '激光器品类最全，VCSEL/DFB/EML/泵浦源全系列，垂直整合优势' },
-          { ticker: 'IPGP', name: 'IPG Photonics', desc: '高功率光纤激光器全球第一，毛利率行业标杆(~50%)，工业+通信双市场' },
-          { ticker: 'MTSI', name: 'MACOM Technology', desc: '高速驱动器IC及光子半导体，CPO光引擎关键供应商，参与CPO生态' }
+          { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: 'VCSEL全球第一，DFB/EML+3D感测+光网络多点布局，ROE改善周期' },
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '激光器品类最全，VCSEL/DFB/EML/泵浦源全系列，垂直整合优势' },
+          { ticker: 'IPGP', mcap:'mid', name: 'IPG Photonics', desc: '高功率光纤激光器全球第一，毛利率行业标杆(~50%)，工业+通信双市场' },
+          { ticker: 'MTSI', mcap:'mid', name: 'MACOM Technology', desc: '高速驱动器IC及光子半导体，CPO光引擎关键供应商，参与CPO生态' }
         ]
       },
       {
@@ -419,8 +428,8 @@ const TIERS = [
         tickerColor: '#bfdbfe',
         desc: 'PIN/APD探测器与电光调制器是光信号关键转换器；WSS（波长选择开关）是ROADM/OXC核心，Lumentum市占率超50%构建深厚护城河，是全光网络长期受益核心器件。',
         companies: [
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '全系列InP探测器与调制器，相干模块不可或缺的核心组件' },
-          { ticker: 'LITE', name: 'Lumentum Holdings', desc: 'WSS/ROADM器件全球领先（市占率>50%），光交换核心枢纽资产' }
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '全系列InP探测器与调制器，相干模块不可或缺的核心组件' },
+          { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: 'WSS/ROADM器件全球领先（市占率>50%），光交换核心枢纽资产' }
         ]
       }
     ]
@@ -453,15 +462,15 @@ const TIERS = [
         tickerColor: '#7dd3fc',
         desc: 'Broadcom/Marvell已实现硅光800G量产；CPO结构中硅光PIC价值从模块内$15→CPO光引擎$80+/件；台积电/GF为主要代工平台，规模效应推动成本持续下行。',
         companies: [
-          { ticker: 'AVGO', name: 'Broadcom Inc', desc: '自研硅光PIC量产800G，CPO战略清晰，自用DSP+光模块垂直整合' },
-          { ticker: 'MRVL', name: 'Marvell Technology', desc: '5nm硅光+Teralynx DSP系列，AI基础设施光互连核心供应商' },
-          { ticker: 'INTC', name: 'Intel Corp', desc: '硅光技术先驱，800G CW-WDM领先量产，独立光子业务IPO预期' },
-          { ticker: 'GFS', name: 'GlobalFoundries', desc: '全球最大独立硅光代工平台，300mm产能，绑定多家模块厂' }
+          { ticker: 'AVGO', mcap:'mega', name: 'Broadcom Inc', desc: '自研硅光PIC量产800G，CPO战略清晰，自用DSP+光模块垂直整合' },
+          { ticker: 'MRVL', mcap:'large', name: 'Marvell Technology', desc: '5nm硅光+Teralynx DSP系列，AI基础设施光互连核心供应商' },
+          { ticker: 'INTC', mcap:'large', name: 'Intel Corp', desc: '硅光技术先驱，800G CW-WDM领先量产，独立光子业务IPO预期' },
+          { ticker: 'GFS', mcap:'large', name: 'GlobalFoundries', desc: '全球最大独立硅光代工平台，300mm产能，绑定多家模块厂' }
         ]
       },
       {
         id: 'T3B',
-        label: '🔧 DSP / TIA 信号处理芯片',
+        label: '🔧 DSP / TIA / SerDes 信号处理',
         color: '#075985',
         bgColor: 'rgba(7,89,133,.15)',
         labelColor: '#bae6fd',
@@ -469,11 +478,27 @@ const TIERS = [
         valColor: '#7dd3fc',
         ccBorder: '#075985',
         tickerColor: '#bae6fd',
-        desc: 'DSP（数字信号处理）占相干模块成本40%+，TIA（跨阻放大器）是高速光接收核心；Marvell外部市场占有率超60%，几乎无第二选择，定价权强。',
+        desc: 'DSP（数字信号处理）占相干模块成本40%+，TIA（跨阻放大器）是高速光接收核心；Marvell外部市场占有率超60%；Credo的SerDes与AEC为短距互连提供铜/光可替换方案。',
         companies: [
-          { ticker: 'MRVL', name: 'Marvell Technology', desc: 'Teralynx系列DSP市占率>60%，相干+直接探测双覆盖，AI互连必选' },
-          { ticker: 'AVGO', name: 'Broadcom Inc', desc: '自用DSP不对外销售，内部垂直整合强化竞争壁垒，提高客户门槛' },
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '收购II-VI获相干DSP能力，系统内部自给自足，降低对外依赖' }
+          { ticker: 'MRVL', mcap:'large', name: 'Marvell Technology', desc: 'Teralynx系列DSP市占率>60%，相干+直接探测双覆盖，AI互连必选' },
+          { ticker: 'AVGO', mcap:'mega', name: 'Broadcom Inc', desc: '自用DSP不对外销售，内部垂直整合强化竞争壁垒，提高客户门槛' },
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '收购II-VI获相干DSP能力，系统内部自给自足，降低对外依赖' },
+          { ticker: 'CRDO', mcap:'mid', name: 'Credo Technology', desc: 'HiWire AEC主动铜缆+SerDes IP核；≤3m短链路与光模块形成替代；AI大客户集中，高增速纯正标的' }
+        ]
+      },
+      {
+        id: 'T3C',
+        label: '🔗 AI互连接口芯片（PCIe/CXL Retimer）',
+        color: '#0c4a6e',
+        bgColor: 'rgba(12,74,110,.15)',
+        labelColor: '#7dd3fc',
+        valBg: 'rgba(12,74,110,.07)',
+        valColor: '#38bdf8',
+        ccBorder: '#0c4a6e',
+        tickerColor: '#7dd3fc',
+        desc: 'PCIe Gen5/6 Retimer与CXL控制器是GPU/CPU与光网络接口的桥接芯片，直接嵌入AI服务器主板；AI算力密度提升推动Retimer从可选变刚需，是光互连产业链中最具成长性的新兴子环节。',
+        companies: [
+          { ticker: 'ALAB', mcap:'large', name: 'Astera Labs', desc: 'TAURUS(PCIe Retimer)/ARIES(CXL)/SCORPIO(Smart Switch)全系AI互连芯片；2024年IPO；AI超大规模DC互连基础设施最纯正标的之一，年增速>80%' }
         ]
       }
     ]
@@ -506,10 +531,10 @@ const TIERS = [
         tickerColor: '#fcd34d',
         desc: '2025年800G为主战场（ASP约$400-500），1.6T开始测试；Coherent市占率~30%全球第一；CPO若2026年商业化将部分替代插拔模块，需持续跟踪架构迁移节奏。',
         companies: [
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '数据中心光模块全球市占率第一（~30%），400G/800G量产，CPO同步布局' },
-          { ticker: 'FN', name: 'Fabrinet', desc: '全球最大光电合同制造商，毛利稳健（~12%净利），客户粘性极高' },
-          { ticker: 'AAOI', name: 'Applied Optoelectronics', desc: '100G/400G数据中心模块，弹性最大但波动性最高，适合波段操作' },
-          { ticker: 'LITE', name: 'Lumentum Holdings', desc: '泵浦激光器+光模块双主线，积极向CPO光引擎转型布局' }
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '数据中心光模块全球市占率第一（~30%），400G/800G量产，CPO同步布局' },
+          { ticker: 'FN', mcap:'mid', name: 'Fabrinet', desc: '全球最大光电合同制造商，毛利稳健（~12%净利），客户粘性极高' },
+          { ticker: 'AAOI', mcap:'small', name: 'Applied Optoelectronics', desc: '100G/400G数据中心模块，弹性最大但波动性最高，适合波段操作' },
+          { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: '泵浦激光器+光模块双主线，积极向CPO光引擎转型布局' }
         ]
       },
       {
@@ -524,9 +549,26 @@ const TIERS = [
         tickerColor: '#fde68a',
         desc: '相干模块ASP是直接探测模块的3-5倍（约$800-2000+），Coherent占相干市场约40%份额；400ZR/ZR+标准化推动DCI渗透率从15%→30%，ASP下行但量增补偿有余。',
         companies: [
-          { ticker: 'COHR', name: 'Coherent Corp', desc: '相干模块全球第一，ICR/Optilux系列，DCI+长途运营商双覆盖' },
-          { ticker: 'CIEN', name: 'Ciena Corp', desc: 'WaveLogic自研相干DSP+模块，系统集成商中模块能力最强' },
-          { ticker: 'NOK', name: 'Nokia Corp', desc: 'PSE-5x相干技术，欧洲运营商长期首选，稳定性高成长性适中' }
+          { ticker: 'COHR', mcap:'large', name: 'Coherent Corp', desc: '相干模块全球第一，ICR/Optilux系列，DCI+长途运营商双覆盖' },
+          { ticker: 'CIEN', mcap:'mid', name: 'Ciena Corp', desc: 'WaveLogic自研相干DSP+模块，系统集成商中模块能力最强' },
+          { ticker: 'NOK', mcap:'large', name: 'Nokia Corp', desc: 'PSE-5x相干技术，欧洲运营商长期首选，稳定性高成长性适中' },
+          { ticker: 'CSCO', mcap:'mega', name: 'Cisco Systems (Acacia)', desc: '2021年收购Acacia获高性能相干模块能力；Acacia系列$1000-2000+ ASP；网络设备巨头+相干模块垂直整合，常被低估的光互连隐性受益方' }
+        ]
+      },
+      {
+        id: 'T4C',
+        label: '🔌 连接器 / Cage / AOC 物理封装',
+        color: '#78350f',
+        bgColor: 'rgba(120,53,15,.15)',
+        labelColor: '#fef08a',
+        valBg: 'rgba(120,53,15,.07)',
+        valColor: '#fde68a',
+        ccBorder: '#78350f',
+        tickerColor: '#fef08a',
+        desc: '光模块须插入交换机/服务器标准笼子（Cage），每个800G端口对应1个OSFP Cage；AI DC端口密度提升是cage需求刚性锚点；AOC主动光缆是机架内部光互连标准形态——此环节常被市场忽视，但受益AI扩容的确定性极高。',
+        companies: [
+          { ticker: 'APH', mcap:'large', name: 'Amphenol Corp', desc: 'QSFP-DD/OSFP Cage+高密背板连接器+AOC主动光缆全球领先；市值~$650亿；AI DC每台400口交换机需400+ cage；是光互连产业链中最被忽视的大盘标的' },
+          { ticker: 'TEL', mcap:'large', name: 'TE Connectivity', desc: '工业+数据中心连接器综合龙头，与APH竞争同一市场；高速光纤连接器/线缆组件+BEAD宽带接入网双线受益；市值~$430亿' }
         ]
       }
     ]
@@ -559,9 +601,9 @@ const TIERS = [
         tickerColor: '#86efac',
         desc: '运营商骨干网升级+DCI驱动需求；Ciena靠WaveLogic技术领先约2年维持溢价（毛利率稳定在50%+）；美国BEAD宽带补贴$425亿为Adtran带来接入侧机遇。',
         companies: [
-          { ticker: 'CIEN', name: 'Ciena Corp', desc: 'WaveLogic相干引擎技术领先同业约2年，系统+模块双线垂直整合' },
-          { ticker: 'NOK', name: 'Nokia Corp', desc: '光传输+接入网综合布局，欧洲运营商市场保有率高，股息稳健' },
-          { ticker: 'ADTN', name: 'Adtran Holdings', desc: '接入光网络设备，BEAD补贴直接受益方，小盘高弹性标的' }
+          { ticker: 'CIEN', mcap:'mid', name: 'Ciena Corp', desc: 'WaveLogic相干引擎技术领先同业约2年，系统+模块双线垂直整合' },
+          { ticker: 'NOK', mcap:'large', name: 'Nokia Corp', desc: '光传输+接入网综合布局，欧洲运营商市场保有率高，股息稳健' },
+          { ticker: 'ADTN', mcap:'small', name: 'Adtran Holdings', desc: '接入光网络设备，BEAD补贴直接受益方，小盘高弹性标的' }
         ]
       },
       {
@@ -576,8 +618,8 @@ const TIERS = [
         tickerColor: '#bbf7d0',
         desc: 'ROADM是现有长途波分网络核心，OXC是下一代全光交换（5-7年演进）；AI工厂能耗约束倒逼光交换替代电交换，降低约70%互连功耗；Lumentum WSS市占率>50%。',
         companies: [
-          { ticker: 'LITE', name: 'Lumentum Holdings', desc: 'WSS/ROADM器件全球第一（市占率>50%），OXC全光交换超前布局' },
-          { ticker: 'CIEN', name: 'Ciena Corp', desc: '完整ROADM系统集成商，DCI全光网络交钥匙方案提供者' }
+          { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: 'WSS/ROADM器件全球第一（市占率>50%），OXC全光交换超前布局' },
+          { ticker: 'CIEN', mcap:'mid', name: 'Ciena Corp', desc: '完整ROADM系统集成商，DCI全光网络交钥匙方案提供者' }
         ]
       }
     ]
@@ -593,11 +635,11 @@ const SPECIAL_SECTIONS = [
     title: '⬡ AI 超大规模数据中心 — 产业链终端需求侧核心驱动力',
     subtitle: '云厂商与AI公司是光互连最终需求来源，GPU算力集群光互连带宽需求CAGR超40%；2025年全球AI/云基础设施资本开支合计超$3000亿',
     companies: [
-      { ticker: 'NVDA', name: 'Nvidia Corp', desc: 'GPU算力集群最大光互连需求驱动方；NVLink/光铜混合互连推动800G/1.6T爆发；CPO最大受益者之一；AI Factories建设节奏决定光互连订单能见度' },
-      { ticker: 'META', name: 'Meta Platforms', desc: '全球最大400G单一买家之一；2025年AI基础设施资本开支达$600-650亿；光模块直接采购金额超$10亿；MTIA自研芯片促进算力扩张' },
-      { ticker: 'MSFT', name: 'Microsoft Corp', desc: 'Azure AI光互连采购全球前三；与OpenAI深度绑定持续推动Capex；数据中心建设计划明确至2027年；光互连多供应商策略' },
-      { ticker: 'ANET', name: 'Arista Networks', desc: 'AI集群网络交换机市占率超40%；与COHR/MRVL光电协同受益；推动CPO系统集成商业化；客户含Meta/Microsoft/Google' },
-      { ticker: 'AMZN', name: 'Amazon (AWS)', desc: 'AWS全球最大云基础设施；Trainium/Inferentia自研芯片集群扩张带动光互连需求；光互连采购全链覆盖上下游' }
+      { ticker: 'NVDA', mcap:'mega', name: 'Nvidia Corp', desc: 'GPU算力集群最大光互连需求驱动方；NVLink/光铜混合互连推动800G/1.6T爆发；CPO最大受益者之一；AI Factories建设节奏决定光互连订单能见度' },
+      { ticker: 'META', mcap:'mega', name: 'Meta Platforms', desc: '全球最大400G单一买家之一；2025年AI基础设施资本开支达$600-650亿；光模块直接采购金额超$10亿；MTIA自研芯片促进算力扩张' },
+      { ticker: 'MSFT', mcap:'mega', name: 'Microsoft Corp', desc: 'Azure AI光互连采购全球前三；与OpenAI深度绑定持续推动Capex；数据中心建设计划明确至2027年；光互连多供应商策略' },
+      { ticker: 'ANET', mcap:'large', name: 'Arista Networks', desc: 'AI集群网络交换机市占率超40%；与COHR/MRVL光电协同受益；推动CPO系统集成商业化；客户含Meta/Microsoft/Google' },
+      { ticker: 'AMZN', mcap:'mega', name: 'Amazon (AWS)', desc: 'AWS全球最大云基础设施；Trainium/Inferentia自研芯片集群扩张带动光互连需求；光互连采购全链覆盖上下游' }
     ]
   }
 ];
@@ -623,8 +665,8 @@ const THEMES = [
     segs: {
       T1: { lvl: 'med', cos: ['AXTI', 'GLW'], desc: 'InP晶圆随激光器扩产拉动；光纤需求跟随DC建设' },
       T2: { lvl: 'high', cos: ['LITE', 'COHR', 'MTSI'], desc: '800G EML/VCSEL供不应求；毛利提升周期明确可见' },
-      T3: { lvl: 'high', cos: ['AVGO', 'MRVL'], desc: '硅光PIC+DSP是800G/1.6T核心成本中枢' },
-      T4: { lvl: 'high', cos: ['COHR', 'FN', 'AAOI', 'LITE'], desc: '最直接受益层；出货量与ASP均向上，景气度最高' },
+      T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'ALAB', 'CRDO'], desc: '硅光PIC+DSP是800G/1.6T核心成本中枢；ALAB Retimer+CRDO AEC为光模块提供接口适配' },
+      T4: { lvl: 'high', cos: ['COHR', 'FN', 'AAOI', 'APH'], desc: '最直接受益层；出货量与ASP均向上；APH cage需求随端口密度刚性增长' },
       T5: { lvl: 'low', cos: ['CIEN'], desc: 'DCI需求间接拉动，非主要受益层' },
       DC: { lvl: 'high', cos: ['NVDA', 'META', 'MSFT', 'AMZN'], desc: '需求端核心驱动；资本开支可见度高至2027年' }
     }
@@ -640,8 +682,8 @@ const THEMES = [
     segs: {
       T1: { lvl: 'low', cos: ['GLW'], desc: '光纤基板材料小幅受益于CPO引脚规格升级' },
       T2: { lvl: 'high', cos: ['COHR', 'LITE', 'MTSI'], desc: 'CPO光引擎中激光器/探测器依然刚需，价值不可替代' },
-      T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'INTC', 'GFS'], desc: '硅光PIC是CPO核心；$15→$80+的价值大幅重估' },
-      T4: { lvl: 'med', cos: ['FN', 'COHR'], desc: 'CPO封装转向先进制造；Fabrinet转型受益最直接' },
+      T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'INTC', 'GFS', 'ALAB'], desc: '硅光PIC是CPO核心；$15→$80+的价值重估；ALAB Retimer在CPO架构中同步升级' },
+      T4: { lvl: 'med', cos: ['FN', 'COHR', 'APH'], desc: 'CPO封装转向先进制造；APH需同步开发CPO专用连接器标准' },
       T5: { lvl: 'low', cos: ['ANET'], desc: 'Arista等推动CPO系统集成，采购结构改变' },
       DC: { lvl: 'high', cos: ['NVDA', 'ANET', 'MSFT'], desc: 'CPO降低总拥有成本；超大规模DC是最积极推动方' }
     }
@@ -692,7 +734,7 @@ const THEMES = [
       T1: { lvl: 'low', cos: [], desc: '材料层间接受益，非主要驱动链路' },
       T2: { lvl: 'med', cos: ['COHR', 'LITE'], desc: 'EML/相干光源是相干模块不可或缺的有源器件' },
       T3: { lvl: 'high', cos: ['MRVL', 'COHR'], desc: '相干DSP成本下降是整个主题商业化的关键路径' },
-      T4: { lvl: 'high', cos: ['COHR', 'CIEN'], desc: '400ZR/ZR+模块商业化核心受益；ASP高毛利厚' },
+      T4: { lvl: 'high', cos: ['COHR', 'CIEN', 'CSCO'], desc: '400ZR/ZR+模块商业化核心受益；CSCO/Acacia是常被忽视的大盘相干模块标的' },
       T5: { lvl: 'med', cos: ['CIEN', 'NOK'], desc: '系统向模块化迁移有3-5年过渡期，影响相对可控' },
       DC: { lvl: 'med', cos: ['ANET', 'AMZN'], desc: 'DCI降本后中小云厂商采购意愿大增，量的增长补偿' }
     }
@@ -747,6 +789,13 @@ const VI_CARDS = [
     color: '#f87171',
     tag: '风险提示',
     body: '①景气度周期风险：超大规模DC资本开支有周期性，2018/2022年曾出现去库存；②CPO替代节奏不确定：若2027年前CPO大规模落地，传统插拔模块厂压力加大；③中美脱钩风险：中国制造商（中际旭创/新易盛）迅速崛起，价格竞争压力加大；④技术路线风险：InP vs 硅光的格局仍在演变中。'
+  },
+  {
+    icon: '🆕',
+    title: '新增关注：ALAB / APH / CRDO / CSCO',
+    color: '#a78bfa',
+    tag: '补充标的',
+    body: '<b>ALAB（Astera Labs）</b>：AI互连芯片最纯正新贵，PCIe/CXL Retimer直接嵌入GPU服务器，年增速>80%；<b>APH（Amphenol）</b>：光模块Cage+AOC隐形基础设施，被市场忽视的$650亿大盘确定性受益；<b>CRDO（Credo）</b>：SerDes/AEC短距互连，AI大客户集中，与MRVL互补；<b>CSCO（Cisco/Acacia）</b>：常被低估的相干模块隐性受益方，Acacia系列ASP$1000-2000+。'
   },
   {
     icon: '📅',
@@ -844,6 +893,18 @@ const CN_BY_TIER = {
   ]
 };
 
+const MCAP_CFG = {
+  mega:  { label:'超大盘', color:'#f97316', bg:'rgba(249,115,22,.15)', border:'rgba(249,115,22,.4)' },
+  large: { label:'大盘',   color:'#60a5fa', bg:'rgba(96,165,250,.15)',  border:'rgba(96,165,250,.4)' },
+  mid:   { label:'中盘',   color:'#34d399', bg:'rgba(52,211,153,.15)',  border:'rgba(52,211,153,.4)' },
+  small: { label:'小盘',   color:'#94a3b8', bg:'rgba(148,163,184,.15)', border:'rgba(148,163,184,.4)' }
+};
+function mcapBadgeHtml(mcap) {
+  const m = MCAP_CFG[mcap];
+  if (!m) return '';
+  return `<span class="mcap-badge" style="background:${m.bg};color:${m.color};border:1px solid ${m.border};">${m.label}</span>`;
+}
+
 function renderChain() {
   const wrap = document.getElementById('chain-wrap');
   if (!wrap) return;
@@ -858,7 +919,7 @@ function renderChain() {
       const cosHtml = s.companies.map(c => `
         <div class="cc" data-ticker="${c.ticker}" style="border-left-color:${s.ccBorder||t.ccBorderColor};">
           <div class="cc-top"><div class="cc-info">
-            <div class="cc-ticker" style="color:${s.tickerColor||t.tickerColor};">${c.ticker}</div>
+            <div class="cc-ticker" style="color:${s.tickerColor||t.tickerColor};">${c.ticker}${mcapBadgeHtml(c.mcap)}</div>
             <div class="cc-name">${c.name}</div>
             <div class="cc-desc">${c.desc}</div>
           </div><div class="cc-links"></div></div>
@@ -919,7 +980,7 @@ function renderSpecial() {
     const cardsHtml = ss.companies.map(c => `
       <div class="special-card" data-ticker="${c.ticker}"
         style="background:${ss.bgColor};border:1px solid ${ss.borderColor};border-left:3px solid ${ss.accentColor};">
-        <div class="cc-ticker" style="color:${ss.accentColor};font-size:14px;">${c.ticker}</div>
+        <div class="cc-ticker" style="color:${ss.accentColor};font-size:14px;">${c.ticker}${mcapBadgeHtml(c.mcap)}</div>
         <div class="cc-name" style="color:var(--text2);font-size:11px;margin-top:3px;">${c.name}</div>
         <div class="cc-desc" style="color:var(--text3);font-size:10px;margin-top:4px;line-height:1.4;">${c.desc}</div>
         <div class="cc-links" style="flex-direction:row;margin-top:7px;"></div>
@@ -1022,7 +1083,7 @@ function renderFootnote() {
   const el = document.getElementById('footnote');
   if (!el) return;
   const total = document.querySelectorAll('[data-ticker]').length;
-  el.textContent = `共 ${total} 个产业链节点 · 20家核心上市公司 · 基础材料→光子器件→硅光芯片→光模块→光网络系统 · AI超大规模DC · 2026-03 · 数据仅供研究参考，不构成投资建议`;
+  el.textContent = `共 ${total} 个产业链节点 · 25家核心上市公司（新增ALAB/APH/CRDO/CSCO/TEL） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网络系统 · 2026-03 v2 · 数据仅供研究参考，不构成投资建议`;
 }
 
 /* ═══════════════════════════════════════════
@@ -1209,7 +1270,8 @@ const PRICING = [
   { tier:'T3', name:'相干DSP芯片', cos:'MRVL（外部>60%）', pct:90, color:'#7dd3fc', trend:'↑', reason:'寡头垄断，无第二选择，AI光互连DSP需求爆发，定价权持续强化' },
   { tier:'T3', name:'硅光PIC平台', cos:'AVGO · MRVL · INTC', pct:80, color:'#38bdf8', trend:'↑', reason:'CPO趋势下PIC价值$15→$80+，AVGO/MRVL双寡头，GFS代工绑定' },
   { tier:'T4', name:'直接探测光模块', cos:'COHR · FN · AAOI', pct:52, color:'#fcd34d', trend:'↓', reason:'中国厂商（中际旭创/新易盛）快速渗透，400G/800G价格竞争加剧，ASP承压' },
-  { tier:'T4', name:'相干光模块', cos:'COHR · CIEN', pct:76, color:'#fbbf24', trend:'→', reason:'技术壁垒高，ASP是直接探测模块3-5倍，中国厂商暂未能规模化突破' },
+  { tier:'T4', name:'相干光模块', cos:'COHR · CIEN · CSCO/Acacia', pct:76, color:'#fbbf24', trend:'→', reason:'技术壁垒高，ASP是直接探测模块3-5倍，中国厂商暂未能规模化突破' },
+  { tier:'T4', name:'连接器/Cage/AOC', cos:'APH · TEL', pct:68, color:'#fef08a', trend:'↑', reason:'供给相对集中（APH市占>40%），AI DC端口密度提升刚性拉动cage需求；与光模块价格竞争无关，需求确定性高' },
   { tier:'T5', name:'光传输系统', cos:'CIEN · NOK', pct:62, color:'#86efac', trend:'→', reason:'运营商采购集中，系统集成商有技术代差但面临价格谈判压力' },
   { tier:'DC', name:'超大规模DC买方', cos:'META · MSFT · AMZN', pct:70, color:'#38bdf8', trend:'↑', reason:'集中采购规模大，多供应商策略压价，但光互连属刚需故买方博弈有天花板' }
 ];
