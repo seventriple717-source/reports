@@ -216,6 +216,27 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .cn-tier{font-size:8.5px;color:var(--text3);margin-bottom:5px;}
 .cn-desc{font-size:9.5px;color:var(--text3);line-height:1.45;margin-bottom:6px;}
 .cn-vs{font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);}
+
+/* ── 产业链概念速览 ── */
+.concept-wrap{background:rgba(99,102,241,.03);border:1px solid rgba(99,102,241,.14);border-radius:12px;padding:18px 20px;margin-bottom:20px;}
+.concept-head{font-size:12px;font-weight:700;color:#a78bfa;letter-spacing:2px;margin-bottom:7px;display:flex;align-items:center;gap:7px;}
+.concept-lead{font-size:10px;color:var(--text3);line-height:1.7;margin-bottom:14px;}
+.concept-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.concept-box{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:11px 13px;}
+.concept-box-title{font-size:10.5px;font-weight:700;color:var(--text2);margin-bottom:9px;letter-spacing:.3px;}
+.arow{display:flex;align-items:flex-start;gap:9px;padding:5px 9px;border-radius:0 5px 5px 0;border-left:3px solid;margin-bottom:4px;}
+.arow-badge{font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.arow-main{font-size:9.5px;font-weight:600;color:var(--text2);line-height:1.3;}
+.arow-sub{font-size:8.5px;color:var(--text3);margin-top:2px;line-height:1.35;}
+.vrow{display:flex;align-items:flex-start;gap:9px;padding:6px 8px;border-radius:5px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
+.vrow-left{flex-shrink:0;text-align:center;min-width:50px;}
+.vrow-moat{font-size:7.5px;font-weight:800;padding:2px 5px;border-radius:3px;margin-top:3px;display:inline-block;letter-spacing:.2px;}
+.vrow-main{font-size:9.5px;font-weight:600;color:var(--text);line-height:1.3;}
+.vrow-sub{font-size:8.5px;color:var(--text3);margin-top:2px;line-height:1.35;}
+.insight-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ibox{border-radius:8px;padding:11px 13px;border:1px solid;}
+.ibox-title{font-size:10px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.ibox-body{font-size:9.5px;color:var(--text3);line-height:1.6;}
 </style>
 </head>
 <body>
@@ -245,6 +266,118 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
     <span class="ctag">CPO重塑产业链价值</span>
     <span class="carrow">→</span>
     <span class="ctag">全光网络长期演进</span>
+  </div>
+</div>
+
+<!-- ── 产业链概念速览 ── -->
+<div class="concept-wrap">
+  <div class="concept-head">🧭 产业链概念速览 — 两种理解方式</div>
+  <div class="concept-lead">
+    光互连只做一件事：<b style="color:var(--text);">电信号 → 光 → 光纤传输 → 光 → 电信号</b>。
+    <b style="color:#93c5fd;">T2</b> 是唯一完成"电↔光"物理转换的核心器件，其余各层围绕"更快 / 更准 / 更便宜 / 更易用"展开。
+    价值链遵循一条规律：<b style="color:#c4b5fd;">上游靠稀缺</b> · <b style="color:#7dd3fc;">中游靠算法/IP</b> · <b style="color:#fcd34d;">下游靠规模（但定价权最弱）</b>。
+  </div>
+  <div class="concept-cols">
+
+    <!-- 左：打电话类比 -->
+    <div class="concept-box">
+      <div class="concept-box-title">📞 打电话类比 — 直觉理解各层在干什么</div>
+      <div class="arow" style="border-left-color:#7c3aed;background:rgba(124,58,237,.06);">
+        <span class="arow-badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div><div class="arow-main">振膜材料 / 永磁体原料</div>
+        <div class="arow-sub">制造器件的物理基础 — 没有 InP 晶圆就造不出 800G 激光器</div></div>
+      </div>
+      <div class="arow" style="border-left-color:#2563eb;background:rgba(37,99,235,.07);">
+        <span class="arow-badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">T2 ★</span>
+        <div><div class="arow-main">麦克风（电→声） + 扬声器（声→电）</div>
+        <div class="arow-sub">⭐ 唯一完成信号形态转换的器件；激光器发光、探测器收光，两者不可替代</div></div>
+      </div>
+      <div class="arow" style="border-left-color:#0369a1;background:rgba(3,105,161,.06);">
+        <span class="arow-badge" style="background:rgba(3,105,161,.2);color:#7dd3fc;">T3</span>
+        <div><div class="arow-main">语音编解码芯片 + 智能降噪算法</div>
+        <div class="arow-sub">DSP 负责编码/纠错；硅光 PIC 把多个光学功能集成在一块硅芯片上</div></div>
+      </div>
+      <div class="arow" style="border-left-color:#b45309;background:rgba(180,83,9,.06);">
+        <span class="arow-badge" style="background:rgba(180,83,9,.2);color:#fcd34d;">T4</span>
+        <div><div class="arow-main">出厂封装好的完整听筒（含麦+芯片+外壳）</div>
+        <div class="arow-sub">标准化"插头"，买来直接插进交换机；内部核心件来自 T2/T3</div></div>
+      </div>
+      <div class="arow" style="border-left-color:#78350f;background:rgba(120,53,15,.06);">
+        <span class="arow-badge" style="background:rgba(120,53,15,.2);color:#fef08a;">T4C</span>
+        <div><div class="arow-main">听筒插座 / 卡扣底座（APH/TEL）</div>
+        <div class="arow-sub">光模块的物理 Cage 和 AOC 线缆 — 纯精密机械，与光电转换无关</div></div>
+      </div>
+      <div class="arow" style="border-left-color:#166534;background:rgba(22,101,52,.06);">
+        <span class="arow-badge" style="background:rgba(22,101,52,.2);color:#86efac;">T5</span>
+        <div><div class="arow-main">电话交换机 + 基站网络</div>
+        <div class="arow-sub">把所有节点连成网络；WDM 多波长复用 + ROADM 光路由</div></div>
+      </div>
+    </div>
+
+    <!-- 右：护城河来源 -->
+    <div class="concept-box">
+      <div class="concept-box-title">⚖️ 各层护城河来源 — 投资定价逻辑</div>
+      <div class="vrow">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(124,58,237,.2);color:#c4b5fd;display:inline-block;">T1</span>
+          <div class="vrow-moat" style="background:rgba(124,58,237,.15);color:#c4b5fd;">稀缺性</div>
+        </div>
+        <div><div class="vrow-main">InP 晶圆全球仅 4-5 家可量产</div>
+        <div class="vrow-sub">新产能需 3 年，800G 放量 → 供给刚性收紧，定价权全链最强</div></div>
+      </div>
+      <div class="vrow">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(37,99,235,.2);color:#93c5fd;display:inline-block;">T2</span>
+          <div class="vrow-moat" style="background:rgba(37,99,235,.15);color:#93c5fd;">物理壁垒</div>
+        </div>
+        <div><div class="vrow-main">激光器无替代品，MOCVD 工艺积累不可复制</div>
+        <div class="vrow-sub">800G EML 技术壁垒极高；全球仅 LITE/COHR 可量产，中国仍在追赶</div></div>
+      </div>
+      <div class="vrow">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(3,105,161,.2);color:#7dd3fc;display:inline-block;">T3</span>
+          <div class="vrow-moat" style="background:rgba(3,105,161,.15);color:#7dd3fc;">算法/IP</div>
+        </div>
+        <div><div class="vrow-main">DSP 寡头垄断（MRVL 外部市占 >60%）</div>
+        <div class="vrow-sub">硅光 PIC 专利 + 先进制程双重壁垒；受出口管制，中国暂时追不上</div></div>
+      </div>
+      <div class="vrow" style="border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.04);">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(180,83,9,.2);color:#fcd34d;display:inline-block;">T4</span>
+          <div class="vrow-moat" style="background:rgba(251,191,36,.12);color:#fbbf24;">集成能力</div>
+        </div>
+        <div><div class="vrow-main" style="color:#fcd34d;">⚠ 本质是精密组装，核心器件均来自上游</div>
+        <div class="vrow-sub">护城河 = 良率 + 产能，而非核心技术 → 中国可以追赶，ASP 持续承压</div></div>
+      </div>
+      <div class="vrow">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(120,53,15,.2);color:#fef08a;display:inline-block;">T4C</span>
+          <div class="vrow-moat" style="background:rgba(120,53,15,.12);color:#fde68a;">精密制造</div>
+        </div>
+        <div><div class="vrow-main">与光模块价格战完全无关</div>
+        <div class="vrow-sub">AI 扩容 → 端口数增长 → Cage 需求刚性增长；APH/TEL 供给集中，确定性高</div></div>
+      </div>
+      <div class="vrow">
+        <div class="vrow-left">
+          <span style="font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;background:rgba(22,101,52,.2);color:#86efac;display:inline-block;">T5</span>
+          <div class="vrow-moat" style="background:rgba(22,101,52,.12);color:#4ade80;">生态绑定</div>
+        </div>
+        <div><div class="vrow-main">靠软件 + 认证 + 运维绑定运营商</div>
+        <div class="vrow-sub">切换成本高但面临华为/中兴竞争；CIEN 技术领先 ~2 年为护城河核心</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 两条关键洞察 -->
+  <div class="insight-cols">
+    <div class="ibox" style="background:rgba(251,191,36,.05);border-color:rgba(251,191,36,.2);">
+      <div class="ibox-title" style="color:#fbbf24;">⚠️ 关键洞察一：T4 是规模最大、定价权最弱的层</div>
+      <div class="ibox-body">T4 光模块看似产业链核心，实则是<b style="color:var(--text);">精密组装商</b>——激光器向 T2 采购（LITE/COHR 定价），DSP 向 T3 采购（MRVL 定价），剩余价值来自良率和产能管理。这正是<b style="color:var(--text);">中国厂商（中际旭创/新易盛）能快速追上的原因</b>：组装工艺可以复制，但 InP 晶圆（T1）和 DSP 算法（T3）暂时无法国产替代。<b style="color:#fbbf24;">长期持仓应优先选 T1/T2/T3，而非纯组装的 T4。</b></div>
+    </div>
+    <div class="ibox" style="background:rgba(251,146,60,.05);border-color:rgba(251,146,60,.2);">
+      <div class="ibox-title" style="color:#fb923c;">⚛️ 关键洞察二：CPO 的本质是 T3 正在"吃掉"T4 的价值</div>
+      <div class="ibox-body">传统架构：ASIC → PCB 走线(10cm 损耗) → <b style="color:#fcd34d;">T4 插拔模块外壳</b> → 光纤。CPO 架构：ASIC 与<b style="color:#7dd3fc;">T3 硅光 PIC 光引擎</b>直接共封装(1-3mm)，省去 T4 的机械外壳和 PCB 损耗，功耗降 75%。价值迁移结果：T4 中光引擎部分的价值从 $15 → $80+ 直接归属 T3；传统纯组装 T4 厂商价值收缩。<b style="color:#fb923c;">FN（Fabrinet）专注代工制造，不承担技术路线风险，因此反而在 CPO 时代持续受益。</b></div>
+    </div>
   </div>
 </div>
 
