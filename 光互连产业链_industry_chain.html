@@ -244,7 +244,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 
 <div class="hdr">
   <h1>光 互 连 产 业 链 全 景 图</h1>
-  <div class="meta">覆盖 <em>25</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 &nbsp;·&nbsp; 2026-03 v2 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
+  <div class="meta">覆盖 <em>27</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 → 以太网交换 &nbsp;·&nbsp; 2026-03 v4 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
 </div>
 
 <div class="notice">
@@ -736,7 +736,8 @@ const TIERS = [
         companies: [
           { ticker: 'CIEN', mcap:'mid', name: 'Ciena Corp', desc: 'WaveLogic相干引擎技术领先同业约2年，系统+模块双线垂直整合' },
           { ticker: 'NOK', mcap:'large', name: 'Nokia Corp', desc: '光传输+接入网综合布局，欧洲运营商市场保有率高，股息稳健' },
-          { ticker: 'ADTN', mcap:'small', name: 'Adtran Holdings', desc: '接入光网络设备，BEAD补贴直接受益方，小盘高弹性标的' }
+          { ticker: 'ADTN', mcap:'small', name: 'Adtran Holdings', desc: '接入光网络设备，BEAD补贴直接受益方，小盘高弹性标的' },
+          { ticker: 'CALX', mcap:'small', name: 'Calix Inc', desc: '宽带接入平台+云管理软件，BEAD补贴$425亿最直接受益方之一；专注宽带运营商，客户粘性强' }
         ]
       },
       {
@@ -753,6 +754,22 @@ const TIERS = [
         companies: [
           { ticker: 'LITE', mcap:'mid', name: 'Lumentum Holdings', desc: 'WSS/ROADM器件全球第一（市占率>50%），OXC全光交换超前布局' },
           { ticker: 'CIEN', mcap:'mid', name: 'Ciena Corp', desc: '完整ROADM系统集成商，DCI全光网络交钥匙方案提供者' }
+        ]
+      },
+      {
+        id: 'T5C',
+        label: '🖧 以太网交换机 / AI集群网络集成',
+        color: '#065f46',
+        bgColor: 'rgba(6,95,70,.15)',
+        labelColor: '#6ee7b7',
+        valBg: 'rgba(6,95,70,.07)',
+        valColor: '#34d399',
+        ccBorder: '#065f46',
+        tickerColor: '#6ee7b7',
+        desc: '以太网交换机是AI集群的"神经系统"——每台旗舰交换机有512个800G端口，即512个光模块插槽+512个APH Cage。ANET出货节奏直接决定T4光模块需求量；2026年首批商用CPO交换机（ANET+AVGO）是CPO商业化的标志事件。此层是T4的直接客户，是T5与DC之间的系统集成环节。',
+        companies: [
+          { ticker: 'ANET', mcap:'large', name: 'Arista Networks', desc: 'AI集群以太网交换机全球市占率>40%；512端口/台×800G直接驱动光模块出货；2026年首批CPO商用交换机与AVGO联合推出；客户含Meta/MSFT/Google' },
+          { ticker: 'HPE', mcap:'large', name: 'HP Enterprise (Juniper)', desc: '2024年以$140亿收购Juniper Networks；Juniper AI-native交换机直接竞争ANET；HPE服务器+Juniper网络垂直整合；AI数据中心以太网交换第二大玩家' }
         ]
       }
     ]
@@ -771,7 +788,6 @@ const SPECIAL_SECTIONS = [
       { ticker: 'NVDA', mcap:'mega', name: 'Nvidia Corp', desc: 'GPU算力集群最大光互连需求驱动方；NVLink/光铜混合互连推动800G/1.6T爆发；CPO最大受益者之一；AI Factories建设节奏决定光互连订单能见度' },
       { ticker: 'META', mcap:'mega', name: 'Meta Platforms', desc: '全球最大400G单一买家之一；2025年AI基础设施资本开支达$600-650亿；光模块直接采购金额超$10亿；MTIA自研芯片促进算力扩张' },
       { ticker: 'MSFT', mcap:'mega', name: 'Microsoft Corp', desc: 'Azure AI光互连采购全球前三；与OpenAI深度绑定持续推动Capex；数据中心建设计划明确至2027年；光互连多供应商策略' },
-      { ticker: 'ANET', mcap:'large', name: 'Arista Networks', desc: 'AI集群网络交换机市占率超40%；与COHR/MRVL光电协同受益；推动CPO系统集成商业化；客户含Meta/Microsoft/Google' },
       { ticker: 'AMZN', mcap:'mega', name: 'Amazon (AWS)', desc: 'AWS全球最大云基础设施；Trainium/Inferentia自研芯片集群扩张带动光互连需求；光互连采购全链覆盖上下游' }
     ]
   }
@@ -783,6 +799,7 @@ const SEGMENTS = [
   { id: 'T3', label: 'T3', sub: '硅光芯片', color: '#7dd3fc' },
   { id: 'T4', label: 'T4', sub: '光模块', color: '#fcd34d' },
   { id: 'T5', label: 'T5', sub: '光网系统', color: '#86efac' },
+  { id: 'T5C', label: 'T5C', sub: '以太网交换', color: '#34d399' },
   { id: 'DC', label: 'DC', sub: 'AI超大规模', color: '#38bdf8' }
 ];
 
@@ -817,8 +834,8 @@ const THEMES = [
       T2: { lvl: 'high', cos: ['COHR', 'LITE', 'MTSI'], desc: 'CPO光引擎中激光器/探测器依然刚需，价值不可替代' },
       T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'INTC', 'GFS', 'ALAB'], desc: '硅光PIC是CPO核心；$15→$80+的价值重估；ALAB Retimer在CPO架构中同步升级' },
       T4: { lvl: 'med', cos: ['FN', 'COHR', 'APH'], desc: 'CPO封装转向先进制造；APH需同步开发CPO专用连接器标准' },
-      T5: { lvl: 'low', cos: ['ANET'], desc: 'Arista等推动CPO系统集成，采购结构改变' },
-      DC: { lvl: 'high', cos: ['NVDA', 'ANET', 'MSFT'], desc: 'CPO降低总拥有成本；超大规模DC是最积极推动方' }
+      T5: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'ANET/HPE推动CPO交换机商业化；首批CPO产品2026年量产，是CPO从实验室到规模部署的关键验证方' },
+      DC: { lvl: 'high', cos: ['NVDA', 'MSFT'], desc: 'CPO降低总拥有成本；超大规模DC是最积极推动方' }
     }
   },
   {
@@ -869,7 +886,8 @@ const THEMES = [
       T3: { lvl: 'high', cos: ['MRVL', 'COHR'], desc: '相干DSP成本下降是整个主题商业化的关键路径' },
       T4: { lvl: 'high', cos: ['COHR', 'CIEN', 'CSCO'], desc: '400ZR/ZR+模块商业化核心受益；CSCO/Acacia是常被忽视的大盘相干模块标的' },
       T5: { lvl: 'med', cos: ['CIEN', 'NOK'], desc: '系统向模块化迁移有3-5年过渡期，影响相对可控' },
-      DC: { lvl: 'med', cos: ['ANET', 'AMZN'], desc: 'DCI降本后中小云厂商采购意愿大增，量的增长补偿' }
+      T5: { lvl: 'med', cos: ['ANET', 'HPE'], desc: '相干 DCI 模块插入 ANET/HPE 交换机；DCI 降本推动采购量增长' },
+      DC: { lvl: 'med', cos: ['AMZN'], desc: 'DCI降本后中小云厂商采购意愿大增，量的增长补偿' }
     }
   },
   {
@@ -886,7 +904,8 @@ const THEMES = [
       T3: { lvl: 'med', cos: ['AVGO', 'MRVL'], desc: '光交换控制芯片和集成方案，CPO延伸至交换架构' },
       T4: { lvl: 'low', cos: ['FN'], desc: '制造层间接受益，非主要受益层' },
       T5: { lvl: 'high', cos: ['LITE', 'CIEN'], desc: 'OXC系统集成和全光ROADM是下一代核心战场' },
-      DC: { lvl: 'high', cos: ['NVDA', 'MSFT', 'ANET'], desc: 'AI工厂是OXC最大潜在买家，降耗是刚性需求' }
+      T5: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'AI工厂网络层：ANET/HPE交换机是OXC全光网络最大潜在采购方' },
+      DC: { lvl: 'high', cos: ['NVDA', 'MSFT'], desc: 'AI工厂能耗刚性需求驱动全光网络，超大规模DC是最积极推动方' }
     }
   }
 ];
@@ -1216,7 +1235,7 @@ function renderFootnote() {
   const el = document.getElementById('footnote');
   if (!el) return;
   const total = document.querySelectorAll('[data-ticker]').length;
-  el.textContent = `共 ${total} 个产业链节点 · 25家核心上市公司（新增ALAB/APH/CRDO/CSCO/TEL） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网络系统 · 2026-03 v2 · 数据仅供研究参考，不构成投资建议`;
+  el.textContent = `共 ${total} 个产业链节点 · 27家核心上市公司（新增ANET→T5C/HPE/CALX） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-03 v4 · 数据仅供研究参考，不构成投资建议`;
 }
 
 /* ═══════════════════════════════════════════
@@ -1266,6 +1285,27 @@ const BASICS = [
     title: 'CPO 架构详解',
     body: '<b>传统插拔</b>：ASIC → PCB走线(5-10cm,损耗大) → Retimer → QSFP-DD模块外壳 → 光纤。<b>CPO</b>：ASIC ↔ 硅光PIC(光引擎，贴合封装，1-3mm间距) → 光纤。<b>价值重构</b>：T4光模块价值部分迁移至T3硅光PIC（PIC价值$15→$80+），传统模块组装厂面临颠覆，FN等先进封装代工受益。',
     tags: ['ASIC+光引擎共封装','PIC价值翻5倍','FN先进封装受益']
+  },
+  {
+    icon: '⚡',
+    color: '#7dd3fc',
+    title: '硅光子平台（SiPh）深度解析',
+    body: '传统光器件：激光器用 InP、调制器用 LiNbO₃、探测器用 Ge——三种材料三条产线，昂贵且难规模化。<b>硅光子</b>把这些功能全部集成在一块硅芯片上，在台积电/GF 标准晶圆厂流片，成本是 InP 路线的 1/3。<b>关键局限</b>：硅发不出激光 → 仍需外挂 InP 激光器（混合集成）→ 这是 T1 InP 晶圆即使在硅光时代依然不可替代的根本原因。<b>CPO 为何以硅光为基础</b>：SiPh PIC 与交换机 ASIC 同为硅芯片，可用先进封装（CoWoS/SoIC）直接贴合，传统 InP 模块无法做到。',
+    tags: ['SiPh成本=InP的1/3','仍需InP激光源','CPO的物理基础','AVGO/MRVL/INTC量产']
+  },
+  {
+    icon: '🔍',
+    color: '#fbbf24',
+    title: '数据中心模块 vs 相干模块——一图看懂区别',
+    body: '<b>数据中心光模块（T4A）</b>：短距（100m–2km）· PAM4调制（只看光强弱）· DSP简单 · 800G约$400–500 · 中国竞争激烈。类比：<b>手电筒打摩斯电码</b>——对方只需数"亮/灭"即可解码，简单粗暴。<br><b>相干光模块（T4B）</b>：长距（80km–数千km）· QAM调制（同时编码振幅+相位）· 需本振激光+ICR相干接收机+高端DSP（占成本40%）· 400ZR约$800–1500 · 中国暂时无法竞争。类比：<b>专业调相无线电台</b>——收发双方需共享本振频率才能解调，技术门槛天壤之别。',
+    tags: ['PAM4 vs QAM','$400 vs $1500','短距 vs 长距','中国可追 vs 暂时无法追']
+  },
+  {
+    icon: '🌐',
+    color: '#34d399',
+    title: '相干传输系统是什么（T5A）',
+    body: 'CIEN/NOK 卖的<b>不是一个模块，是完整的光网络基础设施</b>。系统组成：①相干转发器（终端模块）②<b>WDM合波器</b>（把80–100个不同波长同时塞进一根光纤）③<b>EDFA光放大器</b>（每80km纯光放大，全程无光→电→光转换）④<b>ROADM</b>（在节点把某波长"扳"到不同方向，不需变回电信号）⑤<b>NMS网管软件</b>（管控全网）。这是"交钥匙"方案，运营商买一套就能建城市A到城市B的骨干光路。<b>CIEN护城河</b>：WaveLogic DSP领先竞争对手约2代→同一根光纤跑出2倍容量→运营商付溢价。',
+    tags: ['WDM百波长复用','EDFA纯光放大','ROADM光路由','NMS软件绑定','CIEN领先2代']
   }
 ];
 
