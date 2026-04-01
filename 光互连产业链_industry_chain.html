@@ -84,6 +84,11 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .researched-badge{position:absolute;top:4px;right:4px;font-size:8px;padding:1px 4px;
   border-radius:3px;background:rgba(74,222,128,.12);color:#4ade80;
   border:1px solid rgba(74,222,128,.2);font-weight:600;}
+.rating-chip{display:inline-flex;align-items:center;font-size:8.5px;font-weight:700;
+  padding:1px 5px;border-radius:3px;white-space:nowrap;margin-bottom:2px;letter-spacing:.2px;}
+.rating-chip.buy{background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3);}
+.rating-chip.hold{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.25);}
+.rating-chip.sell{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
 .mcap-badge{font-size:7px;font-weight:700;padding:1px 4px;border-radius:3px;
   white-space:nowrap;vertical-align:middle;margin-left:4px;display:inline-block;letter-spacing:.3px;}
 .special-row{border-radius:12px;padding:15px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
@@ -787,9 +792,22 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
    飞书链接配置区（研究完成后填入）
 ═══════════════════════════════════════════ */
 const FEISHU = {
-  /* 示例：
-  COHR: { doc: "https://feishu.cn/docx/xxx", val: "https://feishu.cn/sheets/xxx", researched: true },
-  */
+  /* ── 独立研报（含飞书链接）─────────────────────── */
+  GLW:  { doc: "https://feishu.cn/docx/AlFGdC4gwoGN3KxkmOKc1QnbnGb", val: "https://feishu.cn/sheet/JrLvsEal6hBLY4tKy9xccscDnBf", researched: true, rating: 'Hold', target: '$133' },
+  AXTI: { doc: "https://feishu.cn/docx/HxmvdohLvoUxhFxSLx6cAiu9nJg", val: "https://feishu.cn/sheet/Puy1swVlChzNBVtx7OYcSAeDnqe", researched: true, rating: 'Sell', target: '$35'  },
+  /* ── 批量研报·光通信组（2026-03-31，已上传飞书）─── */
+  COHR: { doc: "", val: "", researched: true, rating: 'Buy',  target: '$284' },
+  LITE: { doc: "", val: "", researched: true, rating: 'Hold', target: '$673' },
+  IPGP: { doc: "", val: "", researched: true, rating: 'Hold', target: '$107' },
+  MTSI: { doc: "", val: "", researched: true, rating: 'Hold', target: '$190' },
+  GFS:  { doc: "", val: "", researched: true, rating: 'Hold', target: '$50'  },
+  MRVL: { doc: "", val: "", researched: true, rating: 'Buy',  target: '$115' },
+  INTC: { doc: "", val: "", researched: true, rating: 'Hold', target: '$46'  },
+  FN:   { doc: "", val: "", researched: true, rating: 'Buy',  target: '$538' },
+  AAOI: { doc: "", val: "", researched: true, rating: 'Hold', target: '$90'  },
+  CIEN: { doc: "", val: "", researched: true, rating: 'Hold', target: '$390' },
+  NOK:  { doc: "", val: "", researched: true, rating: 'Hold', target: '$8.00'},
+  ADTN: { doc: "", val: "", researched: true, rating: 'Hold', target: '$14'  },
 };
 
 /* ═══════════════════════════════════════════
@@ -1247,31 +1265,45 @@ const THEMES = [
 const VI_CARDS = [
   {
     icon: '🏆',
-    title: '首选标的：COHR + MRVL + GLW',
+    title: '买入标的（3只）：COHR / MRVL / FN',
     color: '#34d399',
-    tag: '价值核心',
-    body: 'Coherent（COHR）是唯一覆盖T1~T4的垂直整合巨头，受益AI周期最全面，经过合并整合后利润率改善有望超预期。Marvell（MRVL）是硅光DSP寡头，AI基础设施采购增长直接转化为高毛利收入。Corning（GLW）是实物基础设施护城河资产，供需缺口持续2年+，适合长期持有。'
+    tag: '深研 Buy',
+    body: '<b>COHR Buy/$284：</b>T1~T4唯一垂直整合巨头，FY2026E EBITDA $2.0B，EV/EBITDA主方法目标$277，分析师共识$284，当前$253.63上行+12%；合并整合进入尾声，EBITDA margin持续改善。<b>MRVL Buy/$115：</b>硅光DSP外部市占率>60%，Teralynx系列AI互连必选，高毛利DSP收入直接受益AI基础设施采购增长。<b>FN Buy/$538：</b>全球最大光电合同制造商，CEO用"exceptional quarter"表述Q2FY26，PE 38x综合目标$538，分析师共识$582（+18%上行）；代工模式不承担技术路线风险，CPO时代反而持续受益。'
+  },
+  {
+    icon: '📊',
+    title: '持有标的（10只）：估值合理，等待更好买点',
+    color: '#fbbf24',
+    tag: '深研 Hold',
+    body: '<b>GLW $133：</b>Hold；EV/EBITDA 27.94x历史高位，$110-115为理想买入区间；光纤基础设施护城河强，但当前安全边际有限。<b>LITE $673：</b>Hold/Watch；EPS转正阶段性，VCSEL+WSS器件双主线，ROE改善周期中。<b>CIEN $390：</b>Hold；WaveLogic DSP技术领先2年护城河，$7B积压可见度高，但股价已超分析师共识$335.94。<b>AAOI $90：</b>Hold；P/S 11x定价，800G纯玩家但客户集中82%（Amazon）执行风险高。<b>NOK $8：</b>Hold；EV/EBITDA 10x，Nokia Tech IP稳固护城河，成长性有限。<b>ADTN $14：</b>Hold；BEAD $425亿补贴受益，EV/EBITDA 10x，等待政策执行验证后转Buy。<b>IPGP $107：</b>Hold；工业激光需求疲软，通信转型尚在进行，PE主方法与分析师共识差距大。<b>MTSI $190：</b>Hold；PE次选$190，CPO光引擎关键供应商逻辑成立，但分析师共识$261与模型差异大，需更多验证。<b>GFS $50：</b>Hold；硅光代工平台价值清晰，但盈利能力改善节奏慢，300mm产能利用率是关键跟踪指标。<b>INTC $46：</b>Hold；硅光业务价值需独立上市解锁，整体转型不确定性高。'
+  },
+  {
+    icon: '🚨',
+    title: '卖出警告：AXTI 当前价格严重透支预期',
+    color: '#f87171',
+    tag: '深研 Sell',
+    body: '<b>AXTI Sell/$35：</b>当前价$52.73已超过<b>所有5位分析师目标价上限（最高$45）</b>，P/S 33x极度泡沫定价。InP积压创历史新高$6000万是真实信号，但管理层目标需要InP季度营收从$8M→$35M（4倍增长）才能支撑当前估值，执行难度极高；合理买入区间$15-20，现价有-34%~-52%下行风险。双向地缘政治管制是极端尾风险。'
   },
   {
     icon: '⚡',
-    title: 'CPO赛道前瞻布局：AVGO + INTC + FN',
+    title: 'CPO赛道前瞻布局：AVGO + FN（INTC待验证）',
     color: '#fb923c',
     tag: '长期催化',
-    body: 'Broadcom（AVGO）已量产硅光800G，CPO路线图清晰，AI ASIC+光互连双线驱动，是光互连+AI芯片最强"组合标的"。Intel（INTC）硅光业务有望独立上市，解锁估值。Fabrinet（FN）是CPO先进封装代工的最大受益者，不承担技术路线风险但稳稳捕获制造价值。'
+    body: 'Broadcom（AVGO）已量产硅光800G，CPO路线图最清晰，AI ASIC+光互连双线驱动。Fabrinet（FN，Buy/$538）是CPO先进封装代工最大受益者，CEO表述"exceptional quarter"，不承担技术路线风险而稳稳捕获制造价值。Intel（INTC，Hold/$46）硅光业务有望独立上市解锁估值，但整体转型风险高；建议等待光子业务独立上市事件驱动再介入。'
   },
   {
     icon: '🌊',
-    title: '选股框架：优先垂直整合/技术壁垒',
+    title: '选股框架：优先垂直整合/技术壁垒，规避纯组装',
     color: '#a78bfa',
     tag: '选股原则',
-    body: '光互连行业技术迭代快（2-3年一代），真正的长期价值来自：①垂直整合（控制上游器件+下游系统）；②技术领先代差（Ciena WaveLogic领先2年+）；③规模效应护城河（GF硅光代工、Lumentum WSS市占率>50%）。避免纯组装型光模块厂，它们面临CPO颠覆风险。'
+    body: '光互连行业技术迭代快（2-3年一代），真正的长期价值来自：①垂直整合（COHR覆盖T1~T4护城河最深）；②技术领先代差（CIEN WaveLogic领先2年+，MRVL DSP市占>60%）；③制造代工（FN不押技术路线，CPO时代反而持续受益）。<b>规避：</b>纯组装型光模块厂面临CPO颠覆+中国竞争双重压力；AXTI当前价格已透支未来3年预期，需回落后再看。'
   },
   {
     icon: '⚠️',
     title: '主要风险点',
     color: '#f87171',
     tag: '风险提示',
-    body: '①景气度周期风险：超大规模DC资本开支有周期性，2018/2022年曾出现去库存；②CPO替代节奏不确定：若2027年前CPO大规模落地，传统插拔模块厂压力加大；③中美脱钩风险：中国制造商（中际旭创/新易盛）迅速崛起，价格竞争压力加大；④技术路线风险：InP vs 硅光的格局仍在演变中。'
+    body: '①景气度周期风险：超大规模DC资本开支有周期性，2018/2022年曾出现去库存；②CPO替代节奏不确定：若2027年前CPO大规模落地，传统插拔模块厂压力加大；③中美脱钩风险：中国制造商（中际旭创/新易盛）迅速崛起，对COHR/AAOI形成价格竞争；④估值泡沫：AXTI P/S 33x已超所有分析师目标，部分光互连标的相对价值低于预期（IPGP PE模型$96 vs 共识$145，差异较大）。'
   },
   {
     icon: '🆕',
@@ -1285,14 +1317,14 @@ const VI_CARDS = [
     title: '关键时间节点跟踪',
     color: '#38bdf8',
     tag: '催化剂',
-    body: '2025Q3-Q4：800G出货量/ASP走势；2025年下半年：1.6T模块首批量产出货；2026年：CPO商业化验证（Arista/Broadcom首批CPO交换机量产）；2026-2027年：Intel光子业务独立上市；2027年：OXC市场规模突破临界点；长期看：全光AI工厂建设启动时间。'
+    body: '2025Q3-Q4：800G出货量/ASP走势；2025年下半年：1.6T模块首批量产出货；2026年：CPO商业化验证（Arista/Broadcom首批CPO交换机量产）；2026-2027年：Intel光子业务独立上市；2027年：OXC市场规模突破临界点；<b>近期触媒：</b>ADTN BEAD补贴执行进度（转Buy条件）；AAOI Q2/Q3执行交叉验证；MTSI CPO光引擎订单放量时间表。'
   },
   {
     icon: '🌏',
     title: '中国供应链崛起：值得关注的隐性风险',
     color: '#fbbf24',
     tag: '风险监控',
-    body: '中际旭创（300308）、新易盛（300502）、天孚通信（300394）等A股公司正快速提升800G光模块份额，主要面向Meta/微软等超大规模DC。中国厂商在A/H股有独立投资机会，但对美股标的（尤其COHR/AAOI）构成价格竞争压力，需持续监控份额变化。'
+    body: '中际旭创（300308）、新易盛（300502）、天孚通信（300394）等A股公司正快速提升800G光模块份额，主要面向Meta/微软等超大规模DC。中国厂商在A/H股有独立投资机会，但对美股标的（尤其COHR/AAOI）构成价格竞争压力，需持续监控份额变化。T3硅光/DSP受出口管制制约，是美股护城河最稳固的环节。'
   }
 ];
 
@@ -1306,6 +1338,12 @@ function initLinks() {
     const el = card.querySelector('.cc-links');
     if (!el) return;
     if (info && info.researched) {
+      if (info.rating) {
+        const chip = document.createElement('span');
+        chip.className = 'rating-chip ' + info.rating.toLowerCase();
+        chip.textContent = info.rating + ' ' + (info.target || '');
+        el.appendChild(chip);
+      }
       const makeBtn = (href, cls, label) => {
         const a = document.createElement('a');
         if (href && href !== '#') { a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
