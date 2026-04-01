@@ -1388,10 +1388,10 @@ function initLinks() {
       el.appendChild(sp);
     }
   });
-  const total = document.querySelectorAll('[data-ticker]').length;
+  const total = new Set([...document.querySelectorAll('[data-ticker]')].map(el => el.dataset.ticker)).size;
   const done = Object.values(FEISHU).filter(v => v.researched).length;
   const prog = document.getElementById('research-progress');
-  if (prog) prog.textContent = done + ' / ' + total + ' 个产业节点已完成深度研究';
+  if (prog) prog.textContent = done + ' / ' + total + ' 家公司已完成深度研究';
   const rc = document.getElementById('researched-count');
   if (rc) rc.textContent = done;
 }
@@ -1630,8 +1630,8 @@ function renderVICards() {
 function renderFootnote() {
   const el = document.getElementById('footnote');
   if (!el) return;
-  const total = document.querySelectorAll('[data-ticker]').length;
-  el.textContent = `共 ${total} 个产业链节点 · 27家核心上市公司（批量研报：CLS/ALAB/APH/CRDO/CSCO/TEL/ANET/HPE/CALX全部完成） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-04 v5 · 数据仅供研究参考，不构成投资建议`;
+  const total = new Set([...document.querySelectorAll('[data-ticker]')].map(el => el.dataset.ticker)).size;
+  el.textContent = `覆盖 ${total} 家核心上市公司 · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-04 v5 · 数据仅供研究参考，不构成投资建议`;
 }
 
 /* ═══════════════════════════════════════════
