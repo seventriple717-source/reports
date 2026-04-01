@@ -40,7 +40,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .ctag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
   border:1px solid rgba(37,99,235,.3);color:#93c5fd;background:rgba(37,99,235,.1);}
 .carrow{color:#6a85a0;font-size:11px;}
-.chain-scroll{overflow-x:auto;padding-bottom:8px;margin-bottom:20px;}
+.chain-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:8px;margin-bottom:20px;}
 .chain-wrap{display:flex;align-items:flex-start;min-width:1300px;gap:0;}
 .arr-col{flex-shrink:0;width:32px;display:flex;flex-direction:column;align-items:center;}
 .arr-sp{height:48px;flex-shrink:0;}
@@ -104,7 +104,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .matrix-section{margin-top:4px;}
 .matrix-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;
   text-transform:uppercase;margin-bottom:16px;}
-.matrix-wrap{overflow-x:auto;}
+.matrix-wrap{overflow-x:auto;overflow-y:hidden;}
 .matrix-table{width:100%;border-collapse:separate;border-spacing:4px;min-width:1200px;}
 .matrix-table th{font-size:10px;font-weight:700;padding:7px 5px;text-align:center;
   letter-spacing:.5px;white-space:nowrap;border-radius:5px;
@@ -153,7 +153,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 /* ── 技术迭代路径 ── */
 .tech-section{margin-top:26px;}
 .tech-heading{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;text-transform:uppercase;margin-bottom:16px;}
-.tech-scroll{overflow-x:auto;padding-bottom:10px;}
+.tech-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:10px;}
 .tech-timeline{display:flex;align-items:flex-start;min-width:900px;padding:0 8px 4px;}
 .tech-seg{flex:1;position:relative;padding:0 3px;}
 .tech-seg::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:2px;background:linear-gradient(90deg,rgba(99,102,241,.5),rgba(99,102,241,.1));z-index:0;}
@@ -249,7 +249,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .sfdiag-sub{font-size:10px;color:var(--text3);margin-bottom:14px;line-height:1.5;}
 .sfdiag-scen{margin-bottom:12px;}
 .sfdiag-scen-title{font-size:10px;font-weight:700;color:var(--text2);margin-bottom:7px;padding:4px 10px;border-left:3px solid;border-radius:0 4px 4px 0;background:rgba(255,255,255,.03);display:inline-block;}
-.sfdiag-flow{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;gap:0;padding:8px 6px;background:rgba(0,0,0,.25);border-radius:8px;border:1px solid rgba(255,255,255,.06);scrollbar-width:thin;}
+.sfdiag-flow{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:0;padding:8px 6px;background:rgba(0,0,0,.25);border-radius:8px;border:1px solid rgba(255,255,255,.06);scrollbar-width:thin;}
 .sfb{flex-shrink:0;text-align:center;padding:6px 9px;border-radius:6px;min-width:72px;border:1px solid;display:flex;flex-direction:column;justify-content:center;align-items:center;}
 .sfb-tier{font-size:7.5px;font-weight:800;padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:3px;}
 .sfb-name{font-size:8.5px;font-weight:600;line-height:1.3;color:var(--text);}
@@ -267,6 +267,10 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .sfio-arr{flex-shrink:0;align-self:center;color:#374151;font-size:13px;padding-bottom:2px;}
 .sfdiag-tc-why{font-size:8.5px;color:var(--text3);line-height:1.55;padding-top:7px;border-top:1px solid rgba(255,255,255,.06);}
 .sfdiag-tc-why b{color:var(--text2);}
+#tt{position:fixed;z-index:9999;pointer-events:none;background:#0b1525;
+  border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:11px 14px;max-width:270px;
+  box-shadow:0 8px 32px rgba(0,0,0,.65);opacity:0;transition:opacity .12s;font-size:11px;line-height:1.4;}
+#tt.show{opacity:1;}
 </style>
 </head>
 <body>
@@ -808,6 +812,16 @@ const FEISHU = {
   CIEN: { doc: "https://feishu.cn/docx/KFbhdbSAQoZ7fGxIb9dc90xmnib", val: "https://feishu.cn/sheet/G7iQsvIB0hK7lftfWfIcwvvUnbf", researched: true, rating: 'Hold', target: '$390' },
   NOK:  { doc: "https://feishu.cn/docx/OPimdEMfwo1QpZxVrwTcX9yon1d", val: "https://feishu.cn/sheet/U0qbsJfukhYEtFtiHfxcLAQqnJg", researched: true, rating: 'Hold', target: '$8.00'},
   ADTN: { doc: "https://feishu.cn/docx/HjBXdFv68ocwOex67lycGs1VnDb", val: "https://feishu.cn/sheet/NLuEsNAsUhNoPztZ9G8cAVE4ndc", researched: true, rating: 'Hold', target: '$14'  },
+  /* ── 批量研报·光互连产业链组（2026-04-01，已上传飞书）─── */
+  CLS:  { doc: "https://feishu.cn/docx/M8w1dMyUNopUMjxdsWsc9wbcnj7", val: "https://feishu.cn/sheet/SNGUshI6fhzqnCtIGsccVHoVnrd", researched: true, rating: 'Buy',  target: '$380' },
+  ALAB: { doc: "https://feishu.cn/docx/Bxznduw2eoX64oxOiAocAcqNnPx", val: "https://feishu.cn/sheet/Mr7Wsqn4shDPNGtBEPAcCLygnYg", researched: true, rating: 'Buy',  target: '$200' },
+  APH:  { doc: "https://feishu.cn/docx/MtZzdljnzoYjr7xaiByc6pK1nWb", val: "https://feishu.cn/sheet/Dr8YspyLMhAv0GtxrwvcYaHNnud", researched: true, rating: 'Buy',  target: '$160' },
+  CRDO: { doc: "https://feishu.cn/docx/FAW6dBVq2oAunxxXroNcOhjnnbd", val: "",                                                              researched: true, rating: 'Buy',  target: '$200' },
+  CSCO: { doc: "https://feishu.cn/docx/MXDTdLkQpoESEyxSJZvcTuqOnTh", val: "https://feishu.cn/sheet/Q5wdsY2dmhv4zft8aTbcFa4Qnch", researched: true, rating: 'Hold', target: '$88'  },
+  TEL:  { doc: "https://feishu.cn/docx/DFXcdRT8HoOJumxmRygcZgWqn3b", val: "https://feishu.cn/sheet/PZsKsStlUhh3Umt5opJcEuPInXc", researched: true, rating: 'Buy',  target: '$250' },
+  ANET: { doc: "https://feishu.cn/docx/KT7xdCgJroaEarxi42xcT1SRnfe", val: "https://feishu.cn/sheet/TnS8sPyQHhtwmctWtgWcrtQ4n5d", researched: true, rating: 'Buy',  target: '$165' },
+  HPE:  { doc: "https://feishu.cn/docx/PgXRdJIykoHTkgxG89QcS0cCnvG", val: "https://feishu.cn/sheet/Zw1islLiBhRLHKtXwasc3D1Wn3w", researched: true, rating: 'Hold', target: '$28'  },
+  CALX: { doc: "https://feishu.cn/docx/H5TZdfpEXoPztFxOB51cF1gfnMc", val: "https://feishu.cn/sheet/D1XIsRIK5hqICJtNvl2cdeYxnfg", researched: true, rating: 'Buy',  target: '$65'  },
 };
 
 /* ═══════════════════════════════════════════
@@ -1142,6 +1156,15 @@ const SPECIAL_SECTIONS = [
   }
 ];
 
+/* ── Ticker 详情查询表 ── */
+const TICKER_INFO = {};
+TIERS.forEach(t => (t.subs||[]).forEach(s => s.companies.forEach(c => {
+  TICKER_INFO[c.ticker] = { name: c.name, desc: c.desc, color: s.tickerColor || t.tickerColor, tier: t.title };
+})));
+SPECIAL_SECTIONS.forEach(ss => ss.companies.forEach(c => {
+  TICKER_INFO[c.ticker] = { name: c.name, desc: c.desc, color: ss.accentColor, tier: 'AI超大规模DC' };
+}));
+
 const SEGMENTS = [
   { id: 'T1', label: 'T1', sub: '基础材料', color: '#c4b5fd' },
   { id: 'T2', label: 'T2', sub: '光子器件', color: '#93c5fd' },
@@ -1167,6 +1190,7 @@ const THEMES = [
       T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'ALAB', 'CRDO'], desc: '硅光PIC+DSP是800G/1.6T核心成本中枢；ALAB Retimer+CRDO AEC为光模块提供接口适配' },
       T4: { lvl: 'high', cos: ['COHR', 'FN', 'AAOI', 'APH'], desc: '最直接受益层；出货量与ASP均向上；APH cage需求随端口密度刚性增长' },
       T5: { lvl: 'low', cos: ['CIEN'], desc: 'DCI需求间接拉动，非主要受益层' },
+      T5C: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'ANET 512×800G端口是T4光模块最大直接买家；出货量与光模块需求1:1绑定；每季度订单可视度强' },
       DC: { lvl: 'high', cos: ['NVDA', 'META', 'MSFT', 'AMZN'], desc: '需求端核心驱动；资本开支可见度高至2027年' }
     }
   },
@@ -1183,7 +1207,8 @@ const THEMES = [
       T2: { lvl: 'high', cos: ['COHR', 'LITE', 'MTSI'], desc: 'CPO光引擎中激光器/探测器依然刚需，价值不可替代' },
       T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'INTC', 'GFS', 'ALAB'], desc: '硅光PIC是CPO核心；$15→$80+的价值重估；ALAB Retimer在CPO架构中同步升级' },
       T4: { lvl: 'med', cos: ['FN', 'COHR', 'APH'], desc: 'CPO封装转向先进制造；APH需同步开发CPO专用连接器标准' },
-      T5: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'ANET/HPE推动CPO交换机商业化；首批CPO产品2026年量产，是CPO从实验室到规模部署的关键验证方' },
+      T5: { lvl: 'low', cos: [], desc: '传统光网络系统层间接受益于CPO降本' },
+      T5C: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'ANET/HPE推动CPO交换机商业化；首批CPO产品2026年量产，是CPO从实验室到规模部署的关键验证方' },
       DC: { lvl: 'high', cos: ['NVDA', 'MSFT'], desc: 'CPO降低总拥有成本；超大规模DC是最积极推动方' }
     }
   },
@@ -1201,6 +1226,7 @@ const THEMES = [
       T3: { lvl: 'high', cos: ['AVGO', 'MRVL', 'INTC', 'GFS'], desc: '硅光平台价值中枢，超额毛利率来源，竞争壁垒深' },
       T4: { lvl: 'high', cos: ['COHR', 'FN', 'AAOI'], desc: '硅光BOM下降驱动量的爆发，Fabrinet代工持续受益' },
       T5: { lvl: 'low', cos: [], desc: '系统厂商间接受益于成本下降' },
+      T5C: { lvl: 'low', cos: ['ANET', 'HPE'], desc: '硅光BOM下降→模块成本降低→单端口TCO改善，有助ANET/HPE交换机部署规模扩张；间接受益' },
       DC: { lvl: 'med', cos: ['NVDA', 'META'], desc: '总拥有成本下降，有利于扩大AI集群规模' }
     }
   },
@@ -1218,6 +1244,7 @@ const THEMES = [
       T3: { lvl: 'low', cos: [], desc: '非主要传导链路，间接受益' },
       T4: { lvl: 'med', cos: ['FN'], desc: '数据中心光缆组件制造需求小幅受益' },
       T5: { lvl: 'med', cos: ['ADTN', 'CIEN'], desc: 'BEAD补贴带动接入光网络系统需求明确增长' },
+      T5C: { lvl: 'low', cos: ['ANET'], desc: 'AI DC光纤扩容随交换机端口密度同步提升；ANET受益于数据中心整体建设节奏，非直接光纤受益方' },
       DC: { lvl: 'high', cos: ['MSFT', 'AMZN', 'META'], desc: '新建AI DC是最大光纤消耗方，单个园区用纤超百万公里' }
     }
   },
@@ -1235,7 +1262,7 @@ const THEMES = [
       T3: { lvl: 'high', cos: ['MRVL', 'COHR'], desc: '相干DSP成本下降是整个主题商业化的关键路径' },
       T4: { lvl: 'high', cos: ['COHR', 'CIEN', 'CSCO'], desc: '400ZR/ZR+模块商业化核心受益；CSCO/Acacia是常被忽视的大盘相干模块标的' },
       T5: { lvl: 'med', cos: ['CIEN', 'NOK'], desc: '系统向模块化迁移有3-5年过渡期，影响相对可控' },
-      T5: { lvl: 'med', cos: ['ANET', 'HPE'], desc: '相干 DCI 模块插入 ANET/HPE 交换机；DCI 降本推动采购量增长' },
+      T5C: { lvl: 'med', cos: ['ANET', 'HPE'], desc: '相干 DCI 模块插入 ANET/HPE 交换机；DCI 降本推动采购量增长' },
       DC: { lvl: 'med', cos: ['AMZN'], desc: 'DCI降本后中小云厂商采购意愿大增，量的增长补偿' }
     }
   },
@@ -1253,7 +1280,7 @@ const THEMES = [
       T3: { lvl: 'med', cos: ['AVGO', 'MRVL'], desc: '光交换控制芯片和集成方案，CPO延伸至交换架构' },
       T4: { lvl: 'low', cos: ['FN'], desc: '制造层间接受益，非主要受益层' },
       T5: { lvl: 'high', cos: ['LITE', 'CIEN'], desc: 'OXC系统集成和全光ROADM是下一代核心战场' },
-      T5: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'AI工厂网络层：ANET/HPE交换机是OXC全光网络最大潜在采购方' },
+      T5C: { lvl: 'high', cos: ['ANET', 'HPE'], desc: 'AI工厂网络层：ANET/HPE交换机是OXC全光网络最大潜在采购方' },
       DC: { lvl: 'high', cos: ['NVDA', 'MSFT'], desc: 'AI工厂能耗刚性需求驱动全光网络，超大规模DC是最积极推动方' }
     }
   }
@@ -1568,8 +1595,8 @@ function renderMatrix() {
           background:${seg.color}30;color:${seg.color};
           border:1px solid ${seg.color}70;letter-spacing:.4px;">${lvlLabel[d.lvl]}</div>`;
         const cosHtml = d.cos.map(c =>
-          `<span style="display:inline-block;font-size:9px;font-weight:700;
-            padding:1px 5px;border-radius:3px;margin:1px;
+          `<span data-tt-ticker="${c}" style="display:inline-block;font-size:9px;font-weight:700;
+            padding:1px 5px;border-radius:3px;margin:1px;cursor:default;
             background:rgba(255,255,255,.07);border:1px solid ${seg.color}55;
             color:${seg.color};">${c}</span>`
         ).join('');
@@ -1604,7 +1631,7 @@ function renderFootnote() {
   const el = document.getElementById('footnote');
   if (!el) return;
   const total = document.querySelectorAll('[data-ticker]').length;
-  el.textContent = `共 ${total} 个产业链节点 · 27家核心上市公司（新增ANET→T5C/HPE/CALX） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-03 v4 · 数据仅供研究参考，不构成投资建议`;
+  el.textContent = `共 ${total} 个产业链节点 · 27家核心上市公司（批量研报：CLS/ALAB/APH/CRDO/CSCO/TEL/ANET/HPE/CALX全部完成） · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-04 v5 · 数据仅供研究参考，不构成投资建议`;
 }
 
 /* ═══════════════════════════════════════════
@@ -2067,6 +2094,49 @@ function renderChinaSection() {
   });
 }
 
+function initTooltip() {
+  const tt = document.getElementById('tt');
+  function positionTT(e) {
+    const pad = 15, w = window.innerWidth, h = window.innerHeight;
+    let x = e.clientX + pad, y = e.clientY + pad;
+    const tw = tt.offsetWidth, th = tt.offsetHeight;
+    if (x + tw > w - 8) x = e.clientX - tw - pad;
+    if (y + th > h - 8) y = e.clientY - th - pad;
+    tt.style.left = x + 'px';
+    tt.style.top  = y + 'px';
+  }
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('[data-tt-ticker]');
+    if (!el) { tt.classList.remove('show'); return; }
+    const ticker = el.dataset.ttTicker;
+    const info = TICKER_INFO[ticker] || {};
+    const fe   = FEISHU[ticker]    || {};
+    const col  = info.color || '#e8eef7';
+    let ratingHtml = '';
+    if (fe.rating) {
+      const rc = fe.rating === 'Buy' ? '#34d399' : fe.rating === 'Hold' ? '#fbbf24' : '#f87171';
+      ratingHtml = `<span style="display:inline-block;font-size:8.5px;font-weight:700;padding:1px 6px;
+        border-radius:3px;background:${rc}22;color:${rc};border:1px solid ${rc}55;margin-left:6px;">
+        ${fe.rating}${fe.target ? ' ' + fe.target : ''}</span>`;
+    }
+    tt.innerHTML = `
+      <div style="display:flex;align-items:center;margin-bottom:4px;">
+        <span style="font-size:14px;font-weight:800;color:${col};">${ticker}</span>${ratingHtml}
+      </div>
+      ${info.name ? `<div style="font-size:9.5px;color:#6e8eac;margin-bottom:7px;">${info.name}${info.tier ? ' &nbsp;·&nbsp; ' + info.tier : ''}</div>` : ''}
+      ${info.desc ? `<div style="font-size:10px;color:#c0d8f0;line-height:1.5;">${info.desc}</div>` : ''}
+    `;
+    tt.classList.add('show');
+    positionTT(e);
+  });
+  document.addEventListener('mousemove', e => {
+    if (tt.classList.contains('show')) positionTT(e);
+  });
+  document.addEventListener('mouseout', e => {
+    if (!e.relatedTarget || !e.relatedTarget.closest('[data-tt-ticker]')) tt.classList.remove('show');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderLegend();
   renderChain();
@@ -2080,7 +2150,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderVICards();
   initLinks();
   renderFootnote();
+  initTooltip();
 });
 </script>
+<div id="tt"></div>
 </body>
 </html>
