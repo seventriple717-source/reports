@@ -27,7 +27,7 @@ details summary:hover{color:#888}
 </head><body>
 
 <h1>10x股策略挖掘机 — 策略实验报告</h1>
-<div class="sub">数据：2003-2014 | 股票池：9332只 | 总信号：120,423 | 生成：2026-04-01 11:27 | 来源：historical_20030910_20141231.csv</div>
+<div class="sub">数据：2003-2014 | 股票池：9332只 | 总信号：120,423 | 生成：2026-04-01 12:09 | 来源：historical_20030910_20141231.csv</div>
 
 <h2>核心发现</h2>
 <div class="callout g"><b>评分是最强过滤器：</b>V1.0→V2.2（score≥70），10x@3年从 1.21% 升至 12.83%，提升 10.6 倍，年均信号仍有约 360 个。</div>
@@ -68,6 +68,8 @@ details summary:hover{color:#888}
 <tr style="background:#141a28"><td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td><td style="color:#777;font-size:10px">V7.0 + 先行信号须score≥75（V7.0所有信号已满足≥70，升至≥75筛出108个更高质量共振信号）</td><td style="color:#555">108</td><td style="color:#555">0.1%</td><td style="color:#00e676">+100% </td><td style="color:#00e676">+79%</td><td style="color:#00e676">+259.0%</td><td style="color:#00e676">2390%</td><td style="font-weight:bold;color:#00e676">5.63%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+88%</td><td style="color:#00e676">+419.7%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">20.69%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+92%</td><td style="color:#00e676">+406.4%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">24.00%</td><td style="color:rgb(179,23,20)">-92%</td></tr>
 <tr style="background:#141a28"><td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td><td style="color:#777;font-size:10px">V7.0信号 + 120日内未涨+20%则出局（释放死钱）</td><td style="color:#555">162</td><td style="color:#555">0.1%</td><td style="color:#00e676">+100% </td><td style="color:#00e676">+77%</td><td style="color:#00e676">+232.6%</td><td style="color:#00e676">2390%</td><td style="font-weight:bold;color:#00e676">5.36%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+87%</td><td style="color:#00e676">+404.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">19.78%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+89%</td><td style="color:#00e676">+384.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">22.37%</td><td style="color:rgb(179,23,20)">-92%</td></tr>
 <tr style="background:#141a28"><td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td><td style="color:#777;font-size:10px">V7.0 + VIX状态过滤：仅在危机复苏期(VIX曾破25且回落)或正常期(VIX<20)入场</td><td style="color:#555">112</td><td style="color:#555">0.1%</td><td style="color:#00e676">+100% </td><td style="color:#00e676">+77%</td><td style="color:#00e676">+231.6%</td><td style="color:#00e676">2390%</td><td style="font-weight:bold;color:#00e676">5.13%</td><td style="color:rgb(179,23,20)">-90%</td><td style="color:#00e676">+89%</td><td style="color:#00e676">+371.5%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">13.85%</td><td style="color:rgb(179,23,20)">-90%</td><td style="color:#00e676">+89%</td><td style="color:#00e676">+353.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">17.86%</td><td style="color:rgb(179,23,20)">-82%</td></tr>
+<tr style="background:#141a28"><td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td><td style="color:#777;font-size:10px">V7.0信号 + 4档止盈：+50%卖1/4 → +200%再卖1/4 → +500%再卖1/4 → 剩余移动止损35%</td><td style="color:#555">162</td><td style="color:#555">0.1%</td><td style="color:#00e676">+100% </td><td style="color:#00e676">+77%</td><td style="color:#00e676">+232.6%</td><td style="color:#00e676">2390%</td><td style="font-weight:bold;color:#00e676">5.36%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+87%</td><td style="color:#00e676">+404.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">19.78%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+89%</td><td style="color:#00e676">+384.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">22.37%</td><td style="color:rgb(179,23,20)">-92%</td></tr>
+<tr style="background:#141a28"><td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td><td style="color:#777;font-size:10px">V7.0信号 + 按score分档止损：≥85用-60%，75-84用-50%，70-74用-35%</td><td style="color:#555">162</td><td style="color:#555">0.1%</td><td style="color:#00e676">+100% </td><td style="color:#00e676">+77%</td><td style="color:#00e676">+232.6%</td><td style="color:#00e676">2390%</td><td style="font-weight:bold;color:#00e676">5.36%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+87%</td><td style="color:#00e676">+404.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">19.78%</td><td style="color:rgb(179,23,20)">-92%</td><td style="color:#00e676">+89%</td><td style="color:#00e676">+384.9%</td><td style="color:#00e676">6612%</td><td style="font-weight:bold;color:#00e676">22.37%</td><td style="color:rgb(179,23,20)">-92%</td></tr>
 </tbody>
 </table></div>
 
@@ -2122,6 +2124,258 @@ details summary:hover{color:#888}
 <td style="color:rgb(179,23,20)">-86%</td>
 <td style="color:#00e676">14.5%</td>
 <td style="font-weight:bold;color:#00e676">3.64%</td>
+</tr><tr>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#777">1年</td>
+<td style="color:#444;font-size:10px">112</td>
+<td style="color:#00e676">+77%</td>
+<td style="color:#00e676">+232.6%</td>
+<td style="color:#00e676">2390%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">32.1%</td>
+<td style="font-weight:bold;color:#00e676">5.36%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+64%</td>
+<td style="color:#00e676">+36%</td>
+<td style="color:#00e676">+140.4%</td>
+<td style="color:#00e676">2390%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">19.6%</td>
+<td style="color:#00e676">3.57%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+96%</td>
+<td style="color:#00e676">+49%</td>
+<td style="color:#00e676">+58.1%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">3.6%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+94%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.0%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.2%</td>
+<td style="font-weight:bold;color:#00e676">0.62%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+82%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+51.2%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">9.4%</td>
+<td style="font-weight:bold;color:#00e676">0.62%</td>
+</tr><tr>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#777">2年</td>
+<td style="color:#444;font-size:10px">91</td>
+<td style="color:#00e676">+87%</td>
+<td style="color:#00e676">+404.9%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="font-weight:bold;color:#00e676">19.78%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+63%</td>
+<td style="color:#00e676">+37%</td>
+<td style="color:#00e676">+185.3%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">30.8%</td>
+<td style="color:#00e676">10.99%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+98%</td>
+<td style="color:#00e676">+52%</td>
+<td style="color:#00e676">+67.1%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">2.2%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+96%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.6%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.9%</td>
+<td style="font-weight:bold;color:#00e676">1.25%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+89%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+65.5%</td>
+<td style="color:#00e676">1492%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">12.5%</td>
+<td style="font-weight:bold;color:#00e676">1.88%</td>
+</tr><tr>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#777">3年</td>
+<td style="color:#444;font-size:10px">76</td>
+<td style="color:#00e676">+89%</td>
+<td style="color:#00e676">+384.9%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="font-weight:bold;color:#00e676">22.37%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+66%</td>
+<td style="color:#00e676">+34%</td>
+<td style="color:#00e676">+188.2%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">31.6%</td>
+<td style="color:#00e676">13.16%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+99%</td>
+<td style="color:#00e676">+50%</td>
+<td style="color:#00e676">+64.4%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">1.3%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+97%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.2%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.9%</td>
+<td style="font-weight:bold;color:#00e676">1.88%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+93%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+56.2%</td>
+<td style="color:#00e676">1547%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">12.5%</td>
+<td style="font-weight:bold;color:#00e676">3.12%</td>
+</tr><tr>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#777">1年</td>
+<td style="color:#444;font-size:10px">112</td>
+<td style="color:#00e676">+77%</td>
+<td style="color:#00e676">+232.6%</td>
+<td style="color:#00e676">2390%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">32.1%</td>
+<td style="font-weight:bold;color:#00e676">5.36%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+64%</td>
+<td style="color:#00e676">+36%</td>
+<td style="color:#00e676">+140.4%</td>
+<td style="color:#00e676">2390%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">19.6%</td>
+<td style="color:#00e676">3.57%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+96%</td>
+<td style="color:#00e676">+49%</td>
+<td style="color:#00e676">+58.1%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">3.6%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+94%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.0%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.2%</td>
+<td style="font-weight:bold;color:#00e676">0.62%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+82%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+51.2%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">9.4%</td>
+<td style="font-weight:bold;color:#00e676">0.62%</td>
+</tr><tr>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#777">2年</td>
+<td style="color:#444;font-size:10px">91</td>
+<td style="color:#00e676">+87%</td>
+<td style="color:#00e676">+404.9%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="font-weight:bold;color:#00e676">19.78%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+63%</td>
+<td style="color:#00e676">+37%</td>
+<td style="color:#00e676">+185.3%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">30.8%</td>
+<td style="color:#00e676">10.99%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+98%</td>
+<td style="color:#00e676">+52%</td>
+<td style="color:#00e676">+67.1%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">2.2%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+96%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.6%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.9%</td>
+<td style="font-weight:bold;color:#00e676">1.25%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+89%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+65.5%</td>
+<td style="color:#00e676">1492%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">12.5%</td>
+<td style="font-weight:bold;color:#00e676">1.88%</td>
+</tr><tr>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#777">3年</td>
+<td style="color:#444;font-size:10px">76</td>
+<td style="color:#00e676">+89%</td>
+<td style="color:#00e676">+384.9%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(179,23,20)">-92%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="font-weight:bold;color:#00e676">22.37%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+66%</td>
+<td style="color:#00e676">+34%</td>
+<td style="color:#00e676">+188.2%</td>
+<td style="color:#00e676">6612%</td>
+<td style="color:rgb(215,59,56)">-20%</td>
+<td style="color:#00e676">31.6%</td>
+<td style="color:#00e676">13.16%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+99%</td>
+<td style="color:#00e676">+50%</td>
+<td style="color:#00e676">+64.4%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(191,35,32)">-40%</td>
+<td style="color:#00e676">1.3%</td>
+<td style="color:#ef5350">0.00%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+97%</td>
+<td style="color:#00e676">+44%</td>
+<td style="color:#00e676">+37.2%</td>
+<td style="color:#00e676">1121%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">6.9%</td>
+<td style="font-weight:bold;color:#00e676">1.88%</td>
+<td style="background:#0a0a18;width:4px"></td>
+<td style="color:#666;font-size:10px">+93%</td>
+<td style="color:#00e676">+46%</td>
+<td style="font-weight:bold;color:#00e676">+56.2%</td>
+<td style="color:#00e676">1547%</td>
+<td style="color:rgb(179,23,20)">-86%</td>
+<td style="color:#00e676">12.5%</td>
+<td style="font-weight:bold;color:#00e676">3.12%</td>
 </tr></tbody>
 </table></div>
 
@@ -2885,6 +3139,98 @@ details summary:hover{color:#888}
 <td style="color:rgb(205,49,46)">-28%</td>
 <td style="color:rgb(179,23,20)">-70%</td>
 <td style="color:#ef5350">28.6%</td>
+</tr><tr><td colspan="14" style="background:#0a0a18;color:#ff4081;font-weight:bold;padding:6px 8px">V11.0 阶梯止盈4档</td></tr>
+<tr>
+<td style="color:#888;padding-left:18px">1年</td>
+<td style="color:#555">112</td>
+<td style="color:#00e676">+77%</td>
+<td style="color:#00e676">+232.6%</td>
+<td style="color:#00e676">+117.8%</td>
+<td style="color:#00e676">8.19</td>
+<td style="color:#00e676">758%</td>
+<td style="color:#00e676">56.2%</td>
+<td style="color:#00e676">32.1%</td>
+<td style="font-weight:bold;color:#00e676">5.36%</td>
+<td style="color:#00e676">2.68%</td>
+<td style="color:rgb(204,48,45)">-29%</td>
+<td style="color:rgb(179,23,20)">-70%</td>
+<td style="color:#ef5350">28.6%</td>
+</tr><tr>
+<td style="color:#888;padding-left:18px">2年</td>
+<td style="color:#555">91</td>
+<td style="color:#00e676">+87%</td>
+<td style="color:#00e676">+404.9%</td>
+<td style="color:#00e676">+266.9%</td>
+<td style="color:#00e676">10.64</td>
+<td style="color:#00e676">1173%</td>
+<td style="color:#00e676">76.9%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="font-weight:bold;color:#00e676">19.78%</td>
+<td style="color:#00e676">14.29%</td>
+<td style="color:rgb(205,49,46)">-28%</td>
+<td style="color:rgb(179,23,20)">-74%</td>
+<td style="color:#ef5350">28.6%</td>
+</tr><tr>
+<td style="color:#888;padding-left:18px">3年</td>
+<td style="color:#555">76</td>
+<td style="color:#00e676">+89%</td>
+<td style="color:#00e676">+384.9%</td>
+<td style="color:#00e676">+301.4%</td>
+<td style="color:#00e676">10.21</td>
+<td style="color:#00e676">1617%</td>
+<td style="color:#00e676">89.5%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="font-weight:bold;color:#00e676">22.37%</td>
+<td style="color:#00e676">13.16%</td>
+<td style="color:rgb(205,49,46)">-28%</td>
+<td style="color:rgb(179,23,20)">-70%</td>
+<td style="color:#ef5350">27.6%</td>
+</tr><tr><td colspan="14" style="background:#0a0a18;color:#f50057;font-weight:bold;padding:6px 8px">V11.1 Score自适应止损</td></tr>
+<tr>
+<td style="color:#888;padding-left:18px">1年</td>
+<td style="color:#555">112</td>
+<td style="color:#00e676">+77%</td>
+<td style="color:#00e676">+232.6%</td>
+<td style="color:#00e676">+117.8%</td>
+<td style="color:#00e676">8.19</td>
+<td style="color:#00e676">758%</td>
+<td style="color:#00e676">56.2%</td>
+<td style="color:#00e676">32.1%</td>
+<td style="font-weight:bold;color:#00e676">5.36%</td>
+<td style="color:#00e676">2.68%</td>
+<td style="color:rgb(204,48,45)">-29%</td>
+<td style="color:rgb(179,23,20)">-70%</td>
+<td style="color:#ef5350">28.6%</td>
+</tr><tr>
+<td style="color:#888;padding-left:18px">2年</td>
+<td style="color:#555">91</td>
+<td style="color:#00e676">+87%</td>
+<td style="color:#00e676">+404.9%</td>
+<td style="color:#00e676">+266.9%</td>
+<td style="color:#00e676">10.64</td>
+<td style="color:#00e676">1173%</td>
+<td style="color:#00e676">76.9%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="font-weight:bold;color:#00e676">19.78%</td>
+<td style="color:#00e676">14.29%</td>
+<td style="color:rgb(205,49,46)">-28%</td>
+<td style="color:rgb(179,23,20)">-74%</td>
+<td style="color:#ef5350">28.6%</td>
+</tr><tr>
+<td style="color:#888;padding-left:18px">3年</td>
+<td style="color:#555">76</td>
+<td style="color:#00e676">+89%</td>
+<td style="color:#00e676">+384.9%</td>
+<td style="color:#00e676">+301.4%</td>
+<td style="color:#00e676">10.21</td>
+<td style="color:#00e676">1617%</td>
+<td style="color:#00e676">89.5%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="font-weight:bold;color:#00e676">22.37%</td>
+<td style="color:#00e676">13.16%</td>
+<td style="color:rgb(205,49,46)">-28%</td>
+<td style="color:rgb(179,23,20)">-70%</td>
+<td style="color:#ef5350">27.6%</td>
 </tr></tbody>
 </table></div>
 
@@ -3111,6 +3457,49 @@ details summary:hover{color:#888}
 </table></div>
 
 
+<h2>⚠️ 生存偏差分析（Survivorship Bias Check）</h2>
+<div class="callout r">
+  <b>核心发现：3年forward return数据缺失率 18.2%，部分缺失可能来自退市/摘牌股票。</b><br>
+  若缺失信号最终以亏损告终，当前命中率存在系统性高估风险。
+</div>
+<div class="wrap"><table>
+<thead><tr>
+  <th style="text-align:left">指标</th><th>全量信号</th><th>V7.0子集</th>
+</tr></thead>
+<tbody>
+<tr><td style="color:#aaa">2011前信号数（应有完整3Y数据）</td>
+    <td style="color:#555">81,243</td>
+    <td style="color:#555">691</td></tr>
+<tr><td style="color:#aaa">3Y数据覆盖率</td>
+    <td style="color:#ffd54f">81.8%</td>
+    <td style="color:#ffd54f">53.4%</td></tr>
+<tr><td style="color:#aaa">有1Y数据但无3Y（潜在退市）</td>
+    <td style="color:#ef5350">9,638个（11.9%）</td>
+    <td style="color:#555">-</td></tr>
+<tr><td style="color:#aaa">有3Y数据组的1Y均收益</td>
+    <td style="color:#00e676">+19.5%</td><td>-</td></tr>
+<tr><td style="color:#aaa">无3Y数据组的1Y均收益</td>
+    <td style="color:#ef5350">+12.1%</td><td>-</td></tr>
+<tr><td style="color:#aaa">10x命中率（仅有3Y数据的信号）</td>
+    <td style="color:#aaa">1.10%</td>
+    <td style="color:#ffd700">31.98%</td></tr>
+<tr><td style="color:#aaa">10x命中率（含缺失信号、保守估算）</td>
+    <td style="color:#aaa">0.90%</td>
+    <td style="color:#ffd54f">17.08%</td></tr>
+</tbody>
+</table></div>
+<div class="callout">
+  <b>解读：</b>
+  无3Y数据组的1Y均收益（+12.1%）显著低于有3Y数据组（+19.5%），
+  说明缺失3Y数据的股票确实表现更差，存在一定程度的生存偏差。<br>
+  保守估算：将所有缺失3Y信号视为-100%，V7.0命中率从 <b style="color:#ffd700">31.98%</b>
+  降至 <b style="color:#ffcc80">17.08%</b>（仍远高于全量基线）。<br>
+  建议：关注数据集中是否包含退市股票的历史数据；若不含，实际命中率在两者之间，约
+  <b style="color:#fff">24.53%</b>。
+</div>
+
+
+    
 <h2>★ 策略 × 止损 综合排序（本次分析核心结论）</h2>
 <div class="callout g">
   <b>止损选择原则：</b>微盘早期股票普遍存在"先回调-20%~-30%，再上涨10倍"的路径。
@@ -3237,6 +3626,32 @@ details summary:hover{color:#888}
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
 <td style="font-weight:bold;color:#888">#9</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">77%</td>
+<td style="color:#00e676;font-weight:bold">+232.6%</td>
+<td style="color:#aaa">+117.8%</td>
+<td style="color:#ffd54f">32.1%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#10</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">77%</td>
+<td style="color:#00e676;font-weight:bold">+232.6%</td>
+<td style="color:#aaa">+117.8%</td>
+<td style="color:#ffd54f">32.1%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#11</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">78</td>
@@ -3249,7 +3664,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-90%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="background:#0d1f0a;">
-<td style="font-weight:bold;color:#888">#10</td>
+<td style="font-weight:bold;color:#888">#12</td>
 <td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
 <td style="color:#40c4ff;font-size:10px">时间止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
 <td style="color:#555">112</td>
@@ -3262,34 +3677,8 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-92%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#11</td>
-<td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
-<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
-<td style="color:#555">112</td>
-<td style="color:#666;font-size:10px">29%</td>
-<td style="color:#ffd54f">64%</td>
-<td style="color:#00e676;font-weight:bold">+213.6%</td>
-<td style="color:#aaa">+96.8%</td>
-<td style="color:#ffd54f">31.2%</td>
-<td style="color:#ffd54f;font-weight:bold">5.36%</td>
-<td style="color:#ffcc80">-50%</td>
-<td style="color:#555;font-size:10px">✅最可信</td>
-</tr><tr style="">
-<td style="font-weight:bold;color:#888">#12</td>
-<td style="color:#76ff03;font-weight:bold;white-space:nowrap">V10.0</td>
-<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
-<td style="color:#555">112</td>
-<td style="color:#666;font-size:10px">29%</td>
-<td style="color:#ffd54f">64%</td>
-<td style="color:#00e676;font-weight:bold">+213.6%</td>
-<td style="color:#aaa">+96.8%</td>
-<td style="color:#ffd54f">31.2%</td>
-<td style="color:#ffd54f;font-weight:bold">5.36%</td>
-<td style="color:#ffcc80">-50%</td>
-<td style="color:#555;font-size:10px">✅最可信</td>
-</tr><tr style="">
 <td style="font-weight:bold;color:#888">#13</td>
-<td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
+<td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">112</td>
 <td style="color:#666;font-size:10px">29%</td>
@@ -3302,6 +3691,71 @@ details summary:hover{color:#888}
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
 <td style="font-weight:bold;color:#888">#14</td>
+<td style="color:#76ff03;font-weight:bold;white-space:nowrap">V10.0</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">64%</td>
+<td style="color:#00e676;font-weight:bold">+213.6%</td>
+<td style="color:#aaa">+96.8%</td>
+<td style="color:#ffd54f">31.2%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px">✅最可信</td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#15</td>
+<td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">64%</td>
+<td style="color:#00e676;font-weight:bold">+213.6%</td>
+<td style="color:#aaa">+96.8%</td>
+<td style="color:#ffd54f">31.2%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px">✅最可信</td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#16</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">64%</td>
+<td style="color:#00e676;font-weight:bold">+213.6%</td>
+<td style="color:#aaa">+96.8%</td>
+<td style="color:#ffd54f">31.2%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#17</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">64%</td>
+<td style="color:#00e676;font-weight:bold">+213.6%</td>
+<td style="color:#aaa">+96.8%</td>
+<td style="color:#ffd54f">31.2%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#18</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#f50057;font-size:10px">Score自适应止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">28%</td>
+<td style="color:#ffd54f">64%</td>
+<td style="color:#00e676;font-weight:bold">+211.6%</td>
+<td style="color:#aaa">+94.7%</td>
+<td style="color:#ffd54f">30.4%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-60%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#19</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">78</td>
@@ -3313,8 +3767,21 @@ details summary:hover{color:#888}
 <td style="color:#ffd54f;font-weight:bold">5.13%</td>
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#20</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#ff4081;font-size:10px">阶梯止盈4档 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">112</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#ffd54f">74%</td>
+<td style="color:#ffd54f;font-weight:bold">+132.3%</td>
+<td style="color:#aaa">+93.8%</td>
+<td style="color:#ffd54f">32.1%</td>
+<td style="color:#ffd54f;font-weight:bold">5.36%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#15</td>
+<td style="font-weight:bold;color:#888">#21</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">32</td>
@@ -3327,7 +3794,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-90%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#16</td>
+<td style="font-weight:bold;color:#888">#22</td>
 <td style="color:#80deea;font-weight:bold;white-space:nowrap">V9.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">10</td>
@@ -3340,7 +3807,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-69%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#17</td>
+<td style="font-weight:bold;color:#888">#23</td>
 <td style="color:#80deea;font-weight:bold;white-space:nowrap">V9.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">10</td>
@@ -3353,7 +3820,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#18</td>
+<td style="font-weight:bold;color:#888">#24</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">32</td>
@@ -3366,7 +3833,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#19</td>
+<td style="font-weight:bold;color:#888">#25</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">392</td>
@@ -3379,7 +3846,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-96%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#20</td>
+<td style="font-weight:bold;color:#888">#26</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">78</td>
@@ -3392,7 +3859,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#21</td>
+<td style="font-weight:bold;color:#888">#27</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">392</td>
@@ -3405,7 +3872,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#22</td>
+<td style="font-weight:bold;color:#888">#28</td>
 <td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">71</td>
@@ -3418,7 +3885,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#23</td>
+<td style="font-weight:bold;color:#888">#29</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">966</td>
@@ -3431,7 +3898,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-96%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#24</td>
+<td style="font-weight:bold;color:#888">#30</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">2212</td>
@@ -3444,7 +3911,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#25</td>
+<td style="font-weight:bold;color:#888">#31</td>
 <td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">112</td>
@@ -3457,7 +3924,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#26</td>
+<td style="font-weight:bold;color:#888">#32</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">2283</td>
@@ -3470,7 +3937,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#27</td>
+<td style="font-weight:bold;color:#888">#33</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">73</td>
@@ -3483,7 +3950,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#28</td>
+<td style="font-weight:bold;color:#888">#34</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">966</td>
@@ -3496,7 +3963,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#29</td>
+<td style="font-weight:bold;color:#888">#35</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">2962</td>
@@ -3509,7 +3976,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#30</td>
+<td style="font-weight:bold;color:#888">#36</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">2212</td>
@@ -3522,7 +3989,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#31</td>
+<td style="font-weight:bold;color:#888">#37</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">2283</td>
@@ -3535,7 +4002,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#32</td>
+<td style="font-weight:bold;color:#888">#38</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">2962</td>
@@ -3548,7 +4015,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#33</td>
+<td style="font-weight:bold;color:#888">#39</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">32</td>
@@ -3561,7 +4028,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#34</td>
+<td style="font-weight:bold;color:#888">#40</td>
 <td style="color:#80deea;font-weight:bold;white-space:nowrap">V9.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">10</td>
@@ -3574,7 +4041,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#35</td>
+<td style="font-weight:bold;color:#888">#41</td>
 <td style="color:#b2dfdb;font-weight:bold;white-space:nowrap">V9.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">6</td>
@@ -3587,7 +4054,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-69%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#36</td>
+<td style="font-weight:bold;color:#888">#42</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">392</td>
@@ -3600,7 +4067,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#37</td>
+<td style="font-weight:bold;color:#888">#43</td>
 <td style="color:#b2dfdb;font-weight:bold;white-space:nowrap">V9.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">6</td>
@@ -3613,7 +4080,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#38</td>
+<td style="font-weight:bold;color:#888">#44</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">11640</td>
@@ -3626,7 +4093,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#39</td>
+<td style="font-weight:bold;color:#888">#45</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">966</td>
@@ -3639,7 +4106,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#40</td>
+<td style="font-weight:bold;color:#888">#46</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">2212</td>
@@ -3652,7 +4119,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#41</td>
+<td style="font-weight:bold;color:#888">#47</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">2283</td>
@@ -3665,7 +4132,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#42</td>
+<td style="font-weight:bold;color:#888">#48</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">11640</td>
@@ -3678,7 +4145,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#43</td>
+<td style="font-weight:bold;color:#888">#49</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">2962</td>
@@ -3691,7 +4158,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#44</td>
+<td style="font-weight:bold;color:#888">#50</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">36397</td>
@@ -3704,7 +4171,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#45</td>
+<td style="font-weight:bold;color:#888">#51</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">11640</td>
@@ -3717,7 +4184,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#46</td>
+<td style="font-weight:bold;color:#888">#52</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">36397</td>
@@ -3730,7 +4197,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#47</td>
+<td style="font-weight:bold;color:#888">#53</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">103494</td>
@@ -3743,7 +4210,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#48</td>
+<td style="font-weight:bold;color:#888">#54</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">103494</td>
@@ -3756,7 +4223,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#49</td>
+<td style="font-weight:bold;color:#888">#55</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">36397</td>
@@ -3769,7 +4236,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#50</td>
+<td style="font-weight:bold;color:#888">#56</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">103494</td>
@@ -3782,7 +4249,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#51</td>
+<td style="font-weight:bold;color:#888">#57</td>
 <td style="color:#b2dfdb;font-weight:bold;white-space:nowrap">V9.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">6</td>
@@ -3910,6 +4377,32 @@ details summary:hover{color:#888}
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
 <td style="font-weight:bold;color:#888">#9</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">87%</td>
+<td style="color:#00e676;font-weight:bold">+404.9%</td>
+<td style="color:#aaa">+266.9%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="color:#00e676;font-weight:bold">19.78%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#10</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">87%</td>
+<td style="color:#00e676;font-weight:bold">+404.9%</td>
+<td style="color:#aaa">+266.9%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="color:#00e676;font-weight:bold">19.78%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#11</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">57</td>
@@ -3922,7 +4415,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="background:#0d1f0a;">
-<td style="font-weight:bold;color:#888">#10</td>
+<td style="font-weight:bold;color:#888">#12</td>
 <td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
 <td style="color:#40c4ff;font-size:10px">时间止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
 <td style="color:#555">91</td>
@@ -3935,7 +4428,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-92%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#11</td>
+<td style="font-weight:bold;color:#888">#13</td>
 <td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">58</td>
@@ -3948,7 +4441,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#12</td>
+<td style="font-weight:bold;color:#888">#14</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">28</td>
@@ -3960,8 +4453,21 @@ details summary:hover{color:#888}
 <td style="color:#00e676;font-weight:bold">17.86%</td>
 <td style="color:#ef9a9a">-90%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#15</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#ff4081;font-size:10px">阶梯止盈4档 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">86%</td>
+<td style="color:#00e676;font-weight:bold">+228.9%</td>
+<td style="color:#aaa">+222.6%</td>
+<td style="color:#00e676">61.5%</td>
+<td style="color:#00e676;font-weight:bold">19.78%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#13</td>
+<td style="font-weight:bold;color:#888">#16</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">65</td>
@@ -3974,7 +4480,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-90%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#14</td>
+<td style="font-weight:bold;color:#888">#17</td>
 <td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">91</td>
@@ -3987,7 +4493,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#15</td>
+<td style="font-weight:bold;color:#888">#18</td>
 <td style="color:#76ff03;font-weight:bold;white-space:nowrap">V10.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">91</td>
@@ -4000,7 +4506,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#16</td>
+<td style="font-weight:bold;color:#888">#19</td>
 <td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">91</td>
@@ -4013,7 +4519,46 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#17</td>
+<td style="font-weight:bold;color:#888">#20</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+356.9%</td>
+<td style="color:#aaa">+197.4%</td>
+<td style="color:#00e676">51.6%</td>
+<td style="color:#00e676;font-weight:bold">19.78%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#21</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+356.9%</td>
+<td style="color:#aaa">+197.4%</td>
+<td style="color:#00e676">51.6%</td>
+<td style="color:#00e676;font-weight:bold">19.78%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#22</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#f50057;font-size:10px">Score自适应止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">91</td>
+<td style="color:#666;font-size:10px">29%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+344.3%</td>
+<td style="color:#aaa">+167.7%</td>
+<td style="color:#00e676">49.5%</td>
+<td style="color:#00e676;font-weight:bold">18.68%</td>
+<td style="color:#ffcc80">-60%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#23</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">28</td>
@@ -4026,7 +4571,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#18</td>
+<td style="font-weight:bold;color:#888">#24</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">65</td>
@@ -4039,7 +4584,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#19</td>
+<td style="font-weight:bold;color:#888">#25</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">314</td>
@@ -4052,7 +4597,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-96%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#20</td>
+<td style="font-weight:bold;color:#888">#26</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">314</td>
@@ -4065,7 +4610,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#21</td>
+<td style="font-weight:bold;color:#888">#27</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">1867</td>
@@ -4078,7 +4623,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-98%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#22</td>
+<td style="font-weight:bold;color:#888">#28</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">765</td>
@@ -4091,7 +4636,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-96%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#23</td>
+<td style="font-weight:bold;color:#888">#29</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">1809</td>
@@ -4104,7 +4649,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-98%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#24</td>
+<td style="font-weight:bold;color:#888">#30</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">2360</td>
@@ -4117,7 +4662,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-98%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#25</td>
+<td style="font-weight:bold;color:#888">#31</td>
 <td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">91</td>
@@ -4130,7 +4675,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#26</td>
+<td style="font-weight:bold;color:#888">#32</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">1867</td>
@@ -4143,7 +4688,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#27</td>
+<td style="font-weight:bold;color:#888">#33</td>
 <td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">58</td>
@@ -4156,7 +4701,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#28</td>
+<td style="font-weight:bold;color:#888">#34</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">765</td>
@@ -4169,7 +4714,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#29</td>
+<td style="font-weight:bold;color:#888">#35</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">1809</td>
@@ -4182,7 +4727,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#30</td>
+<td style="font-weight:bold;color:#888">#36</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">65</td>
@@ -4195,7 +4740,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#31</td>
+<td style="font-weight:bold;color:#888">#37</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">57</td>
@@ -4208,7 +4753,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#32</td>
+<td style="font-weight:bold;color:#888">#38</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">2360</td>
@@ -4221,7 +4766,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#33</td>
+<td style="font-weight:bold;color:#888">#39</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">28</td>
@@ -4234,7 +4779,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#34</td>
+<td style="font-weight:bold;color:#888">#40</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">314</td>
@@ -4247,7 +4792,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#35</td>
+<td style="font-weight:bold;color:#888">#41</td>
 <td style="color:#80deea;font-weight:bold;white-space:nowrap">V9.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">6</td>
@@ -4260,7 +4805,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">⚠️极低</td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#36</td>
+<td style="font-weight:bold;color:#888">#42</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">1867</td>
@@ -4273,7 +4818,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#37</td>
+<td style="font-weight:bold;color:#888">#43</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">9669</td>
@@ -4286,7 +4831,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#38</td>
+<td style="font-weight:bold;color:#888">#44</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">1809</td>
@@ -4299,7 +4844,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#39</td>
+<td style="font-weight:bold;color:#888">#45</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">765</td>
@@ -4312,7 +4857,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#40</td>
+<td style="font-weight:bold;color:#888">#46</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">2360</td>
@@ -4325,7 +4870,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#41</td>
+<td style="font-weight:bold;color:#888">#47</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">9669</td>
@@ -4338,7 +4883,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#42</td>
+<td style="font-weight:bold;color:#888">#48</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">30891</td>
@@ -4351,7 +4896,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#43</td>
+<td style="font-weight:bold;color:#888">#49</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">9669</td>
@@ -4364,7 +4909,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#44</td>
+<td style="font-weight:bold;color:#888">#50</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">30891</td>
@@ -4377,7 +4922,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#45</td>
+<td style="font-weight:bold;color:#888">#51</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">87136</td>
@@ -4390,7 +4935,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#46</td>
+<td style="font-weight:bold;color:#888">#52</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">87136</td>
@@ -4403,7 +4948,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#47</td>
+<td style="font-weight:bold;color:#888">#53</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">30891</td>
@@ -4416,7 +4961,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#48</td>
+<td style="font-weight:bold;color:#888">#54</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">87136</td>
@@ -4505,6 +5050,32 @@ details summary:hover{color:#888}
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
 <td style="font-weight:bold;color:#888">#6</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">89%</td>
+<td style="color:#00e676;font-weight:bold">+384.9%</td>
+<td style="color:#aaa">+301.4%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="color:#ffd700;font-weight:bold">22.37%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#7</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#66bb6a;font-size:10px">无止损</td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">89%</td>
+<td style="color:#00e676;font-weight:bold">+384.9%</td>
+<td style="color:#aaa">+301.4%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="color:#ffd700;font-weight:bold">22.37%</td>
+<td style="color:#ef9a9a">-92%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#8</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">52</td>
@@ -4516,8 +5087,21 @@ details summary:hover{color:#888}
 <td style="color:#ffd700;font-weight:bold">21.15%</td>
 <td style="color:#ef9a9a">-92%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#9</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#ff4081;font-size:10px">阶梯止盈4档 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">-</td>
+<td style="color:#00e676">95%</td>
+<td style="color:#00e676;font-weight:bold">+248.8%</td>
+<td style="color:#aaa">+269.7%</td>
+<td style="color:#00e676">71.1%</td>
+<td style="color:#ffd700;font-weight:bold">22.37%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#7</td>
+<td style="font-weight:bold;color:#888">#10</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">56</td>
@@ -4530,7 +5114,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-82%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#8</td>
+<td style="font-weight:bold;color:#888">#11</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">23</td>
@@ -4543,7 +5127,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-82%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#9</td>
+<td style="font-weight:bold;color:#888">#12</td>
 <td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">50</td>
@@ -4556,7 +5140,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="background:#0d1f0a;">
-<td style="font-weight:bold;color:#888">#10</td>
+<td style="font-weight:bold;color:#888">#13</td>
 <td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
 <td style="color:#40c4ff;font-size:10px">时间止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
 <td style="color:#555">76</td>
@@ -4569,7 +5153,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-92%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#11</td>
+<td style="font-weight:bold;color:#888">#14</td>
 <td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">76</td>
@@ -4582,7 +5166,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#12</td>
+<td style="font-weight:bold;color:#888">#15</td>
 <td style="color:#76ff03;font-weight:bold;white-space:nowrap">V10.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">76</td>
@@ -4595,7 +5179,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#13</td>
+<td style="font-weight:bold;color:#888">#16</td>
 <td style="color:#40c4ff;font-weight:bold;white-space:nowrap">V10.2</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">76</td>
@@ -4608,7 +5192,33 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#14</td>
+<td style="font-weight:bold;color:#888">#17</td>
+<td style="color:#ff4081;font-weight:bold;white-space:nowrap">V11.0</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">28%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+324.9%</td>
+<td style="color:#aaa">+153.5%</td>
+<td style="color:#00e676">53.9%</td>
+<td style="color:#ffd700;font-weight:bold">22.37%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#18</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#4fc3f7;font-size:10px">固定-50%</td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">28%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+324.9%</td>
+<td style="color:#aaa">+153.5%</td>
+<td style="color:#00e676">53.9%</td>
+<td style="color:#ffd700;font-weight:bold">22.37%</td>
+<td style="color:#ffcc80">-50%</td>
+<td style="color:#555;font-size:10px"></td>
+</tr><tr style="">
+<td style="font-weight:bold;color:#888">#19</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">52</td>
@@ -4620,8 +5230,21 @@ details summary:hover{color:#888}
 <td style="color:#ffd700;font-weight:bold">21.15%</td>
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
+</tr><tr style="background:#0d1f0a;">
+<td style="font-weight:bold;color:#888">#20</td>
+<td style="color:#f50057;font-weight:bold;white-space:nowrap">V11.1</td>
+<td style="color:#f50057;font-size:10px">Score自适应止损 <span style="color:#76ff03;font-size:9px">★新</span></td>
+<td style="color:#555">76</td>
+<td style="color:#666;font-size:10px">28%</td>
+<td style="color:#ffd54f">68%</td>
+<td style="color:#00e676;font-weight:bold">+312.7%</td>
+<td style="color:#aaa">+146.4%</td>
+<td style="color:#00e676">51.3%</td>
+<td style="color:#ffd700;font-weight:bold">21.05%</td>
+<td style="color:#ffcc80">-60%</td>
+<td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#15</td>
+<td style="font-weight:bold;color:#888">#21</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">56</td>
@@ -4634,7 +5257,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#16</td>
+<td style="font-weight:bold;color:#888">#22</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">23</td>
@@ -4647,7 +5270,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#17</td>
+<td style="font-weight:bold;color:#888">#23</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">267</td>
@@ -4660,7 +5283,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-96%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#18</td>
+<td style="font-weight:bold;color:#888">#24</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">1581</td>
@@ -4673,7 +5296,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#19</td>
+<td style="font-weight:bold;color:#888">#25</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">1488</td>
@@ -4686,7 +5309,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#20</td>
+<td style="font-weight:bold;color:#888">#26</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">267</td>
@@ -4699,7 +5322,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#21</td>
+<td style="font-weight:bold;color:#888">#27</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">644</td>
@@ -4712,7 +5335,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-98%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#22</td>
+<td style="font-weight:bold;color:#888">#28</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">1949</td>
@@ -4725,7 +5348,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-99%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#23</td>
+<td style="font-weight:bold;color:#888">#29</td>
 <td style="color:#69f0ae;font-weight:bold;white-space:nowrap">V10.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">50</td>
@@ -4738,7 +5361,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#24</td>
+<td style="font-weight:bold;color:#888">#30</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">1581</td>
@@ -4751,7 +5374,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#25</td>
+<td style="font-weight:bold;color:#888">#31</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">1488</td>
@@ -4764,7 +5387,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#26</td>
+<td style="font-weight:bold;color:#888">#32</td>
 <td style="color:#ffd700;font-weight:bold;white-space:nowrap">V7.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">76</td>
@@ -4777,7 +5400,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅最可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#27</td>
+<td style="font-weight:bold;color:#888">#33</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">644</td>
@@ -4790,7 +5413,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#28</td>
+<td style="font-weight:bold;color:#888">#34</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">1949</td>
@@ -4803,7 +5426,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#29</td>
+<td style="font-weight:bold;color:#888">#35</td>
 <td style="color:#ea80fc;font-weight:bold;white-space:nowrap">V10.3</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">56</td>
@@ -4816,7 +5439,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶待验证</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#30</td>
+<td style="font-weight:bold;color:#888">#36</td>
 <td style="color:#ff6f00;font-weight:bold;white-space:nowrap">V8.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">52</td>
@@ -4829,7 +5452,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#31</td>
+<td style="font-weight:bold;color:#888">#37</td>
 <td style="color:#ff9800;font-weight:bold;white-space:nowrap">V7.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">23</td>
@@ -4842,7 +5465,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">🔶一般</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#32</td>
+<td style="font-weight:bold;color:#888">#38</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">8046</td>
@@ -4855,7 +5478,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#33</td>
+<td style="font-weight:bold;color:#888">#39</td>
 <td style="color:#ef5350;font-weight:bold;white-space:nowrap">V6.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">267</td>
@@ -4868,7 +5491,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px">✅可信</td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#34</td>
+<td style="font-weight:bold;color:#888">#40</td>
 <td style="color:#80cbc4;font-weight:bold;white-space:nowrap">V5.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">1581</td>
@@ -4881,7 +5504,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#35</td>
+<td style="font-weight:bold;color:#888">#41</td>
 <td style="color:#ff8a65;font-weight:bold;white-space:nowrap">V3.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20%</td>
 <td style="color:#555">1488</td>
@@ -4894,7 +5517,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#36</td>
+<td style="font-weight:bold;color:#888">#42</td>
 <td style="color:#ffd54f;font-weight:bold;white-space:nowrap">V2.2</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">1949</td>
@@ -4907,7 +5530,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#37</td>
+<td style="font-weight:bold;color:#888">#43</td>
 <td style="color:#ce93d8;font-weight:bold;white-space:nowrap">V4.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">644</td>
@@ -4920,7 +5543,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#38</td>
+<td style="font-weight:bold;color:#888">#44</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">8046</td>
@@ -4933,7 +5556,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#39</td>
+<td style="font-weight:bold;color:#888">#45</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">26110</td>
@@ -4946,7 +5569,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#40</td>
+<td style="font-weight:bold;color:#888">#46</td>
 <td style="color:#66bb6a;font-weight:bold;white-space:nowrap">V2.1</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">8046</td>
@@ -4959,7 +5582,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#41</td>
+<td style="font-weight:bold;color:#888">#47</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">26110</td>
@@ -4972,7 +5595,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#42</td>
+<td style="font-weight:bold;color:#888">#48</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#66bb6a;font-size:10px">无止损</td>
 <td style="color:#555">74157</td>
@@ -4985,7 +5608,7 @@ details summary:hover{color:#888}
 <td style="color:#ef9a9a">-100%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#43</td>
+<td style="font-weight:bold;color:#888">#49</td>
 <td style="color:#4fc3f7;font-weight:bold;white-space:nowrap">V2.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">26110</td>
@@ -4998,7 +5621,7 @@ details summary:hover{color:#888}
 <td style="color:#a5d6a7">-20%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="">
-<td style="font-weight:bold;color:#888">#44</td>
+<td style="font-weight:bold;color:#888">#50</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#4fc3f7;font-size:10px">固定-50%</td>
 <td style="color:#555">74157</td>
@@ -5011,7 +5634,7 @@ details summary:hover{color:#888}
 <td style="color:#ffcc80">-50%</td>
 <td style="color:#555;font-size:10px"></td>
 </tr><tr style="background:#1a0a0a;">
-<td style="font-weight:bold;color:#888">#45</td>
+<td style="font-weight:bold;color:#888">#51</td>
 <td style="color:#607d8b;font-weight:bold;white-space:nowrap">V1.0</td>
 <td style="color:#ffd54f;font-size:10px">固定-20% <span style="color:#ef5350;font-size:9px">淘汰</span></td>
 <td style="color:#555">74157</td>
@@ -5115,6 +5738,6 @@ details summary:hover{color:#888}
 </div>
 
 <div style="margin-top:20px;color:#333;font-size:10px;text-align:center">
-  10x股策略挖掘机 v2 | 数据: us_data_ddl2015 2003-2014 | 2026-04-01 11:27
+  10x股策略挖掘机 v2 | 数据: us_data_ddl2015 2003-2014 | 2026-04-01 12:09
 </div>
 </body></html>
