@@ -415,6 +415,132 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
   </div>
 </div>
 
+<!-- ── 信号架构三路对比 ── -->
+<div class="sfdiag-wrap" style="margin-bottom:20px;">
+  <div class="sfdiag-head">⚡ 信号架构三路对比：DSP 可插拔 vs LPO vs CPO</div>
+  <div class="sfdiag-sub">速率（100G/400G/800G/1.6T）是"跑多快"，架构是"怎么跑"。三种方案在不同速率节点有不同适配性，直接决定 T3/T4 的价值归属。</div>
+
+  <!-- 对比表格 -->
+  <div style="overflow-x:auto;margin-bottom:16px;">
+    <table style="width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed;">
+      <colgroup>
+        <col style="width:14%">
+        <col style="width:28.7%">
+        <col style="width:28.7%">
+        <col style="width:28.7%">
+      </colgroup>
+      <thead>
+        <tr style="background:rgba(255,255,255,.05);">
+          <th style="padding:7px 10px;text-align:left;color:var(--text3);font-weight:600;border-bottom:1px solid rgba(255,255,255,.08);">维度</th>
+          <th style="padding:7px 10px;text-align:center;color:#fbbf24;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);">🔌 传统 DSP 可插拔</th>
+          <th style="padding:7px 10px;text-align:center;color:#34d399;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);">⚡ LPO（线性驱动）</th>
+          <th style="padding:7px 10px;text-align:center;color:#7dd3fc;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);">🔬 CPO（共封装）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">DSP 位置</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">模块内置独立 DSP 芯片</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">DSP 移至交换机 ASIC 端</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">无独立 DSP，ASIC 直连光引擎</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.015);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">物理形态</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">QSFP-DD / OSFP 热插拔模块</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">同外形热插拔（OSFP-XD）</td>
+          <td style="padding:7px 10px;text-align:center;color:#7dd3fc;font-weight:600;">焊死于交换机板，<em>不可插拔</em></td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">功耗（800G）</td>
+          <td style="padding:7px 10px;text-align:center;color:#fbbf24;">~15 W / 模块（基准）</td>
+          <td style="padding:7px 10px;text-align:center;color:#34d399;">~10 W（<b>−33%</b>）</td>
+          <td style="padding:7px 10px;text-align:center;color:#7dd3fc;">~6 W（<b>−60%</b>）</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.015);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">传输距离</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">≤2 km（中长距支持）</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">≤500 m（机柜间 / 园区内）</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">≤数百米（同机架 / 同集群）</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">相对成本</td>
+          <td style="padding:7px 10px;text-align:center;color:#fbbf24;">最高（含独立 DSP 芯片）</td>
+          <td style="padding:7px 10px;text-align:center;color:#34d399;">中（省 DSP，Retimer 转移至 ASIC）</td>
+          <td style="padding:7px 10px;text-align:center;color:#7dd3fc;">最低（规模化后，无外壳/插槽）</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.015);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">商业化阶段</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">✅ 成熟量产（100G–800G）</td>
+          <td style="padding:7px 10px;text-align:center;color:#34d399;">🚀 <b>2024–2025 规模化</b>（800G 主战场）</td>
+          <td style="padding:7px 10px;text-align:center;color:#7dd3fc;">🔬 <b>2026–2027 商业化起步</b>（1.6T 节点）</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">T3 受益方</td>
+          <td style="padding:7px 10px;text-align:center;color:#fbbf24;">MRVL（模块内 DSP）</td>
+          <td style="padding:7px 10px;text-align:center;color:#34d399;font-weight:600;">CRDO / MRVL（ASIC 端 Retimer/SerDes）</td>
+          <td style="padding:7px 10px;text-align:center;color:#7dd3fc;font-weight:600;">INTC / GFS / AVGO（硅光 PIC 光引擎）</td>
+        </tr>
+        <tr style="background:rgba(255,255,255,.015);">
+          <td style="padding:7px 10px;color:var(--text3);font-weight:600;">T4 冲击</td>
+          <td style="padding:7px 10px;text-align:center;color:var(--text2);">无</td>
+          <td style="padding:7px 10px;text-align:center;color:#fbbf24;">模块利润压缩（DSP 价值外移）</td>
+          <td style="padding:7px 10px;text-align:center;color:#f87171;font-weight:600;">可插拔模块需求长期收缩</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 速率 × 架构 对应矩阵 -->
+  <div style="margin-bottom:6px;font-size:9.5px;color:var(--text3);font-weight:600;letter-spacing:1px;">速率 × 架构适配矩阵</div>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:9px;table-layout:fixed;">
+      <colgroup>
+        <col style="width:20%">
+        <col style="width:20%">
+        <col style="width:20%">
+        <col style="width:20%">
+        <col style="width:20%">
+      </colgroup>
+      <thead>
+        <tr style="background:rgba(255,255,255,.04);">
+          <th style="padding:6px 8px;text-align:left;color:var(--text3);font-weight:600;border-bottom:1px solid rgba(255,255,255,.08);">架构 \ 速率</th>
+          <th style="padding:6px 8px;text-align:center;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.08);">100G</th>
+          <th style="padding:6px 8px;text-align:center;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.08);">400G</th>
+          <th style="padding:6px 8px;text-align:center;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.08);">800G</th>
+          <th style="padding:6px 8px;text-align:center;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.08);">1.6T</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+          <td style="padding:6px 8px;color:#fbbf24;font-weight:600;">DSP 可插拔</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;">主流</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;">主流</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(251,191,36,.08);color:#a78bfa;">共存</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(248,113,113,.08);color:#f87171;">功耗过高</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.01);">
+          <td style="padding:6px 8px;color:#34d399;font-weight:600;">LPO 线性驱动</td>
+          <td style="padding:6px 8px;text-align:center;color:var(--text3);">—</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(52,211,153,.08);color:#34d399;">出现</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(52,211,153,.2);color:#34d399;font-weight:700;">🚀 主战场</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(52,211,153,.08);color:#34d399;">延续</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;color:#7dd3fc;font-weight:600;">CPO 共封装</td>
+          <td style="padding:6px 8px;text-align:center;color:var(--text3);">—</td>
+          <td style="padding:6px 8px;text-align:center;color:var(--text3);">—</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(125,209,252,.06);color:#7dd3fc;">研发中</td>
+          <td style="padding:6px 8px;text-align:center;background:rgba(125,209,252,.2);color:#7dd3fc;font-weight:700;">🔬 首发节点</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sfdiag-tc-why" style="margin-top:10px;">
+    💡 <b>投资视角：</b>LPO 方案中 DSP 从模块转移至 ASIC 端，<b style="color:#34d399;">CRDO 的 SerDes/Retimer 直接受益</b>（取代模块内 MRVL DSP 的部分功能）；CPO 方案则使光引擎价值从 T4 模块迁移至 T3 硅光，<b style="color:#7dd3fc;">AVGO+INTC 的 PIC 单价从 $15 → $80+</b>。速率越高 → 架构越向 LPO/CPO 演进 → T3 价值持续抬升，T4 利润空间持续承压。
+  </div>
+</div>
+
 <!-- ── 信号链路流程图 ── -->
 <div class="sfdiag-wrap">
   <div class="sfdiag-head">📡 信号链路流程图 — 每个环节在干什么</div>
@@ -564,6 +690,51 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
     </div>
   </div>
 
+  <!-- 场景三 -->
+  <div class="sfdiag-scen">
+    <div class="sfdiag-scen-title" style="border-left-color:#34d399;">🔗 场景三：NVLink 光学 / 超短距机架内 GPU 互连 — GPU A → GPU B（距离 &lt;10m，多模光纤）</div>
+    <div class="sfdiag-flow">
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">GPU A</span>
+        <div class="sfb-name">NVIDIA H200</div>
+        <div class="sfb-sub">NVLink Gen5<br>高速电信号</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.1);">
+        <span class="sfb-tier" style="background:rgba(37,99,235,.25);color:#93c5fd;">T2</span>
+        <div class="sfb-name">VCSEL 阵列</div>
+        <div class="sfb-sub">850nm 多模<br>电流→光子<br>LITE / COHR</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(180,83,9,.4);background:rgba(180,83,9,.1);">
+        <span class="sfb-tier" style="background:rgba(180,83,9,.25);color:#fcd34d;">T4</span>
+        <div class="sfb-name">AOC 有源光缆</div>
+        <div class="sfb-sub">无独立 DSP<br>直驱 VCSEL<br>OSFP-XD</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.07);">
+        <span class="sfb-tier" style="background:rgba(124,58,237,.2);color:#c4b5fd;">T1</span>
+        <div class="sfb-name">多模光纤 OM4/OM5</div>
+        <div class="sfb-sub">50μm 纤芯<br>&lt;100m 机架内<br>GLW / OFS</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.1);">
+        <span class="sfb-tier" style="background:rgba(37,99,235,.25);color:#93c5fd;">T2</span>
+        <div class="sfb-name">PIN 探测器阵列</div>
+        <div class="sfb-sub">光子→电流<br>TIA 跨阻放大</div>
+      </div>
+      <div class="sfarr">→</div>
+      <div class="sfb" style="border-color:rgba(56,189,248,.3);background:rgba(8,145,178,.12);">
+        <span class="sfb-tier" style="background:rgba(8,145,178,.25);color:#38bdf8;">GPU B</span>
+        <div class="sfb-name">NVIDIA H200</div>
+        <div class="sfb-sub">NVLink 接收<br>完整数据包</div>
+      </div>
+    </div>
+    <div class="sfdiag-tc-why" style="margin-top:10px;background:rgba(52,211,153,.04);border-left:3px solid rgba(52,211,153,.4);padding-left:10px;">
+      💡 <b>VCSEL vs DFB/EML：</b>VCSEL（垂直腔面发射激光器）工作于 850nm，成本 ~$2–5/颗，阵列集成容易，专为 <b>&lt;100m 多模光纤（OM4/OM5）</b>设计，是机架内 GPU 互连（NVLink Optical / InfiniBand HDR/NDR）的主力器件。DFB/EML 工作于 1310/1550nm，成本 $30–80+/颗，用于 &gt;500m 单模光纤。<b>关键区别：</b>单模 800G（T4A 主流）≠ 多模 VCSEL（T4 AOC）——两者并行存在于 AI 数据中心，分别对应不同互连距离和场景。每台 H100 NVLink 交换机含 <b>576 个 VCSEL 通道</b>，AI 集群扩张直接驱动 LITE / COHR 短距 VCSEL 业务增量。
+    </div>
+  </div>
+
   <!-- 各环节详解卡片 -->
   <div class="sfdiag-tier-grid">
 
@@ -610,6 +781,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
         <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">承载数据的调制光信号（PAM4 / QPSK / QAM16）</div></div>
       </div>
       <div class="sfdiag-tc-why">💡 <b>为什么重要：</b>InP 光芯片昂贵（$50+/片），SiPh 用 CMOS 晶圆厂（TSMC/GFS）制造，成本降 1/3。CPO 时代 PIC 价值从 $15→$80+ 每模块，T3A 是"吃掉 T4 价值"的核心路径。</div>
+      <div class="sfdiag-tc-why" style="margin-top:6px;background:rgba(168,85,247,.06);border-left:2px solid rgba(168,85,247,.5);padding-left:8px;">🔬 <b>新兴替代平台 — 薄膜铌酸锂（TFLN）：</b>LiNbO₃ 电光系数是硅的 30×，调制带宽 &gt;100 GHz，插损 &lt;1 dB，是 1.6T/3.2T 高速调制器的颠覆性候选。TFLN 不取代整块 SiPh，而是在<b>调制器子系统</b>中与 SiPh 无源波导混合集成（Hybrid Integration）——SiPh 负责低损耗光路路由，TFLN 负责高速电光调制。公开市场标的：<b>COHR</b>（自研 TFLN 调制器，已集成于 ZR+ 相干模块）、<b>LITE</b>（泵浦激光 + TFLN 器件研发）、<b>MTSI</b>（高速驱动 IC，TFLN 标配配套）；代工端 <b>GFS / IMEC</b> 已开放 TFLN PDK，推动工艺商品化。</div>
     </div>
 
     <div class="sfdiag-tc" style="border-top-color:#0284c7;">
@@ -640,6 +812,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
         <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">QSFP-DD / OSFP 标准插拔模块（买来直接插进交换机）</div></div>
       </div>
       <div class="sfdiag-tc-why">💡 <b>本质是精密组装：</b>核心器件来自 T2/T3，T4 仅提供标准化接口和封装良率。定价权最弱——中国厂商（中际旭创/新易盛）已能复制，ASP 持续承压。CPO 2026 年商用后将部分替代此形态。</div>
+      <div class="sfdiag-tc-why" style="margin-top:6px;background:rgba(251,191,36,.05);border-left:2px solid rgba(251,191,36,.35);padding-left:8px;">🔩 <b>先进封装路径分叉：</b>传统 T4 是<b>标准光学封装</b>（QSFP/OSFP 外壳 + 自动化 sub-μm 光路对准），由 <b>FN（Fabrinet）</b> 精密代工主导；CPO 则是<b>光子先进封装</b>——将硅光 PIC 与交换机 ASIC 在同一有机基板上 2.5D/3D 共封装（Flip-Chip + 微凸点互连），工艺复杂度接近 HBM3 封装。CPO 先进封装由 <b>AVGO / INTC</b>（自研 IDM 路径）及 <b>AMKR（Amkor Technology）</b>（第三方 OSAT，已与 INTC 合作光子引擎封装，入局光子 Flip-Chip）承接。<b>FN 在两种路径均受益</b>——传统路径承接 COHR/LITE 精密制造代工，CPO 路径承接光引擎精密集成，是 T4→CPO 过渡期确定性最高的代工标的。</div>
     </div>
 
     <div class="sfdiag-tc" style="border-top-color:#92400e;">
@@ -685,6 +858,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
         <div class="sfio-box"><div class="sfio-lbl">输出</div><div class="sfio-val">单对光纤承载 96×400G = 38.4Tbps；完整运营商 / DCI 骨干传输网</div></div>
       </div>
       <div class="sfdiag-tc-why">💡 <b>价值在"系统集成"：</b>WDM 让一根光纤同时传 96 个波长，省去 95 对光纤；EDFA 全光放大无需 O-E-O 转换，功耗降 70%。CIEN 的 WaveLogic DSP 领先同业约 2 年，是其毛利率 50%+ 护城河的核心。</div>
+      <div class="sfdiag-tc-why" style="margin-top:6px;background:rgba(134,239,172,.05);border-left:2px solid rgba(134,239,172,.3);padding-left:8px;">📡 <b>EDFA 放大器供应链：</b>掺铒光纤放大器（EDFA）每隔 80km 对光信号进行全光放大（Er³⁺ 掺杂光纤 + 980nm 泵浦激光，无需 O-E-O），是长途 DCI 和运营商骨干网的隐形基础设施。主要上市公司供应商：<b>COHR（Coherent）</b>——全球最大 980nm 泵浦激光器供应商（来自 JDSU/Finisar 遗产），主导 EDFA 泵浦源市场；<b>LITE（Lumentum）</b>——高功率泵浦激光器 + EDFA 完整模块，WSS/EDFA 系统双线布局；<b>CIEN（Ciena）</b>——将 EDFA 集成于 WDM 传输系统出售，以系统级毛利率 50%+ 变现放大器价值。随 AI 数据中心间 DCI 带宽需求翻倍，EDFA 泵浦激光器复购率极高且供应高度集中，是 AI 建设周期中的确定性受益环节。</div>
     </div>
 
     <div class="sfdiag-tc" style="border-top-color:#15803d;">
@@ -717,6 +891,31 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
       <div class="sfdiag-tc-why">💡 <b>光模块最大的单体需求方：</b>ANET 每卖出一台 512 端口交换机，直接带动 512 个 800G 光模块出货（约 $20 万模块价值/台）。2026 年 ANET+AVGO 联合推 CPO 交换机，将从"买模块"转变为"卖含光引擎的整机"。</div>
     </div>
 
+  </div>
+</div>
+
+<!-- ── 横切层：测试与计量（T&M）── -->
+<div class="sfdiag-wrap" style="margin-bottom:20px;">
+  <div class="sfdiag-head">🔬 横切层：测试与计量（T&amp;M）— VIAV · KEYS</div>
+  <div class="sfdiag-sub">光互连产业链中最被忽视的横切层——每一层级（T1→T5）的器件、模块、系统在出厂前均须通过光学测量验证。T&amp;M 需求与产业链资本开支高度正相关，但供应高度集中（VIAV/KEYS 合计占据 60%+），是高确定性的"卖铲子"逻辑，与光模块价格战完全脱钩。</div>
+  <div class="insight-cols" style="margin-top:12px;">
+    <div class="ibox" style="background:rgba(147,51,234,.05);border-color:rgba(147,51,234,.2);">
+      <div class="ibox-title" style="color:#c084fc;">🔬 VIAV — Viavi Solutions</div>
+      <div class="ibox-body">
+        <b>定位：</b>光网络测试仪表 + 光纤检测的垂直专家，产品线覆盖全产业链：<b>T1</b> 光纤 OTDR 检测仪；<b>T2/T3</b> 光功率计 / 光谱分析仪（OSA）；<b>T4</b> 800G 光模块全自动化测试平台（光源+误码测试+眼图+一致性验证）；<b>T5</b> WDM 线路测试系统。市值 ~$15亿（小盘），但收入结构中约 <b>40%</b> 来自数据中心光模块测试，AI Capex 直接驱动 VIAV 仪器订单。800G 光模块每颗出厂须经 8–12 项光电测试（含 PAM4 眼图、BER &lt;10⁻¹²），测试时长约 15 分钟，VIAV 在全自动测试台市占率 &gt;40%。<br>
+        <b style="color:#c084fc;">投资逻辑：</b>下游 T4 产能扩张 1× → VIAV 测试仪器需求约 0.3× 同比增长；与光模块 ASP 无关，纯粹受益于产能竞赛周期。
+      </div>
+    </div>
+    <div class="ibox" style="background:rgba(6,182,212,.05);border-color:rgba(6,182,212,.2);">
+      <div class="ibox-title" style="color:#22d3ee;">📏 KEYS — Keysight Technologies</div>
+      <div class="ibox-body">
+        <b>定位：</b>高端电子 + 光学综合测试仪器，覆盖射频、高速数字、光子全领域。光互连相关：<b>T3A/T3B</b> 高速 SerDes 信号完整性测试（PAM4 误码仪 / ICR 矢量分析仪）；<b>T4</b> 400G/800G 光模块完整测试解决方案（DP-QPSK 矢量分析 + 相干 OSNR 测量）；<b>T3C</b> PCIe Gen5/6 / CXL 协议分析仪（ALAB/CRDO 研发验证必用）。市值 ~$200亿（大盘），光子测试收入约占 15%，随 1.6T/3.2T 新速率标准落地（每代新速率带动一轮测试仪换代采购），增速持续加速。<br>
+        <b style="color:#22d3ee;">投资逻辑：</b>协议升级的"换代采购"周期——R&amp;D 验证阶段即开始导入 KEYS，领先大规模量产 12–18 个月。
+      </div>
+    </div>
+  </div>
+  <div class="sfdiag-tc-why" style="margin-top:10px;">
+    💡 <b>T&amp;M 横切层核心逻辑：</b>光模块厂商打价格战时，测试仪器需求<b>不降反升</b>——产能竞赛越激烈，测试台需求越大。VIAV 是小盘高弹性纯光网络标的（直接受益 AI 资本开支，Beta ~1.5）；KEYS 是大盘稳健复合增速标的（光子测试 15% 占比 × 25%+ 增速 = 显著业绩贡献增量，叠加 SerDes/PCIe 测试协同）。两者均不直接参与光模块价格竞争，是产业链中定价权最为稳健的"基础设施供应商"。
   </div>
 </div>
 
@@ -777,6 +976,74 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
     <div class="cn-subtitle">↑ 上方产业链图中每个 Tier 已标注中国参与方位置。下方为详细竞争分析：T4光模块威胁最高（中际旭创已全球TOP2）；T3硅光/DSP受出口管制制约，是美股标的护城河最稳固环节。</div>
     <div class="cn-threat-bar" id="cn-threat-bar"></div>
     <div class="cn-grid" id="cn-grid"></div>
+  </div>
+
+  <!-- 前沿私有公司战略节点 -->
+  <div class="cn-section" id="private-section" style="border-top:1px solid rgba(255,255,255,.07);margin-top:20px;padding-top:20px;">
+    <div class="cn-title">🚀 前沿私有公司 — 光互连下一代架构创始者</div>
+    <div class="cn-subtitle">以下公司均未上市，但其技术路线将直接影响 2026–2028 年光互连格局。战略价值：竞争对手情报 + 并购目标追踪 + 第一性原理技术验证。</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px;">
+
+      <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:800;color:#fbbf24;">Ayar Labs</span>
+          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.4);">光 I/O Chiplet</span>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A · 芯片内光子 I/O（In-Package Optics）</div>
+        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
+          核心技术：<b>TeraPHY</b> 光 I/O Chiplet——将光 TX/RX 直接集成在芯片封装内，通过 UCIe 接口与 GPU/ASIC 通信，芯片间带宽密度 4× 提升（vs 电 SerDes），功耗降 80%。与 <b>TSMC</b> 深度合作（TSMC3D CoW 工艺流片）；<b>英特尔 / NVIDIA / AMD</b> 均参与战略投资。已完成 Series C 融资，估值 ~$3亿（2023年）。
+        </div>
+        <div style="font-size:8.5px;color:#fbbf24;margin-top:6px;padding-top:5px;border-top:1px solid rgba(251,191,36,.15);">⚠️ 竞争警示：对 CRDO HiWire AEC 和传统 T4 可插拔模块构成直接颠覆风险。AVGO/INTC 潜在并购目标。</div>
+      </div>
+
+      <div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:800;color:#a78bfa;">Lightmatter</span>
+          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.4);">光子 AI 互连</span>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A / T5C · 硅光交换矩阵 Fabric</div>
+        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
+          核心技术：<b>Passage</b> 光子互连平台——用硅光波导矩阵替代铜线 Crossbar，实现多芯片间 Tbps 带宽互连，延迟 &lt;1 ns（vs 铜 &gt;10 ns），功耗降 60%。已完成 <b>$4亿+</b> 融资（a16z/Spark Capital 领投），2024 年 B 轮后估值 ~$45亿。Google DeepMind 已签 MOU 进行 AI 加速器验证测试。
+        </div>
+        <div style="font-size:8.5px;color:#a78bfa;margin-top:6px;padding-top:5px;border-top:1px solid rgba(139,92,246,.15);">🎯 机会视角：若 AI 超算切换至光 Fabric，ANET/CSCO 电交换机将首当其冲。ANET/CSCO/AVGO 潜在并购目标（$50–70亿估值区间）。</div>
+      </div>
+
+      <div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:800;color:#34d399;">Celestial AI</span>
+          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.4);">光子存储互连</span>
+        </div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A · 存算协同光子 Fabric（Memory Bandwidth）</div>
+        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
+          核心技术：<b>Photonic Fabric</b>——专为 GPU-to-Memory（HBM/DRAM）带宽瓶颈设计的光子互连，目标解决 AI 训练中的"内存墙"。已完成 <b>$1.75亿</b>（2024 年，Samsung Ventures / SK Hynix 参与战略投资）。路线差异化：专注 Memory Bandwidth 而非 GPU-to-GPU，与 Ayar/Lightmatter 形成互补。
+        </div>
+        <div style="font-size:8.5px;color:#34d399;margin-top:6px;padding-top:5px;border-top:1px solid rgba(52,211,153,.15);">🔬 技术赌注：若光子 HBM 接口量产，将颠覆 HBM 电接口生态（影响 ALAB / CRDO 的总线互连市场）。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 光子 EDA 工具链 -->
+  <div class="cn-section" id="eda-section" style="border-top:1px solid rgba(255,255,255,.07);margin-top:20px;padding-top:20px;">
+    <div class="cn-title">🛠️ 光子 EDA 工具链 — 设计软件基础设施</div>
+    <div class="cn-subtitle">光子芯片设计（PIC）需要专用 EDA 工具——传统数字 EDA 无法处理电磁场/光场耦合、波导弯曲、多物理场协同仿真。光子 EDA 是 T3A 硅光规模化的软件护城河，三大巨头各有侧重。</div>
+    <div class="insight-cols" style="margin-top:12px;">
+      <div class="ibox" style="background:rgba(59,130,246,.05);border-color:rgba(59,130,246,.2);">
+        <div class="ibox-title" style="color:#60a5fa;">🔧 三大光子 EDA 平台</div>
+        <div class="ibox-body">
+          <b>Synopsys (SNPS) — RSoft Photonic Suite：</b>业界最广泛使用的光子仿真工具，BeamPROP（波导传播）/ BandSOLVE（光子晶体）/ ModeSYS（系统级光链路仿真）。SNPS 已将光子 EDA 整合入 PrimeSim 统一平台，支持光-电协同设计。<br><br>
+          <b>Cadence (CDN) — Photonic Design Platform：</b>2016年收购 Lumerical，提供 FDTD / FDE / EME 精密电磁仿真。Lumerical FDTD 是 TFLN 调制器和 CPO 光引擎设计的首选工具，被 COHR/LITE/GFS PDK 合作伙伴广泛采用。<br><br>
+          <b>Ansys (ANSS) — Lumerical + HFSS：</b>2021年收购 Lumerical（与 Cadence 竞争，Lumerical 资产最终归属 ANSS），将 FDTD 电磁仿真与结构热仿真整合，支持 CPO 多物理场（光+热+力学）协同设计，是 AVGO/INTC CPO 开发必备工具。
+        </div>
+      </div>
+      <div class="ibox" style="background:rgba(244,114,182,.05);border-color:rgba(244,114,182,.2);">
+        <div class="ibox-title" style="color:#f472b6;">💡 EDA 投资视角</div>
+        <div class="ibox-body">
+          <b>"隐形税"逻辑：</b>每家 T3A 硅光公司（AVGO/MRVL/INTC 及 GFS 的所有 PDK 客户）均须购买 SNPS/CDN/ANSS 光子 EDA 工具，光子业务规模化 → EDA 订阅收入稳定增长。但光子 EDA 仅占三家公司收入极小比例（各 &lt;2%），更多是对 SNPS/CDN/ANSS 正面评级的<b>边际加分项</b>，不构成独立光子投资主题。<br><br>
+          <b>新兴纯正光子 EDA（未上市）：</b><b>Flexcompute</b>（MIT 出品，Tidy3D 云端 GPU 加速 FDTD，已获 $40M 融资）和 <b>Luceda Photonics</b>（PIC-Design Suite，荷兰）试图以 SaaS + GPU 加速切入，对传统 EDA 巨头的长期颠覆潜力值得关注，但尚不具备上市标的条件。
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -1631,7 +1898,7 @@ function renderFootnote() {
   const el = document.getElementById('footnote');
   if (!el) return;
   const total = new Set([...document.querySelectorAll('[data-ticker]')].map(el => el.dataset.ticker)).size;
-  el.textContent = `覆盖 ${total} 家核心上市公司 · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-04 v5 · 数据仅供研究参考，不构成投资建议`;
+  el.textContent = `覆盖 ${total} 家核心上市公司 · 基础材料→光子器件→硅光/AI互连芯片→光模块/连接器→光网系统→以太网交换 · 2026-04 v6 · 数据仅供研究参考，不构成投资建议`;
 }
 
 /* ═══════════════════════════════════════════
