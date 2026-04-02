@@ -101,7 +101,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .special-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
 .special-card .cc-links{flex-direction:row;margin-top:7px;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:22px 0;}
-.matrix-section{margin-top:4px;}
+.matrix-section{margin-top:4px;max-width:1200px;}
 .matrix-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;
   text-transform:uppercase;margin-bottom:16px;}
 .matrix-wrap{overflow-x:auto;overflow-y:hidden;}
@@ -151,7 +151,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .cpo-impact{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;}
 
 /* ── 技术迭代路径 ── */
-.tech-section{margin-top:26px;}
+.tech-section{margin-top:26px;max-width:1200px;}
 .tech-heading{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;text-transform:uppercase;margin-bottom:16px;}
 .tech-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:10px;}
 .tech-timeline{display:flex;align-items:flex-start;min-width:900px;padding:0 8px 4px;}
@@ -205,7 +205,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .pl-dot{width:10px;height:4px;border-radius:2px;flex-shrink:0;}
 
 /* ── 中国供应链 ── */
-.cn-section{margin-top:26px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.18);border-radius:12px;padding:18px 22px;}
+.cn-section{margin-top:26px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.18);border-radius:12px;padding:18px 22px;max-width:1200px;}
 .cn-title{font-size:13px;font-weight:700;color:#f87171;letter-spacing:2px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
 .cn-subtitle{font-size:10.5px;color:var(--text3);margin-bottom:16px;line-height:1.5;}
 .cn-threat-bar{display:flex;gap:0;border-radius:8px;overflow:hidden;margin-bottom:18px;height:36px;}
@@ -244,7 +244,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .ibox-body{font-size:9.5px;color:var(--text3);line-height:1.6;}
 
 /* ── 信号链路流程图 ── */
-.sfdiag-wrap{background:rgba(13,21,38,.7);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:18px 20px;margin-bottom:20px;}
+.sfdiag-wrap{background:rgba(13,21,38,.7);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:18px 20px;margin-bottom:20px;max-width:1200px;}
 .sfdiag-head{font-size:13px;font-weight:700;color:#7dd3fc;letter-spacing:2px;margin-bottom:4px;display:flex;align-items:center;gap:7px;}
 .sfdiag-sub{font-size:10px;color:var(--text3);margin-bottom:14px;line-height:1.5;}
 .sfdiag-scen{margin-bottom:12px;}
@@ -278,7 +278,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 
 <div class="hdr">
   <h1>光 互 连 产 业 链 全 景 图</h1>
-  <div class="meta">覆盖 <em>28</em> 家核心上市公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/AI互连芯片 → 光模块/连接器 → 光网络系统 → 以太网交换 &nbsp;·&nbsp; 2026-03 v5 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
+  <div class="meta">覆盖 <em>33</em> 家上市公司 + 3 家前沿私有公司 &nbsp;·&nbsp; 基础材料 → 光子器件 → 硅光/DSP → 光模块/连接器 → 光网系统 → 横切层（T&M/EDA） → 前沿未上市 &nbsp;·&nbsp; 2026-04 v8 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
 </div>
 
 <div class="notice">
@@ -564,6 +564,15 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
   </div>
 </div>
 
+<!-- 技术迭代路径 -->
+  <div class="tech-section">
+    <div class="tech-heading">技 术 迭 代 路 径 — 光 模 块 速 率 演 进</div>
+    <div class="tech-scroll">
+      <div class="tech-timeline" id="tech-timeline"></div>
+    </div>
+    <div id="tech-phase-bar" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:12px;"></div>
+  </div>
+
 <!-- ── 信号链路流程图 ── -->
 <div class="sfdiag-wrap">
   <div class="sfdiag-head">📡 信号链路流程图 — 每个环节在干什么</div>
@@ -780,58 +789,10 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 <div class="chain-wrap" id="chain-wrap"></div>
 </div>
 
-<!-- ── 横切层：测试与计量（T&M）── -->
-<div class="sfdiag-wrap" style="margin-bottom:20px;">
-  <div class="sfdiag-head">🔬 横切层：测试与计量（T&amp;M）— VIAV · KEYS</div>
-  <div class="sfdiag-sub">光互连产业链中最被忽视的横切层——每一层级（T1→T5）的器件、模块、系统在出厂前均须通过光学测量验证。T&amp;M 需求与产业链资本开支高度正相关，但供应高度集中（VIAV/KEYS 合计占据 60%+），是高确定性的"卖铲子"逻辑，与光模块价格战完全脱钩。</div>
-  <div class="insight-cols" style="margin-top:12px;">
-    <div class="ibox" style="background:rgba(147,51,234,.05);border-color:rgba(147,51,234,.2);">
-      <div class="ibox-title" style="color:#c084fc;">🔬 VIAV — Viavi Solutions</div>
-      <div class="ibox-body">
-        <b>定位：</b>光网络测试仪表 + 光纤检测的垂直专家，产品线覆盖全产业链：<b>T1</b> 光纤 OTDR 检测仪；<b>T2/T3</b> 光功率计 / 光谱分析仪（OSA）；<b>T4</b> 800G 光模块全自动化测试平台（光源+误码测试+眼图+一致性验证）；<b>T5</b> WDM 线路测试系统。市值 ~$15亿（小盘），但收入结构中约 <b>40%</b> 来自数据中心光模块测试，AI Capex 直接驱动 VIAV 仪器订单。800G 光模块每颗出厂须经 8–12 项光电测试（含 PAM4 眼图、BER &lt;10⁻¹²），测试时长约 15 分钟，VIAV 在全自动测试台市占率 &gt;40%。<br>
-        <b style="color:#c084fc;">投资逻辑：</b>下游 T4 产能扩张 1× → VIAV 测试仪器需求约 0.3× 同比增长；与光模块 ASP 无关，纯粹受益于产能竞赛周期。
-      </div>
-    </div>
-    <div class="ibox" style="background:rgba(6,182,212,.05);border-color:rgba(6,182,212,.2);">
-      <div class="ibox-title" style="color:#22d3ee;">📏 KEYS — Keysight Technologies</div>
-      <div class="ibox-body">
-        <b>定位：</b>高端电子 + 光学综合测试仪器，覆盖射频、高速数字、光子全领域。光互连相关：<b>T3A/T3B</b> 高速 SerDes 信号完整性测试（PAM4 误码仪 / ICR 矢量分析仪）；<b>T4</b> 400G/800G 光模块完整测试解决方案（DP-QPSK 矢量分析 + 相干 OSNR 测量）；<b>T3C</b> PCIe Gen5/6 / CXL 协议分析仪（ALAB/CRDO 研发验证必用）。市值 ~$200亿（大盘），光子测试收入约占 15%，随 1.6T/3.2T 新速率标准落地（每代新速率带动一轮测试仪换代采购），增速持续加速。<br>
-        <b style="color:#22d3ee;">投资逻辑：</b>协议升级的"换代采购"周期——R&amp;D 验证阶段即开始导入 KEYS，领先大规模量产 12–18 个月。
-      </div>
-    </div>
-  </div>
-  <div class="sfdiag-tc-why" style="margin-top:10px;">
-    💡 <b>T&amp;M 横切层核心逻辑：</b>光模块厂商打价格战时，测试仪器需求<b>不降反升</b>——产能竞赛越激烈，测试台需求越大。VIAV 是小盘高弹性纯光网络标的（直接受益 AI 资本开支，Beta ~1.5）；KEYS 是大盘稳健复合增速标的（光子测试 15% 占比 × 25%+ 增速 = 显著业绩贡献增量，叠加 SerDes/PCIe 测试协同）。两者均不直接参与光模块价格竞争，是产业链中定价权最为稳健的"基础设施供应商"。
-  </div>
-</div>
-</div>
-
-  <!-- 光子 EDA 工具链 -->
-  <div class="cn-section" id="eda-section" style="border-top:1px solid rgba(255,255,255,.07);margin-top:20px;padding-top:20px;">
-    <div class="cn-title">🛠️ 光子 EDA 工具链 — 设计软件基础设施</div>
-    <div class="cn-subtitle">光子芯片设计（PIC）需要专用 EDA 工具——传统数字 EDA 无法处理电磁场/光场耦合、波导弯曲、多物理场协同仿真。光子 EDA 是 T3A 硅光规模化的软件护城河，三大巨头各有侧重。</div>
-    <div class="insight-cols" style="margin-top:12px;">
-      <div class="ibox" style="background:rgba(59,130,246,.05);border-color:rgba(59,130,246,.2);">
-        <div class="ibox-title" style="color:#60a5fa;">🔧 三大光子 EDA 平台</div>
-        <div class="ibox-body">
-          <b>Synopsys (SNPS) — RSoft Photonic Suite：</b>业界最广泛使用的光子仿真工具，BeamPROP（波导传播）/ BandSOLVE（光子晶体）/ ModeSYS（系统级光链路仿真）。SNPS 已将光子 EDA 整合入 PrimeSim 统一平台，支持光-电协同设计。<br><br>
-          <b>Cadence (CDN) — Photonic Design Platform：</b>2016年收购 Lumerical，提供 FDTD / FDE / EME 精密电磁仿真。Lumerical FDTD 是 TFLN 调制器和 CPO 光引擎设计的首选工具，被 COHR/LITE/GFS PDK 合作伙伴广泛采用。<br><br>
-          <b>Ansys (ANSS) — Lumerical + HFSS：</b>2021年收购 Lumerical（与 Cadence 竞争，Lumerical 资产最终归属 ANSS），将 FDTD 电磁仿真与结构热仿真整合，支持 CPO 多物理场（光+热+力学）协同设计，是 AVGO/INTC CPO 开发必备工具。
-        </div>
-      </div>
-      <div class="ibox" style="background:rgba(244,114,182,.05);border-color:rgba(244,114,182,.2);">
-        <div class="ibox-title" style="color:#f472b6;">💡 EDA 投资视角</div>
-        <div class="ibox-body">
-          <b>"隐形税"逻辑：</b>每家 T3A 硅光公司（AVGO/MRVL/INTC 及 GFS 的所有 PDK 客户）均须购买 SNPS/CDN/ANSS 光子 EDA 工具，光子业务规模化 → EDA 订阅收入稳定增长。但光子 EDA 仅占三家公司收入极小比例（各 &lt;2%），更多是对 SNPS/CDN/ANSS 正面评级的<b>边际加分项</b>，不构成独立光子投资主题。<br><br>
-          <b>新兴纯正光子 EDA（未上市）：</b><b>Flexcompute</b>（MIT 出品，Tidy3D 云端 GPU 加速 FDTD，已获 $40M 融资）和 <b>Luceda Photonics</b>（PIC-Design Suite，荷兰）试图以 SaaS + GPU 加速切入，对传统 EDA 巨头的长期颠覆潜力值得关注，但尚不具备上市标的条件。
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 <!-- ── T1-T5 各层详解 ──>
-  <!-- 各环节详解卡片 -->
+  <div class="sfdiag-head" style="margin-bottom:14px;font-size:12px;letter-spacing:.8px;color:#a5b4fc;border-left-color:#4f46e5;">🔬 各层技术深度解析 — 输入 · 过程 · 输出</div>
   <div class="sfdiag-tier-grid">
 
     <div class="sfdiag-tc" style="border-top-color:#7c3aed;">
@@ -990,50 +951,6 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
   </div>
   </div>
 
-  <!-- 前沿私有公司战略节点 -->
-  <div class="cn-section" id="private-section" style="border-top:1px solid rgba(255,255,255,.07);margin-top:20px;padding-top:20px;">
-    <div class="cn-title">🚀 前沿私有公司 — 光互连下一代架构创始者</div>
-    <div class="cn-subtitle">以下公司均未上市，但其技术路线将直接影响 2026–2028 年光互连格局。战略价值：竞争对手情报 + 并购目标追踪 + 第一性原理技术验证。</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px;">
-
-      <div style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;font-weight:800;color:#fbbf24;">Ayar Labs</span>
-          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.4);">光 I/O Chiplet</span>
-        </div>
-        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A · 芯片内光子 I/O（In-Package Optics）</div>
-        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
-          核心技术：<b>TeraPHY</b> 光 I/O Chiplet——将光 TX/RX 直接集成在芯片封装内，通过 UCIe 接口与 GPU/ASIC 通信，芯片间带宽密度 4× 提升（vs 电 SerDes），功耗降 80%。与 <b>TSMC</b> 深度合作（TSMC3D CoW 工艺流片）；<b>英特尔 / NVIDIA / AMD</b> 均参与战略投资。已完成 Series C 融资，估值 ~$3亿（2023年）。
-        </div>
-        <div style="font-size:8.5px;color:#fbbf24;margin-top:6px;padding-top:5px;border-top:1px solid rgba(251,191,36,.15);">⚠️ 竞争警示：对 CRDO HiWire AEC 和传统 T4 可插拔模块构成直接颠覆风险。AVGO/INTC 潜在并购目标。</div>
-      </div>
-
-      <div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.25);border-radius:8px;padding:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;font-weight:800;color:#a78bfa;">Lightmatter</span>
-          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.4);">光子 AI 互连</span>
-        </div>
-        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A / T5C · 硅光交换矩阵 Fabric</div>
-        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
-          核心技术：<b>Passage</b> 光子互连平台——用硅光波导矩阵替代铜线 Crossbar，实现多芯片间 Tbps 带宽互连，延迟 &lt;1 ns（vs 铜 &gt;10 ns），功耗降 60%。已完成 <b>$4亿+</b> 融资（a16z/Spark Capital 领投），2024 年 B 轮后估值 ~$45亿。Google DeepMind 已签 MOU 进行 AI 加速器验证测试。
-        </div>
-        <div style="font-size:8.5px;color:#a78bfa;margin-top:6px;padding-top:5px;border-top:1px solid rgba(139,92,246,.15);">🎯 机会视角：若 AI 超算切换至光 Fabric，ANET/CSCO 电交换机将首当其冲。ANET/CSCO/AVGO 潜在并购目标（$50–70亿估值区间）。</div>
-      </div>
-
-      <div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;font-weight:800;color:#34d399;">Celestial AI</span>
-          <span style="font-size:8px;padding:1px 6px;border-radius:3px;background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.4);">光子存储互连</span>
-        </div>
-        <div style="font-size:9px;color:var(--text3);margin-bottom:4px;">T3A · 存算协同光子 Fabric（Memory Bandwidth）</div>
-        <div style="font-size:9.5px;color:var(--text2);line-height:1.5;">
-          核心技术：<b>Photonic Fabric</b>——专为 GPU-to-Memory（HBM/DRAM）带宽瓶颈设计的光子互连，目标解决 AI 训练中的"内存墙"。已完成 <b>$1.75亿</b>（2024 年，Samsung Ventures / SK Hynix 参与战略投资）。路线差异化：专注 Memory Bandwidth 而非 GPU-to-GPU，与 Ayar/Lightmatter 形成互补。
-        </div>
-        <div style="font-size:8.5px;color:#34d399;margin-top:6px;padding-top:5px;border-top:1px solid rgba(52,211,153,.15);">🔬 技术赌注：若光子 HBM 接口量产，将颠覆 HBM 电接口生态（影响 ALAB / CRDO 的总线互连市场）。</div>
-      </div>
-
-    </div>
-  </div>
 
 
 
@@ -1049,15 +966,6 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 <div id="tech-deep-wrap">
 
 
-
-  <!-- 技术迭代路径 -->
-  <div class="tech-section">
-    <div class="tech-heading">技 术 迭 代 路 径 — 光 模 块 速 率 演 进</div>
-    <div class="tech-scroll">
-      <div class="tech-timeline" id="tech-timeline"></div>
-    </div>
-    <div id="tech-phase-bar" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:12px;"></div>
-  </div>
 
   <!-- 发展周期 & 卡点 -->
   <div class="cycle-wrap" id="cycle-wrap"></div>
@@ -1090,8 +998,6 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 </div>
 
 <div class="footnote" id="footnote"></div>
-
-</div>
 
 <script>
 /* ═══════════════════════════════════════════
@@ -1438,6 +1344,127 @@ const TIERS = [
         ]
       }
     ]
+  },
+  {
+    id: 'TM',
+    num: '横切层',
+    title: '测试与计量（T&M）',
+    crosscut: true,
+    width: 'wide',
+    color: '#9333ea',
+    bgGrad: ['#2e1065','#7e22ce'],
+    bodyBg: 'rgba(147,51,234,.08)',
+    borderColor: 'rgba(147,51,234,.22)',
+    ccBorderColor: '#a855f7',
+    tickerColor: '#d8b4fe',
+    descBg: 'rgba(147,51,234,.1)',
+    descBorder: '#a855f7',
+    descColor: '#d8b4fe',
+    desc: '产业链中最被忽视的横切层——T1→T5 每一层级的器件、模块、系统在出厂前均须通过光学测量验证。T&M 需求与产业链资本开支高度正相关，VIAV/KEYS 合计市占 60%+，是高确定性的"卖铲子"逻辑，与光模块 ASP 价格战完全脱钩。',
+    subs: [
+      {
+        id: 'TMA',
+        label: '🔬 光学测试仪表（全链覆盖 T1→T5）',
+        color: '#9333ea',
+        bgColor: 'rgba(147,51,234,.15)',
+        labelColor: '#d8b4fe',
+        valBg: 'rgba(147,51,234,.07)',
+        valColor: '#c4b5fd',
+        ccBorder: '#9333ea',
+        tickerColor: '#d8b4fe',
+        desc: 'T1 OTDR光纤检测 · T2/T3 光谱分析仪OSA · T4 800G全自动测试台（VIAV市占>40%）· T5 WDM线路测试。AI Capex直接驱动仪器订单：T4产能扩张1× → VIAV仪器需求约0.3×同比增长，与光模块ASP无关。',
+        companies: [
+          { ticker: 'VIAV', mcap:'small', name: 'Viavi Solutions', desc: '光网络测试仪表垂直专家，T1→T5全链覆盖；800G模块全自动测试台市占率>40%；约40%收入来自DC测试，AI Capex直接驱动仪器订单；小盘高弹性（Beta~1.5），纯光互连Beta' }
+        ]
+      },
+      {
+        id: 'TMB',
+        label: '📏 电子测量与协议分析（SerDes + 光子 + PCIe）',
+        color: '#7c3aed',
+        bgColor: 'rgba(124,58,237,.15)',
+        labelColor: '#c4b5fd',
+        valBg: 'rgba(124,58,237,.07)',
+        valColor: '#a78bfa',
+        ccBorder: '#7c3aed',
+        tickerColor: '#c4b5fd',
+        desc: 'T3B SerDes/PAM4信号完整性 · T4 400G/800G相干矢量分析 · T3C PCIe Gen5/6/CXL协议分析仪（ALAB/CRDO研发必用）。每代新速率标准落地→换代采购周期，领先大规模量产12-18个月。',
+        companies: [
+          { ticker: 'KEYS', mcap:'large', name: 'Keysight Technologies', desc: '高端电子+光学综合测试仪器；T3/T4/T3C全覆盖；1.6T/3.2T新速率标准带动换代采购周期；光子测试约15%收入增速加速；大盘稳健复合增速标的（市值~$200亿）' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'EDA',
+    num: '横切层',
+    title: '光子 EDA 设计工具',
+    crosscut: true,
+    width: 'wide',
+    color: '#4f46e5',
+    bgGrad: ['#1e1b4b','#3730a3'],
+    bodyBg: 'rgba(79,70,229,.08)',
+    borderColor: 'rgba(79,70,229,.22)',
+    ccBorderColor: '#818cf8',
+    tickerColor: '#a5b4fc',
+    descBg: 'rgba(79,70,229,.1)',
+    descBorder: '#818cf8',
+    descColor: '#a5b4fc',
+    desc: '光子芯片设计（PIC）需要专用 EDA 工具——传统数字 EDA 无法处理电磁场/光场耦合、波导弯曲、多物理场协同仿真。每家 T3A 硅光公司（AVGO/MRVL/INTC 及 GFS PDK 客户）均须购买工具，光子业务规模化→EDA订阅收入稳定增长（"隐形税"逻辑）。',
+    subs: [
+      {
+        id: 'EDAA',
+        label: '🔧 光子 EDA 三大平台（T3A 硅光 PIC 设计必选）',
+        color: '#4f46e5',
+        bgColor: 'rgba(79,70,229,.15)',
+        labelColor: '#a5b4fc',
+        valBg: 'rgba(79,70,229,.07)',
+        valColor: '#818cf8',
+        ccBorder: '#4f46e5',
+        tickerColor: '#a5b4fc',
+        desc: '光子EDA仅占各公司收入<2%，是正面评级的边际加分项而非独立主题。SNPS RSoft / CDN Lumerical FDTD / ANSS Lumerical+HFSS三平台分别侧重波导仿真、精密电磁仿真、多物理场协同（CPO光+热+力学）。',
+        companies: [
+          { ticker: 'SNPS', mcap:'large', name: 'Synopsys Inc', desc: 'RSoft Photonic Suite（业界最广泛）：BeamPROP波导传播/ModeSYS光链路仿真，已整合入PrimeSim支持光-电协同设计；光子EDA是SNPS EDA帝国的光子时代护城河延伸' },
+          { ticker: 'CDN',  mcap:'large', name: 'Cadence Design Systems', desc: '收购Lumerical提供FDTD/FDE/EME精密电磁仿真；TFLN调制器和CPO光引擎设计首选工具，被COHR/LITE/GFS PDK广泛采用；Photonic Design Platform' },
+          { ticker: 'ANSS', mcap:'large', name: 'Ansys Inc', desc: 'Lumerical+HFSS多物理场：FDTD电磁仿真+结构热仿真；CPO光+热+力学协同设计，AVGO/INTC CPO开发必备工具；2021年收购Lumerical整合光子EDA' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'TF',
+    num: '前沿',
+    title: '未上市前沿架构创始者',
+    crosscut: true,
+    width: 'wide',
+    color: '#d97706',
+    bgGrad: ['#451a03','#92400e'],
+    bodyBg: 'rgba(217,119,6,.08)',
+    borderColor: 'rgba(217,119,6,.22)',
+    ccBorderColor: '#f59e0b',
+    tickerColor: '#fcd34d',
+    descBg: 'rgba(217,119,6,.1)',
+    descBorder: '#f59e0b',
+    descColor: '#fcd34d',
+    desc: '以下公司均未上市，技术路线将直接影响 2026–2028 年光互连格局（对应 OIO 信号架构）。战略价值：竞争对手情报 + 并购目标追踪 + 第一性原理技术验证。颠覆威胁：Ayar Labs TeraPHY 直接挑战 T4 可插拔模块与 CRDO AEC；Lightmatter Passage 光交换矩阵威胁 ANET/CSCO 电交换机。',
+    subs: [
+      {
+        id: 'TFA',
+        label: '🚀 光 I/O Chiplet & 光子互连 Fabric（In-Package Optics / OIO 架构，2027+ 节点）',
+        color: '#d97706',
+        bgColor: 'rgba(217,119,6,.15)',
+        labelColor: '#fcd34d',
+        valBg: 'rgba(217,119,6,.07)',
+        valColor: '#fbbf24',
+        ccBorder: '#d97706',
+        tickerColor: '#fcd34d',
+        desc: 'T3A/T5C层前沿，OIO信号架构代表（功耗-80%，带宽密度4×提升）。与上游T2/T3深度耦合，TSMC 3D CoW为工艺护城河；NVDA/INTC/AMD/Samsung均有战略投资布局。',
+        companies: [
+          { ticker: 'AYAR', private: true, mcap:'', name: 'Ayar Labs（私有）', desc: 'TeraPHY光I/O Chiplet：光TX/RX直接集成封装内（UCIe接口），带宽密度4×↑，功耗-80%；TSMC 3D CoW工艺；NVDA/INTC/AMD战略投资；Series C估值~$3亿。⚠️ 颠覆风险：对CRDO HiWire AEC和T4可插拔模块构成直接挑战；AVGO/INTC潜在并购目标' },
+          { ticker: 'LMAT', private: true, mcap:'', name: 'Lightmatter（私有）', desc: 'Passage光子互连平台：硅光波导矩阵替代铜线Crossbar，Tbps互连，延迟<1ns（vs铜>10ns），功耗-60%；B轮后估值~$45亿；Google DeepMind已签MOU验证。🎯 机会：若AI超算切换光Fabric，ANET/CSCO电交换机将首当其冲；ANET/AVGO潜在并购目标' },
+          { ticker: 'CLAI', private: true, mcap:'', name: 'Celestial AI（私有）', desc: 'Photonic Fabric：专为GPU-to-Memory(HBM/DRAM)带宽瓶颈设计的光子互连；$1.75亿（Samsung Ventures/SK Hynix战略投资）；路线差异化：专注Memory Bandwidth，与Ayar/Lightmatter互补。🔬 若光子HBM接口量产将颠覆ALAB/CRDO总线互连市场' }
+        ]
+      }
+    ]
   }
 ];
 
@@ -1702,6 +1729,7 @@ function renderLegend() {
   const legend = document.getElementById('legend');
   if (!legend) return;
   TIERS.forEach(t => {
+    if (t.crosscut) return; // skip crosscut tiers in legend
     (t.subs || []).forEach(s => {
       const d = document.createElement('div');
       d.className = 'leg';
@@ -1766,14 +1794,21 @@ function renderChain() {
     if (i > 0) wrap.innerHTML += arrow;
     let subsHtml = '';
     (t.subs || []).forEach(s => {
-      const cosHtml = s.companies.map(c => `
-        <div class="cc" data-ticker="${c.ticker}" style="border-left-color:${s.ccBorder||t.ccBorderColor};">
+      const cosHtml = s.companies.map(c => {
+        const isPrivate = c.private === true;
+        const tickerAttr = isPrivate ? '' : `data-ticker="${c.ticker}"`;
+        const linksHtml = isPrivate
+          ? `<span class="cc-btn" style="background:rgba(217,119,6,.15);color:#fbbf24;border:1px solid rgba(217,119,6,.4);font-size:8px;padding:2px 6px;border-radius:3px;white-space:nowrap;">私有·未上市</span>`
+          : `<div class="cc-links"></div>`;
+        return `
+        <div class="cc" ${tickerAttr} style="border-left-color:${s.ccBorder||t.ccBorderColor};">
           <div class="cc-top"><div class="cc-info">
-            <div class="cc-ticker" style="color:${s.tickerColor||t.tickerColor};">${c.ticker}${mcapBadgeHtml(c.mcap)}</div>
+            <div class="cc-ticker" style="color:${s.tickerColor||t.tickerColor};">${c.ticker}</div>
             <div class="cc-name">${c.name}</div>
             <div class="cc-desc">${c.desc}</div>
-          </div><div class="cc-links"></div></div>
-        </div>`).join('');
+          </div><div class="cc-links">${linksHtml}</div></div>
+        </div>`;
+      }).join('');
       subsHtml += `
         <div>
           <div class="sub-lbl" style="background:${s.bgColor};color:${s.labelColor};">${s.label}</div>
@@ -1782,8 +1817,8 @@ function renderChain() {
         </div>`;
     });
 
-    // 注入中国企业
-    const cnCos = CN_BY_TIER[t.id];
+    // 注入中国企业（仅限非横切层）
+    const cnCos = !t.crosscut && CN_BY_TIER[t.id];
     if (cnCos && cnCos.length) {
       const cnCardsHtml = cnCos.map(c => `
         <div class="cc" style="border-left-color:#dc2626;background:rgba(220,38,38,.04);border-color:rgba(220,38,38,.15);">
@@ -1806,10 +1841,12 @@ function renderChain() {
         </div>`;
     }
 
+    const crosscutStyle = t.crosscut ? `border-top:2px dashed ${t.color};margin-top:4px;` : '';
+    const numStyle = t.crosscut ? `font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:3px;background:rgba(255,255,255,.12);` : '';
     wrap.innerHTML += `
-      <div class="tb ${t.width||''}" id="${t.id}">
+      <div class="tb ${t.width||''}" id="${t.id}" style="${crosscutStyle}">
         <div class="th" style="background:linear-gradient(135deg,${t.bgGrad[0]},${t.bgGrad[1]});">
-          <div class="th-num">${t.num}</div>
+          <div class="th-num" style="${numStyle}">${t.num}</div>
           <div class="th-title">${t.title}</div>
         </div>
         <div class="tb-body" style="background:${t.bodyBg};border-color:${t.borderColor};">
@@ -1841,8 +1878,13 @@ function renderSpecial() {
         <div class="special-sub">${ss.subtitle}</div>
       </div>
       <div class="special-cards">${cardsHtml}</div>`;
-    const divider = document.querySelector('.divider');
-    divider.parentNode.insertBefore(div, divider);
+    const chainScroll = document.querySelector('.chain-scroll');
+    if (chainScroll && chainScroll.parentNode) {
+      chainScroll.parentNode.insertBefore(div, chainScroll.nextSibling);
+    } else {
+      const divider = document.querySelector('.divider');
+      if (divider) divider.parentNode.insertBefore(div, divider);
+    }
   });
 }
 
