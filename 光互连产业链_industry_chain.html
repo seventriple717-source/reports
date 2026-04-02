@@ -200,6 +200,11 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
 .p-bar-fill{height:100%;border-radius:3px;}
 .p-pct{font-size:9.5px;font-weight:700;flex-shrink:0;width:28px;text-align:right;}
 .p-reason{font-size:9px;color:var(--text3);line-height:1.45;margin-top:5px;}
+.p-margin-row{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.p-margin-label{font-size:8px;font-weight:700;flex-shrink:0;color:var(--text3);width:42px;letter-spacing:.3px;}
+.p-margin-val{font-size:9.5px;font-weight:800;flex-shrink:0;width:46px;text-align:right;}
+.p-margin-note{font-size:8.5px;color:var(--text3);line-height:1.4;margin-top:4px;padding-top:4px;border-top:1px solid rgba(255,255,255,.05);}
+.p-divider{height:1px;background:rgba(255,255,255,.05);margin:6px 0;}
 .pricing-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);}
 .pl-item{display:flex;align-items:center;gap:5px;}
 .pl-dot{width:10px;height:4px;border-radius:2px;flex-shrink:0;}
@@ -973,7 +978,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-s
   <!-- 定价权地图 -->
   <div class="pricing-section">
     <div class="pricing-title">⚖️ 定 价 权 地 图 — 价 值 链 话 语 权 分 布</div>
-    <div class="pricing-subtitle">沿产业链从上游到下游，定价权整体呈<b style="color:#e8eef7;">上游强、下游弱</b>的格局；CPO技术变革正在<b style="color:#fb923c;">将T4(光模块)的定价权向T3(硅光芯片)迁移</b>，而AI需求的高度集中也赋予DC采购方相当的反向议价能力。</div>
+    <div class="pricing-subtitle">沿产业链从上游到下游，定价权整体呈<b style="color:#e8eef7;">上游强、下游弱</b>的格局；每张卡片同时显示<b style="color:#fbbf24;">定价权强度</b>与<b style="color:#34d399;">毛利率区间</b>——两者共同决定一个环节的长期投资价值。CPO技术变革正在<b style="color:#fb923c;">将T4(光模块)的定价权与利润向T3(硅光芯片)迁移</b>。</div>
     <div class="pricing-grid" id="pricing-grid"></div>
     <div class="pricing-legend" id="pricing-legend"></div>
   </div>
@@ -2208,17 +2213,17 @@ const CYCLE_CARDS = [
 
 // 定价权地图
 const PRICING = [
-  { tier:'T1', name:'光纤预制棒', cos:'GLW · 住友 · 古河', pct:85, color:'#c4b5fd', trend:'→', reason:'CR3约70%，新产能建设需3年，AI+BEAD双轮需求可见度高，价格转嫁能力强' },
-  { tier:'T1', name:'InP化合物晶圆', cos:'AXTI · COHR内部', pct:92, color:'#d8b4fe', trend:'↑', reason:'全球仅4-5家可量产，扩产极困难，800G放量供应偏紧，定价权最强的上游环节' },
-  { tier:'T2', name:'EML/DFB激光器', cos:'LITE · COHR', pct:88, color:'#93c5fd', trend:'↑', reason:'技术壁垒极高，MOCVD设备+工艺know-how双重护城河，供不应求推高ASP' },
-  { tier:'T2', name:'WSS/ROADM器件', cos:'LITE（市占>50%）', pct:91, color:'#bfdbfe', trend:'→', reason:'Lumentum寡头地位，专利+工艺双壁垒，OXC趋势强化其长期定价权' },
-  { tier:'T3', name:'相干DSP芯片', cos:'MRVL（外部>60%）', pct:90, color:'#7dd3fc', trend:'↑', reason:'寡头垄断，无第二选择，AI光互连DSP需求爆发，定价权持续强化' },
-  { tier:'T3', name:'硅光PIC平台', cos:'AVGO · MRVL · INTC', pct:80, color:'#38bdf8', trend:'↑', reason:'CPO趋势下PIC价值$15→$80+，AVGO/MRVL双寡头，GFS代工绑定' },
-  { tier:'T4', name:'直接探测光模块', cos:'COHR · FN · AAOI', pct:52, color:'#fcd34d', trend:'↓', reason:'中国厂商（中际旭创/新易盛）快速渗透，400G/800G价格竞争加剧，ASP承压' },
-  { tier:'T4', name:'相干光模块', cos:'COHR · CIEN · CSCO/Acacia', pct:76, color:'#fbbf24', trend:'→', reason:'技术壁垒高，ASP是直接探测模块3-5倍，中国厂商暂未能规模化突破' },
-  { tier:'T4', name:'连接器/Cage/AOC', cos:'APH · TEL', pct:68, color:'#fef08a', trend:'↑', reason:'供给相对集中（APH市占>40%），AI DC端口密度提升刚性拉动cage需求；与光模块价格竞争无关，需求确定性高' },
-  { tier:'T5', name:'光传输系统', cos:'CIEN · NOK', pct:62, color:'#86efac', trend:'→', reason:'运营商采购集中，系统集成商有技术代差但面临价格谈判压力' },
-  { tier:'DC', name:'超大规模DC买方', cos:'META · MSFT · AMZN', pct:70, color:'#38bdf8', trend:'↑', reason:'集中采购规模大，多供应商策略压价，但光互连属刚需故买方博弈有天花板' }
+  { tier:'T1', name:'光纤预制棒', cos:'GLW · 住友 · 古河', pct:85, color:'#c4b5fd', trend:'→', margin:'33–42%', marginPct:38, marginNote:'GLW光纤分部毛利率~35%，特种光纤更高；BEAD补贴+AI需求拉动ASP', reason:'CR3约70%，新产能建设需3年，AI+BEAD双轮需求可见度高，价格转嫁能力强' },
+  { tier:'T1', name:'InP化合物晶圆', cos:'AXTI · COHR内部', pct:92, color:'#d8b4fe', trend:'↑', margin:'42–55%', marginPct:48, marginNote:'AXTI历史高峰毛利率45%+，供给刚性支撑高利润；800G扩产周期内利润率持续扩张', reason:'全球仅4-5家可量产，扩产极困难，800G放量供应偏紧，定价权最强的上游环节' },
+  { tier:'T2', name:'EML/DFB激光器', cos:'LITE · COHR', pct:88, color:'#93c5fd', trend:'↑', margin:'50–60%', marginPct:55, marginNote:'COHR/LITE激光器业务毛利率50%+，800G EML ASP $30–80+/颗，MOCVD工艺壁垒支撑溢价', reason:'技术壁垒极高，MOCVD设备+工艺know-how双重护城河，供不应求推高ASP' },
+  { tier:'T2', name:'WSS/ROADM器件', cos:'LITE（市占>50%）', pct:91, color:'#bfdbfe', trend:'→', margin:'55–65%', marginPct:60, marginNote:'LITE整体毛利率~47%，WSS/ROADM业务显著高于均值；OXC演进将进一步提升ASP', reason:'Lumentum寡头地位，专利+工艺双壁垒，OXC趋势强化其长期定价权' },
+  { tier:'T3', name:'相干DSP芯片', cos:'MRVL（外部>60%）', pct:90, color:'#7dd3fc', trend:'↑', margin:'55–65%', marginPct:60, marginNote:'MRVL光网络业务毛利率~60%+，纯IP/算法属性，无重资产拖累，AI互连加速放量', reason:'寡头垄断，无第二选择，AI光互连DSP需求爆发，定价权持续强化' },
+  { tier:'T3', name:'硅光PIC平台', cos:'AVGO · MRVL · INTC', pct:80, color:'#38bdf8', trend:'↑', margin:'50–62%', marginPct:56, marginNote:'AVGO整体毛利率~64%（含软件），硅光PIC随CPO从$15→$80+单价，T3是价值迁移最大受益层', reason:'CPO趋势下PIC价值$15→$80+，AVGO/MRVL双寡头，GFS代工绑定' },
+  { tier:'T4', name:'直接探测光模块', cos:'COHR · FN · AAOI', pct:52, color:'#fcd34d', trend:'↓', margin:'20–33%', marginPct:27, marginNote:'COHR DC模块毛利率~30%，AAOI仅15–22%；中国竞争持续压缩ASP，FN净利仅~12%（代工属性）', reason:'中国厂商（中际旭创/新易盛）快速渗透，400G/800G价格竞争加剧，ASP承压' },
+  { tier:'T4', name:'相干光模块', cos:'COHR · CIEN · CSCO/Acacia', pct:76, color:'#fbbf24', trend:'→', margin:'38–50%', marginPct:44, marginNote:'CIEN模块业务毛利率~50%+，COHR相干模块~40%；ASP $800–2000+/颗，技术壁垒支撑溢价', reason:'技术壁垒高，ASP是直接探测模块3-5倍，中国厂商暂未能规模化突破' },
+  { tier:'T4', name:'连接器/Cage/AOC', cos:'APH · TEL', pct:68, color:'#fef08a', trend:'↑', margin:'30–36%', marginPct:33, marginNote:'APH整体毛利率~33%，IT分部（含Cage/AOC）略高；精密制造属性，与光模块价格战完全无关', reason:'供给相对集中（APH市占>40%），AI DC端口密度提升刚性拉动cage需求；与光模块价格竞争无关，需求确定性高' },
+  { tier:'T5', name:'光传输系统', cos:'CIEN · NOK', pct:62, color:'#86efac', trend:'→', margin:'45–55%', marginPct:50, marginNote:'CIEN毛利率稳定~52%（WaveLogic技术领先2年支撑溢价）；NOK约38%偏低，软硬件组合拉平', reason:'运营商采购集中，系统集成商有技术代差但面临价格谈判压力' },
+  { tier:'DC', name:'超大规模DC买方', cos:'META · MSFT · AMZN', pct:70, color:'#38bdf8', trend:'↑', margin:'N/A', marginPct:0, marginNote:'需求侧，非供应方——光互连成本约占DC总建设成本5–7%，属刚需支出，买方议价有天花板', reason:'集中采购规模大，多供应商策略压价，但光互连属刚需故买方博弈有天花板' }
 ];
 
 /* ═══════════════════════════════════════════
@@ -2306,6 +2311,16 @@ function renderPricingPower() {
     div.className = 'p-card';
     const tierColors = { T1:'#c4b5fd', T2:'#93c5fd', T3:'#7dd3fc', T4:'#fcd34d', T5:'#86efac', DC:'#38bdf8' };
     const tc = tierColors[p.tier] || '#aaa';
+    // margin color coding
+    const marginColor = p.margin === 'N/A' ? '#475569'
+      : p.marginPct >= 50 ? '#34d399'   // high
+      : p.marginPct >= 35 ? '#fbbf24'   // medium
+      : '#f87171';                        // thin
+    const marginLabel = p.margin === 'N/A' ? '需求侧'
+      : p.marginPct >= 50 ? '高利润'
+      : p.marginPct >= 35 ? '中利润'
+      : '薄利';
+    const marginBarWidth = p.margin === 'N/A' ? 0 : Math.min(p.marginPct * 1.4, 100);
     div.innerHTML = `
       <div class="p-card-hdr">
         <span class="p-tier" style="background:${tc}18;color:${tc};border:1px solid ${tc}40;">${p.tier}</span>
@@ -2313,11 +2328,20 @@ function renderPricingPower() {
       </div>
       <div class="p-name" style="color:${p.color};">${p.name}</div>
       <div class="p-cos">${p.cos}</div>
-      <div class="p-bar-row">
+      <div class="p-bar-row" title="定价权强度">
+        <div style="font-size:8px;color:var(--text3);flex-shrink:0;width:42px;letter-spacing:.3px;">定价权</div>
         <div class="p-bar-bg"><div class="p-bar-fill" style="width:${p.pct}%;background:${p.color};"></div></div>
         <div class="p-pct" style="color:${p.color};">${p.pct}%</div>
       </div>
-      <div class="p-reason">${p.reason}</div>`;
+      <div class="p-margin-row" title="毛利率区间">
+        <div class="p-margin-label">毛利率</div>
+        <div class="p-bar-bg"><div class="p-bar-fill" style="width:${marginBarWidth}%;background:${marginColor};opacity:.8;"></div></div>
+        <div class="p-margin-val" style="color:${marginColor};">${p.margin}</div>
+      </div>
+      <span style="display:inline-block;font-size:8px;font-weight:700;padding:1px 6px;border-radius:3px;margin-top:5px;background:${marginColor}18;color:${marginColor};border:1px solid ${marginColor}40;">${marginLabel}</span>
+      <div class="p-divider"></div>
+      <div class="p-reason">${p.reason}</div>
+      ${p.marginNote ? `<div class="p-margin-note">📊 ${p.marginNote}</div>` : ''}`;
     grid.appendChild(div);
   });
   if (legend) {
@@ -2327,7 +2351,10 @@ function renderPricingPower() {
       { color:'#7dd3fc', label:'T3 硅光芯片（CPO推升中）' },
       { color:'#fcd34d', label:'T4 光模块（竞争加剧承压）' },
       { color:'#86efac', label:'T5 系统（系统集成商压力大）' },
-      { color:'#38bdf8', label:'DC 采购方（反向议价上升）' }
+      { color:'#38bdf8', label:'DC 采购方（反向议价上升）' },
+      { color:'#34d399', label:'🟢 高利润（毛利率≥50%）' },
+      { color:'#fbbf24', label:'🟡 中利润（毛利率35–50%）' },
+      { color:'#f87171', label:'🔴 薄利（毛利率<35%）' },
     ];
     items.forEach(i => {
       const d = document.createElement('div');
