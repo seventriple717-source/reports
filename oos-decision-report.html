@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OOS策略决策报告 | 2026-04-02 11:37</title>
+<title>OOS策略决策报告 | 2026-04-02 11:45</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
@@ -23,39 +23,70 @@ tr:hover>td{background:#f5f5f5}
 <div style="margin-bottom:16px">
   <div style="font-size:22px;font-weight:900;color:#1a237e">OOS策略测试 — 决策报告</div>
   <div style="font-size:12px;color:#607d8b;margin-top:2px">
-    测试集：2015-2022 (2015-2022数据，训练集完全隔离) | 生成：2026-04-02 11:37
+    测试集：2015-2022 (2015-2022数据，训练集完全隔离) | 生成：2026-04-02 11:45
   </div>
 </div>
 
 
-<div class="card" style="border:3px solid #2e7d32;background:linear-gradient(135deg,#f1f8e9,#e8f5e9)">
-<div style="font-size:13px;color:#1b5e20;font-weight:700;margin-bottom:12px">
-  ✅ OOS测试结论 — 综合推荐策略（样本n≥20，2Y 10x最优）
+<div class="card" style="border:2px solid #1565c0;background:linear-gradient(135deg,#fafffe,#f3f8ff)">
+<div style="font-size:14px;color:#0d47a1;font-weight:700;margin-bottom:14px">
+  📋 OOS测试结论 — 策略排名（2Y，持有到期 / 无止损）
 </div>
-<div style="font-size:26px;font-weight:900;color:#1565c0;margin-bottom:4px">
-  V15.4 链L3: +量能爆发
+<p style="font-size:11px;color:#888;margin-bottom:12px">
+  以下表格的主体指标（均值、胜率、10x命中率）均为<b>持有到期不止损</b>的原始表现。止损策略对比见下方单独区块。
+</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+  <div>
+    <div style="font-size:12px;font-weight:700;color:#1b5e20;margin-bottom:6px;padding:6px 10px;background:#e8f5e9;border-radius:6px">
+      OOS 2015-2022 排名（Top5，N≥20）
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600" style="background:#37474f;color:white;padding:7px 10px;text-align:left">排名</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600" style="background:#37474f;color:white;padding:7px 8px;text-align:left">策略</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">样本n</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 10x命中</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 均值</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 胜率</th></tr>
+      <tbody><tr style="background:#f1f8e9;font-weight:700"><td style="padding:7px 10px;font-size:15px">🥇</td><td style="padding:7px 6px"><span style="color:#00695c;font-weight:700">V15.4 链L3: +量能爆发</span> <span style="font-size:10px;color:#e65100">⚠️小样本</span></td><td style="text-align:center;padding:7px 6px;color:#666">20</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">25.0%</td><td style="text-align:center;padding:7px 6px">+575%</td><td style="text-align:center;padding:7px 6px">65%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥈</td><td style="padding:7px 6px"><span style="color:#1565c0;font-weight:700">V15.2 链L2: +SPY恢复期</span></td><td style="text-align:center;padding:7px 6px;color:#666">53</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">20.8%</td><td style="text-align:center;padding:7px 6px">+356%</td><td style="text-align:center;padding:7px 6px">64%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥉</td><td style="padding:7px 6px"><span style="color:#1565c0;font-weight:700">V15.3 链L2+阶梯止损</span></td><td style="text-align:center;padding:7px 6px;color:#666">53</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">20.8%</td><td style="text-align:center;padding:7px 6px">+356%</td><td style="text-align:center;padding:7px 6px">64%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#4</td><td style="padding:7px 6px"><span style="color:#2e7d32;font-weight:700">V14.0 SPY恢复期精选</span></td><td style="text-align:center;padding:7px 6px;color:#666">74</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">20.3%</td><td style="text-align:center;padding:7px 6px">+342%</td><td style="text-align:center;padding:7px 6px">65%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#5</td><td style="padding:7px 6px"><span style="color:#795548;font-weight:700">V7.0 早期精华</span></td><td style="text-align:center;padding:7px 6px;color:#666">82</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">19.5%</td><td style="text-align:center;padding:7px 6px">+326%</td><td style="text-align:center;padding:7px 6px">67%</td></tr></tbody>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:12px;font-weight:700;color:#6a1b9a;margin-bottom:6px;padding:6px 10px;background:#f3e5f5;border-radius:6px">
+      训练集 2003-2014 排名（Top5，对比参考）
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600" style="background:#37474f;color:white;padding:7px 10px;text-align:left">排名</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600" style="background:#37474f;color:white;padding:7px 8px;text-align:left">策略</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">样本n</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 10x命中</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 均值</th><th style="background:#37474f;color:white;padding:7px 8px;font-size:11px;font-weight:600">2Y 胜率</th></tr>
+      <tbody><tr style="background:#f1f8e9;font-weight:700"><td style="padding:7px 10px;font-size:15px">🥇</td><td style="padding:7px 6px"><span style="color:#00695c;font-weight:700">V15.4 链L3: +量能爆发</span> <span style="font-size:10px;color:#e65100">⚠️小样本</span></td><td style="text-align:center;padding:7px 6px;color:#666">15</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">40.0%</td><td style="text-align:center;padding:7px 6px">+576%</td><td style="text-align:center;padding:7px 6px">100%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥈</td><td style="padding:7px 6px"><span style="color:#6a1b9a;font-weight:700">V15.5 链Alt: SPY+量能爆发</span></td><td style="text-align:center;padding:7px 6px;color:#666">27</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">29.6%</td><td style="text-align:center;padding:7px 6px">+504%</td><td style="text-align:center;padding:7px 6px">96%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥉</td><td style="padding:7px 6px"><span style="color:#ad1457;font-weight:700">V12.1 量能爆发确认</span></td><td style="text-align:center;padding:7px 6px;color:#666">28</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">28.6%</td><td style="text-align:center;padding:7px 6px">+489%</td><td style="text-align:center;padding:7px 6px">96%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#4</td><td style="padding:7px 6px"><span style="color:#6a1b9a;font-weight:700">V13.0 量能爆发+阶梯止损</span></td><td style="text-align:center;padding:7px 6px;color:#666">28</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">28.6%</td><td style="text-align:center;padding:7px 6px">+489%</td><td style="text-align:center;padding:7px 6px">96%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#5</td><td style="padding:7px 6px"><span style="color:#1565c0;font-weight:700">V15.2 链L2: +SPY恢复期</span></td><td style="text-align:center;padding:7px 6px;color:#666">54</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">22.2%</td><td style="text-align:center;padding:7px 6px">+445%</td><td style="text-align:center;padding:7px 6px">89%</td></tr></tbody>
+    </table>
+  </div>
 </div>
-<div style="font-size:12px;color:#555;margin-bottom:16px">双高分共振 + SPY恢复期 + 阶梯止损（训练集验证策略链第二层）</div>
-<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px">
-  <div class="kpi"><div class="kpi-v" style="color:#1b5e20">25.0%</div><div class="kpi-l">2Y 10x命中率</div></div>
-  <div class="kpi"><div class="kpi-v" style="color:#1565c0">35.0%</div><div class="kpi-l">2Y 5x命中率</div></div>
-  <div class="kpi"><div class="kpi-v">65%</div><div class="kpi-l">2Y 胜率</div></div>
-  <div class="kpi" style="border:2px solid #f57f17"><div class="kpi-v" style="color:#e65100">+575%</div><div class="kpi-l">2Y 均值收益</div></div>
-  <div class="kpi"><div class="kpi-v">+142%</div><div class="kpi-l">2Y 中位收益</div></div>
-  <div class="kpi"><div class="kpi-v" style="color:#c62828">-46%</div><div class="kpi-l">2Y 中位MDD</div></div>
+
+<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;border-left:4px solid #f9a825">
+  <b>排名对比解读：</b>
+  V15.4 两期均排名第一，但OOS样本仅n=20，稳定性存疑。
+  V15.2 排名从训练集第6位升至OOS第2位，且样本充足(n=53)，稳定性最佳。
+  V15.5 / V12.1 训练集排名高，OOS 10x有所下降（约-10pp），整体方向一致。
+  <b>总体排序方向训练集与OOS基本一致，主要指标量级收窄属正常OOS衰减。</b>
 </div>
-<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
-  <div class="kpi"><div class="kpi-v" style="color:#1b5e20">33.3%</div><div class="kpi-l">3Y 10x命中率</div></div>
-  <div class="kpi"><div class="kpi-v" style="color:#1565c0">53.3%</div><div class="kpi-l">3Y 5x命中率</div></div>
-  <div class="kpi"><div class="kpi-v">67%</div><div class="kpi-l">3Y 胜率</div></div>
-  <div class="kpi" style="border:2px solid #f57f17"><div class="kpi-v" style="color:#e65100">+353%</div><div class="kpi-l">3Y 均值收益</div></div>
-  <div class="kpi"><div class="kpi-v">+72%</div><div class="kpi-l">3Y 中位收益</div></div>
-  <div class="kpi"><div class="kpi-v" style="color:#888">20 / 15</div><div class="kpi-l">2Y/3Y 样本数</div></div>
-</div>
-<div style="margin-top:12px;font-size:11px;color:#666;border-top:1px solid #c8e6c9;padding-top:10px">
-  <b>为什么选这个？</b>
-  在所有样本数≥20的策略中，V15.2 在2Y和3Y周期都保持了最高的10x命中率，且训练集已验证。
-  止损版本V15.3与之信号相同，中位回撤略有改善，可按个人风险偏好选择V15.2（无止损持满）或V15.3（动态止损保护本金）。
+
+<div style="border-top:1px solid #e0e0e0;padding-top:14px">
+  <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:10px">
+    ⚡ 叠加阶梯止损后排名（OOS 2Y，按均值收益降序）
+  </div>
+  <div style="font-size:11px;color:#888;margin-bottom:8px">
+    阶梯止损与训练集结论一致：均优于持有到期和固定-50%。胜率提升约+15pp，均值提升约+200~+400pp，10x命中不变。
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <tr>
+      <th style="background:#1565c0;color:white;padding:7px 10px;text-align:left">排名</th>
+      <th style="background:#1565c0;color:white;padding:7px 8px;text-align:left">策略</th>
+      <th style="background:#1565c0;color:white;padding:7px 8px">样本n</th>
+      <th style="background:#1565c0;color:white;padding:7px 8px">2Y 10x命中</th>
+      <th style="background:#1565c0;color:white;padding:7px 8px">均值（阶梯止损）</th>
+      <th style="background:#1565c0;color:white;padding:7px 8px">胜率</th>
+    </tr>
+    <tbody><tr style="background:#e3f2fd;font-weight:700"><td style="padding:7px 10px;font-size:15px">🥇</td><td style="padding:7px 6px"><span style="color:#00695c;font-weight:700">V15.4 链L3: +量能爆发</span> <span style="font-size:10px;color:#e65100">⚠️小样本</span></td><td style="text-align:center;padding:7px 6px;color:#666">20</td><td style="text-align:center;padding:7px 6px;color:#1b5e20;font-weight:700">25.0%</td><td style="text-align:center;padding:7px 6px;color:#1565c0;font-weight:700">+898%</td><td style="text-align:center;padding:7px 6px">85%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥈</td><td style="padding:7px 6px"><span style="color:#6a1b9a;font-weight:700">V15.5 链Alt: SPY+量能爆发</span></td><td style="text-align:center;padding:7px 6px;color:#666">31</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">19.4%</td><td style="text-align:center;padding:7px 6px;color:#1565c0;font-weight:700">+771%</td><td style="text-align:center;padding:7px 6px">77%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">🥉</td><td style="padding:7px 6px"><span style="color:#ad1457;font-weight:700">V12.1 量能爆发确认</span></td><td style="text-align:center;padding:7px 6px;color:#666">37</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">18.9%</td><td style="text-align:center;padding:7px 6px;color:#1565c0;font-weight:700">+720%</td><td style="text-align:center;padding:7px 6px">76%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#4</td><td style="padding:7px 6px"><span style="color:#6a1b9a;font-weight:700">V13.0 量能爆发+阶梯止损</span></td><td style="text-align:center;padding:7px 6px;color:#666">37</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">18.9%</td><td style="text-align:center;padding:7px 6px;color:#1565c0;font-weight:700">+720%</td><td style="text-align:center;padding:7px 6px">76%</td></tr><tr style=""><td style="padding:7px 10px;font-size:15px">#5</td><td style="padding:7px 6px"><span style="color:#1565c0;font-weight:700">V15.2 链L2: +SPY恢复期</span></td><td style="text-align:center;padding:7px 6px;color:#666">53</td><td style="text-align:center;padding:7px 6px;color:#2e7d32;font-weight:700">20.8%</td><td style="text-align:center;padding:7px 6px;color:#1565c0;font-weight:700">+607%</td><td style="text-align:center;padding:7px 6px">81%</td></tr></tbody>
+  </table>
+  <p style="font-size:11px;color:#aaa;margin-top:8px">
+    综合建议：<b>V15.2 + 阶梯止损</b>（均值+607%，10x 20.8%，n=53，样本最充足的前三名中综合最佳）；
+    若追求最高10x命中且能接受小样本风险，可考虑 <b>V15.4</b>（n=20，10x 25%）。
+  </p>
 </div>
 </div>
 
