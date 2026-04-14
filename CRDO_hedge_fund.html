@@ -121,13 +121,40 @@
   .reason-item{font-size:12px;color:#94a3b8;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);line-height:1.6}
   .reason-item:last-child{border-bottom:none}
   .reason-item b{color:#e2e8f0}
-  .entry-steps{margin-top:20px;background:#0a1424;border-radius:10px;padding:16px}
+  .entry-steps{margin-top:20px}
   .entry-steps h4{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:12px}
-  .entry-step{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid #0f1629;font-size:12px}
-  .entry-step:last-child{border-bottom:none}
-  .step-num{width:24px;height:24px;border-radius:50%;background:#1e2d4a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#64748b;flex-shrink:0;margin-top:2px}
-  .step-text{color:#94a3b8;line-height:1.6}
-  .step-text b{color:#e2e8f0}
+  .entry-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+  .entry-card{background:#0a1424;border:1px solid #1e2d4a;border-radius:10px;padding:14px;position:relative;overflow:hidden}
+  .entry-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+  .entry-card.step1::before{background:#60a5fa}
+  .entry-card.step2::before{background:#a78bfa}
+  .entry-card.step3::before{background:#00d4aa}
+  .entry-card.step4::before{background:#f59e0b}
+  .ec-step{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:6px}
+  .ec-trigger{font-size:11px;color:#94a3b8;margin-bottom:8px;line-height:1.5}
+  .ec-pos{font-size:22px;font-weight:800;color:#e2e8f0}
+  .ec-pos span{font-size:11px;color:#64748b;font-weight:400;margin-left:2px}
+  .ec-note{font-size:10px;color:#64748b;margin-top:4px;line-height:1.4}
+  .price-targets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+  .pt-card{border-radius:10px;padding:14px;text-align:center}
+  .pt-card.stop{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.35)}
+  .pt-card.t1{background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.3)}
+  .pt-card.t2{background:rgba(0,212,170,0.07);border:1px solid rgba(0,212,170,0.3)}
+  .pt-card.t3{background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.3)}
+  .pt-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
+  .pt-card.stop .pt-label{color:#ef4444}
+  .pt-card.t1 .pt-label{color:#fbbf24}
+  .pt-card.t2 .pt-label{color:#00d4aa}
+  .pt-card.t3 .pt-label{color:#60a5fa}
+  .pt-price{font-size:26px;font-weight:800;margin-bottom:2px}
+  .pt-card.stop .pt-price{color:#ef4444}
+  .pt-card.t1 .pt-price{color:#fbbf24}
+  .pt-card.t2 .pt-price{color:#00d4aa}
+  .pt-card.t3 .pt-price{color:#60a5fa}
+  .pt-pct{font-size:13px;font-weight:700;margin-bottom:4px}
+  .pt-card.stop .pt-pct{color:#f87171}
+  .pt-desc{font-size:10px;color:#64748b;line-height:1.4}
+  @media(max-width:900px){.entry-cards,.price-targets{grid-template-columns:repeat(2,1fr)}}
   .sources-section{background:#0f1629;border:1px solid #1e2d4a;border-radius:12px;padding:20px;margin-bottom:24px}
   .source-link{font-size:11px;color:#60a5fa;display:block;margin-bottom:4px;word-break:break-all}
   .disclaimer{font-size:11px;color:#475569;margin-top:12px;line-height:1.6;padding:12px;background:#0a0e1a;border-radius:6px}
@@ -581,11 +608,61 @@
     </div>
   </div>
   <div class="entry-steps">
-    <h4>建仓策略（四步骤）</h4>
-    <div class="entry-step"><div class="step-num">1</div><div class="step-text"><b>当前价$131.55：</b>建立初始仓位 <b>3%</b>——DustPhotonics公告情绪偏热，分批建仓，不追高</div></div>
-    <div class="entry-step"><div class="step-num">2</div><div class="step-text"><b>若回调至$115-120：</b>加仓至 <b>5%</b>——回到200MA下方整理区，更优性价比入场点</div></div>
-    <div class="entry-step"><div class="step-num">3</div><div class="step-text"><b>Q4 FY2026业绩超预期（5月报告）：</b>加仓至目标仓位 <b>8%</b>——业绩验证后建立全仓</div></div>
-    <div class="entry-step"><div class="step-num">4</div><div class="step-text"><b>Cardinal 1.6T量产确认（FY2027 H1）：</b>可达仓位上限 <b>12%</b> · 止损$112无条件全退</div></div>
+    <h4>建仓策略（四阶段）</h4>
+    <div class="entry-cards">
+      <div class="entry-card step1">
+        <div class="ec-step">阶段 1 · 立即</div>
+        <div class="ec-trigger">当前价 $131.55<br>DustPhotonics公告情绪偏热，分批建仓不追高</div>
+        <div class="ec-pos">3% <span>初始仓位</span></div>
+        <div class="ec-note">止损参考 $112，跌破立即退出</div>
+      </div>
+      <div class="entry-card step2">
+        <div class="ec-step">阶段 2 · 回调加仓</div>
+        <div class="ec-trigger">若回调至 $115–$120<br>回到200MA下方整理区，性价比更优</div>
+        <div class="ec-pos">5% <span>加仓至</span></div>
+        <div class="ec-note">$115 附近支撑更强，风险收益比改善</div>
+      </div>
+      <div class="entry-card step3">
+        <div class="ec-step">阶段 3 · 业绩验证</div>
+        <div class="ec-trigger">Q4 FY2026 超预期<br>（5月业绩报告，指引$425-435M）</div>
+        <div class="ec-pos">8% <span>目标仓位</span></div>
+        <div class="ec-note">业绩超预期>5%后建立全仓，否则维持5%</div>
+      </div>
+      <div class="entry-card step4">
+        <div class="ec-step">阶段 4 · 产品催化</div>
+        <div class="ec-trigger">Cardinal 1.6T 量产确认<br>（FY2027 H1 / 预计2026年底）</div>
+        <div class="ec-pos">12% <span>仓位上限</span></div>
+        <div class="ec-note">DustPhotonics整合顺利+Cardinal放量双重验证后达上限</div>
+      </div>
+    </div>
+
+    <h4 style="margin-top:16px">止盈止损价位</h4>
+    <div class="price-targets">
+      <div class="pt-card stop">
+        <div class="pt-label">止损 · 无条件</div>
+        <div class="pt-price">$112</div>
+        <div class="pt-pct">-14.8%</div>
+        <div class="pt-desc">收盘跌破$112 或 Q4实际营收&lt;$400M，无条件清仓全退</div>
+      </div>
+      <div class="pt-card t1">
+        <div class="pt-label">目标价1 · 减仓10%</div>
+        <div class="pt-price">$175</div>
+        <div class="pt-pct">+33%</div>
+        <div class="pt-desc">Jefferies目标价，触达后减仓10%至7%仓位，锁定部分利润</div>
+      </div>
+      <div class="pt-card t2">
+        <div class="pt-label">目标价2 · 减仓20%</div>
+        <div class="pt-price">$200</div>
+        <div class="pt-pct">+52%</div>
+        <div class="pt-desc">分析师中位数目标，触达后再减仓20%至5-6%，保留核心仓位</div>
+      </div>
+      <div class="pt-card t3">
+        <div class="pt-label">目标价3 · 清仓评估</div>
+        <div class="pt-price">$220</div>
+        <div class="pt-pct">+67%</div>
+        <div class="pt-desc">DCF中性$277支撑，触达后重新评估估值是否仍具吸引力再决定</div>
+      </div>
+    </div>
   </div>
 </div>
 
