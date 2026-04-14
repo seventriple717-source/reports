@@ -191,6 +191,54 @@
   .source-list li { font-size: 12px; color: #475569; padding: 4px 0; border-bottom: 1px solid #0f172a; }
   .source-list a { color: #3b82f6; text-decoration: none; }
   .disclaimer { font-size: 11px; color: #374151; margin-top: 16px; line-height: 1.7; border-top: 1px solid #1e293b; padding-top: 14px; }
+  /* Tariff Scenario Section */
+  .tariff-section { margin-bottom: 40px; }
+  .asml-banner { background: linear-gradient(135deg, #1a1025 0%, #1e1535 100%); border: 1px solid #7c3aed; border-radius: 14px; padding: 22px 28px; margin-bottom: 24px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .asml-banner .ab-stat { text-align: center; flex-shrink: 0; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); border-radius: 10px; padding: 14px 20px; min-width: 120px; }
+  .asml-banner .ab-stat .ab-val { font-size: 26px; font-weight: 800; color: #a78bfa; }
+  .asml-banner .ab-stat .ab-lbl { font-size: 11px; color: #7c3aed; margin-top: 4px; }
+  .asml-banner .ab-text { flex: 1; min-width: 220px; }
+  .asml-banner .ab-text h4 { font-size: 14px; font-weight: 700; color: #c4b5fd; margin-bottom: 8px; }
+  .asml-banner .ab-text p { font-size: 13px; color: #a5b4fc; line-height: 1.7; }
+  .china-exposure { background: #111827; border: 1px solid #1e293b; border-radius: 14px; padding: 24px 28px; margin-bottom: 24px; }
+  .china-exposure h4 { font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px; }
+  .exposure-tree { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; color: #94a3b8; line-height: 1.9; background: #0f172a; border-radius: 8px; padding: 16px 20px; white-space: pre; overflow-x: auto; }
+  .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  @media(max-width:1100px){ .scenario-grid { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:600px){ .scenario-grid { grid-template-columns: 1fr; } }
+  .scenario-card { background: #111827; border: 1px solid #1e293b; border-radius: 14px; padding: 20px; position: relative; overflow: hidden; }
+  .scenario-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .sc-0::before { background: #10b981; }
+  .sc-1::before { background: #22d3ee; }
+  .sc-2::before { background: #f59e0b; }
+  .sc-3::before { background: #f97316; }
+  .sc-4::before { background: #ef4444; }
+  .sc-5::before { background: #7c3aed; }
+  .sc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .sc-title { font-size: 15px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+  .sc-trigger { font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.5; }
+  .sc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .sc-metric { background: #0f172a; border-radius: 8px; padding: 10px 12px; }
+  .sc-metric .sm-lbl { font-size: 11px; color: #64748b; margin-bottom: 3px; }
+  .sc-metric .sm-val { font-size: 15px; font-weight: 700; }
+  .sc-impact-bar { margin-top: 10px; }
+  .sc-impact-bar .sib-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+  .sc-impact-bar .sib-bg { background: #1e293b; border-radius: 4px; height: 8px; }
+  .sc-impact-bar .sib-fill { height: 8px; border-radius: 4px; }
+  .sc-prob { display: inline-block; background: rgba(100,116,139,0.15); border: 1px solid #334155; border-radius: 6px; padding: 3px 10px; font-size: 12px; color: #94a3b8; margin-top: 10px; }
+  .sc-note { font-size: 12px; color: #64748b; line-height: 1.6; margin-top: 10px; border-top: 1px solid #1e293b; padding-top: 10px; }
+  .scenario-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #111827; border-radius: 12px; overflow: hidden; }
+  .scenario-summary-table th { background: #0f172a; color: #64748b; padding: 12px 16px; text-align: center; font-weight: 600; border-bottom: 1px solid #1e293b; }
+  .scenario-summary-table th:first-child { text-align: left; }
+  .scenario-summary-table td { padding: 11px 16px; text-align: center; border-bottom: 1px solid #1a2332; color: #cbd5e1; }
+  .scenario-summary-table td:first-child { text-align: left; font-weight: 600; }
+  .scenario-summary-table tr:last-child td { border-bottom: none; font-weight: 700; background: rgba(245,158,11,0.05); color: #f59e0b; }
+  .insight-box { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.25); border-radius: 12px; padding: 20px 24px; margin-top: 20px; }
+  .insight-box h4 { font-size: 13px; font-weight: 700; color: #fca5a5; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .insight-box ul { list-style: none; }
+  .insight-box ul li { font-size: 13px; color: #fca5a5; padding: 5px 0; border-bottom: 1px solid rgba(239,68,68,0.1); line-height: 1.6; }
+  .insight-box ul li:last-child { border-bottom: none; }
+  .insight-box ul li::before { content: "▸"; color: #ef4444; margin-right: 8px; }
 </style>
 </head>
 <body>
@@ -1042,6 +1090,219 @@
       <div class="rc-trigger">触发条件: Q1 FY26 EPS &lt; $0.65（vs预期$0.75）；FY2026全年指引下调</div>
       <div class="rc-impact">股价下跌估算: -12 至 -20%</div>
     </div>
+  </div>
+</div>
+
+<!-- ===================== TARIFF SCENARIO ANALYSIS ===================== -->
+<div class="tariff-section section">
+  <div class="section-title">关税与贸易战情景深度分析（ASML类比校准）</div>
+
+  <!-- ASML Analogy Banner -->
+  <div class="asml-banner">
+    <div class="ab-stat"><div class="ab-val">-34%</div><div class="ab-lbl">ASML 出口管制后股价跌幅</div></div>
+    <div class="ab-stat"><div class="ab-val">46%</div><div class="ab-lbl">ASML 当时中国营收占比</div></div>
+    <div class="ab-stat"><div class="ab-val">22%</div><div class="ab-lbl">ROG 中国营收占比（当前）</div></div>
+    <div class="ab-text">
+      <h4>核心教训：技术不可替代 ≠ 收入安全</h4>
+      <p>ASML 的 EUV 光刻机比 ROG 的 PTFE 基板更"不可替代"——中国根本造不出来，不是造得差。但出口管制宣布后股价仍跌 34%。原因是<strong style="color:#c4b5fd;">政策切断了交易本身</strong>，而非技术被取代。ROG 高频树脂的不可替代性保护的是技术护城河，不保护政治风险下的营收。而且 ROG 无法像 ASML 那样依靠 AI 算力需求对冲中国缺口，等比例冲击可能相当甚至更大。另需警惕：正因为这些材料被用于中国军用雷达/电子战，美国 BIS 将其列入出口管制的动机反而更强。</p>
+    </div>
+  </div>
+
+  <!-- China Exposure Breakdown -->
+  <div class="china-exposure">
+    <h4>ROG 中国敞口真实结构</h4>
+    <div class="exposure-tree">总营收 $810M
+├── 亚太区 ~38% = $308M
+│   ├── 中国大陆（直接）~21% of 总营收 = $170M
+│   │   ├── 东莞工厂本地制造→本地销售：~$105M  ← 关税对冲但有资产减值风险
+│   │   └── 美国/比利时制造→出口中国：~$65M   ← 直接关税/禁令敞口
+│   └── 日本/台湾/韩国：~$138M
+└── 北美/欧洲：~$502M
+
+主要中国客户：华为（5G基站PTFE基板）· 比亚迪/宁德生态（IGBT功率模块）
+              台光电子等PCB厂 · 国防相关企业（已部分受限）</div>
+  </div>
+
+  <!-- 6 Scenario Cards -->
+  <div class="scenario-grid">
+    <!-- S0 -->
+    <div class="scenario-card sc-0">
+      <div class="sc-label" style="color:#10b981;">情景 0</div>
+      <div class="sc-title">无升级（基准）</div>
+      <div class="sc-trigger">当前关税政策维持，无新出口管制，中美贸易摩擦可控</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失</div><div class="sm-val" style="color:#10b981;">$0</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击</div><div class="sm-val" style="color:#10b981;">0</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#10b981;">0%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">30%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#10b981;">0%</span></div><div class="sib-bg"><div class="sib-fill" style="width:2%;background:#10b981;"></div></div></div>
+      <div class="sc-note">中国客户继续正常采购不可替代高频材料；标准产品小幅竞争压力</div>
+    </div>
+    <!-- S1 -->
+    <div class="scenario-card sc-1">
+      <div class="sc-label" style="color:#22d3ee;">情景 1</div>
+      <div class="sc-title">温和关税（+25%）</div>
+      <div class="sc-trigger">美国对华加征 25% 附加关税，无新增出口管制，ROG 照常出口</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失</div><div class="sm-val" style="color:#22d3ee;">-$25M</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击</div><div class="sm-val" style="color:#22d3ee;">-$0.18</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#22d3ee;">-10%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">30%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#22d3ee;">-10%</span></div><div class="sib-bg"><div class="sib-fill" style="width:15%;background:#22d3ee;"></div></div></div>
+      <div class="sc-note">标准产品 ~$20-30M 需求萎缩；高频材料（~$145M）OEM 吸收关税成本继续采购；东莞工厂本地供应基本不受影响</div>
+    </div>
+    <!-- S2 -->
+    <div class="scenario-card sc-2">
+      <div class="sc-label" style="color:#f59e0b;">情景 2</div>
+      <div class="sc-title">定向实体清单（华为模式）</div>
+      <div class="sc-trigger">美国将华为/中兴生态链列入出口实体清单，ROG 无法向其出货；2019 年历史前例已出现过一次</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失</div><div class="sm-val" style="color:#f59e0b;">-$55M</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击</div><div class="sm-val" style="color:#f59e0b;">-$0.47</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#f59e0b;">-22%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">20%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#f59e0b;">-22%</span></div><div class="sib-bg"><div class="sib-fill" style="width:32%;background:#f59e0b;"></div></div></div>
+      <div class="sc-note">不可替代变成"买不到"——技术护城河失效。ASML 2023 年初始反应等比例版本；2019 年华为禁令已使 ROG 损失约 $15-20M，股价当季 -15-18%</div>
+    </div>
+    <!-- S3 -->
+    <div class="scenario-card sc-3">
+      <div class="sc-label" style="color:#f97316;">情景 3</div>
+      <div class="sc-title">全面先进材料出口管制</div>
+      <div class="sc-trigger">美国 BIS 将高频 PTFE/LCP 层压板列为"军民两用敏感材料"——这些材料已用于中国军用雷达、导弹导引头，被列管的政治动机真实存在</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失</div><div class="sm-val" style="color:#f97316;">-$170M</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击</div><div class="sm-val" style="color:#f97316;">-$1.55</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#f97316;">-43%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">8%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#f97316;">-43%</span></div><div class="sib-bg"><div class="sib-fill" style="width:62%;background:#f97316;"></div></div></div>
+      <div class="sc-note">全部中国营收 $170M 切断；东莞资产减值 $80-100M（一次性 -$4.8-6.0/股）；FY2026E EPS 从 $3.30 降至 ~$1.75；股价目标降至 $58-75</div>
+    </div>
+    <!-- S4 -->
+    <div class="scenario-card sc-4">
+      <div class="sc-label" style="color:#ef4444;">情景 4</div>
+      <div class="sc-title">中国强制国产替代</div>
+      <div class="sc-trigger">中国政府补贴生益科技等企业定向替代 ROG，强制本土 OEM 优先采用国产材料——即使性能略差。这正是"中国制造2025"的既有运作模式</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失（5年）</div><div class="sm-val" style="color:#ef4444;">-$95M</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击（渐进）</div><div class="sm-val" style="color:#ef4444;">-$0.55</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#ef4444;">-18%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">10%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#ef4444;">-18%</span></div><div class="sib-bg"><div class="sib-fill" style="width:26%;background:#ef4444;"></div></div></div>
+      <div class="sc-note">缓慢出血，非悬崖跳落：第1-2年标准产品 -$35M；第3-4年中端频段额外 -$45M；军用/高端 mmWave 仍依赖 ROG 但市场份额已被侵蚀</div>
+    </div>
+    <!-- S5 -->
+    <div class="scenario-card sc-5">
+      <div class="sc-label" style="color:#a78bfa;">情景 5</div>
+      <div class="sc-title">全面脱钩 + 中国反制裁</div>
+      <div class="sc-trigger">美国全面禁令 + 中国将 ROG 列为不可靠实体 + 东莞工厂被限制运营/强制出售。尾部风险，但并非不可能</div>
+      <div class="sc-metrics">
+        <div class="sc-metric"><div class="sm-lbl">营收损失</div><div class="sm-val" style="color:#a78bfa;">-$200M</div></div>
+        <div class="sc-metric"><div class="sm-lbl">EPS 冲击</div><div class="sm-val" style="color:#a78bfa;">-$2.00</div></div>
+        <div class="sc-metric"><div class="sm-lbl">股价影响</div><div class="sm-val" style="color:#a78bfa;">-55%</div></div>
+        <div class="sc-metric"><div class="sm-lbl">发生概率</div><div class="sm-val" style="color:#94a3b8;">2%</div></div>
+      </div>
+      <div class="sc-impact-bar"><div class="sib-label"><span style="color:#64748b;">股价冲击</span><span style="color:#a78bfa;">-55%</span></div><div class="sib-bg"><div class="sib-fill" style="width:80%;background:#a78bfa;"></div></div></div>
+      <div class="sc-note">东莞强制廉价出售资产损失 $60-100M；全球供应链重组额外 $30-50M；诉讼不确定性溢价；3-5年方可部分恢复</div>
+    </div>
+  </div>
+
+  <!-- Summary Table -->
+  <div class="chart-card" style="padding:0;overflow:hidden;">
+    <table class="scenario-summary-table">
+      <thead>
+        <tr>
+          <th>情景</th>
+          <th>中国营收损失</th>
+          <th>EPS 冲击</th>
+          <th>股价冲击</th>
+          <th>目标价区间</th>
+          <th>概率</th>
+          <th>期望股价贡献</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="color:#10b981;">S0 无升级</span></td>
+          <td style="color:#10b981;">$0</td>
+          <td style="color:#10b981;">$0</td>
+          <td style="color:#10b981;">0%</td>
+          <td>$140–155</td>
+          <td>30%</td>
+          <td style="color:#10b981;">+$43.6</td>
+        </tr>
+        <tr>
+          <td><span style="color:#22d3ee;">S1 温和关税</span></td>
+          <td style="color:#22d3ee;">-$25M</td>
+          <td style="color:#22d3ee;">-$0.18</td>
+          <td style="color:#22d3ee;">-10%</td>
+          <td>$103–106</td>
+          <td>30%</td>
+          <td style="color:#22d3ee;">+$31.0</td>
+        </tr>
+        <tr>
+          <td><span style="color:#f59e0b;">S2 定向实体清单</span></td>
+          <td style="color:#f59e0b;">-$55M</td>
+          <td style="color:#f59e0b;">-$0.47</td>
+          <td style="color:#f59e0b;">-22%</td>
+          <td>$86–94</td>
+          <td>20%</td>
+          <td style="color:#f59e0b;">+$18.0</td>
+        </tr>
+        <tr>
+          <td><span style="color:#f97316;">S3 全面出口管制</span></td>
+          <td style="color:#f97316;">-$170M</td>
+          <td style="color:#f97316;">-$1.55</td>
+          <td style="color:#f97316;">-43%</td>
+          <td>$58–75</td>
+          <td>8%</td>
+          <td style="color:#f97316;">+$5.2</td>
+        </tr>
+        <tr>
+          <td><span style="color:#ef4444;">S4 强制国产替代</span></td>
+          <td style="color:#ef4444;">-$95M</td>
+          <td style="color:#ef4444;">-$0.55</td>
+          <td style="color:#ef4444;">-18%</td>
+          <td>$87–95</td>
+          <td>10%</td>
+          <td style="color:#ef4444;">+$9.5</td>
+        </tr>
+        <tr>
+          <td><span style="color:#a78bfa;">S5 全面脱钩</span></td>
+          <td style="color:#a78bfa;">-$200M</td>
+          <td style="color:#a78bfa;">-$2.00</td>
+          <td style="color:#a78bfa;">-55%</td>
+          <td>$40–63</td>
+          <td>2%</td>
+          <td style="color:#a78bfa;">+$1.0</td>
+        </tr>
+        <tr>
+          <td>概率加权期望价格</td>
+          <td>—</td>
+          <td>~-$0.22</td>
+          <td>~-18%</td>
+          <td><strong>$108.3</strong></td>
+          <td>100%</td>
+          <td style="color:#f59e0b;">$108.3</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Key Insights -->
+  <div class="insight-box">
+    <h4>关键修正结论</h4>
+    <ul>
+      <li>原报告关税风险估计 -20 至 -30% 覆盖的是 S2-S3 之间区间，概率加权期望冲击应为 <strong>约 -18%</strong>，但尾部情景（S3-S5）不可忽视</li>
+      <li>"不可替代"是工程问题，强制替代和政治禁令是政治问题——ASML 的教训是即使技术绝对领先，市场会对政策风险做出即时、大幅的折价反应</li>
+      <li>ROG PTFE 材料被用于中国军用雷达/电子战/导弹导引头这一事实，反而提高了 BIS 将其列管的政治动机，"不可替代"加大了被管控的概率</li>
+      <li>关键预警信号：BIS《商务管制清单》（CCL）更新中是否新增 PTFE 层压板 ECCN 编号，优先级高于 ROG 季度财报</li>
+      <li>东莞工厂（账面资产约 $80-120M）是双向风险：顺风时降低亚太供应成本；逆风时成为地缘资产减值敞口</li>
+    </ul>
   </div>
 </div>
 
