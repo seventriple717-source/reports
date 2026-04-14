@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRDO · AI对冲基金分析报告 · 2026-04-14</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a; --card: #111827; --border: #1f2937;
+    --text: #e5e7eb; --muted: #6b7280; --accent: #3b82f6;
+    --green: #00d4aa; --yellow: #f59e0b; --red: #ef4444;
+    --green-bg: rgba(0,212,170,0.12); --yellow-bg: rgba(245,158,11,0.12); --red-bg: rgba(239,68,68,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; }
+
+  /* Layout */
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .hero-left .ticker { font-size: 48px; font-weight: 800; color: #fff; letter-spacing: -2px; }
+  .hero-left .company { font-size: 16px; color: var(--muted); margin-top: 4px; }
+  .hero-left .date { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .hero-right { text-align: right; }
+  .signal-badge { display: inline-block; font-size: 36px; font-weight: 800; padding: 12px 32px; border-radius: 12px; letter-spacing: 2px; }
+  .signal-badge.buy { background: var(--green-bg); color: var(--green); border: 2px solid var(--green); }
+  .signal-badge.hold { background: var(--yellow-bg); color: var(--yellow); border: 2px solid var(--yellow); }
+  .signal-badge.sell { background: var(--red-bg); color: var(--red); border: 2px solid var(--red); }
+  .hero-meta { margin-top: 12px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .hero-meta-item { text-align: center; }
+  .hero-meta-item .label { font-size: 11px; color: var(--muted); }
+  .hero-meta-item .value { font-size: 15px; font-weight: 700; color: #fff; }
+
+  /* Acquisition Banner */
+  .acq-banner { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15)); border: 1px solid rgba(59,130,246,0.4); border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; display: flex; gap: 16px; align-items: flex-start; }
+  .acq-icon { font-size: 28px; flex-shrink: 0; }
+  .acq-title { font-size: 15px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
+  .acq-body { font-size: 13px; color: var(--text); line-height: 1.7; }
+  .acq-tag { display: inline-block; background: rgba(59,130,246,0.2); color: #93c5fd; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+
+  /* Metric Cards */
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 768px) { .metrics-grid { grid-template-columns: 1fr 1fr; } }
+  .metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+  .metric-card .m-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric-card .m-value { font-size: 22px; font-weight: 700; color: #fff; margin-top: 4px; }
+  .metric-card .m-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .metric-card .m-value.green { color: var(--green); }
+  .metric-card .m-value.yellow { color: var(--yellow); }
+  .metric-card .m-value.red { color: var(--red); }
+
+  /* Agent Table */
+  .agent-table { width: 100%; border-collapse: collapse; }
+  .agent-table th { background: #0d1117; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .agent-table td { padding: 11px 14px; border-bottom: 1px solid rgba(31,41,55,0.6); vertical-align: middle; font-size: 13px; }
+  .agent-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .agent-table tr.bullish { border-left: 3px solid var(--green); }
+  .agent-table tr.neutral { border-left: 3px solid var(--yellow); }
+  .agent-table tr.bearish { border-left: 3px solid var(--red); }
+  .agent-table .name { font-weight: 600; color: #fff; }
+  .agent-table .school { font-size: 11px; color: var(--muted); }
+  .signal-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; letter-spacing: 0.05em; }
+  .signal-tag.bullish { background: var(--green-bg); color: var(--green); }
+  .signal-tag.neutral { background: var(--yellow-bg); color: var(--yellow); }
+  .signal-tag.bearish { background: var(--red-bg); color: var(--red); }
+  .conf-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .conf-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .conf-fill { height: 100%; border-radius: 3px; }
+  .conf-fill.bullish { background: var(--green); }
+  .conf-fill.neutral { background: var(--yellow); }
+  .conf-fill.bearish { background: var(--red); }
+  .conf-num { font-size: 12px; font-weight: 600; width: 34px; text-align: right; }
+  .conf-num.bullish { color: var(--green); }
+  .conf-num.neutral { color: var(--yellow); }
+  .conf-num.bearish { color: var(--red); }
+  .reasoning { color: var(--muted); font-size: 12px; max-width: 380px; line-height: 1.5; }
+
+  /* Charts row */
+  .charts-row { display: grid; grid-template-columns: 280px 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 768px) { .charts-row { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 16px; }
+  .chart-canvas-wrap { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+  .chart-legend { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .legend-item { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .summary-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .stat-block { text-align: center; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px; }
+  .stat-block .sb-val { font-size: 32px; font-weight: 800; }
+  .stat-block .sb-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Risk Matrix */
+  .risk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 768px) { .risk-grid { grid-template-columns: 1fr; } }
+  .risk-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .risk-name { font-size: 13px; font-weight: 600; color: #fff; }
+  .risk-level { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+  .risk-level.high { background: var(--red-bg); color: var(--red); }
+  .risk-level.mid { background: var(--yellow-bg); color: var(--yellow); }
+  .risk-level.low { background: var(--green-bg); color: var(--green); }
+  .risk-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* Final Decision */
+  .decision-panel { background: linear-gradient(135deg, rgba(0,212,170,0.08), rgba(59,130,246,0.08)); border: 1px solid rgba(0,212,170,0.3); border-radius: 16px; padding: 32px; }
+  .decision-top { display: flex; align-items: center; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .decision-signal { font-size: 42px; font-weight: 800; color: var(--green); }
+  .decision-meta { flex: 1; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .dm-item .dm-label { font-size: 11px; color: var(--muted); }
+  .dm-item .dm-value { font-size: 18px; font-weight: 700; color: #fff; }
+  .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 768px) { .decision-grid { grid-template-columns: 1fr; } }
+  .bull-block { background: var(--green-bg); border: 1px solid rgba(0,212,170,0.2); border-radius: 10px; padding: 16px; }
+  .bear-block { background: var(--red-bg); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 16px; }
+  .block-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .bull-block .block-title { color: var(--green); }
+  .bear-block .block-title { color: var(--red); }
+  .reason-item { font-size: 13px; color: var(--text); margin-bottom: 8px; padding-left: 16px; position: relative; line-height: 1.5; }
+  .reason-item::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .bear-block .reason-item::before { background: var(--red); }
+  .strategy-block { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 16px; }
+  .strategy-block .block-title { color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .strategy-steps { display: flex; gap: 12px; flex-wrap: wrap; }
+  .step-card { flex: 1; min-width: 160px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 12px; }
+  .step-card .step-cond { font-size: 11px; color: var(--muted); }
+  .step-card .step-action { font-size: 13px; font-weight: 600; color: #fff; margin-top: 4px; }
+
+  /* Disclaimer */
+  .disclaimer { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-top: 32px; }
+  .disclaimer p { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .sources { margin-top: 12px; }
+  .sources a { font-size: 11px; color: #4b5563; display: block; margin-bottom: 2px; }
+  .sources a:hover { color: var(--accent); }
+
+  /* Table wrap */
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="ticker">CRDO</div>
+      <div class="company">Credo Technology Group Holding Ltd · NASDAQ</div>
+      <div class="date">AI 对冲基金分析报告 · 2026-04-14</div>
+    </div>
+    <div class="hero-right">
+      <div class="signal-badge buy">BUY</div>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><div class="label">股价</div><div class="value">$134.36</div></div>
+        <div class="hero-meta-item"><div class="label">市值</div><div class="value">$22B</div></div>
+        <div class="hero-meta-item"><div class="label">Forward PE</div><div class="value">24.2x</div></div>
+        <div class="hero-meta-item"><div class="label">目标区间</div><div class="value">$180–$200</div></div>
+        <div class="hero-meta-item"><div class="label">止损</div><div class="value">$100</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACQUISITION BANNER -->
+  <div class="acq-banner">
+    <div class="acq-icon">⚡</div>
+    <div>
+      <div class="acq-title">重大并购：Credo 以 $7.5 亿收购 DustPhotonics（2026-04-13 公告）</div>
+      <div class="acq-body">
+        <span class="acq-tag">今日驱动因素</span>
+        Credo 宣布以 <strong>$7.5亿现金 + 0.92M股</strong>（另有最多3.21M股里程碑条款）收购硅光子PIC领导者 DustPhotonics。
+        该并购将使 CRDO 从"铜缆AEC专家"升级为"电铜+光学全栈垂直整合"，
+        SerDes → DSP → 硅光子 → 光收发器完整覆盖，直接化解了"光纤技术替代AEC铜缆"这一核心尾部风险。
+        管理层预期 FY2027 光学业务收入 <strong>&gt;$5亿</strong>，本次交易预期在 FY2027 非GAAP EPS 上体现增厚。
+        股价当日上涨 +10.8%，正是本次收购公告驱动。
+      </div>
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="section">
+    <div class="section-title">核心指标</div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="m-label">当前股价 · 52周区间</div>
+        <div class="m-value">$134.36</div>
+        <div class="m-sub">52W：$40 – $180</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">TTM 营收 · YoY 增速</div>
+        <div class="m-value green">$1.068B</div>
+        <div class="m-sub">YoY +226%</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">最新季度（Q3 FY2026）</div>
+        <div class="m-value green">$407M</div>
+        <div class="m-sub">YoY +201.5%，超预期 +5%</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">毛利率 · 营业利润率</div>
+        <div class="m-value">68.6%</div>
+        <div class="m-sub">营业利润率 36.8%</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">净现金 · 流动比率</div>
+        <div class="m-value">$814M</div>
+        <div class="m-sub">流动比率 10.82 · 零债务</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">ROE · EPS TTM</div>
+        <div class="m-value">27.5%</div>
+        <div class="m-sub">EPS TTM ~$1.74</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">TTM P/E · Forward P/E</div>
+        <div class="m-value yellow">69x</div>
+        <div class="m-sub">Forward P/E 24.2x（FY2027E）</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">分析师目标价均值</div>
+        <div class="m-value green">$199</div>
+        <div class="m-sub">Strong Buy · 16位分析师全买入</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">Q4 FY2026 指引</div>
+        <div class="m-value">$430M</div>
+        <div class="m-sub">$425–$435M，再创历史新高</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT TABLE -->
+  <div class="section">
+    <div class="section-title">16位投资者信号</div>
+    <div class="table-wrap">
+      <table class="agent-table">
+        <thead>
+          <tr>
+            <th>投资者</th>
+            <th>流派</th>
+            <th>信号</th>
+            <th>置信度</th>
+            <th>核心逻辑</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bearish">
+            <td><div class="name">沃伦·巴菲特</div></td>
+            <td><div class="school">保守价值</div></td>
+            <td><span class="signal-tag bearish">BEARISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bearish" style="width:68%"></div></div><span class="conf-num bearish">68%</span></div></td>
+            <td class="reasoning">DCF保守内在价值~$30亿 vs 市值$220亿，安全边际-86%。护城河真实但价格无法接受。</td>
+          </tr>
+          <tr class="neutral">
+            <td><div class="name">查理·芒格</div></td>
+            <td><div class="school">逆向价值</div></td>
+            <td><span class="signal-tag neutral">NEUTRAL</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill neutral" style="width:58%"></div></div><span class="conf-num neutral">58%</span></div></td>
+            <td class="reasoning">逆向检验2/3可反驳，SerDes护城河真实。客户集中+管理层减持令人不安，等待合理价格。</td>
+          </tr>
+          <tr class="bearish">
+            <td><div class="name">本杰明·格雷厄姆</div></td>
+            <td><div class="school">量化安全边际</div></td>
+            <td><span class="signal-tag bearish">BEARISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bearish" style="width:88%"></div></div><span class="conf-num bearish">88%</span></div></td>
+            <td class="reasoning">仅2/7通过。Graham数$12.79，当前价$134是Graham数的10.5倍。数字不说谎，不买。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">彼得·林奇</div></td>
+            <td><div class="school">GARP成长</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:84%"></div></div><span class="conf-num bullish">84%</span></div></td>
+            <td class="reasoning">PEG仅0.24，教科书级Fast Grower。营收+201%，近零债务，GARP评分8/9。强烈买入。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">菲利普·费雪</div></td>
+            <td><div class="school">成长质量</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:74%"></div></div><span class="conf-num bullish">74%</span></div></td>
+            <td class="reasoning">6.5/8 Scuttlebutt通过。技术护城河深，ZeroFlap+ALC+DustPhotonics产品路线图清晰，TAM持续扩张。</td>
+          </tr>
+          <tr class="neutral">
+            <td><div class="name">比尔·阿克曼</div></td>
+            <td><div class="school">集中激进价值</div></td>
+            <td><span class="signal-tag neutral">NEUTRAL</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill neutral" style="width:56%"></div></div><span class="conf-num neutral">56%</span></div></td>
+            <td class="reasoning">5年IRR估算>20%有吸引力。但客户集中度35%制约集中持仓，$7.5亿收购耗尽现金储备存隐患。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">凯瑟琳·伍德</div></td>
+            <td><div class="school">颠覆性创新</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:93%"></div></div><span class="conf-num bullish">93%</span></div></td>
+            <td class="reasoning">AI基础设施核心卡位，颠覆性评分9/10。DustPhotonics收购后垂直整合光子学，TAM从互联扩展至光收发器，5年核心持仓。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">乔治·索罗斯</div></td>
+            <td><div class="school">反身性宏观</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:75%"></div></div><span class="conf-num bullish">75%</span></div></td>
+            <td class="reasoning">正向反身性循环加速：AI capex→CRDO营收暴涨→更强R&D→更好产品→更多采购。DustPhotonics进一步强化飞轮。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">德鲁肯米勒</div></td>
+            <td><div class="school">趋势+动量</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:72%"></div></div><span class="conf-num bullish">72%</span></div></td>
+            <td class="reasoning">三重共振：盈利动量（连续超预期）+技术突破（V型反弹）+流动性转向（降息预期）。止损$100。</td>
+          </tr>
+          <tr class="neutral">
+            <td><div class="name">雷·达利欧</div></td>
+            <td><div class="school">全天候宏观</div></td>
+            <td><span class="signal-tag neutral">NEUTRAL</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill neutral" style="width:55%"></div></div><span class="conf-num neutral">55%</span></div></td>
+            <td class="reasoning">公司本身全天候健壮（零债务、高利润率），但极度依赖AI capex单一驱动，滞胀环境下脆弱。组合权重≤3%。</td>
+          </tr>
+          <tr class="neutral">
+            <td><div class="name">大卫·泰珀</div></td>
+            <td><div class="school">宏观极端价值</div></td>
+            <td><span class="signal-tag neutral">NEUTRAL</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill neutral" style="width:52%"></div></div><span class="conf-num neutral">52%</span></div></td>
+            <td class="reasoning">最优抄底点$88-93（3月底）已经过去，现在追高不是我的风格。若再次回调至$100以下则重新评估。</td>
+          </tr>
+          <tr class="bearish">
+            <td><div class="name">迈克尔·伯里</div></td>
+            <td><div class="school">深度逆向价值</div></td>
+            <td><span class="signal-tag bearish">BEARISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bearish" style="width:82%"></div></div><span class="conf-num bearish">82%</span></div></td>
+            <td class="reasoning">EV/FCF约60x，NCAV溢价30倍，分析师全员买入=我的反向指标。$7.5亿收购耗尽现金，更无安全边际。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">约翰·保尔森</div></td>
+            <td><div class="school">事件驱动套利</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:70%"></div></div><span class="conf-num bullish">70%</span></div></td>
+            <td class="reasoning">DustPhotonics收购是明确事件催化剂：$7.5亿战略并购→光学TAM打开→FY2027重估。从Neutral升格为Bullish。</td>
+          </tr>
+          <tr class="bearish">
+            <td><div class="name">塞思·卡拉曼</div></td>
+            <td><div class="school">绝对安全边际</div></td>
+            <td><span class="signal-tag bearish">BEARISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bearish" style="width:80%"></div></div><span class="conf-num bearish">80%</span></div></td>
+            <td class="reasoning">悲观情景最大亏损-91%，完全不符合损失保护优先原则。需要持续兑现超预期的单程彩票，非价值标的。</td>
+          </tr>
+          <tr class="bullish">
+            <td><div class="name">技术面分析</div></td>
+            <td><div class="school">量化技术</div></td>
+            <td><span class="signal-tag bullish">BULLISH</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill bullish" style="width:65%"></div></div><span class="conf-num bullish">65%</span></div></td>
+            <td class="reasoning">V型反弹确立（$88→$134），突破阻力位，成交量放量。50日均线$106已收复，趋势修复中。支撑$105，阻力$160。</td>
+          </tr>
+          <tr class="neutral">
+            <td><div class="name">情绪面分析</div></td>
+            <td><div class="school">市场情绪</div></td>
+            <td><span class="signal-tag neutral">NEUTRAL</span></td>
+            <td><div class="conf-bar-wrap"><div class="conf-bar"><div class="conf-fill neutral" style="width:54%"></div></div><span class="conf-num neutral">54%</span></div></td>
+            <td class="reasoning">机构持仓80.46%（Goldman、UBS增持）+分析师全买入为正面；CEO/CTO在$88-93大量减持为重要警示信号。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="section">
+    <div class="section-title">信号分布</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">16位分析者投票分布</div>
+        <div class="chart-canvas-wrap">
+          <canvas id="signalChart"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item"><div style="display:flex;align-items:center;gap:8px"><div class="legend-dot" style="background:#00d4aa"></div><span>看涨 (BULLISH)</span></div><strong style="color:#00d4aa">7</strong></div>
+          <div class="legend-item"><div style="display:flex;align-items:center;gap:8px"><div class="legend-dot" style="background:#f59e0b"></div><span>中性 (NEUTRAL)</span></div><strong style="color:#f59e0b">5</strong></div>
+          <div class="legend-item"><div style="display:flex;align-items:center;gap:8px"><div class="legend-dot" style="background:#ef4444"></div><span>看跌 (BEARISH)</span></div><strong style="color:#ef4444">4</strong></div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="chart-title">分析摘要</div>
+        <div class="summary-stats">
+          <div class="stat-block">
+            <div class="sb-val" style="color:#00d4aa">7</div>
+            <div class="sb-label">看涨信号</div>
+          </div>
+          <div class="stat-block">
+            <div class="sb-val" style="color:#f59e0b">5</div>
+            <div class="sb-label">中性信号</div>
+          </div>
+          <div class="stat-block">
+            <div class="sb-val" style="color:#ef4444">4</div>
+            <div class="sb-label">看跌信号</div>
+          </div>
+          <div class="stat-block">
+            <div class="sb-val" style="color:#fff">70%</div>
+            <div class="sb-label">平均置信度</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:14px;font-size:13px;color:var(--muted);line-height:1.7">
+          <strong style="color:var(--text)">分析师分歧揭示核心矛盾：</strong><br>
+          成长投资者（林奇/伍德/费雪）看到的是AI时代护城河正在形成，未来盈利已被订单锁定；
+          价值投资者（格雷厄姆/伯里/卡拉曼）看到的是TTM PE 69倍没有任何容错空间。
+          DustPhotonics收购进一步拉大了多空分歧——它同时是成长派的"战略加分"和价值派的"现金耗尽"。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK MATRIX -->
+  <div class="section">
+    <div class="section-title">风险矩阵</div>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">客户集中度</div>
+          <div class="risk-level high">高风险</div>
+        </div>
+        <div class="risk-desc">最大客户占营收约35%（疑似微软）。若该超大规模云厂商削减AI capex或转换供应商，单季营收可能下滑20-30%。量化影响：营收-$130M → 股价可能-40-50%。</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">AI Capex 泡沫破裂</div>
+          <div class="risk-level high">高风险</div>
+        </div>
+        <div class="risk-desc">若AI训练投资出现ROI质疑，超大规模云厂商集体放缓capex，CRDO将从直接受益者变为直接受害者。概率估计15%，股价下跌风险-60~70%，落至$40-50。</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">收购整合风险</div>
+          <div class="risk-level mid">中风险</div>
+        </div>
+        <div class="risk-desc">$7.5亿收购DustPhotonics耗尽$8.13亿现金储备，剩余约$60M。若整合不顺或光学产品未能在FY2027达到$5亿目标，将面临流动性压力与EPS下修。</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">估值容错空间</div>
+          <div class="risk-level high">高风险</div>
+        </div>
+        <div class="risk-desc">TTM PE 69倍，任何一季度营收或毛利率不及预期，均可能触发20-30%的估值重置。市场完全price in了"完美兑现"的场景，没有错误的余地。</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">贸易管制/关税</div>
+          <div class="risk-level mid">中风险</div>
+        </div>
+        <div class="risk-desc">Fab-less模式依赖台积电等台湾代工厂。中美关税升级或半导体出口管制扩大可能冲击供应链，短期影响-15~25%。概率20%，近期关税风险有所缓和。</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <div class="risk-name">管理层减持信号</div>
+          <div class="risk-level mid">中风险</div>
+        </div>
+        <div class="risk-desc">CEO和CTO于2026年1-3月在$88-93大量卖出股票，零买入。两位核心高管在$88低点减持（分析师目标价$200），时机耐人寻味，需持续关注后续交易。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL DECISION -->
+  <div class="section">
+    <div class="section-title">组合经理最终决策</div>
+    <div class="decision-panel">
+      <div class="decision-top">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px">最终信号</div>
+          <div class="decision-signal">BUY</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">弱共识（7/16看涨）</div>
+        </div>
+        <div class="decision-meta">
+          <div class="dm-item"><div class="dm-label">建议仓位</div><div class="dm-value">5%</div></div>
+          <div class="dm-item"><div class="dm-label">12个月目标价</div><div class="dm-value" style="color:var(--green)">$180–$200</div></div>
+          <div class="dm-item"><div class="dm-label">止损价</div><div class="dm-value" style="color:var(--red)">$100</div></div>
+          <div class="dm-item"><div class="dm-label">仓位上限</div><div class="dm-value">6%</div></div>
+          <div class="dm-item"><div class="dm-label">平均置信度</div><div class="dm-value">70%</div></div>
+          <div class="dm-item"><div class="dm-label">信号分布</div><div class="dm-value" style="font-size:14px">7B / 5N / 4S</div></div>
+        </div>
+      </div>
+
+      <div class="decision-grid">
+        <div class="bull-block">
+          <div class="block-title">多头核心理由（Top 3）</div>
+          <div class="reason-item">盈利加速不可忽视：Q3 FY2026营收+201.5%，Q4指引$430M再创新高，FY2027管理层指引>50%增长。这种增速在半导体行业极为罕见，且有采购订单支撑。</div>
+          <div class="reason-item">DustPhotonics收购重写竞争格局：$7.5亿布局硅光子学，CRDO从"AEC铜缆专家"升级为"电+光全栈垂直整合"，一举化解了光纤替代这一最大尾部风险，光学TAM新增$500M+ FY2027。</div>
+          <div class="reason-item">Forward P/E 24.2x配合>100% EPS增速，PEG仅0.24，是成长投资框架下罕见的低估值。随着盈利持续兑现，今天的"高估值"将快速被时间稀释。</div>
+        </div>
+        <div class="bear-block">
+          <div class="block-title">主要风险（Top 2）</div>
+          <div class="reason-item">客户集中+管理层减持双重警示：最大客户35%集中度+CEO/CTO在低点大量卖出，两个罕见同时出现的红旗。若该超大规模客户减少订单，营收可能下滑30%，股价下跌风险-50%。</div>
+          <div class="reason-item">估值没有容错空间：TTM PE 69倍，任何一季不及预期即触发剧烈重估。$7.5亿收购同时耗尽现金储备，若光学业务整合不顺，将同时面临流动性压力与EPS下修的双重打击。</div>
+        </div>
+      </div>
+
+      <div class="strategy-block">
+        <div class="block-title">建仓策略</div>
+        <div class="strategy-steps">
+          <div class="step-card">
+            <div class="step-cond">当前价 $134</div>
+            <div class="step-action">初始仓位 2%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">已从低点反弹44%，谨慎建仓</div>
+          </div>
+          <div class="step-card">
+            <div class="step-cond">回调至 $110–$120</div>
+            <div class="step-action">加仓至 4%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">更佳风险回报，均线支撑区</div>
+          </div>
+          <div class="step-card">
+            <div class="step-cond">Q4 FY2026财报超预期</div>
+            <div class="step-action">加至仓位上限 6%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">基本面确认后加码</div>
+          </div>
+          <div class="step-card">
+            <div class="step-cond">跌破 $100</div>
+            <div class="step-action">无条件止损</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">低于管理层减持区，不抄底</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <p><strong>免责声明：</strong>本报告由 AI 对冲基金 Skill 基于公开信息自动生成，仅供参考，不构成任何投资建议或邀约。所有分析均基于截至 2026-04-14 的公开可查数据，不保证数据完整性和时效性。过去表现不代表未来收益。投资有风险，入市需谨慎。</p>
+    <div class="sources">
+      <strong style="font-size:11px;color:#4b5563">数据来源：</strong>
+      <a href="https://investors.credosemi.com/news-events/news/news-details/2026/Credo-Agrees-to-Acquire-DustPhotonics-Accelerating-Expansion-into-Silicon-Photonics-and-Next-Generation-Optical-Connectivity/default.aspx">Credo 官方：收购 DustPhotonics 公告</a>
+      <a href="https://www.businesswire.com/news/home/20251201598056/en/Credo-Technology-Group-Holding-Ltd-Reports-Second-Quarter-of-Fiscal-Year-2026-Financial-Results">Credo Q2 FY2026 财务结果</a>
+      <a href="https://www.fool.com/earnings/call-transcripts/2026/03/02/credo-tech-crdo-q3-2026-earnings-call-transcript/">Q3 FY2026 财报电话会议记录</a>
+      <a href="https://stockanalysis.com/stocks/crdo/financials/">CRDO 财务数据 - StockAnalysis</a>
+      <a href="https://www.nasdaq.com/market-activity/stocks/crdo/insider-activity">CRDO 内部人交易 - Nasdaq</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const ctx = document.getElementById('signalChart').getContext('2d');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ['看涨 7', '中性 5', '看跌 4'],
+    datasets: [{
+      data: [7, 5, 4],
+      backgroundColor: ['#00d4aa', '#f59e0b', '#ef4444'],
+      borderColor: ['#00d4aa', '#f59e0b', '#ef4444'],
+      borderWidth: 2,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '68%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => ` ${ctx.label} / 16位分析者`
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
