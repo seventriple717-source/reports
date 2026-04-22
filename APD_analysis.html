@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APD Air Products and Chemicals — Deep Investment Analysis 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #0f1629;
+    --bg-card: #141c2e;
+    --bg-card2: #1a2340;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8892a4;
+    --accent-green: #00d4aa;
+    --accent-yellow: #f59e0b;
+    --accent-red: #ef4444;
+    --accent-blue: #3b82f6;
+    --accent-purple: #8b5cf6;
+    --border: #243048;
+    --bull: #00d4aa;
+    --bear: #ef4444;
+    --neutral: #f59e0b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; }
+  a { color: var(--accent-blue); }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #0a0e1a 0%, #0d1528 40%, #0f1f3d 100%); border-bottom: 1px solid var(--border); padding: 48px 32px 36px; }
+  .hero-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+  .hero-left .ticker { font-size: 56px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+  .hero-left .company { font-size: 18px; color: var(--text-secondary); margin-top: 4px; }
+  .hero-left .price-row { display: flex; align-items: baseline; gap: 16px; margin-top: 16px; }
+  .hero-left .price { font-size: 42px; font-weight: 700; color: var(--accent-green); }
+  .hero-left .mktcap { font-size: 16px; color: var(--text-secondary); background: var(--bg-card2); padding: 4px 12px; border-radius: 20px; }
+  .hero-left .date { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+  .hero-right { text-align: right; }
+  .signal-badge { display: inline-block; padding: 10px 28px; border-radius: 8px; font-size: 28px; font-weight: 800; letter-spacing: 2px; }
+  .signal-hold { background: rgba(245,158,11,0.15); color: var(--accent-yellow); border: 2px solid var(--accent-yellow); }
+  .signal-buy { background: rgba(0,212,170,0.15); color: var(--accent-green); border: 2px solid var(--accent-green); }
+  .signal-sell { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 2px solid var(--accent-red); }
+  .hero-meta { display: flex; gap: 24px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+  .hero-meta-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 18px; text-align: center; }
+  .hero-meta-item .label { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; }
+  .hero-meta-item .value { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+
+  /* Event Banner */
+  .event-banner { background: linear-gradient(90deg, #1e1450 0%, #0f1e4d 50%, #1a1040 100%); border-top: 1px solid #3b4a8a; border-bottom: 1px solid #3b4a8a; padding: 18px 32px; }
+  .event-banner-inner { max-width: 1280px; margin: 0 auto; }
+  .event-banner .tag { display: inline-block; background: var(--accent-purple); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; text-transform: uppercase; margin-bottom: 8px; }
+  .event-banner h3 { font-size: 16px; color: #c4b5fd; }
+  .event-banner p { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Container */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 40px 0; }
+  h2.section-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+  /* KPI Grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .kpi-card .kpi-label { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 1px; }
+  .kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--text-primary); margin: 6px 0 4px; }
+  .kpi-card .kpi-sub { font-size: 13px; color: var(--text-secondary); }
+  .kpi-card .kpi-badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+  .badge-green { background: rgba(0,212,170,0.15); color: var(--accent-green); }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+
+  /* Charts */
+  .chart-container { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+  .chart-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+  .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
+
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: var(--bg-card2); color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .text-green { color: var(--accent-green); font-weight: 600; }
+  .text-red { color: var(--accent-red); font-weight: 600; }
+  .text-yellow { color: var(--accent-yellow); font-weight: 600; }
+
+  /* Business segments */
+  .segments-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .segments-grid { grid-template-columns: 1fr; } }
+
+  /* Growth drivers */
+  .drivers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .drivers-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .drivers-grid { grid-template-columns: 1fr; } }
+  .driver-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .driver-card .driver-title { font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; }
+  .driver-card .driver-value { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+  .driver-card .driver-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Moat */
+  .moat-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; }
+  @media (max-width: 900px) { .moat-grid { grid-template-columns: repeat(3,1fr); } }
+  .moat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .moat-card .moat-dim { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+  .moat-card .moat-score { font-size: 28px; font-weight: 800; color: var(--accent-green); }
+  .moat-card .moat-max { font-size: 13px; color: var(--text-secondary); }
+  .moat-card .moat-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 8px 0; }
+  .moat-card .moat-fill { height: 100%; border-radius: 3px; background: var(--accent-green); }
+  .moat-card .moat-evidence { font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+
+  /* Investor signals table */
+  .investor-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .investor-table th { background: var(--bg-card2); color: var(--text-secondary); text-transform: uppercase; font-size: 11px; padding: 12px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+  .investor-table td { padding: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .investor-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .inv-name { font-weight: 700; color: var(--text-primary); font-size: 14px; }
+  .inv-style { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .signal-chip { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
+  .chip-bull { background: rgba(0,212,170,0.15); color: var(--accent-green); border: 1px solid rgba(0,212,170,0.3); }
+  .chip-bear { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
+  .chip-neutral { background: rgba(245,158,11,0.15); color: var(--accent-yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .conf-bar-wrap { background: var(--bg-secondary); border-radius: 3px; height: 6px; width: 100px; margin-top: 6px; }
+  .conf-bar-fill { height: 100%; border-radius: 3px; }
+  .conf-label { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+  .inv-points { list-style: none; margin-top: 8px; }
+  .inv-points li { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; padding-left: 12px; position: relative; }
+  .inv-points li::before { content: '•'; position: absolute; left: 0; color: var(--accent-blue); }
+  .row-bull { border-left: 3px solid var(--accent-green); }
+  .row-bear { border-left: 3px solid var(--accent-red); }
+  .row-neutral { border-left: 3px solid var(--accent-yellow); }
+
+  /* Donut chart section */
+  .signal-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+  .signal-stats { display: flex; flex-direction: column; gap: 14px; }
+  .stat-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; }
+  .stat-row .stat-label { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); }
+  .stat-row .stat-value { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-top: 4px; }
+
+  /* Valuation panel */
+  .valuation-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  @media (max-width: 900px) { .valuation-grid { grid-template-columns: 1fr; } }
+  .val-col { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 22px; }
+  .val-col h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .checklist-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+  .checklist-item .ci-label { color: var(--text-secondary); }
+  .ci-val { font-weight: 600; }
+  .ci-pass { color: var(--accent-green); }
+  .ci-fail { color: var(--accent-red); }
+  .ci-partial { color: var(--accent-yellow); }
+  .val-highlight { background: var(--bg-card2); border-radius: 8px; padding: 14px; margin-top: 14px; text-align: center; }
+  .val-highlight .vh-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; }
+  .val-highlight .vh-value { font-size: 24px; font-weight: 800; color: var(--accent-green); margin-top: 4px; }
+  .val-highlight .vh-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .dcf-bar { margin: 8px 0; }
+  .dcf-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+  .dcf-bar-track { background: var(--bg-secondary); height: 8px; border-radius: 4px; overflow: hidden; }
+  .dcf-bar-fill { height: 100%; border-radius: 4px; }
+  .gauge-container { position: relative; height: 100px; }
+
+  /* Risk matrix */
+  .risk-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  @media (max-width: 900px) { .risk-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 600px) { .risk-grid { grid-template-columns: 1fr; } }
+  .risk-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .risk-card .risk-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+  .risk-tags { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .risk-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; }
+  .prob-high { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+  .prob-med { background: rgba(245,158,11,0.2); color: var(--accent-yellow); }
+  .prob-low { background: rgba(0,212,170,0.2); color: var(--accent-green); }
+  .risk-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .risk-impact { font-size: 13px; font-weight: 700; color: var(--accent-red); margin-top: 8px; }
+
+  /* Final decision */
+  .final-panel { background: var(--bg-card); border: 2px solid var(--neutral); border-radius: 14px; padding: 32px; }
+  .final-panel.bull-panel { border-color: var(--bull); }
+  .final-panel.bear-panel { border-color: var(--bear); }
+  .final-signal-big { font-size: 52px; font-weight: 900; text-align: center; margin-bottom: 24px; letter-spacing: 4px; }
+  .final-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+  @media (max-width: 768px) { .final-grid { grid-template-columns: repeat(2,1fr); } }
+  .final-item { background: var(--bg-secondary); border-radius: 8px; padding: 16px; text-align: center; }
+  .final-item .fi-label { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); }
+  .final-item .fi-value { font-size: 20px; font-weight: 800; margin-top: 6px; }
+  .reasons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 768px) { .reasons-grid { grid-template-columns: 1fr; } }
+  .bull-reasons { background: rgba(0,212,170,0.05); border: 1px solid rgba(0,212,170,0.2); border-radius: 8px; padding: 18px; }
+  .bear-reasons { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 18px; }
+  .reasons-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .reason-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; color: var(--text-secondary); }
+  .reason-num { font-weight: 800; min-width: 20px; }
+  .strategy-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+  @media (max-width: 768px) { .strategy-steps { grid-template-columns: repeat(2,1fr); } }
+  .strat-step { background: var(--bg-secondary); border-radius: 8px; padding: 14px; text-align: center; }
+  .strat-step .step-num { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; }
+  .strat-step .step-val { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+  .strat-step .step-desc { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Sources */
+  .sources-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-top: 20px; }
+  .disclaimer { font-size: 11px; color: var(--text-secondary); margin-top: 12px; line-height: 1.5; padding: 12px; background: var(--bg-secondary); border-radius: 6px; }
+
+  /* Competitors */
+  .comp-table-wrap { overflow-x: auto; }
+
+  /* Summary box */
+  .summary-box { background: var(--bg-card2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 16px; }
+  .summary-box .sb-title { font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; }
+  .summary-box p { font-size: 13px; color: var(--text-secondary); }
+
+  /* Radar area */
+  .radar-container { max-width: 380px; margin: 0 auto; }
+
+  /* Phase 0.5 */
+  .preanalysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .preanalysis-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- 1. HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="ticker">APD</div>
+      <div class="company">Air Products and Chemicals, Inc. | NYSE: APD | 工业气体 / 清洁氢能</div>
+      <div class="price-row">
+        <div class="price">$294.78</div>
+        <div class="mktcap">市值 $65.6B</div>
+      </div>
+      <div class="date">深度分析日期：2026-04-22 | 数据截止：2026-04-22</div>
+    </div>
+    <div class="hero-right">
+      <div class="signal-badge signal-hold">HOLD</div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="label">12月目标价</div>
+          <div class="value">$295–$325</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">止损</div>
+          <div class="value">$256</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">建议仓位</div>
+          <div class="value">0%</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Forward PE</div>
+          <div class="value">22.1x</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. EVENT BANNER -->
+<div class="event-banner">
+  <div class="event-banner-inner">
+    <div class="tag">重大战略</div>
+    <h3>战略重置：剥离$36亿清洁能源项目，回归工业气体核心，全球最大氢气生产商地位稳固</h3>
+    <p>2025年11月，新任CEO主导退出3个低回报大型项目，目标2030年营业利润率30%、ROCE中双位数。NEOM绿氢项目>90%完工，商业化预计2027年；路易斯安那州蓝氢综合体FID预计2026年中，2030年完工。</p>
+  </div>
+</div>
+
+<!-- 3. KPI GRID -->
+<div class="container">
+<section>
+  <h2 class="section-title">核心指标一览</h2>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">当前股价 / 52周区间</div>
+      <div class="kpi-value">$294.78</div>
+      <div class="kpi-sub">$229.11 — $301.25 &nbsp;<span class="kpi-badge badge-green">+18.1% YTD</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">TTM营收 / YoY</div>
+      <div class="kpi-value">$12.04B</div>
+      <div class="kpi-sub">FY2025 同比 <span class="text-red">-0.5%</span> &nbsp; Q1 FY2026: +6%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Q1 FY2026 营收</div>
+      <div class="kpi-value">$3.10B</div>
+      <div class="kpi-sub">同比 <span class="text-green">+6%</span> &nbsp; 各区域均正增长</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">毛利率 (FY2025)</div>
+      <div class="kpi-value">31.4%</div>
+      <div class="kpi-sub">FY2024: 32.5% &nbsp;<span class="kpi-badge badge-yellow">轻微收缩</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">调整后营业利润率</div>
+      <div class="kpi-value">24.4%</div>
+      <div class="kpi-sub">Q1 FY2026调整值，同比 +140bps</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">FCF利润率</div>
+      <div class="kpi-value text-red">N/A</div>
+      <div class="kpi-sub">FCF = <span class="text-red">-$3.77B</span>（重型CapEx投资期）</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">净债务 / 流动比率</div>
+      <div class="kpi-value">$17.1B</div>
+      <div class="kpi-sub">D/E 1.02 &nbsp; 流动比率 1.46</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">ROIC (AlphaSpread)</div>
+      <div class="kpi-value">6.7%</div>
+      <div class="kpi-sub">重CapEx投资期压制，目标2030年中双位数</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">TTM P/E / Forward P/E</div>
+      <div class="kpi-value">N/A / 22.1x</div>
+      <div class="kpi-sub">GAAP TTM亏损；调整Forward PE 22.1x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">P/S / P/B</div>
+      <div class="kpi-value">5.38 / 4.26</div>
+      <div class="kpi-sub">BVPS $69.15 &nbsp; 溢价明显</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">分析师评级 / 目标价</div>
+      <div class="kpi-value">$307.75</div>
+      <div class="kpi-sub">14买 / 10持 / 0卖 &nbsp;<span class="kpi-badge badge-green">温和买入</span></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">建议仓位 / 止损</div>
+      <div class="kpi-value">0% / $256</div>
+      <div class="kpi-sub">信号：3涨 / 8中性 / 5跌，不建议新仓</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. FINANCIAL TRENDS -->
+<section>
+  <h2 class="section-title">财务趋势分析</h2>
+  <div class="charts-row">
+    <div class="chart-container">
+      <div class="chart-title">季度营收趋势（亿美元）及 YoY 增速</div>
+      <canvas id="revenueChart" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">利润率趋势（年度，%）</div>
+      <canvas id="marginChart" height="200"></canvas>
+    </div>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">FCF 趋势（亿美元）</div>
+    <canvas id="fcfChart" height="120"></canvas>
+  </div>
+  <div class="chart-container" style="margin-top:20px;">
+    <div class="chart-title">近5年年度财务数据</div>
+    <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>财年</th>
+          <th>营收</th>
+          <th>YoY</th>
+          <th>毛利率</th>
+          <th>调整营业利润率</th>
+          <th>调整EPS</th>
+          <th>FCF</th>
+          <th>CapEx</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>FY2021</td><td>$10.32B</td><td class="text-green">—</td><td>30.4%</td><td>~22.1%</td><td>$9.43</td><td class="text-green">$871M</td><td>$3.6B</td></tr>
+        <tr><td>FY2022</td><td>$12.70B</td><td class="text-green">+23%</td><td>26.5%</td><td>~18.4%</td><td>$10.08</td><td class="text-green">$244M</td><td>$4.1B</td></tr>
+        <tr><td>FY2023</td><td>$12.60B</td><td class="text-red">-0.8%</td><td>29.9%</td><td>~19.8%</td><td>$11.35</td><td class="text-red">-$1.42B</td><td>$5.7B</td></tr>
+        <tr><td>FY2024</td><td>$12.10B</td><td class="text-red">-4.0%</td><td>32.5%</td><td>~36.9%*</td><td>$12.40</td><td class="text-red">-$3.15B</td><td>$5.1B</td></tr>
+        <tr><td>FY2025</td><td>$12.04B</td><td class="text-red">-0.5%</td><td>31.4%</td><td>~24.1%**</td><td>$12.03</td><td class="text-red">-$3.77B</td><td>$4.4B</td></tr>
+        <tr><td>Q1 FY2026</td><td>$3.10B</td><td class="text-green">+6.0%</td><td>~31%</td><td>24.4%</td><td>$3.16</td><td>数据不可用</td><td>$911M</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="disclaimer" style="margin-top:10px;">*FY2024 GAAP营业利润率含资产收益；**FY2025含$37亿一次性减值/重组费用，调整后约$29亿/24%。</div>
+  </div>
+</section>
+
+<!-- 5. BUSINESS MODEL -->
+<section>
+  <h2 class="section-title">商业模式与收入分布</h2>
+  <div class="segments-grid">
+    <div class="chart-container">
+      <div class="chart-title">Q1 FY2026 各地区营收（百万美元）</div>
+      <canvas id="segmentChart" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">收入质量分析</div>
+      <table class="data-table">
+        <thead><tr><th>维度</th><th>指标</th><th>评估</th></tr></thead>
+        <tbody>
+          <tr><td>合同结构</td><td>49%收入锁定在20年合同</td><td class="text-green">极强</td></tr>
+          <tr><td>Take-or-Pay</td><td>工业气体90%为长期协议</td><td class="text-green">极强</td></tr>
+          <tr><td>价格保护</td><td>能源成本100%直通客户</td><td class="text-green">极强</td></tr>
+          <tr><td>客户集中度</td><td>分散化，无单一客户>10%</td><td class="text-green">低风险</td></tr>
+          <tr><td>订阅/ARR</td><td>约$10-11B年化核心气体收入</td><td class="text-green">稳定</td></tr>
+          <tr><td>收入可预测性</td><td>管道+现场供气合同</td><td class="text-green">极高</td></tr>
+          <tr><td>一次性风险</td><td>设备销售&lt;5%营收</td><td class="text-green">极低</td></tr>
+          <tr><td>氢气战略地位</td><td>全球最大H2供应商</td><td class="text-green">独特</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="summary-box">
+    <div class="sb-title">核心商业模式：工业气体-基础设施即服务</div>
+    <p>Air Products 的核心模式是在客户厂区旁建立专用生产设施（现场供气/管道供气），锁定15-20年take-or-pay合同，无论客户是否提货均需付款。这种模式创造了极高的转换成本和稳定的现金流，是工业领域最好的商业模式之一。能源成本变动通过合同直接传递给客户，进一步保护利润率。</p>
+  </div>
+</section>
+
+<!-- 6. GROWTH DRIVERS -->
+<section>
+  <h2 class="section-title">增长驱动与关键KPI</h2>
+  <div class="drivers-grid">
+    <div class="driver-card">
+      <div class="driver-title">工业气体市场TAM</div>
+      <div class="driver-value">$150B+</div>
+      <div class="driver-desc">预计2026年达$200B；全球工业化持续需求</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">NEOM绿氢项目进度</div>
+      <div class="driver-value">&gt;90%完工</div>
+      <div class="driver-desc">1.2 MTPA氨，2027商业化；Yara市场销售协议H1 2026签署</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">路易斯安那蓝氢</div>
+      <div class="driver-value">$8-9B</div>
+      <div class="driver-desc">750 MMSCFD低碳H2，95%碳捕集，FID 2026中，2030完工</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">埃德蒙顿净零</div>
+      <div class="driver-value">$3.3B</div>
+      <div class="driver-desc">净零氢能综合体，2027-28年上线</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">年度成本节约目标</div>
+      <div class="driver-value">$2.5亿</div>
+      <div class="driver-desc">裁员3600人，运营精简；到2029年实现</div>
+    </div>
+    <div class="driver-card">
+      <div class="driver-title">FY2026 EPS指引</div>
+      <div class="driver-value">$12.85-13.15</div>
+      <div class="driver-desc">同比+7-9%；调整后；CapEx ~$40亿</div>
+    </div>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">关键KPI追踪</div>
+    <table class="data-table">
+      <thead><tr><th>KPI</th><th>当前值</th><th>目标值</th><th>方向</th><th>评估</th></tr></thead>
+      <tbody>
+        <tr><td>调整EPS增速</td><td>+7-9% (FY2026E)</td><td>高单位数+</td><td class="text-green">↑</td><td>按计划</td></tr>
+        <tr><td>营业利润率（调整）</td><td>24.4% (Q1 FY26)</td><td>30% (2030目标)</td><td class="text-green">↑</td><td>进展中</td></tr>
+        <tr><td>ROCE</td><td>~6.7%</td><td>中双位数 (2030)</td><td class="text-yellow">→</td><td>CapEx压制中</td></tr>
+        <tr><td>CapEx</td><td>~$4.0B (FY26E)</td><td>~$2.5B (FY27+)</td><td class="text-green">↓ 趋势</td><td>过峰</td></tr>
+        <tr><td>营收YoY增速</td><td>+6% (Q1 FY26)</td><td>中单位数</td><td class="text-green">↑</td><td>改善</td></tr>
+        <tr><td>NEOM进度</td><td>&gt;90%完工</td><td>2027商业化</td><td class="text-green">↑</td><td>按计划</td></tr>
+        <tr><td>净债务/EBITDA</td><td>~4.4x (估算)</td><td>&lt;3.0x</td><td class="text-red">高</td><td>关注</td></tr>
+        <tr><td>FCF转正时间</td><td>FY2027+ (预期)</td><td>FCF正转</td><td class="text-yellow">→</td><td>关键催化剂</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 7. COMPETITIVE LANDSCAPE -->
+<section>
+  <h2 class="section-title">竞争格局深度分析</h2>
+  <div class="segments-grid">
+    <div class="chart-container">
+      <div class="chart-title">全球工业气体市场份额估算（营收基础）</div>
+      <canvas id="marketShareChart" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">同业比较（2025年数据）</div>
+      <div class="comp-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>指标</th><th>APD</th><th>Linde (LIN)</th><th>Air Liquide (AI.PA)</th><th>APD优劣</th></tr></thead>
+        <tbody>
+          <tr><td>营收规模</td><td>$12.0B</td><td>~$44B</td><td>~$30B</td><td class="text-red">最小</td></tr>
+          <tr><td>营收增速</td><td>-0.5% (FY25)</td><td>~+6%</td><td>~+5%</td><td class="text-red">落后</td></tr>
+          <tr><td>调整营业利润率</td><td>~24.4%</td><td>~26%</td><td>~20%</td><td class="text-yellow">中间</td></tr>
+          <tr><td>Forward PE</td><td>22.1x</td><td>~28x</td><td>~24x</td><td class="text-green">最低估值</td></tr>
+          <tr><td>净债务/EBITDA</td><td>~4.4x</td><td>~2.0x</td><td>~2.5x</td><td class="text-red">最高杠杆</td></tr>
+          <tr><td>市值</td><td>$65.6B</td><td>~$220B</td><td>~$85B</td><td class="text-red">最小</td></tr>
+          <tr><td>H2 战略地位</td><td>全球最大H2供应商</td><td>领先</td><td>参与</td><td class="text-green">差异化</td></tr>
+          <tr><td>护城河评级</td><td>窄护城河（强）</td><td>宽护城河</td><td>窄护城河</td><td class="text-yellow">中等</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. MOAT SCORECARD -->
+<section>
+  <h2 class="section-title">护城河评分卡（Phase 0.5-B）</h2>
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-dim">技术/IP壁垒</div>
+      <div class="moat-score">3</div>
+      <div class="moat-max">/5</div>
+      <div class="moat-bar"><div class="moat-fill" style="width:60%"></div></div>
+      <div class="moat-evidence">全球最大H2生产商，专有工程技术，大型液化低温设备制造能力</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-dim">转换成本</div>
+      <div class="moat-score">5</div>
+      <div class="moat-max">/5</div>
+      <div class="moat-bar"><div class="moat-fill" style="width:100%"></div></div>
+      <div class="moat-evidence">现场管道基础设施，15-20年take-or-pay，切换竞争对手需重建整套系统</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-dim">网络效应</div>
+      <div class="moat-score">2</div>
+      <div class="moat-max">/5</div>
+      <div class="moat-bar"><div class="moat-fill" style="width:40%; background: var(--accent-yellow)"></div></div>
+      <div class="moat-evidence">管道网络在局部区域形成垄断，但无平台级网络效应</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-dim">成本优势</div>
+      <div class="moat-score">4</div>
+      <div class="moat-max">/5</div>
+      <div class="moat-bar"><div class="moat-fill" style="width:80%"></div></div>
+      <div class="moat-evidence">规模经济，管道网络摊销，现有基础设施难以复制，运营50国</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-dim">品牌/定价权</div>
+      <div class="moat-score">4</div>
+      <div class="moat-max">/5</div>
+      <div class="moat-bar"><div class="moat-fill" style="width:80%"></div></div>
+      <div class="moat-evidence">调整营业利润率~24%，高于Air Liquide；合同内建价格调整机制</div>
+    </div>
+  </div>
+  <div style="margin-top:20px; text-align:center; padding:18px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px;">
+    <span style="font-size:32px; font-weight:800; color:var(--accent-yellow)">18 / 25</span>
+    <span style="margin-left:16px; display:inline-block; padding:6px 18px; background:rgba(245,158,11,0.15); color:var(--accent-yellow); border:1px solid rgba(245,158,11,0.3); border-radius:6px; font-weight:700; font-size:16px;">窄护城河（接近宽）</span>
+    <p style="color:var(--text-secondary); font-size:13px; margin-top:10px;">凭借无与伦比的转换成本(5/5)、规模成本优势与定价权，实际保护水平优于评分。Morningstar 将工业气体行业定义为宽护城河行业。</p>
+  </div>
+</section>
+
+<!-- 9. 16 INVESTOR SIGNALS -->
+<section>
+  <h2 class="section-title">16位传奇投资者深度量化分析</h2>
+  <div style="overflow-x:auto;">
+  <table class="investor-table">
+    <thead>
+      <tr>
+        <th style="min-width:140px;">投资者</th>
+        <th>信号</th>
+        <th>置信度</th>
+        <th style="min-width:420px;">核心量化评估（3-5条）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Buffett -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">Warren Buffett</div><div class="inv-style">价值/能力圈/永久持有</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:55%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">55%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[能力圈]</strong> 工业气体业务10年可预测性极强，90%收入来自长期合同；清洁氢能不确定性较高</li>
+            <li><strong>[护城河 18/25]</strong> ROE调整约15%（勉强达标）；D/E 1.02（超过0.5红线）；调整营业利润率24.4%（>15% 达标）</li>
+            <li><strong>[管理层]</strong> 新CEO 2025年上任，执行战略重置，退出$36亿低回报项目；近期主要为股权激励授予，无重大净增持</li>
+            <li><strong>[DCF安全边际]</strong> 保守内在价值~$110/股 vs 当前$295，安全边际-63%（高估）</li>
+            <li><strong>[综合]</strong> 能力圈通过（核心业务）；护城河基本通过；管理层通过；估值不通过（无安全边际）→ 观望</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Munger -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">Charlie Munger</div><div class="inv-style">反向/多学科/极少数卓越</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:50%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">50%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[逆向1]</strong> "氢能是未来"→ 反驳：NEOM等大型项目已大幅削减规模，资本纪律改善；但FID决策仍存不确定性</li>
+            <li><strong>[逆向2]</strong> "重债压垮企业"→ 反驳：$18.1B债务对应$41.2B资产，有形资产充足；工业气体现金流稳定可覆盖利息</li>
+            <li><strong>[逆向3]</strong> "工业气体已是低增长成熟行业"→ 部分成立：核心业务增速仅3-6%，难以支撑22x Forward PE</li>
+            <li><strong>[管理层诚信]</strong> 前CEO Seifi Ghasemi时代存在资本配置过激问题；新CEO启动战略重置，方向正确，但历史存在瑕疵</li>
+            <li><strong>[跨学科]</strong> 类比生物学：工业气体如"工厂的氧气供应系统"——一旦接入无法断开，形成共生关系；但过度扩张是癌变风险</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Graham -->
+      <tr class="row-bear">
+        <td><div class="inv-name">Benjamin Graham</div><div class="inv-style">严格量化/安全边际</div></td>
+        <td><span class="signal-chip chip-bear">BEARISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:70%;background:var(--accent-red)"></div></div>
+          <div class="conf-label">70%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[7项清单 2/7]</strong> P/E≤15? ✗(22.1x) | P/B≤1.5? ✗(4.26) | P/E×P/B≤22.5? ✗(94.1) | 流动比率≥2? ✗(1.46) | 负债/权益≤1? ✗(1.02) | EPS连续5年正? ✗(FY2025 GAAP亏损) | 近3年盈利增长≥30%? ✗(调整EPS仅+8.5%) → 通过：0/7（若用调整EPS则2/7）</li>
+            <li><strong>[Graham数]</strong> √(22.5 × $12.03 × $69.15) = $136.8，当前$294.78，溢价 +115%</li>
+            <li><strong>[DCF保守]</strong> ~$110/股，安全边际 -63%，绝无安全边际</li>
+            <li><strong>[结论]</strong> 以格雷厄姆标准衡量，APD是典型的"好公司坏估值"——数字不支持买入</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Lynch -->
+      <tr class="row-bear">
+        <td><div class="inv-name">Peter Lynch</div><div class="inv-style">PEG/成长型/普通人视角</div></td>
+        <td><span class="signal-chip chip-bear">BEARISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:65%;background:var(--accent-red)"></div></div>
+          <div class="conf-label">65%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[PEG = 2.73]</strong> Forward PE 22.1x ÷ EPS增速8.1% = 2.73（>2.0 = 明显高估）</li>
+            <li><strong>[GARP 1/9]</strong> 营收增速>20%? ✗ | 净利增速>营收? 部分✓(调整EPS+8%) | D/E<0.35? ✗(1.02) | 内部人持股>5%? ✗(~0.3%) | PEG<1.0? ✗(2.73) → 总分约1-2/9</li>
+            <li><strong>[公司类型]</strong> "稳健成长型"转变中：核心工业气体=稳健；清洁氢能=困境反转/重大押注</li>
+            <li><strong>[投资故事]</strong> "世界最大氢气公司在重新聚焦后将成为清洁能源基础设施的核心"——故事清晰但溢价过高</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Fisher -->
+      <tr class="row-bull">
+        <td><div class="inv-name">Philip Fisher</div><div class="inv-style">深度调研/20年持有/成长质量</div></td>
+        <td><span class="signal-chip chip-bull">BULLISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:55%;background:var(--accent-green)"></div></div>
+          <div class="conf-label">55%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[市场规模]</strong> 工业气体TAM ~$150B(2025)→$200B+(2027)，氢能市场萌芽期；APD全球最大H2生产商，定位独特</li>
+            <li><strong>[利润率趋势]</strong> 毛利率 30.4%→32.5%→31.4%（FY21-25），调整营业利润率恢复至24.4%；目标30%（2030），方向正确</li>
+            <li><strong>[R&D能力]</strong> 专注工艺创新，气体液化/分离技术积累；全球50国运营经验形成独特Know-How</li>
+            <li><strong>[管理层深度]</strong> 新CEO执行力强，战略重置清晰，资本纪律改善；44年连续股息增长体现管理一致性</li>
+            <li><strong>[Scuttlebutt 6/8]</strong> 市场规模✓ | 利润率趋势✓ | 管理深度✓ | 研发✓ | 劳资✓ | 客户粘性✓ | 新产品尚待验证✗ | 销售组织弱项✗</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Marks -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">Howard Marks</div><div class="inv-style">周期/风险意识/尾部风险</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:55%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">55%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[周期阶段]</strong> 工业气体：成熟增长期；清洁氢能：投资/建设期（早期，1-2年进入商业化）</li>
+            <li><strong>[估值分位]</strong> Forward PE 22.1x：APD历史均值约18-22x，处于上沿约65-70%分位；P/B 4.26x较历史高位</li>
+            <li><strong>[CapEx信号]</strong> CapEx/营收 ~33%（历史极高），即将峰顶下行；这通常是行业周期见顶信号</li>
+            <li><strong>[市场情绪]</strong> 分析师14买/10持/0卖，空头1.96%（极低），机构持仓92.9%（过于拥挤）→ 情绪过热</li>
+            <li><strong>[尾部风险TOP3]</strong> ①NEOM/路易项目延期或超支(-25%+) | ②利率上升再融资风险(-15%) | ③氢能商业化不及预期(-30%)</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Ackman -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">Bill Ackman</div><div class="inv-style">集中/催化剂/激进主义</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:50%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">50%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[业务简单性]</strong> 核心工业气体±30%精度可预测；清洁氢项目结果不确定性较高，约±50%范围</li>
+            <li><strong>[压力测试]</strong> 营收-30%→~$8.4B，调整营业利润~$1.5B，减利息$800M，税后几乎归零；加上$4B CapEx，净现金$1B撑约2-3个季度——财务脆弱</li>
+            <li><strong>[护城河10年]</strong> 工业气体护城河20+年持久；绿氢成本竞争加剧是主要威胁，概率30-40%/10年内</li>
+            <li><strong>[催化剂]</strong> ①路易斯安那FID（2026中，+5-10%股价）②NEOM商业化（2027，+15-20%）③FCF转正（2027+，+10-15%）</li>
+            <li><strong>[5年IRR]</strong> $294→5年目标$360（25x×$14.40 FY2028E EPS）= 年化4.1%；偏低，资本机会成本不足</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Wood -->
+      <tr class="row-bear">
+        <td><div class="inv-name">Cathie Wood</div><div class="inv-style">颠覆性创新/5年指数增长</div></td>
+        <td><span class="signal-chip chip-bear">BEARISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:60%;background:var(--accent-red)"></div></div>
+          <div class="conf-label">60%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[颠覆性 4/10]</strong> 清洁氢能平台(+2) | 成本降低潜力但非10x(+1) | 网络效应弱(+0) | TAM≥$100B但非市值10x(+1) | 无Wright定律验证(+0) → 4/10</li>
+            <li><strong>[2028E估值]</strong> FY2028E营收~$13B × P/S 4x = 目标市值$52B，目标股价$234 → 较当前-21%</li>
+            <li><strong>[市场偏差]</strong> 传统分析师使用工业周期PE框架，低估氢能长期TAM扩张；但APD是传统执行者，非真正颠覆者</li>
+            <li><strong>[结论]</strong> APD是工业基础设施公司，非颠覆性平台；以Wood框架无法支撑当前估值</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Soros -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">George Soros</div><div class="inv-style">反身性/泡沫/不对称赔率</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:45%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">45%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[反身性]</strong> 正向循环：清洁氢叙事→溢价估值→融资容易→项目推进→强化叙事；当前循环处于"成熟期"，NEOM即将验证</li>
+            <li><strong>[泡沫阶段]</strong> "加速期"后段：估值较历史偏高，YTD+18%，MACD转正；情绪乐观但未过热</li>
+            <li><strong>[主流叙事错误]</strong> 市场高估NEOM对2027年后EPS的贡献（NEOM脱并后APD仅保留权益法收益，非并表）</li>
+            <li><strong>[赔率]</strong> 上行(35%概率)目标$380(+29%) | 下行(30%概率)目标$200(-32%) | 期望值: 0.35×29% - 0.30×32% = -(-0.35%) ≈ 0.55:1（略负期望）</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Druckenmiller -->
+      <tr class="row-bull">
+        <td><div class="inv-name">S. Druckenmiller</div><div class="inv-style">趋势/宏观/重仓高置信度</div></td>
+        <td><span class="signal-chip chip-bull">BULLISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:60%;background:var(--accent-green)"></div></div>
+          <div class="conf-label">60%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[技术面]</strong> 200日均线$273.81，当前$294（偏离+7.4%）；RSI估算~58（中性偏多）；MACD 2026年2月转正；支撑$274/阻力$301</li>
+            <li><strong>[盈利动量]</strong> Q1 FY2026 EPS $3.16超预期+2.6%；Q2指引$2.95-$3.10（中点+12.5% YoY）；分析师整体上调趋势</li>
+            <li><strong>[流动性环境]</strong> 若美联储2026年降息，低利率有利APD（降低再融资成本，偏向成长股）；当前利率环境适中</li>
+            <li><strong>[止损]</strong> 买入$294，破200MA $273 触发止损（-7.1%）；关键支撑失效则立即退出</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Dalio -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">Ray Dalio</div><div class="inv-style">全天候/债务周期/风险平价</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:50%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">50%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[四象限]</strong> 当前：低增长+中等通胀环境；APD在此象限（工业类）表现中性偏弱；高增长环境下表现最佳</li>
+            <li><strong>[债务安全]</strong> 净债务$17.1B，D/E 1.02；处于去杠杆过渡期；行业债务周期中段，有压力</li>
+            <li><strong>[多元化]</strong> Beta 0.81，与大盘相关性中等；工业/能源配置价值；全天候组合建议权重~2-3%</li>
+            <li><strong>[去杠杆压测]</strong> 信用收缩10%：再融资成本+50bps = 利息+$90M/yr = EPS -$0.30/股（-2.3%影响）；可承受</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Tepper -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">David Tepper</div><div class="inv-style">极度悲观抄底/宏观逆转</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:50%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">50%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[折价幅度]</strong> Forward PE 22.1x处于历史约65%分位（历史均值~19x），vs均值溢价+16%；非折价状态</li>
+            <li><strong>[催化剂]</strong> Q2 FY2026财报4月30日（+2周）；路易斯安那FID中2026（高概率，+5-8%潜力）；FCF转正2027（+10-15%潜力）</li>
+            <li><strong>[宏观尾风]</strong> 若能源价格下降，降低运营成本；降息周期有利于降低$18B债务利息负担</li>
+            <li><strong>[泰珀评分]</strong> "合理估值"水平——不够便宜到抄底，但有催化剂驱动潜力</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Burry -->
+      <tr class="row-bear">
+        <td><div class="inv-name">Michael Burry</div><div class="inv-style">深度价值/逆向/财报挖掘</div></td>
+        <td><span class="signal-chip chip-bear">BEARISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:65%;background:var(--accent-red)"></div></div>
+          <div class="conf-label">65%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[NCAV]</strong> 流动资产估~$5.5B - 总负债$23.4B = NCAV总额 -$17.9B，NCAV/股 -$80.4 vs 当前$294.78 → 无NCAV支撑</li>
+            <li><strong>[EV/FCF]</strong> EV $82.8B ÷ TTM FCF -$3.77B = 负值（无法计算）；用调整EBIT $2.9B → EV/EBIT = 28.6x（贵）</li>
+            <li><strong>[逆向情绪]</strong> 空头1.96%（极低，无反向信号）；分析师14买/10持/0卖（全面看涨=反向信号！）；机构93%（过度拥挤）</li>
+            <li><strong>[隐藏价值]</strong> NEOM项目完工后脱并，届时APD仅保留权益法收益而非全额并表 → 市场可能高估了NEOM对总营收的贡献</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Paulson -->
+      <tr class="row-neutral">
+        <td><div class="inv-name">John Paulson</div><div class="inv-style">事件驱动/并购/分拆套利</div></td>
+        <td><span class="signal-chip chip-neutral">NEUTRAL</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:45%;background:var(--accent-yellow)"></div></div>
+          <div class="conf-label">45%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[并购概率]</strong> 以$65.6B市值被收购概率低（Linde $220B也难吞）；潜在被Air Liquide收购可能性极低；并购溢价预期~20%=$354/股</li>
+            <li><strong>[分拆价值]</strong> 核心工业气体（$12B营收×2.5倍PS=$30B）+清洁氢项目（按投资价值$15-20B）= SoP $45-50B vs 市值$65.6B → 折价约25%，略贵</li>
+            <li><strong>[催化剂清单]</strong> 路易斯安那FID|60%|2026中|+5-8% | NEOM商业化|85%|2027|+10-15% | FCF正转|70%|2027|+8-12%</li>
+            <li><strong>[管理层]</strong> 新CEO Eduardo Meneghini（原COO升任）2025年上任，专注价值释放；方向正确但需时间验证</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Klarman -->
+      <tr class="row-bear">
+        <td><div class="inv-name">Seth Klarman</div><div class="inv-style">绝对安全边际/本金保护</div></td>
+        <td><span class="signal-chip chip-bear">BEARISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:65%;background:var(--accent-red)"></div></div>
+          <div class="conf-label">65%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[保守内在价值 ~$150]</strong> 假设营收增速3%，调整利润率23%，PE降至18x → 保守价值约$150/股；当前$294.78折价 -49%（严重不足30%安全边际）</li>
+            <li><strong>[最大本金损失]</strong> 若项目延期+债务压力：股价潜在下跌至$170-200，亏损-33%至-42%，超过30%可接受上限</li>
+            <li><strong>[复杂性折价]</strong> 分析师覆盖约24家，高覆盖；机构93%持仓密度极高；无"被忽视"溢价，无折价可利用</li>
+            <li><strong>[无催化剂]</strong> 仅靠均值回归（PE回到18x）需股价降至$237才合理；从当前$295均值回归年化回报为负</li>
+          </ul>
+        </td>
+      </tr>
+      <!-- Technical -->
+      <tr class="row-bull">
+        <td><div class="inv-name">技术+情绪面</div><div class="inv-style">价格行为/资金流/情绪</div></td>
+        <td><span class="signal-chip chip-bull">BULLISH</span></td>
+        <td>
+          <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:65%;background:var(--accent-green)"></div></div>
+          <div class="conf-label">65%</div>
+        </td>
+        <td>
+          <ul class="inv-points">
+            <li><strong>[技术]</strong> 200MA $273.81，当前$294.78（偏离+7.7%）；MACD 2026年2月转正；YTD +18.1%；1月超50MA看涨信号</li>
+            <li><strong>[趋势]</strong> 52周区间$229→$301，处于区间高位；支撑$274（200MA）/ 阻力$301（52周高）；技术结构健康</li>
+            <li><strong>[情绪]</strong> 空头1.96%（极低）；机构持仓92.9%（高度持仓）；内部人近期主要为股权授予，无大额净减持</li>
+            <li><strong>[分析师]</strong> 14买入/10持有/0卖出；目标价均值$307.75（上行+4.4%）；共识温和看涨</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 10. SIGNAL DISTRIBUTION -->
+<section>
+  <h2 class="section-title">信号分布与统计摘要</h2>
+  <div class="signal-summary">
+    <div>
+      <canvas id="signalDonut" height="260"></canvas>
+    </div>
+    <div class="signal-stats">
+      <div class="stat-row">
+        <div class="stat-label">信号分布</div>
+        <div class="stat-value">看涨 3 &nbsp;/&nbsp; 中性 8 &nbsp;/&nbsp; 看跌 5</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">平均置信度</div>
+        <div class="stat-value" style="color:var(--accent-yellow)">57%</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">最高置信度</div>
+        <div class="stat-value" style="color:var(--accent-red)">格雷厄姆 70%（看跌）</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">多空分歧最大维度</div>
+        <div class="stat-value" style="font-size:14px">估值（溢价115% vs 强护城河）</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">共识核心观点</div>
+        <div class="stat-value" style="font-size:13px">好公司，当前定价无安全边际</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. THREE-FRAMEWORK VALUATION -->
+<section>
+  <h2 class="section-title">三框架价值估值面板</h2>
+  <div class="valuation-grid">
+    <!-- Graham column -->
+    <div class="val-col">
+      <h3>格雷厄姆框架</h3>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">量化纪律 · 严格清单 · 安全边际</div>
+      <div class="checklist-item"><span class="ci-label">P/E ≤ 15x</span><span class="ci-val ci-fail">✗ 22.1x</span></div>
+      <div class="checklist-item"><span class="ci-label">P/B ≤ 1.5x</span><span class="ci-val ci-fail">✗ 4.26x</span></div>
+      <div class="checklist-item"><span class="ci-label">P/E × P/B ≤ 22.5</span><span class="ci-val ci-fail">✗ 94.1</span></div>
+      <div class="checklist-item"><span class="ci-label">流动比率 ≥ 2x</span><span class="ci-val ci-fail">✗ 1.46x</span></div>
+      <div class="checklist-item"><span class="ci-label">负债/权益 ≤ 1x</span><span class="ci-val ci-partial">~ 1.02x</span></div>
+      <div class="checklist-item"><span class="ci-label">EPS 5年连续正</span><span class="ci-val ci-fail">✗ FY25亏损</span></div>
+      <div class="checklist-item"><span class="ci-label">3年盈利增长≥30%</span><span class="ci-val ci-fail">✗ +8.5%</span></div>
+      <div style="text-align:right;font-size:12px;color:var(--accent-red);font-weight:700;margin-top:6px;">通过 0-1 / 7</div>
+      <div class="val-highlight">
+        <div class="vh-label">Graham 数</div>
+        <div class="vh-value">$136.8</div>
+        <div class="vh-sub">当前$294.78 &nbsp;|&nbsp; 溢价 +115%</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="dcf-bar-label"><span>保守DCF</span><span class="text-red">$110</span></div>
+        <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:37%;background:var(--accent-red)"></div></div>
+        <div class="dcf-bar-label" style="margin-top:8px;"><span>中性DCF</span><span class="text-yellow">$195</span></div>
+        <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:66%;background:var(--accent-yellow)"></div></div>
+        <div class="dcf-bar-label" style="margin-top:8px;"><span>乐观DCF</span><span class="text-green">$320</span></div>
+        <div class="dcf-bar-track"><div class="dcf-bar-fill" style="width:100%;background:var(--accent-green)"></div></div>
+      </div>
+    </div>
+    <!-- Buffett column -->
+    <div class="val-col">
+      <h3>巴菲特框架</h3>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">护城河质量 · 管理层 · 公允价值</div>
+      <canvas id="moatRadar" height="220"></canvas>
+      <div class="val-highlight">
+        <div class="vh-label">护城河综合内在价值区间</div>
+        <div class="vh-value">$165 — $240</div>
+        <div class="vh-sub">基于护城河溢价DCF；当前$294.78 超出上限</div>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="checklist-item"><span class="ci-label">ROE &gt; 15%</span><span class="ci-val ci-partial">~ 15% (调整)</span></div>
+        <div class="checklist-item"><span class="ci-label">营业利润率 &gt; 15%</span><span class="ci-val ci-pass">✓ 24.4%</span></div>
+        <div class="checklist-item"><span class="ci-label">D/E &lt; 0.5</span><span class="ci-val ci-fail">✗ 1.02</span></div>
+        <div class="checklist-item"><span class="ci-label">安全边际 &gt; 0%</span><span class="ci-val ci-fail">✗ -25%</span></div>
+      </div>
+    </div>
+    <!-- Marks column -->
+    <div class="val-col">
+      <h3>马克斯框架</h3>
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">周期定位 · 估值分位 · 情景分析</div>
+      <div style="text-align:center;padding:14px;background:var(--bg-secondary);border-radius:8px;margin-bottom:14px;">
+        <div style="font-size:11px;text-transform:uppercase;color:var(--text-secondary);">估值历史分位</div>
+        <div style="font-size:36px;font-weight:800;color:var(--accent-yellow);">65%</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Forward PE 22.1x（历史均值~19x）</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--bg-secondary);border-radius:8px;margin-bottom:14px;">
+        <span style="display:inline-block;padding:6px 16px;border-radius:20px;font-weight:700;font-size:14px;background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);">成长期后段 → 峰顶转折</span>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">CapEx/营收33%（历史极高），即将峰顶；情绪乐观；估值上沿</div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>情景</th><th>概率</th><th>12M目标</th><th>回报</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--accent-green)">牛市</td><td>30%</td><td>$360</td><td class="text-green">+22%</td></tr>
+          <tr><td>基准</td><td>45%</td><td>$305</td><td class="text-yellow">+3.5%</td></tr>
+          <tr><td style="color:var(--accent-red)">熊市</td><td>25%</td><td>$220</td><td class="text-red">-25%</td></tr>
+        </tbody>
+      </table>
+      <div class="val-highlight" style="margin-top:14px;">
+        <div class="vh-label">期望值（加权）</div>
+        <div class="vh-value" style="color:var(--accent-yellow)">$296.5</div>
+        <div class="vh-sub">较当前基本持平；风险/回报不对称不足</div>
+      </div>
+    </div>
+  </div>
+  <!-- Synthesis -->
+  <div style="margin-top:20px;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:8px;">三框架综合结论</div>
+        <p style="font-size:13px;color:var(--text-secondary);">三框架一致指向：APD是卓越的工业基础设施企业，但当前股价$294.78显著高于格雷厄姆安全边际（$136），超出巴菲特公允价值上限（$240），处于马克斯周期65%分位。唯有乐观DCF（$320）提供轻微上行空间。</p>
+      </div>
+      <div style="text-align:center;padding:20px;background:var(--bg-secondary);border-radius:10px;">
+        <div style="font-size:12px;text-transform:uppercase;color:var(--text-secondary);">理想买入区间</div>
+        <div style="font-size:32px;font-weight:900;color:var(--accent-green);margin:8px 0;">$220 — $250</div>
+        <div style="font-size:12px;color:var(--text-secondary);">对应约20-25x Forward PE；提供足够安全边际</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. RISK MATRIX -->
+<section>
+  <h2 class="section-title">风险矩阵</h2>
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-name">大型项目延期/超支</div>
+      <div class="risk-tags"><span class="risk-tag prob-med">概率：中</span><span class="risk-tag prob-high">影响：高</span></div>
+      <div class="risk-desc">NEOM（>$10B）或路易斯安那（$8-9B）项目延期或显著超支，历史已有先例（前任CEO时代多次推迟）</div>
+      <div class="risk-impact">股价预估影响：-20% 至 -35%</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">触发：宣布推迟超过12个月或成本超支超过$20亿</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-name">利率上升/再融资风险</div>
+      <div class="risk-tags"><span class="risk-tag prob-med">概率：中</span><span class="risk-tag prob-med">影响：中</span></div>
+      <div class="risk-desc">净债务$17.1B，若利率上升100bps，再融资成本增加约$170M/年，EPS影响-$0.57（约-4.4%）</div>
+      <div class="risk-impact">股价预估影响：-8% 至 -15%</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">触发：10年期美债收益率突破5%，信用利差扩大</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-name">氢能商业化不及预期</div>
+      <div class="risk-tags"><span class="risk-tag prob-med">概率：中高</span><span class="risk-tag prob-high">影响：高</span></div>
+      <div class="risk-desc">绿/蓝氢在2030年前无法达到经济平价，NEOM氨出口价格低于预期，ROI受损；清洁能源政策支持减弱</div>
+      <div class="risk-impact">股价预估影响：-25% 至 -40%</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">触发：绿氢成本未能降至$2/kg，政府补贴削减</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-name">竞争加剧/市场份额</div>
+      <div class="risk-tags"><span class="risk-tag prob-low">概率：低</span><span class="risk-tag prob-med">影响：中</span></div>
+      <div class="risk-desc">Linde/Air Liquide在核心工业气体市场持续侵蚀APD份额；中国竞争者在亚洲低价竞争</div>
+      <div class="risk-impact">股价预估影响：-10% 至 -15%</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">触发：连续2+季度核心业务量下滑超5%</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-name">估值收缩风险</div>
+      <div class="risk-tags"><span class="risk-tag prob-med">概率：中高</span><span class="risk-tag prob-med">影响：中高</span></div>
+      <div class="risk-desc">当前Forward PE 22.1x处于历史65%分位；若市场利率维持高位或增长不及预期，PE从22x回到18x导致股价下调</div>
+      <div class="risk-impact">股价预估影响：-18% 至 -22%</div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:6px;">触发：EPS指引下调 或 整体市场回调</div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. FINAL DECISION -->
+<section>
+  <h2 class="section-title">组合经理最终决策</h2>
+  <div class="final-panel">
+    <div class="final-signal-big" style="color:var(--accent-yellow);">HOLD</div>
+    <div class="final-grid">
+      <div class="final-item">
+        <div class="fi-label">建议仓位</div>
+        <div class="fi-value" style="color:var(--accent-yellow)">0%</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">3涨/8中/5跌，低于建仓门槛</div>
+      </div>
+      <div class="final-item">
+        <div class="fi-label">12月目标价区间</div>
+        <div class="fi-value" style="color:var(--text-primary)">$295–$325</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">上行受限，下行风险较大</div>
+      </div>
+      <div class="final-item">
+        <div class="fi-label">止损价</div>
+        <div class="fi-value" style="color:var(--accent-red)">$256</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">-13.2%；跌破200MA区域</div>
+      </div>
+      <div class="final-item">
+        <div class="fi-label">信号比例</div>
+        <div class="fi-value" style="color:var(--text-primary)">3/8/5</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">涨/中性/跌 | 平均置信度57%</div>
+      </div>
+    </div>
+    <div class="reasons-grid">
+      <div class="bull-reasons">
+        <div class="reasons-title" style="color:var(--accent-green)">多头核心理由</div>
+        <div class="reason-item"><span class="reason-num" style="color:var(--accent-green)">1.</span><span>全球最大氢气供应商+49%收入20年锁定合同：take-or-pay结构形成极强稳定现金流护城河（18/25护城河评分）</span></div>
+        <div class="reason-item"><span class="reason-num" style="color:var(--accent-green)">2.</span><span>战略重置进行中：剥离$36亿低ROI项目，Q1 FY2026调整营业利润率24.4%（+140bps），FY2026 EPS指引+7-9%至$13.00中点，盈利复苏动能明确</span></div>
+        <div class="reason-item"><span class="reason-num" style="color:var(--accent-green)">3.</span><span>NEOM（>90%完工）+ 路易斯安那FID（2026中）两大催化剂临近：成功落地将验证清洁氢能商业逻辑，重估价值潜力+15-25%</span></div>
+      </div>
+      <div class="bear-reasons">
+        <div class="reasons-title" style="color:var(--accent-red)">主要风险</div>
+        <div class="reason-item"><span class="reason-num" style="color:var(--accent-red)">1.</span><span>估值无安全边际：Graham数$136.8（溢价115%），保守DCF仅$110，当前$294.78对应Forward PE 22.1x（历史65%分位）；若EPS增长不及预期，估值收缩空间-20%至-35%</span></div>
+        <div class="reason-item"><span class="reason-num" style="color:var(--accent-red)">2.</span><span>财务脆弱：净债务$17.1B（D/E 1.02）、FCF持续为负（FY25: -$3.77B）、CapEx $4B/年；若氢能项目延期，负债增加+利率上升的组合将显著损害业绩</span></div>
+      </div>
+    </div>
+    <div style="margin-top:24px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px;">建仓策略（仅供持有者参考）</div>
+      <div class="strategy-steps">
+        <div class="strat-step">
+          <div class="step-num">当前状态</div>
+          <div class="step-val">观望</div>
+          <div class="step-desc">不建议当前$294新建仓位，安全边际不足</div>
+        </div>
+        <div class="strat-step">
+          <div class="step-num">首次观察点</div>
+          <div class="step-val">$265–$270</div>
+          <div class="step-desc">接近200MA，估值回落至19x FWD PE，可考虑观察仓3%</div>
+        </div>
+        <div class="strat-step">
+          <div class="step-num">理想买入区</div>
+          <div class="step-val">$220–$250</div>
+          <div class="step-desc">15-16x FWD PE，提供30%+安全边际，可建仓至6-8%</div>
+        </div>
+        <div class="strat-step">
+          <div class="step-num">止损线</div>
+          <div class="step-val">$256</div>
+          <div class="step-desc">若持有则在此无条件退出（-13%，跌破技术支撑）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRE-ANALYSIS SUMMARY -->
+<section>
+  <h2 class="section-title">Phase 0.5 预分析：财务趋势 + 三框架速算</h2>
+  <div class="preanalysis-grid">
+    <div class="chart-container">
+      <div class="chart-title">财务健康评分（逐项0-2分，满分10分）</div>
+      <table class="data-table">
+        <thead><tr><th>维度</th><th>标准</th><th>实际值</th><th>得分</th></tr></thead>
+        <tbody>
+          <tr><td>营收增速</td><td>&gt;30%=2, 10-30%=1, &lt;10%=0</td><td>-0.5% (FY25) / +6% (Q1F26)</td><td class="text-red">0</td></tr>
+          <tr><td>毛利率趋势</td><td>扩张=2, 稳定=1, 收缩=0</td><td>32.5%→31.4% (轻微收缩)</td><td class="text-yellow">1</td></tr>
+          <tr><td>FCF转化率</td><td>&gt;80%=2, 50-80%=1, &lt;50%=0</td><td>FY25 FCF= -$3.77B（负值）</td><td class="text-red">0</td></tr>
+          <tr><td>资产负债质量</td><td>净现金=2, 轻债=1, 重债=0</td><td>净债务$17.1B（重债）</td><td class="text-red">0</td></tr>
+          <tr><td>ROE水平</td><td>&gt;20%=2, 10-20%=1, &lt;10%=0</td><td>调整约15%（GAAP负值）</td><td class="text-yellow">1</td></tr>
+          <tr><td colspan="3" style="text-align:right;font-weight:700;">财务健康总分（含重投资期背景）</td><td class="text-yellow"><strong>2/10</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="disclaimer" style="margin-top:8px;">注：2/10 主要反映当前重型CapEx投资期的财务状态，而非业务基本面质量。调整后营业利润$2.9B显示核心业务仍具盈利能力。</div>
+    </div>
+    <div class="chart-container">
+      <div class="chart-title">三框架估值速算</div>
+      <table class="data-table">
+        <thead><tr><th>框架</th><th>计算</th><th>估值</th><th>vs 当前价</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>格雷厄姆数</td>
+            <td>√(22.5×$12.03×$69.15)</td>
+            <td class="text-red">$136.8</td>
+            <td class="text-red">-53.6%</td>
+          </tr>
+          <tr>
+            <td>DCF 保守</td>
+            <td>FCF $1.5B, 增速5%/8%, 折现10%</td>
+            <td class="text-red">$110</td>
+            <td class="text-red">-62.7%</td>
+          </tr>
+          <tr>
+            <td>DCF 中性</td>
+            <td>FCF $2.5B, 增速8%/12%, 折现10%</td>
+            <td class="text-yellow">$195</td>
+            <td class="text-yellow">-33.8%</td>
+          </tr>
+          <tr>
+            <td>DCF 乐观</td>
+            <td>FCF $3.5B, 增速12%/15%, 折现9%</td>
+            <td class="text-green">$320</td>
+            <td class="text-green">+8.6%</td>
+          </tr>
+          <tr>
+            <td>DCF 加权 (30/45/25)</td>
+            <td>0.30×$110+0.45×$195+0.25×$320</td>
+            <td class="text-yellow">$200</td>
+            <td class="text-red">-32.2%</td>
+          </tr>
+          <tr>
+            <td>PEG比率</td>
+            <td>Forward PE 22.1 ÷ EPS增速8.1%</td>
+            <td class="text-red">2.73</td>
+            <td class="text-red">&gt;2.0 高估</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 14. SOURCES -->
+<section>
+  <div class="sources-section">
+    <h2 class="section-title" style="border:none;margin-bottom:12px;">数据来源与免责声明</h2>
+    <div style="font-size:12px;color:var(--text-secondary);column-count:2;column-gap:24px;">
+      <p>• Air Products Official Press Release: Q1 FY2026 Results (Jan 30, 2026)</p>
+      <p>• Air Products FY2025 Full-Year Results (Nov 6, 2025)</p>
+      <p>• StockAnalysis.com — APD Financials, Statistics, Balance Sheet</p>
+      <p>• GuruFocus — ROIC, PE, Ownership data</p>
+      <p>• MarketBeat / TipRanks — Analyst Ratings & Price Targets</p>
+      <p>• AlphaSpread — ROIC, Intrinsic Value</p>
+      <p>• MacroTrends — Historical Revenue, PE Ratio trends</p>
+      <p>• Fintel.io — Institutional Ownership Data</p>
+      <p>• BeyondSPX / Seeking Alpha — Strategic Analysis</p>
+      <p>• Artificall.com — Linde vs APD Comparison</p>
+      <p>• Technavio — Industrial Gases Market Report</p>
+      <p>• BizModelMastery — Contract Structure Analysis</p>
+    </div>
+    <div class="disclaimer">
+      <strong>免责声明：</strong>本报告由 AI 系统基于公开信息于 2026-04-22 生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。所有数据来自公开渠道，可能存在偏差或滞后。过去业绩不代表未来表现。投资决策前请咨询专业财务顾问。本报告由 Claude AI（Anthropic）生成，不对投资损益承担责任。
+    </div>
+    <div style="font-size:11px;color:var(--text-secondary);margin-top:10px;">分析时间戳：2026-04-22 | 报告版本：v1.0 | 覆盖范围：16位传奇投资者框架 + 三估值框架 + 五维护城河</div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<script>
+// Revenue Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+new Chart(revenueCtx, {
+  type: 'bar',
+  data: {
+    labels: ['FY2021','FY2022','FY2023','FY2024','FY2025','Q1 FY26'],
+    datasets: [
+      {
+        label: '营收 (亿美元)',
+        data: [103.2, 127.0, 126.0, 121.0, 120.4, 31.0],
+        backgroundColor: 'rgba(59,130,246,0.6)',
+        borderColor: '#3b82f6',
+        borderWidth: 1,
+        order: 2,
+        yAxisID: 'y'
+      },
+      {
+        label: 'YoY 增速 (%)',
+        data: [null, 23.0, -0.8, -4.0, -0.5, 6.0],
+        type: 'line',
+        borderColor: '#00d4aa',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 5,
+        order: 1,
+        yAxisID: 'y1'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { position: 'left', grid: { color: '#243048' }, ticks: { color: '#8892a4' } },
+      y1: { position: 'right', grid: { display: false }, ticks: { color: '#00d4aa' } },
+      x: { ticks: { color: '#8892a4' }, grid: { color: '#243048' } }
+    },
+    plugins: { legend: { labels: { color: '#8892a4' } } }
+  }
+});
+
+// Margin Chart
+const marginCtx = document.getElementById('marginChart').getContext('2d');
+new Chart(marginCtx, {
+  type: 'line',
+  data: {
+    labels: ['FY2021','FY2022','FY2023','FY2024','FY2025'],
+    datasets: [
+      { label: '毛利率', data: [30.4, 26.5, 29.9, 32.5, 31.4], borderColor: '#00d4aa', backgroundColor: 'rgba(0,212,170,0.1)', fill: true, tension: 0.3 },
+      { label: '调整营业利润率', data: [22.1, 18.4, 19.8, 24.1, 24.4], borderColor: '#f59e0b', backgroundColor: 'transparent', tension: 0.3 }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { ticks: { color: '#8892a4', callback: v => v+'%' }, grid: { color: '#243048' } },
+      x: { ticks: { color: '#8892a4' }, grid: { color: '#243048' } }
+    },
+    plugins: { legend: { labels: { color: '#8892a4' } } }
+  }
+});
+
+// FCF Chart
+const fcfCtx = document.getElementById('fcfChart').getContext('2d');
+new Chart(fcfCtx, {
+  type: 'bar',
+  data: {
+    labels: ['FY2021','FY2022','FY2023','FY2024','FY2025'],
+    datasets: [{
+      label: '自由现金流 (亿美元)',
+      data: [8.7, 2.4, -14.2, -31.5, -37.7],
+      backgroundColor: (ctx) => ctx.raw >= 0 ? 'rgba(0,212,170,0.7)' : 'rgba(239,68,68,0.7)',
+      borderColor: (ctx) => ctx.raw >= 0 ? '#00d4aa' : '#ef4444',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { ticks: { color: '#8892a4' }, grid: { color: '#243048' } },
+      x: { ticks: { color: '#8892a4' }, grid: { color: '#243048' } }
+    },
+    plugins: { legend: { labels: { color: '#8892a4' } } }
+  }
+});
+
+// Segment Chart
+const segCtx = document.getElementById('segmentChart').getContext('2d');
+new Chart(segCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Americas', 'Asia', 'Europe', 'ME&India+Corp'],
+    datasets: [{
+      data: [1341.7, 831.5, 782.0, 147.3],
+      backgroundColor: ['#3b82f6','#00d4aa','#f59e0b','#8b5cf6'],
+      borderColor: '#0a0e1a',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8892a4' }, position: 'right' },
+      tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: $${ctx.raw}M` } }
+    }
+  }
+});
+
+// Market Share Chart
+const msCtx = document.getElementById('marketShareChart').getContext('2d');
+new Chart(msCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Linde', 'Air Liquide', 'Air Products', 'Others'],
+    datasets: [{
+      data: [59, 18, 8, 15],
+      backgroundColor: ['#3b82f6','#00d4aa','#f59e0b','#374151'],
+      borderColor: '#0a0e1a',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8892a4' }, position: 'right' },
+      tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ~${ctx.raw}%` } }
+    }
+  }
+});
+
+// Signal Donut
+const sdCtx = document.getElementById('signalDonut').getContext('2d');
+new Chart(sdCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['看涨 (3)', '中性 (8)', '看跌 (5)'],
+    datasets: [{
+      data: [3, 8, 5],
+      backgroundColor: ['rgba(0,212,170,0.8)','rgba(245,158,11,0.8)','rgba(239,68,68,0.8)'],
+      borderColor: '#0a0e1a',
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '65%',
+    plugins: {
+      legend: { labels: { color: '#e8eaf0', font: { size: 13 } } }
+    }
+  }
+});
+
+// Moat Radar
+const mrCtx = document.getElementById('moatRadar').getContext('2d');
+new Chart(mrCtx, {
+  type: 'radar',
+  data: {
+    labels: ['技术/IP', '转换成本', '网络效应', '成本优势', '品牌定价权'],
+    datasets: [{
+      label: 'APD 护城河',
+      data: [3, 5, 2, 4, 4],
+      borderColor: '#00d4aa',
+      backgroundColor: 'rgba(0,212,170,0.15)',
+      pointBackgroundColor: '#00d4aa',
+      borderWidth: 2
+    }, {
+      label: '满分参考',
+      data: [5, 5, 5, 5, 5],
+      borderColor: 'rgba(255,255,255,0.1)',
+      backgroundColor: 'transparent',
+      borderDash: [3,3],
+      pointRadius: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 5,
+        ticks: { color: '#8892a4', stepSize: 1, backdropColor: 'transparent' },
+        grid: { color: '#243048' },
+        pointLabels: { color: '#8892a4', font: { size: 11 } }
+      }
+    },
+    plugins: { legend: { labels: { color: '#8892a4', font: { size: 11 } } } }
+  }
+});
+</script>
+</body>
+</html>
