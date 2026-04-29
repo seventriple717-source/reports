@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>机器人产业链全景研究</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070c19;
+      --bg2: #0d1526;
+      --bg3: #131f35;
+      --panel: rgba(19,31,53,.72);
+      --panel2: rgba(255,255,255,.035);
+      --border: rgba(255,255,255,.075);
+      --border2: rgba(148,163,184,.18);
+      --text: #e8eef7;
+      --text2: #a8bdd4;
+      --text3: #6e8eac;
+      --blue: #60a5fa;
+      --violet: #a78bfa;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --cyan: #22d3ee;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(96,165,250,.055), transparent 320px),
+        linear-gradient(135deg, rgba(52,211,153,.035), transparent 520px),
+        var(--bg);
+      color: var(--text);
+      font: 12px/1.55 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.75) 36%, transparent 86%);
+    }
+
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { color: #bfdbfe; text-decoration: underline; }
+
+    .page {
+      width: min(1700px, calc(100vw - 44px));
+      margin: 0 auto;
+      padding: 28px 0 52px;
+      position: relative;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 0 0 18px;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+    }
+
+    .eyebrow {
+      color: var(--text3);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+    }
+
+    .source-label {
+      margin-top: 5px;
+      color: rgba(168,189,212,.72);
+      font-size: 9px;
+      line-height: 1.35;
+      letter-spacing: .2px;
+      text-transform: none;
+    }
+
+    .source-label::before {
+      content: "依据：";
+      color: rgba(52,211,153,.82);
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 6px 0 8px;
+      font-size: 28px;
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: 6px;
+      background: linear-gradient(130deg, var(--blue), var(--violet) 48%, var(--green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      margin: 0 0 15px;
+      color: var(--text2);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 7px;
+      font-size: 12px;
+      letter-spacing: .5px;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      margin: 0 auto 14px;
+      color: var(--text2);
+      font-size: 12px;
+    }
+
+    .thesis-grid, .kpi-grid, .chain-grid, .value-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .thesis-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 14px;
+    }
+
+    .kpi-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 12px;
+    }
+
+    .chain-grid {
+      display: flex;
+      gap: 0;
+      min-width: 1500px;
+      align-items: stretch;
+    }
+
+    .value-grid { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+
+    .card, .kpi, .theme, .section {
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: 8px;
+    }
+
+    .card {
+      padding: 11px 13px;
+      color: #cbd5e1;
+      text-align: left;
+    }
+
+    .kpi {
+      padding: 10px 12px;
+      background: rgba(37,99,235,.07);
+      border-color: rgba(96,165,250,.20);
+      text-align: left;
+    }
+
+    .section {
+      padding: 18px 22px;
+      margin-top: 22px;
+      background: rgba(255,255,255,.025);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #chain-map {
+      overflow-x: auto;
+      padding: 0 0 10px;
+      border: 0;
+      background: transparent;
+    }
+
+    .kpi strong {
+      display: block;
+      margin: 2px 0 1px;
+      font-size: 20px;
+      line-height: 1.15;
+      color: #f8fafc;
+    }
+
+    .kpi span, .muted {
+      color: var(--text3);
+      font-size: 10px;
+    }
+
+    .tier {
+      flex: 1;
+      min-width: 285px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(19,31,53,.76);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tier + .tier {
+      margin-left: 34px;
+    }
+
+    .tier + .tier::before {
+      content: "→";
+      position: absolute;
+      left: -28px;
+      top: 58px;
+      color: rgba(148,163,184,.55);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .tier:nth-child(1) { --accent: #60a5fa; --accent-soft: rgba(96,165,250,.12); }
+    .tier:nth-child(2) { --accent: #34d399; --accent-soft: rgba(52,211,153,.12); }
+    .tier:nth-child(3) { --accent: #22d3ee; --accent-soft: rgba(34,211,238,.11); }
+    .tier:nth-child(4) { --accent: #a78bfa; --accent-soft: rgba(167,139,250,.11); }
+    .tier:nth-child(5) { --accent: #fbbf24; --accent-soft: rgba(251,191,36,.11); }
+
+    .tier-head {
+      height: 58px;
+      padding: 9px 13px;
+      background: var(--accent-soft);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tier-head h3 {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .tier-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--text3);
+      font-size: 9.5px;
+    }
+
+    .company-list {
+      display: grid;
+      gap: 7px;
+      padding: 10px 9px 12px;
+    }
+
+    .company {
+      border: 1px solid rgba(255,255,255,.07);
+      border-left: 3px solid var(--accent);
+      background: rgba(255,255,255,.035);
+      border-radius: 0 6px 6px 0;
+      padding: 7px 9px;
+      transition: background .16s ease, transform .16s ease, box-shadow .16s ease;
+    }
+
+    .company:hover {
+      background: rgba(255,255,255,.068);
+      transform: translateX(3px);
+      box-shadow: -4px 0 16px rgba(0,0,0,.24);
+    }
+
+    .company-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 7px;
+    }
+
+    .company-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .report-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 20px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(96,165,250,.28);
+      background: rgba(96,165,250,.10);
+      color: #93c5fd;
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .report-btn.valuation {
+      border-color: rgba(52,211,153,.28);
+      background: rgba(52,211,153,.10);
+      color: #6ee7b7;
+    }
+
+    .report-btn.pending {
+      border-color: rgba(148,163,184,.14);
+      background: rgba(148,163,184,.055);
+      color: rgba(148,163,184,.58);
+      cursor: default;
+    }
+
+    .ticker {
+      color: #f8fafc;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: .5px;
+    }
+
+    .pill, .priority, .grade {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 18px;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 9px;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,.16);
+      white-space: nowrap;
+      color: var(--text2);
+      background: rgba(255,255,255,.045);
+    }
+
+    .priority.P0, .grade.A { color: #052e18; background: #34d399; border-color: #34d399; }
+    .priority.P1, .grade.B { color: #271400; background: #fbbf24; border-color: #fbbf24; }
+    .priority.P2, .grade.C { color: #dbeafe; background: rgba(96,165,250,.18); border-color: rgba(96,165,250,.38); }
+    .grade.D { color: #fee2e2; background: rgba(248,113,113,.20); border-color: rgba(248,113,113,.48); }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(345px, 1fr));
+      gap: 10px;
+    }
+
+    .theme {
+      padding: 12px 14px;
+      background: rgba(19,31,53,.70);
+      border-left: 3px solid rgba(96,165,250,.42);
+      transition: transform .16s ease, background .16s ease;
+    }
+
+    .theme:hover {
+      background: rgba(255,255,255,.052);
+      transform: translateY(-2px);
+    }
+
+    .theme-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .theme p { margin: 0; color: #dbeafe; }
+    .theme ul {
+      margin: 9px 0 0;
+      padding-left: 16px;
+      color: var(--text3);
+      font-size: 10px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(7,12,25,.42);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 1240px;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #bfdbfe;
+      background: rgba(96,165,250,.075);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      position: sticky;
+      top: 0;
+    }
+
+    td { color: #cbd5e1; font-size: 10px; }
+    tbody tr:hover td { background: rgba(255,255,255,.025); }
+
+    .bar-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 7px;
+      padding: 11px 13px;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 8px;
+      background: rgba(255,255,255,.032);
+    }
+
+    .bar-row strong {
+      color: #e0e7ff;
+      font-size: 11px;
+    }
+
+    .bar-track {
+      height: 6px;
+      background: rgba(255,255,255,.075);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: 3px;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 10px;
+    }
+
+    .risk {
+      border: 1px solid rgba(248,113,113,.18);
+      border-left: 3px solid var(--red);
+      padding: 11px 13px;
+      background: rgba(248,113,113,.045);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 7px;
+      padding-left: 18px;
+      color: var(--text3);
+      font-size: 10px;
+    }
+
+    @media (max-width: 880px) {
+      .page { width: min(100vw - 24px, 1700px); padding-top: 18px; }
+      h1 { font-size: 24px; letter-spacing: 3px; }
+      .hero { padding-bottom: 14px; }
+      .thesis-grid, .kpi-grid { grid-template-columns: 1fr; }
+      .chain-grid { display: grid; min-width: 0; grid-template-columns: 1fr; gap: 10px; }
+      .tier + .tier { margin-left: 0; }
+      .tier + .tier::before { display: none; }
+      .theme-grid, .bar-list, .risk-grid, .value-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section id="hero" class="hero"></section>
+    <section id="chain-map" class="section"></section>
+    <section id="theme-matrix" class="section"></section>
+    <section id="quant-table" class="section"></section>
+    <section id="pricing-power" class="section"></section>
+    <section id="china-substitution" class="section"></section>
+    <section id="value-view" class="section"></section>
+    <section id="sources" class="section"></section>
+  </main>
+
+  <script>
+    const DATA = {
+  "industry": "机器人",
+  "subtitle": "覆盖工业机器人、协作机器人、人形/具身智能、仓储物流与医疗机器人，重点拆解上游核心零部件、中游本体与控制、下游高价值应用之间的利润池迁移。",
+  "asOfDate": "2026-04-29",
+  "thesis": [
+    "机器人投资不能只买“整机想象力”：短中期最确定的利润池在高可靠执行器、减速器、伺服、视觉/力传感、控制软件和高附加值应用闭环。",
+    "工业机器人是现金流底座，人形机器人是期权。IFR 口径下 2024 年全球工业机器人装机 54.2 万台、运行存量 466.4 万台；人形机器人预测从 2035 年约 88 亿美元到 2050 年 5 万亿美元不等，必须按情景折现。",
+    "中国是最大需求和最快替代市场：2024 年中国工业机器人装机 29.5 万台、占全球 54%，本土厂商在中国市场份额首次升至 57%，对外资本体形成价格与份额压力。",
+    "越靠近“可靠性认证 + 客户数据闭环 + 软件生态”的环节，越能保住毛利；纯硬件本体若缺少算法和场景数据，容易陷入规模化前的价格战。"
+  ],
+  "kpis": [
+    {
+      "label": "工业机器人装机",
+      "value": "542k 台",
+      "note": "2024 全球新增，IFR World Robotics 2025"
+    },
+    {
+      "label": "工业机器人市场值",
+      "value": "$16.7B",
+      "note": "2026 趋势报告，IFR 口径为年度装机价值"
+    },
+    {
+      "label": "中国装机份额",
+      "value": "54%",
+      "note": "2024，中国 295k 台，IFR"
+    },
+    {
+      "label": "中国本土份额",
+      "value": "57%",
+      "note": "2024 年首次超过外资，IFR"
+    },
+    {
+      "label": "人形机器人预测",
+      "value": "$8.8B-$5T",
+      "note": "2035 保守口径至 2050 蓝图口径，分歧极大"
+    }
+  ],
+  "tiers": [
+    {
+      "name": "AI算力与控制软件",
+      "role": "决定感知、规划、仿真训练和非结构化任务泛化能力",
+      "valueCapture": "高",
+      "companies": [
+        {
+          "ticker": "NVDA",
+          "name": "NVIDIA",
+          "cnName": "英伟达",
+          "exchange": "NASDAQ",
+          "exposure": "机器人基础模型/仿真/边缘算力",
+          "purity": "major segment",
+          "why": "Isaac、Jetson、GPU 与仿真生态使其成为具身智能训练和部署的算力底座。",
+          "evidence": "NVIDIA robotics/Isaac ecosystem, 2026"
+        },
+        {
+          "ticker": "QCOM",
+          "name": "Qualcomm",
+          "cnName": "高通",
+          "exchange": "NASDAQ",
+          "exposure": "低功耗边缘AI芯片",
+          "purity": "major segment",
+          "why": "移动 SoC、AI 加速与连接能力适配服务机器人、AMR 和轻量边缘设备。",
+          "evidence": "Company product materials, 2025-2026"
+        },
+        {
+          "ticker": "AMD",
+          "name": "Advanced Micro Devices",
+          "cnName": "AMD",
+          "exchange": "NASDAQ",
+          "exposure": "边缘计算/嵌入式处理",
+          "purity": "diversified",
+          "why": "嵌入式处理器、FPGA 和 AI 加速可进入工业控制、机器视觉与边缘推理。",
+          "evidence": "Company embedded product materials, 2025"
+        },
+        {
+          "ticker": "ROK",
+          "name": "Rockwell Automation",
+          "cnName": "罗克韦尔自动化",
+          "exchange": "NYSE",
+          "exposure": "PLC/工控软件/产线集成",
+          "purity": "major segment",
+          "why": "机器人不是孤立设备，进厂需要与 PLC、MES、安全控制和产线数据系统打通。",
+          "evidence": "FY2025 annual/IR materials"
+        },
+        {
+          "ticker": "SIE.DE",
+          "name": "Siemens",
+          "cnName": "西门子",
+          "exchange": "XETRA",
+          "exposure": "数字孪生/自动化控制",
+          "purity": "diversified",
+          "why": "仿真、运动控制和工业软件决定机器人系统导入效率。",
+          "evidence": "Company Digital Industries materials, 2025"
+        },
+        {
+          "ticker": "6645.T",
+          "name": "Omron",
+          "cnName": "欧姆龙",
+          "exchange": "Tokyo",
+          "exposure": "控制器/安全/自动化平台",
+          "purity": "major segment",
+          "why": "传感、控制和机器人单元组合能力强，适合柔性产线。",
+          "evidence": "FY2025 IR materials"
+        }
+      ]
+    },
+    {
+      "name": "执行器/减速器/伺服",
+      "role": "决定关节成本、精度、寿命、噪声、热管理和量产一致性",
+      "valueCapture": "高",
+      "companies": [
+        {
+          "ticker": "6324.T",
+          "name": "Harmonic Drive Systems",
+          "cnName": "哈默纳科",
+          "exchange": "Tokyo",
+          "exposure": "谐波减速器",
+          "purity": "pure-play",
+          "why": "谐波减速器是轻量关节的关键瓶颈，认证周期和寿命数据构成壁垒。",
+          "evidence": "Company filings / harmonic reducer market reports, 2025"
+        },
+        {
+          "ticker": "6268.T",
+          "name": "Nabtesco",
+          "cnName": "纳博特斯克",
+          "exchange": "Tokyo",
+          "exposure": "RV减速器",
+          "purity": "major segment",
+          "why": "中大负载工业机器人关节长期受益于 RV 减速器精度和可靠性壁垒。",
+          "evidence": "Company precision reduction gear materials, 2025"
+        },
+        {
+          "ticker": "6594.T",
+          "name": "Nidec",
+          "cnName": "尼得科",
+          "exchange": "Tokyo",
+          "exposure": "电机/减速/驱动",
+          "purity": "diversified",
+          "why": "电机平台和量产能力适合从工业自动化延伸到人形关节模组。",
+          "evidence": "Company robotics component materials, 2025"
+        },
+        {
+          "ticker": "300124.SZ",
+          "name": "Shenzhen Inovance",
+          "cnName": "汇川技术",
+          "exchange": "SZSE",
+          "exposure": "伺服驱动/控制",
+          "purity": "major segment",
+          "why": "中国伺服与自动化龙头，是国产替代工业机器人控制链的核心受益者。",
+          "evidence": "Company annual/IR materials, 2025"
+        },
+        {
+          "ticker": "688017.SH",
+          "name": "Leader Harmonious Drive",
+          "cnName": "绿的谐波",
+          "exchange": "SSE STAR",
+          "exposure": "国产谐波减速器",
+          "purity": "pure-play",
+          "why": "中国人形机器人和协作机器人放量时，国产谐波替代弹性最大但需验证寿命和一致性。",
+          "evidence": "Company filings / domestic substitution reports, 2025"
+        },
+        {
+          "ticker": "002747.SZ",
+          "name": "Estun Automation",
+          "cnName": "埃斯顿",
+          "exchange": "SZSE",
+          "exposure": "伺服+本体",
+          "purity": "major segment",
+          "why": "伺服、控制和本体纵向布局，受益中国工业机器人国产化。",
+          "evidence": "Company filings, 2025"
+        }
+      ]
+    },
+    {
+      "name": "感知/视觉/传感",
+      "role": "把机器人从重复动作推进到识别、抓取、避障和质量检测",
+      "valueCapture": "高",
+      "companies": [
+        {
+          "ticker": "6861.T",
+          "name": "Keyence",
+          "cnName": "基恩士",
+          "exchange": "Tokyo",
+          "exposure": "机器视觉/传感器",
+          "purity": "major segment",
+          "why": "传感器和视觉系统拥有极强直销与应用工程能力，FY2025 经营利润率约 51%。",
+          "evidence": "KEYENCE FY2025 financial materials, Apr 2026"
+        },
+        {
+          "ticker": "CGNX",
+          "name": "Cognex",
+          "cnName": "康耐视",
+          "exchange": "NASDAQ",
+          "exposure": "机器视觉/深度学习检测",
+          "purity": "pure-play",
+          "why": "机器视觉是机器人闭环作业的核心入口，2025 毛利率约 67%。",
+          "evidence": "Macrotrends/Company FY2025 data, 2026"
+        },
+        {
+          "ticker": "TDY",
+          "name": "Teledyne Technologies",
+          "cnName": "特励达",
+          "exchange": "NYSE",
+          "exposure": "工业相机/成像传感",
+          "purity": "major segment",
+          "why": "高端成像、红外和机器视觉组件用于工业检测、国防与机器人感知。",
+          "evidence": "Company imaging segment materials, 2025"
+        },
+        {
+          "ticker": "2498.HK",
+          "name": "RoboSense",
+          "cnName": "速腾聚创",
+          "exchange": "HKEX",
+          "exposure": "激光雷达/机器人感知",
+          "purity": "major segment",
+          "why": "从车载 LiDAR 延伸到机器人感知，成本下降和规模制造是核心变量。",
+          "evidence": "Company filings / product materials, 2025"
+        },
+        {
+          "ticker": "HSAI",
+          "name": "Hesai Group",
+          "cnName": "禾赛科技",
+          "exchange": "NASDAQ",
+          "exposure": "激光雷达",
+          "purity": "major segment",
+          "why": "机器人和自动驾驶共享激光雷达供应链，受益感知硬件降本。",
+          "evidence": "Company filings/product materials, 2025"
+        },
+        {
+          "ticker": "ZBRA",
+          "name": "Zebra Technologies",
+          "cnName": "斑马技术",
+          "exchange": "NASDAQ",
+          "exposure": "移动计算/机器视觉/AMR生态",
+          "purity": "major segment",
+          "why": "仓储、零售和制造场景的数据采集能力与 AMR 部署形成协同。",
+          "evidence": "Company enterprise asset intelligence materials, 2025"
+        }
+      ]
+    },
+    {
+      "name": "本体/OEM/协作与人形",
+      "role": "承担系统设计、运动控制、客户认证和品牌渠道",
+      "valueCapture": "中",
+      "companies": [
+        {
+          "ticker": "6954.T",
+          "name": "FANUC",
+          "cnName": "发那科",
+          "exchange": "Tokyo",
+          "exposure": "工业机器人/CNC/伺服",
+          "purity": "major segment",
+          "why": "传统工业机器人核心龙头，受汽车、电子和中国自动化周期影响明显。",
+          "evidence": "Company filings / 2025 margin data"
+        },
+        {
+          "ticker": "6506.T",
+          "name": "Yaskawa Electric",
+          "cnName": "安川电机",
+          "exchange": "Tokyo",
+          "exposure": "工业机器人/运动控制",
+          "purity": "major segment",
+          "why": "机器人与运动控制协同强，FY2024 集团收入 5,377 亿日元、经营利润率 9.3%。",
+          "evidence": "Yaskawa Report 2025"
+        },
+        {
+          "ticker": "ABBN.SW",
+          "name": "ABB",
+          "cnName": "ABB机器人",
+          "exchange": "SIX",
+          "exposure": "工业机器人业务待出售",
+          "purity": "diversified",
+          "why": "SoftBank 以 53.75 亿美元收购 ABB 机器人业务，验证 physical AI 战略价值。",
+          "evidence": "SoftBank press release, Oct 2025"
+        },
+        {
+          "ticker": "7012.T",
+          "name": "Kawasaki Heavy Industries",
+          "cnName": "川崎重工",
+          "exchange": "Tokyo",
+          "exposure": "工业/医疗机器人",
+          "purity": "diversified",
+          "why": "工业机器人产品线覆盖焊接、搬运、医疗和半导体场景。",
+          "evidence": "Company robotics materials, 2025"
+        },
+        {
+          "ticker": "TER",
+          "name": "Teradyne",
+          "cnName": "泰瑞达",
+          "exchange": "NASDAQ",
+          "exposure": "协作机器人UR/MiR",
+          "purity": "minor segment",
+          "why": "Universal Robots 与 MiR 是协作机器人代表，但在 TER 中仍小于半导体测试主业。",
+          "evidence": "Teradyne filings/news, 2025-2026"
+        },
+        {
+          "ticker": "9880.HK",
+          "name": "UBTECH Robotics",
+          "cnName": "优必选",
+          "exchange": "HKEX",
+          "exposure": "人形机器人",
+          "purity": "pure-play",
+          "why": "中国上市人形机器人稀缺标的，弹性大但商业化和毛利稳定性仍需验证。",
+          "evidence": "Company filings/product deployments, 2025"
+        }
+      ]
+    },
+    {
+      "name": "高价值应用与系统集成",
+      "role": "把机器人转化为可收费的生产率、手术量、仓储效率和服务收入",
+      "valueCapture": "高/中",
+      "companies": [
+        {
+          "ticker": "ISRG",
+          "name": "Intuitive Surgical",
+          "cnName": "直觉外科",
+          "exchange": "NASDAQ",
+          "exposure": "手术机器人平台",
+          "purity": "pure-play",
+          "why": "装机、耗材和服务形成飞轮，2025 收入约 100.6 亿美元、da Vinci 手术量约 315.3 万例。",
+          "evidence": "Intuitive Q4/FY2025 release, Jan 2026"
+        },
+        {
+          "ticker": "SYM",
+          "name": "Symbotic",
+          "cnName": "Symbotic",
+          "exchange": "NASDAQ",
+          "exposure": "AI仓储机器人系统",
+          "purity": "pure-play",
+          "why": "FY2025 收入 22.47 亿美元、同比增 26%，仓储自动化 ROI 明确但客户集中度需监控。",
+          "evidence": "Symbotic FY2025 results, Nov 2025"
+        },
+        {
+          "ticker": "6383.T",
+          "name": "Daifuku",
+          "cnName": "大福",
+          "exchange": "Tokyo",
+          "exposure": "物流自动化/仓储系统",
+          "purity": "major segment",
+          "why": "自动化立库、输送和半导体/机场物流系统是机器人应用层的稳定现金流。",
+          "evidence": "Company annual materials, 2025"
+        },
+        {
+          "ticker": "AUTO.OL",
+          "name": "AutoStore",
+          "cnName": "AutoStore",
+          "exchange": "Oslo",
+          "exposure": "立方仓储机器人",
+          "purity": "pure-play",
+          "why": "模块化仓储机器人系统，受益电商、零售和第三方物流自动化。",
+          "evidence": "Company annual materials, 2025"
+        },
+        {
+          "ticker": "SYK",
+          "name": "Stryker",
+          "cnName": "史赛克",
+          "exchange": "NYSE",
+          "exposure": "Mako骨科机器人",
+          "purity": "major segment",
+          "why": "医疗机器人与耗材、植入物和医院渠道绑定，利润质量高。",
+          "evidence": "Company filings, 2025"
+        },
+        {
+          "ticker": "MDT",
+          "name": "Medtronic",
+          "cnName": "美敦力",
+          "exchange": "NYSE",
+          "exposure": "Hugo手术机器人",
+          "purity": "diversified",
+          "why": "若新平台商业化改善，将对 ISRG 高毛利生态形成竞争压力。",
+          "evidence": "Company filings/product materials, 2025"
+        }
+      ]
+    }
+  ],
+  "themes": [
+    {
+      "priority": "P0",
+      "name": "执行器和关节模组是人形机器人的第一价值池",
+      "thesis": "人形机器人若从样机走向量产，关节数量、寿命、噪声、热管理和一致性会把价值优先推给执行器/减速器/伺服供应商。",
+      "evidence": "Dimension Market Research 估算人形执行器 2026 年 3.964 亿美元、2035 年 689 亿美元；Valuates 口径 2024 年 1.5 亿美元、2031 年 98.6 亿美元，说明预测分歧大但方向一致。",
+      "tiers": [
+        "执行器/减速器/伺服",
+        "本体/OEM/协作与人形"
+      ],
+      "companies": [
+        "6324.T",
+        "6268.T",
+        "6594.T",
+        "688017.SH",
+        "300124.SZ",
+        "9880.HK"
+      ],
+      "monitor": "量产订单、关节 ASP、良率、寿命测试、客户认证名单、单机 BOM 中执行器成本占比",
+      "failure": "整机量产推迟、关节集成度下降导致单价压缩，或中国供应商快速价格战压低毛利。"
+    },
+    {
+      "priority": "P0",
+      "name": "机器视觉和力/距传感决定机器人从自动化到自主化",
+      "thesis": "非结构化场景的核心不是机械臂本体，而是看得懂、抓得准、能反馈，视觉与传感环节因此拥有更强毛利和软件附加值。",
+      "evidence": "GMI 估算机器人视觉系统 2025 年 45 亿美元、2035 年 132 亿美元、CAGR 11.5%；Keyence FY2025 经营利润率约 51%，Cognex 2025 毛利率约 67%。",
+      "tiers": [
+        "感知/视觉/传感",
+        "AI算力与控制软件"
+      ],
+      "companies": [
+        "6861.T",
+        "CGNX",
+        "TDY",
+        "2498.HK",
+        "HSAI",
+        "NVDA"
+      ],
+      "monitor": "AI视觉检测渗透率、3D视觉/力控导入、机器人抓取成功率、工业客户 capex",
+      "failure": "视觉硬件标准化过快、价格下降快于软件和应用工程收费能力。"
+    },
+    {
+      "priority": "P1",
+      "name": "工业机器人底盘复苏与中国国产化份额提升",
+      "thesis": "工业机器人仍是确定性最大市场，汽车、电子和一般工业自动化周期恢复时，传统龙头和中国伺服/本体厂商同时受益。",
+      "evidence": "IFR World Robotics 2025 显示 2024 全球工业机器人新增 54.2 万台、存量 466.4 万台；中国新增 29.5 万台，占全球 54%，且本土厂商份额升至 57%。",
+      "tiers": [
+        "本体/OEM/协作与人形",
+        "执行器/减速器/伺服"
+      ],
+      "companies": [
+        "6954.T",
+        "6506.T",
+        "ABBN.SW",
+        "300124.SZ",
+        "002747.SZ",
+        "688017.SH"
+      ],
+      "monitor": "中国 PMI/制造业 capex、汽车与电子订单、工业机器人月度产量、外资/国产份额",
+      "failure": "下游资本开支疲弱，或国产份额提升主要通过低价竞争而非盈利质量改善。"
+    },
+    {
+      "priority": "P1",
+      "name": "仓储物流是机器人商业化最清晰的 ROI 场景",
+      "thesis": "仓储机器人能直接量化人工替代、吞吐效率和空间利用率，是比家庭机器人更早商业闭环的应用层。",
+      "evidence": "Symbotic FY2025 收入 22.47 亿美元、同比增长 26%；Q1 FY2026 收入 6.30 亿美元、同比增长 29%，说明高密度仓储系统仍在放量。",
+      "tiers": [
+        "高价值应用与系统集成",
+        "感知/视觉/传感",
+        "AI算力与控制软件"
+      ],
+      "companies": [
+        "SYM",
+        "AUTO.OL",
+        "6383.T",
+        "ZBRA",
+        "TER",
+        "QCOM"
+      ],
+      "monitor": "订单 backlog 转收入、客户集中度、项目毛利、交付周期、零售/电商 capex",
+      "failure": "项目制交付拖延、核心客户削减预算或系统毛利无法持续提升。"
+    },
+    {
+      "priority": "P1",
+      "name": "医疗机器人是最高质量但估值最敏感的机器人资产",
+      "thesis": "手术机器人把硬件装机、耗材、服务和医生学习曲线绑定，形成比工业本体更强的重复收入和护城河。",
+      "evidence": "Intuitive 2025 收入约 100.6 亿美元、同比增长 21%；2025 da Vinci 手术约 315.3 万例、同比增长 18%，非 GAAP 毛利率指引约 67%-67.5%。",
+      "tiers": [
+        "高价值应用与系统集成",
+        "本体/OEM/协作与人形"
+      ],
+      "companies": [
+        "ISRG",
+        "SYK",
+        "MDT",
+        "7012.T"
+      ],
+      "monitor": "手术量增速、单台利用率、耗材收入占比、新竞品审批和医院预算",
+      "failure": "手术量增速放缓、竞品价格战、再制造耗材或监管压力压低毛利。"
+    },
+    {
+      "priority": "P2",
+      "name": "人形机器人是远期期权，短期应按供应链验证而非整机叙事交易",
+      "thesis": "人形机器人 TAM 想象极大，但当前关键在真实场景数据、可靠性、成本曲线和订单质量，不能把演示视频等同商业化。",
+      "evidence": "Morgan Stanley 预计 2050 年人形机器人相关市场可超过 5 万亿美元；但 Precedence Research 2026 年报告给出的 2035 年市场仅约 87.8 亿美元，预测跨度说明不确定性极高。",
+      "tiers": [
+        "AI算力与控制软件",
+        "执行器/减速器/伺服",
+        "本体/OEM/协作与人形"
+      ],
+      "companies": [
+        "TSLA",
+        "9880.HK",
+        "NVDA",
+        "688017.SH",
+        "6324.T",
+        "2498.HK"
+      ],
+      "monitor": "真实客户部署、单机 BOM、续航/负载/MTBF、远程遥操作比例、监管安全标准",
+      "failure": "机器人仍依赖遥操作、单位经济性无法成立，或应用被 AMR/机械臂等更便宜形态替代。"
+    }
+  ],
+  "quantRows": [
+    {
+      "location": "工业机器人整机",
+      "item": "多关节/SCARA/协作机器人",
+      "moat": "运动控制、可靠性、客户认证、全球服务网络",
+      "suppliers": "FANUC, Yaskawa, ABB Robotics, Kawasaki, Estun",
+      "marketSize": "$16.7B 年度装机价值，2026 趋势口径 (IFR)",
+      "growth": "2024 新增 542k 台；中国至 2028 年均约 10% 增长潜力 (IFR)",
+      "profitability": "ABB Robotics 2024 收入约 $2.28B、经营利润率 12.1% (MarketWatch/transaction data)",
+      "chinaProgress": "Scaling：2024 中国本土份额 57%",
+      "grade": "B"
+    },
+    {
+      "location": "人形机器人整机",
+      "item": "双足/轮式人形机器人",
+      "moat": "全身控制、场景数据、可靠性、安全认证、供应链集成",
+      "suppliers": "Tesla, UBTECH, Unitree/private, Figure/private, Agility/private",
+      "marketSize": "$4.89B 2025 -> $165.13B 2034 (Fortune BI)；$2.16B 2026 -> $8.78B 2035 (Precedence)",
+      "growth": "预测跨度大：16.9%-50.6% CAGR，不宜单点估值",
+      "profitability": "多数厂商处于早期商业化，稳定毛利未验证",
+      "chinaProgress": "Early/Scaling：中国样机和低成本硬件领先，规模化质量仍需验证",
+      "grade": "B"
+    },
+    {
+      "location": "关节执行器",
+      "item": "旋转/线性执行器、伺服电机、驱动器",
+      "moat": "扭矩密度、热管理、寿命、控制算法、量产一致性",
+      "suppliers": "Nidec, Inovance, Estun, Moons, Siemens, Rockwell",
+      "marketSize": "$396M 2026 -> $68.9B 2035 人形执行器口径 (Dimension Market Research)",
+      "growth": "78% CAGR 2026-2035E；Valuates 口径 2024-2031E 约 80% CAGR",
+      "profitability": "成熟伺服厂商利润率分化；高端集成关节预计毛利更高但需量产验证",
+      "chinaProgress": "Scaling：国产伺服强，空心杯/力控/高端集成关节仍分化",
+      "grade": "A"
+    },
+    {
+      "location": "精密减速器",
+      "item": "谐波/RV/行星减速器",
+      "moat": "齿形设计、材料热处理、疲劳寿命、低背隙、良率曲线",
+      "suppliers": "Harmonic Drive, Nabtesco, Leaderdrive, Nidec-Shimpo",
+      "marketSize": "人形谐波减速器约 $145M 2025 -> $780M 2030 (Pro Market Reports)；另有 $450M 2025 -> $1.2B 2035 口径 (Emergen)",
+      "growth": "取决于人形机器人量产节奏，工业端更稳、人形端弹性更高",
+      "profitability": "高端日系毛利/经营利润质量较高，国产替代需看价格和良率",
+      "chinaProgress": "Scaling：国产谐波加速，RV 高端仍受日系约束",
+      "grade": "A"
+    },
+    {
+      "location": "视觉与传感",
+      "item": "2D/3D视觉、工业相机、LiDAR、力矩传感",
+      "moat": "成像算法、标定、抗干扰、应用工程、客户数据闭环",
+      "suppliers": "Keyence, Cognex, Teledyne, Omron, RoboSense, Hesai",
+      "marketSize": "$4.5B 2025 -> $13.2B 2035 机器人视觉系统 (GMI)",
+      "growth": "11.5% CAGR 2026-2035E；AI 检测和物流抓取为主要增量",
+      "profitability": "Keyence FY2025 经营利润率约 51%；Cognex 2025 毛利率约 67%",
+      "chinaProgress": "Scaling：LiDAR 成本优势明显，高端工业视觉软件仍追赶",
+      "grade": "A"
+    },
+    {
+      "location": "控制器/工控软件",
+      "item": "PLC、运动控制、数字孪生、机器人操作系统",
+      "moat": "安全认证、稳定性、软件生态、与产线系统集成",
+      "suppliers": "Siemens, Rockwell, Omron, NVIDIA, Qualcomm",
+      "marketSize": "未单独披露；随工业自动化和具身智能渗透增长",
+      "growth": "AI autonomy 是 IFR 2026 五大趋势之一，带动控制软件升级",
+      "profitability": "软件和自动化平台利润率通常高于本体硬件，具体按公司披露",
+      "chinaProgress": "Mature/Scaling：PLC 高端仍外资强，运动控制国产进步快",
+      "grade": "A"
+    },
+    {
+      "location": "仓储物流应用",
+      "item": "AMR、AS/RS、高密度仓储机器人",
+      "moat": "系统算法、项目交付、客户运营数据、售后服务",
+      "suppliers": "Symbotic, AutoStore, Daifuku, Zebra, Teradyne MiR",
+      "marketSize": "专业服务机器人/仓储自动化无统一口径；Symbotic FY2025 收入 $2.247B 可作可投资样本",
+      "growth": "Symbotic FY2025 收入 +26%，Q1 FY2026 +29% YoY",
+      "profitability": "Symbotic FY2025 adjusted EBITDA $147M，项目毛利仍在改善期",
+      "chinaProgress": "Mature：AMR 本体替代快，软件/系统集成能力决定利润",
+      "grade": "B"
+    },
+    {
+      "location": "医疗机器人应用",
+      "item": "手术机器人、骨科机器人、腔镜/介入平台",
+      "moat": "监管审批、医生学习曲线、耗材闭环、临床数据",
+      "suppliers": "Intuitive Surgical, Stryker, Medtronic, Johnson & Johnson/private pipeline",
+      "marketSize": "Intuitive 2025 收入约 $10.06B，已是机器人最大高质量收入池之一",
+      "growth": "2025 da Vinci procedures +18%；2026 指引 +13%-15%",
+      "profitability": "Intuitive 2025 非 GAAP 毛利率指引约 67%-67.5%",
+      "chinaProgress": "Early/Scaling：国产手术机器人获批推进，但装机、耗材与临床数据仍需爬坡",
+      "grade": "A"
+    },
+    {
+      "location": "末端执行器/灵巧手",
+      "item": "夹爪、吸盘、灵巧手、触觉反馈",
+      "moat": "接触控制、材料、可靠性、低成本量产",
+      "suppliers": "Schunk/private, SMC, Robotiq/private, Tesla supply chain, Chinese startups",
+      "marketSize": "缺少统一公开口径，随协作/人形/物流抓取需求同步增长",
+      "growth": "高弹性但分散，取决于抓取任务从结构化走向非结构化",
+      "profitability": "标准夹爪毛利中等，带触觉和软件闭环的灵巧手有更高溢价",
+      "chinaProgress": "Scaling：中国低成本供应强，高端触觉与寿命验证仍不足",
+      "grade": "B"
+    },
+    {
+      "location": "电池/热管理/线束",
+      "item": "高倍率电池、BMS、轻量结构件、线束",
+      "moat": "能量密度、安全、热管理、轻量化制造",
+      "suppliers": "CATL, Panasonic, TDK, Murata, Chinese precision manufacturers",
+      "marketSize": "机器人专用口径未成熟，多从消费电子/EV 供应链迁移",
+      "growth": "人形机器人若放量，续航和安全标准将推升高倍率小电池需求",
+      "profitability": "成熟供应链利润率较低，定制化模组和安全认证环节更有价值",
+      "chinaProgress": "Mature：中国电池和结构件供应链强",
+      "grade": "C"
+    }
+  ],
+  "pricingPower": [
+    {
+      "segment": "医疗机器人平台",
+      "power": 92,
+      "reason": "监管、医生学习曲线、耗材和服务收入构成强闭环，客户替换成本最高。",
+      "evidence": "Intuitive FY2025: revenue ~$10.06B, non-GAAP GM guide ~67%-67.5%"
+    },
+    {
+      "segment": "机器视觉/高端传感",
+      "power": 88,
+      "reason": "客户买的是良率和停线风险降低，应用工程与软件算法使硬件不易完全商品化。",
+      "evidence": "Keyence FY2025 operating margin ~51%; Cognex 2025 gross margin ~67%"
+    },
+    {
+      "segment": "执行器/精密减速器",
+      "power": 82,
+      "reason": "寿命、噪声、背隙和一致性难以快速复制，人形放量前期容易成为瓶颈。",
+      "evidence": "Dimension/Valuates actuator CAGR estimates; harmonic reducer market reports"
+    },
+    {
+      "segment": "工控软件/控制器",
+      "power": 76,
+      "reason": "安全认证、产线集成和长期维护创造粘性，但硬件控制器存在国产替代压力。",
+      "evidence": "IFR 2026 trend: AI & autonomy in robotics"
+    },
+    {
+      "segment": "工业机器人本体",
+      "power": 55,
+      "reason": "成熟市场竞争充分，中国本土份额提升压低外资定价权，服务网络仍能保住部分利润。",
+      "evidence": "IFR: China domestic supplier share 57% in 2024"
+    },
+    {
+      "segment": "仓储系统集成",
+      "power": 58,
+      "reason": "ROI 明确但项目制交付复杂，毛利受客户集中度、施工周期和标准化程度影响。",
+      "evidence": "Symbotic FY2025 revenue +26%, adjusted EBITDA $147M"
+    },
+    {
+      "segment": "通用人形整机",
+      "power": 42,
+      "reason": "短期品牌溢价来自叙事，长期定价权取决于真实任务能力；若硬件趋同，价格战概率高。",
+      "evidence": "Humanoid forecasts highly dispersed across Morgan Stanley/Fortune BI/Precedence"
+    }
+  ],
+  "chinaSubstitution": [
+    {
+      "area": "工业机器人本体",
+      "status": "加速",
+      "risk": "中国本土厂商 2024 年在国内市场份额升至 57%，外资在中低端应用的价格和份额压力上升。",
+      "names": "埃斯顿、汇川技术、新松、埃夫特；外资 FANUC、Yaskawa、ABB、KUKA"
+    },
+    {
+      "area": "伺服与控制",
+      "status": "成熟/加速",
+      "risk": "国产伺服在中端市场竞争力强，高端控制和安全认证仍由外资保持一定优势。",
+      "names": "汇川技术、埃斯顿、禾川科技、雷赛智能；Siemens、Rockwell、Omron"
+    },
+    {
+      "area": "谐波减速器",
+      "status": "加速但分化",
+      "risk": "国产替代弹性大，但人形机器人量产需要寿命、一致性、噪声和批次稳定性验证；价格战可能压低单位利润。",
+      "names": "绿的谐波、来福谐波、双环传动；Harmonic Drive"
+    },
+    {
+      "area": "RV减速器",
+      "status": "受限",
+      "risk": "中大负载工业机器人对可靠性要求高，日系 Nabtesco 等仍具长期工艺和客户认证优势。",
+      "names": "Nabtesco、Sumitomo；中国厂商持续追赶"
+    },
+    {
+      "area": "机器视觉/LiDAR",
+      "status": "分化",
+      "risk": "LiDAR 成本和制造能力中国优势明显，但高端工业视觉的软件、应用工程和全球客户服务仍由 Keyence、Cognex 等掌握。",
+      "names": "速腾聚创、禾赛科技、奥比中光；Keyence、Cognex、Teledyne"
+    },
+    {
+      "area": "人形机器人整机",
+      "status": "早期领先但未定局",
+      "risk": "中国硬件迭代快、成本低，但大规模商业部署、真实数据、售后安全责任和盈利模型尚未验证。",
+      "names": "优必选、宇树、智元、傅利叶；Tesla、Figure、Agility"
+    },
+    {
+      "area": "医疗机器人",
+      "status": "早期替代",
+      "risk": "国产产品获批和招标推进，但临床数据、医生学习曲线、耗材生态和国际注册仍是长期壁垒。",
+      "names": "微创机器人、精锋医疗、术锐；Intuitive、Stryker、Medtronic"
+    }
+  ],
+  "valueView": [
+    {
+      "lens": "现在最值得跟踪的主线",
+      "conclusion": "优先级为医疗机器人平台、机器视觉/传感、执行器/减速器、工控软件，其次才是工业本体和通用人形整机。原因是前四类更容易形成毛利和客户粘性。"
+    },
+    {
+      "lens": "巴菲特视角",
+      "conclusion": "更偏好 ISRG、Keyence、Cognex 这类拥有耗材/软件/应用工程/客户闭环的高质量资产；纯本体公司需要在周期低点和合理估值下才有安全边际。"
+    },
+    {
+      "lens": "霍华德·马克斯视角",
+      "conclusion": "人形机器人处在预期扩张早期，赔率来自上游瓶颈而非远期 TAM 的单点折现。预测跨度过大时，应买“验证节点”，不要买“终局故事”。"
+    },
+    {
+      "lens": "格雷厄姆视角",
+      "conclusion": "传统工业机器人龙头可按周期股处理，关注订单、产能利用率、库存和经营利润率；若估值已提前反映人形期权，需要用更高安全边际过滤。"
+    },
+    {
+      "lens": "核心监控指标",
+      "conclusion": "跟踪 IFR 装机、国产份额、执行器 ASP、谐波/RV 交期、视觉公司订单、仓储项目毛利、da Vinci 手术量、人形真实部署和遥操作比例。"
+    },
+    {
+      "lens": "风险清单",
+      "conclusion": "最大风险是量产时间表延后、下游 capex 下行、国产替代引发价格战、整机公司缺乏真实商业场景，以及医疗机器人竞争压低耗材利润。"
+    }
+  ],
+  "sources": [
+    {
+      "title": "IFR World Robotics 2025: Global robot demand in factories doubles over 10 years",
+      "url": "https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years%20%20%20",
+      "date": "2025-09-25",
+      "note": "工业机器人装机、存量、中国份额、本土份额"
+    },
+    {
+      "title": "IFR Top 5 Global Robotics Trends 2026",
+      "url": "https://ifr.org/ifr-press-releases/news/robot-cost-savings-can-reach-more-than-20-percent/",
+      "date": "2026-01-08",
+      "note": "工业机器人装机价值、AI与自主化趋势"
+    },
+    {
+      "title": "Morgan Stanley: Humanoids, a $5 Trillion Market",
+      "url": "https://www.morganstanley.com/insights/articles/humanoid-robot-market-5-trillion-by-2050",
+      "date": "2025-05-14",
+      "note": "人形机器人长期蓝图口径"
+    },
+    {
+      "title": "Fortune Business Insights: Humanoid Robot Market Size",
+      "url": "https://www.fortunebusinessinsights.com/humanoid-robots-market-110188",
+      "date": "2026-03-30",
+      "note": "人形机器人 2025-2034 市场规模与 CAGR"
+    },
+    {
+      "title": "Precedence Research: Humanoid Robot Market Size Worth USD 8.78 Billion by 2035",
+      "url": "https://www.globenewswire.com/news-release/2026/04/22/3278870/0/en/Humanoid-Robot-Market-Size-Worth-USD-8-78-Billion-by-2035-Driven-by-AI-Advancements-and-Expanding-Industrial-and-Consumer-Applications.html",
+      "date": "2026-04-22",
+      "note": "人形机器人保守市场规模口径"
+    },
+    {
+      "title": "Dimension Market Research: Humanoid Robot Actuators Market",
+      "url": "https://dimensionmarketresearch.com/report/humanoid-robot-actuators-market/",
+      "date": "2026-04",
+      "note": "人形机器人执行器市场规模、CAGR、技术结构"
+    },
+    {
+      "title": "Valuates Reports: Humanoid Robot Actuator Market",
+      "url": "https://finance.yahoo.com/news/humanoid-robot-actuator-market-reach-122200605.html",
+      "date": "2026-01-13",
+      "note": "人形机器人执行器另一个高增长口径"
+    },
+    {
+      "title": "GMI Insights: Robotic Vision Systems Market",
+      "url": "https://www.gminsights.com/industry-analysis/robotic-vision-systems-market",
+      "date": "2026",
+      "note": "机器人视觉系统规模、CAGR、Keyence/Cognex/Omron/Teledyne/Basler 竞争格局"
+    },
+    {
+      "title": "SoftBank: Acquisition of ABB Ltd's Robotics Business",
+      "url": "https://group.softbank/en/news/press/20251008",
+      "date": "2025-10-08",
+      "note": "ABB 机器人业务交易验证 Physical AI 价值"
+    },
+    {
+      "title": "Yaskawa Report 2025",
+      "url": "https://www.yaskawa-global.com/wp-content/uploads/2025/09/YR2025E_A3.pdf",
+      "date": "2025-09",
+      "note": "Yaskawa FY2024 集团收入、经营利润率和业务结构"
+    },
+    {
+      "title": "KEYENCE FY2025 Financial Results Materials",
+      "url": "https://www.marketscreener.com/news/keyence-fy2025-financial-results-materials-ce7f59dcda8ef324",
+      "date": "2026-04-24",
+      "note": "Keyence FY2025 销售和经营利润率"
+    },
+    {
+      "title": "Cognex Gross Margin 2012-2025",
+      "url": "https://www.macrotrends.net/stocks/charts/CGNX/cognex/gross-margin",
+      "date": "2026",
+      "note": "Cognex 2025 毛利率参考"
+    },
+    {
+      "title": "Intuitive Surgical Q4/FY2025 Earnings",
+      "url": "https://isrg.intuitive.com/news-releases/news-release-details/intuitive-announces-fourth-quarter-earnings-5/",
+      "date": "2026-01-22",
+      "note": "Intuitive 2025 收入、手术量、装机和毛利率指引"
+    },
+    {
+      "title": "Symbotic FY2025 Results",
+      "url": "https://www.globenewswire.com/de/news-release/2025/11/24/3193917/0/en/Symbotic-Reports-Fourth-Quarter-and-Fiscal-Year-2025-Results.html",
+      "date": "2025-11-24",
+      "note": "仓储机器人系统 FY2025 收入、增长和 EBITDA"
+    },
+    {
+      "title": "Symbotic Q1 FY2026 Results",
+      "url": "https://ir.symbotic.com/news-releases/news-release-details/symbotic-reports-first-quarter-fiscal-year-2026-results/",
+      "date": "2026-02-04",
+      "note": "仓储机器人系统最新季度增长"
+    }
+  ]
+};
+
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[ch]));
+
+    function renderHero() {
+      const thesis = DATA.thesis.map(item => `<div class="card">${esc(item)}</div>`).join("");
+      const kpis = DATA.kpis.map(item => `
+        <div class="kpi">
+          <span>${esc(item.label)}</span>
+          <strong>${esc(item.value)}</strong>
+          <span>${esc(item.note)}</span>
+        </div>`).join("");
+      document.getElementById("hero").innerHTML = `
+        <div class="eyebrow">Industry Chain Research | As of ${esc(DATA.asOfDate)}</div>
+        <h1>${esc(DATA.industry)}产业链全景研究</h1>
+        <p class="subtitle">${esc(DATA.subtitle)}</p>
+        <div class="thesis-grid">${thesis}</div>
+        <div class="kpi-grid">${kpis}</div>`;
+    }
+
+    function renderChain() {
+      const tiers = DATA.tiers.map(tier => `
+        <article class="tier">
+          <div class="tier-head">
+            <h3>${esc(tier.name)}</h3>
+            <div class="tier-meta"><span>${esc(tier.role)}</span><span>价值捕获：${esc(tier.valueCapture)}</span></div>
+          </div>
+          <div class="company-list">
+            ${tier.companies.map(company => `
+              <div class="company">
+                <div class="company-top">
+                  <span><span class="ticker">${esc(company.ticker)}</span> ${esc(company.cnName || company.name)}</span>
+                  <span class="pill">${esc(company.exchange)}</span>
+                </div>
+                <div>${esc(company.exposure)} · ${esc(company.purity)}</div>
+                <div class="muted">${esc(company.why)}</div>
+                <div class="company-actions">
+                  ${company.researchUrl ? `<a class="report-btn" href="${esc(company.researchUrl)}" target="_blank" rel="noopener">研究报告</a>` : `<span class="report-btn pending">研究报告</span>`}
+                  ${company.valuationUrl ? `<a class="report-btn valuation" href="${esc(company.valuationUrl)}" target="_blank" rel="noopener">估值报告</a>` : `<span class="report-btn valuation pending">估值报告</span>`}
+                </div>
+              </div>`).join("")}
+          </div>
+        </article>`).join("");
+      document.getElementById("chain-map").innerHTML = `<h2>产业链地图</h2><div class="chain-grid">${tiers}</div>`;
+    }
+
+    function renderThemes() {
+      const themes = DATA.themes.map(theme => `
+        <article class="theme">
+          <div class="theme-head">
+            <h3>${esc(theme.name)}</h3>
+            <span class="priority ${esc(theme.priority)}">${esc(theme.priority)}</span>
+          </div>
+          <p>${esc(theme.thesis)}</p>
+          <ul>
+            <li>量化依据：${esc(theme.evidence)}</li>
+            <li>相关环节：${esc(theme.tiers.join(" / "))}</li>
+            <li>代表公司：${esc(theme.companies.join(", "))}</li>
+            <li>监控指标：${esc(theme.monitor)}</li>
+            <li>失效条件：${esc(theme.failure)}</li>
+          </ul>
+        </article>`).join("");
+      document.getElementById("theme-matrix").innerHTML = `<h2>投资主题矩阵</h2><div class="theme-grid">${themes}</div>`;
+    }
+
+    function renderQuantTable() {
+      const rows = DATA.quantRows.map(row => `
+        <tr>
+          <td>${esc(row.location)}</td>
+          <td>${esc(row.item)}</td>
+          <td>${esc(row.moat)}</td>
+          <td>${esc(row.suppliers)}</td>
+          <td>${esc(row.marketSize)}</td>
+          <td>${esc(row.growth)}</td>
+          <td>${esc(row.profitability)}</td>
+          <td>${esc(row.chinaProgress)}</td>
+          <td><span class="grade ${esc(row.grade)}">${esc(row.grade)}</span></td>
+        </tr>`).join("");
+      document.getElementById("quant-table").innerHTML = `
+        <h2>定量瓶颈与受益级别</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>物理位置/链条角色</th><th>关键材料/部件</th><th>核心壁垒/规格</th><th>直接供应商</th>
+              <th>市场规模</th><th>增长</th><th>盈利能力</th><th>中国替代进度</th><th>受益级别</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function renderPricingPower() {
+      const bars = DATA.pricingPower.map(row => `
+        <div class="bar-row">
+          <strong>${esc(row.segment)}</strong>
+          <div class="bar-track"><div class="bar-fill" style="--w:${Math.max(0, Math.min(100, Number(row.power) || 0))}%"></div></div>
+          <div><span>${esc(row.reason)}</span><div class="source-label">${esc(row.evidence)}</div></div>
+        </div>`).join("");
+      document.getElementById("pricing-power").innerHTML = `<h2>定价权与利润池</h2><div class="bar-list">${bars}</div>`;
+    }
+
+    function renderChinaSubstitution() {
+      const risks = DATA.chinaSubstitution.map(row => `
+        <div class="risk">
+          <h3>${esc(row.area)} <span class="pill">${esc(row.status)}</span></h3>
+          <p>${esc(row.risk)}</p>
+          <div class="muted">${esc(row.names)}</div>
+        </div>`).join("");
+      document.getElementById("china-substitution").innerHTML = `<h2>中国替代与竞争威胁</h2><div class="risk-grid">${risks}</div>`;
+    }
+
+    function renderValueView() {
+      const cards = DATA.valueView.map(row => `<div class="card"><h3>${esc(row.lens)}</h3><p>${esc(row.conclusion)}</p></div>`).join("");
+      document.getElementById("value-view").innerHTML = `<h2>价值投资视角</h2><div class="value-grid">${cards}</div>`;
+    }
+
+    function renderSources() {
+      const sources = DATA.sources.map(src => `
+        <li><a href="${esc(src.url)}" target="_blank" rel="noopener">${esc(src.title)}</a> · ${esc(src.date)} · ${esc(src.note)}</li>`).join("");
+      document.getElementById("sources").innerHTML = `<h2>来源</h2><ol class="source-list">${sources}</ol>`;
+    }
+
+    renderHero();
+    renderChain();
+    renderThemes();
+    renderQuantTable();
+    renderPricingPower();
+    renderChinaSubstitution();
+    renderValueView();
+    renderSources();
+  </script>
+</body>
+</html>
