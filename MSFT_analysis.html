@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSFT Microsoft - 价值投资深度分析报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e1a; color: #e2e8f0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; }
+  a { color: #60a5fa; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Layout */
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 48px 0; border-bottom: 1px solid #1e293b; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); padding: 60px 0; border-bottom: 1px solid #334155; }
+  .hero-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 32px; }
+  .hero-left { flex: 1; min-width: 280px; }
+  .ticker-badge { display: inline-block; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 4px 12px; font-size: 13px; color: #94a3b8; margin-bottom: 8px; letter-spacing: 1px; }
+  .hero-title { font-size: 48px; font-weight: 800; background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-subtitle { font-size: 20px; color: #94a3b8; margin-top: 4px; }
+  .hero-right { display: flex; flex-wrap: wrap; gap: 24px; }
+  .hero-stat { text-align: center; min-width: 120px; }
+  .hero-stat-value { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+  .hero-stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .rating-badge { display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; margin-top: 16px; }
+  .rating-cautious-buy { background: #1e3a5f; color: #60a5fa; border: 1px solid #3b82f6; }
+  .hero-meta { font-size: 13px; color: #475569; margin-top: 12px; }
+
+  /* Section headers */
+  .section-title { font-size: 24px; font-weight: 700; color: #f1f5f9; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #1e40af; display: flex; align-items: center; gap: 10px; }
+  .section-title .num { background: #1e40af; color: #93c5fd; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+
+  /* KPI Grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .kpi-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; transition: border-color 0.2s; }
+  .kpi-card:hover { border-color: #3b82f6; }
+  .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: #f1f5f9; }
+  .kpi-change { font-size: 12px; margin-top: 4px; }
+  .kpi-change.up { color: #34d399; }
+  .kpi-change.down { color: #f87171; }
+  .kpi-change.neutral { color: #94a3b8; }
+
+  /* Charts */
+  .chart-container { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .chart-title { font-size: 14px; font-weight: 600; color: #94a3b8; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-wrap { position: relative; height: 280px; }
+  .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .charts-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table th { background: #1e293b; color: #94a3b8; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #334155; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+  .data-table tr:hover td { background: #1a2332; }
+  .data-table .positive { color: #34d399; }
+  .data-table .negative { color: #f87171; }
+  .table-wrap { background: #111827; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 24px; overflow-x: auto; }
+
+  /* Analysis cards */
+  .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .analysis-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; }
+  .analysis-card h3 { font-size: 15px; font-weight: 700; color: #93c5fd; margin-bottom: 12px; }
+  .analysis-card p, .analysis-card li { font-size: 14px; color: #94a3b8; margin-bottom: 6px; }
+  .analysis-card ul { padding-left: 16px; }
+  .analysis-card .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #1e293b; }
+  .analysis-card .metric-row:last-child { border-bottom: none; }
+  .metric-label { font-size: 13px; color: #64748b; }
+  .metric-value { font-size: 13px; color: #e2e8f0; font-weight: 600; }
+
+  /* Moat scorecard */
+  .moat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .moat-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; }
+  .moat-card h4 { font-size: 14px; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+  .stars { color: #f59e0b; font-size: 18px; letter-spacing: 2px; }
+  .stars-empty { color: #374151; }
+  .progress-bar-wrap { background: #1e293b; border-radius: 4px; height: 6px; margin-top: 8px; }
+  .progress-bar { height: 6px; border-radius: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+  .moat-rating { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-top: 8px; }
+  .wide-moat { background: #064e3b; color: #34d399; }
+  .narrow-moat { background: #7c2d12; color: #fb923c; }
+
+  /* Risk matrix */
+  .risk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .risk-table th { background: #1e293b; color: #94a3b8; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; }
+  .risk-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; }
+  .risk-high { color: #f87171; }
+  .risk-medium { color: #fbbf24; }
+  .risk-low { color: #34d399; }
+  .risk-badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+  .risk-badge.high { background: #7f1d1d; color: #fca5a5; }
+  .risk-badge.medium { background: #78350f; color: #fcd34d; }
+  .risk-badge.low { background: #064e3b; color: #6ee7b7; }
+
+  /* Valuation section */
+  .valuation-framework { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  .val-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; }
+  .val-card h3 { font-size: 16px; font-weight: 700; color: #93c5fd; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+  .val-card .verdict { font-size: 13px; color: #94a3b8; }
+  .verdict-badge { display: inline-block; padding: 4px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; margin: 8px 0; }
+  .verdict-yellow { background: #78350f; color: #fcd34d; }
+  .verdict-green { background: #064e3b; color: #34d399; }
+  .verdict-red { background: #7f1d1d; color: #fca5a5; }
+
+  .conclusion-card { background: linear-gradient(135deg, #1e1b4b, #172554); border: 1px solid #3730a3; border-radius: 16px; padding: 32px; margin-bottom: 24px; text-align: center; }
+  .conclusion-card h2 { font-size: 22px; font-weight: 800; color: #c7d2fe; margin-bottom: 8px; }
+  .buy-range { font-size: 48px; font-weight: 900; color: #60a5fa; margin: 16px 0; }
+  .buy-range-sub { font-size: 14px; color: #818cf8; }
+
+  .check-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .check-table td { padding: 8px 12px; border-bottom: 1px solid #1e293b; }
+  .check-pass { color: #34d399; font-weight: 700; }
+  .check-fail { color: #f87171; font-weight: 700; }
+  .check-label { color: #94a3b8; }
+  .check-value { color: #e2e8f0; }
+
+  /* KPI watch list */
+  .kpi-watch-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .kpi-watch-item { background: #111827; border: 1px solid #1e293b; border-radius: 10px; padding: 16px; }
+  .kpi-watch-item h4 { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-watch-current { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+  .kpi-watch-target { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+  /* Data sources */
+  .sources-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sources-list li { font-size: 13px; color: #64748b; }
+  .sources-list li::before { content: '- '; color: #4b5563; }
+
+  /* Sentiment gauge */
+  .sentiment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+  .sentiment-card { background: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; }
+  .sentiment-label { font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+  .sentiment-value { font-size: 24px; font-weight: 700; }
+  .sentiment-sub { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .bullish { color: #34d399; }
+  .bearish { color: #f87171; }
+  .neutral-val { color: #fbbf24; }
+
+  /* Competitor table */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th { background: #1e293b; color: #94a3b8; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; }
+  .comp-table td { padding: 10px 14px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+  .comp-table .highlight { background: #1e2d40; }
+  .comp-table tr:hover td { background: #1a2332; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .charts-2col, .charts-3col { grid-template-columns: 1fr; }
+    .analysis-grid { grid-template-columns: 1fr; }
+    .valuation-framework { grid-template-columns: 1fr; }
+    .kpi-watch-list { grid-template-columns: 1fr; }
+    .sources-list { grid-template-columns: 1fr; }
+    .sentiment-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 36px; }
+    .buy-range { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== 1. HERO ===== -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="ticker-badge">NASDAQ: MSFT</div>
+        <div class="hero-title">Microsoft</div>
+        <div class="hero-subtitle">Microsoft Corporation — AI Cloud Leader</div>
+        <div class="rating-badge rating-cautious-buy">谨慎买入 / Cautious Buy</div>
+        <div class="hero-meta">分析日期: 2026-05-06 &nbsp;|&nbsp; 数据截至: Q3 FY2026 (Mar 31, 2026)</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat">
+          <div class="hero-stat-value">$413.96</div>
+          <div class="hero-stat-label">当前股价</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">$3.08T</div>
+          <div class="hero-stat-label">市值</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">24.7x</div>
+          <div class="hero-stat-label">TTM P/E</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">22.4x</div>
+          <div class="hero-stat-label">Fwd P/E</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">+18%</div>
+          <div class="hero-stat-label">营收 YoY</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">+40%</div>
+          <div class="hero-stat-label">Azure 增速</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2. KPI CARDS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">2</span>核心 KPI 指标</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Q3 FY2026 营收</div>
+        <div class="kpi-value">$82.9B</div>
+        <div class="kpi-change up">+18.3% YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q3 FY2026 净利润</div>
+        <div class="kpi-value">$31.8B</div>
+        <div class="kpi-change up">+23% YoY (GAAP)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">9M FY2026 自由现金流</div>
+        <div class="kpi-value">~$47.3B</div>
+        <div class="kpi-change neutral">FCF = 营运CF - CapEx</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">毛利率 (Q3 FY2026)</div>
+        <div class="kpi-value">67.6%</div>
+        <div class="kpi-change down">CapEx压力下行</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">营业利润率 (Q3)</div>
+        <div class="kpi-value">46.3%</div>
+        <div class="kpi-change up">+0.8pp YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">EPS (TTM GAAP)</div>
+        <div class="kpi-value">$16.79</div>
+        <div class="kpi-change up">+21% YoY (非GAAP)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Azure 增速</div>
+        <div class="kpi-value">+40%</div>
+        <div class="kpi-change up">Q3 FY2026 (39% CC)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">AI 年化收入</div>
+        <div class="kpi-value">$37B</div>
+        <div class="kpi-change up">+123% YoY run rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM P/E</div>
+        <div class="kpi-value">24.7x</div>
+        <div class="kpi-change neutral">5年均值 31.9x</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Forward P/E</div>
+        <div class="kpi-value">22.4x</div>
+        <div class="kpi-change neutral">历史偏低分位</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROE (FY2025)</div>
+        <div class="kpi-value">29.6%</div>
+        <div class="kpi-change up">ROIC: 22.0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">市值</div>
+        <div class="kpi-value">$3.08T</div>
+        <div class="kpi-change neutral">全球第二大公司</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. BUSINESS MODEL ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">3</span>商业模式分析</div>
+    <div class="charts-2col">
+      <div class="chart-container">
+        <div class="chart-title">Q3 FY2026 收入分部结构</div>
+        <div class="chart-wrap"><canvas id="segmentPieChart"></canvas></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">近5季度分部收入趋势 (亿美元)</div>
+        <div class="chart-wrap"><canvas id="segmentBarChart"></canvas></div>
+      </div>
+    </div>
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h3>收入质量评分</h3>
+        <div class="metric-row"><span class="metric-label">订阅/重复性收入占比</span><span class="metric-value" style="color:#34d399">~70%+</span></div>
+        <div class="metric-row"><span class="metric-label">M365商业云 ARR</span><span class="metric-value">$43B+</span></div>
+        <div class="metric-row"><span class="metric-label">Azure剩余履约义务</span><span class="metric-value">$625B backlog</span></div>
+        <div class="metric-row"><span class="metric-label">Copilot席位数</span><span class="metric-value">2000万+</span></div>
+        <div class="metric-row"><span class="metric-label">软件/服务/云占总收入</span><span class="metric-value" style="color:#34d399">~84%</span></div>
+        <div class="metric-row"><span class="metric-label">收入质量综合评分</span><span class="metric-value" style="color:#34d399">9/10</span></div>
+      </div>
+      <div class="analysis-card">
+        <h3>企业锁定与定价权</h3>
+        <ul>
+          <li>Azure企业合同平均锁定3-5年，替换成本极高</li>
+          <li>M365生态系统整合（Teams/SharePoint/Exchange）构成转换壁垒</li>
+          <li>Copilot ARPU提升：M365 E3→E5升级潜力（+$30/用户/月）</li>
+          <li>OpenAI独家协议延续至2032，Azure首选算力地位</li>
+          <li>GitHub Copilot企业版渗透持续加速</li>
+          <li>Dynamics 365 ERP/CRM深度集成，替换成本逾百万美元级</li>
+        </ul>
+      </div>
+      <div class="analysis-card">
+        <h3>客户结构分布</h3>
+        <div class="metric-row"><span class="metric-label">超大规模云/AI厂商</span><span class="metric-value">~25%</span></div>
+        <div class="metric-row"><span class="metric-label">大型企业/Fortune 500</span><span class="metric-value">~45%</span></div>
+        <div class="metric-row"><span class="metric-label">中小企业/SMB</span><span class="metric-value">~20%</span></div>
+        <div class="metric-row"><span class="metric-label">政府/公共部门</span><span class="metric-value">~7%</span></div>
+        <div class="metric-row"><span class="metric-label">消费者</span><span class="metric-value">~3%</span></div>
+        <div class="metric-row"><span class="metric-label">OpenAI占Azure RPO</span><span class="metric-value" style="color:#fbbf24">45% (集中度风险)</span></div>
+      </div>
+      <div class="analysis-card">
+        <h3>AI飞轮效应</h3>
+        <ul>
+          <li><strong>Azure算力</strong>: OpenAI模型训练/推理 → AI能力持续提升</li>
+          <li><strong>Copilot渗透</strong>: M365用户升级 → ARPU提升 → 研发投入</li>
+          <li><strong>GitHub Copilot</strong>: 开发者生态粘性 → 云迁移加速</li>
+          <li><strong>Dynamics AI</strong>: 企业流程AI化 → 更深锁定</li>
+          <li><strong>Azure AI Studio</strong>: 企业自建AI → 更多算力消耗</li>
+          <li>AI年化收入$37B，+123% YoY，飞轮加速验证</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. FINANCIAL ANALYSIS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">4</span>财务分析</div>
+    <div class="charts-2col">
+      <div class="chart-container">
+        <div class="chart-title">季度营收趋势 + YoY增速 (亿美元)</div>
+        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">利润率趋势 (%)</div>
+        <div class="chart-wrap"><canvas id="marginChart"></canvas></div>
+      </div>
+    </div>
+    <div class="charts-2col">
+      <div class="chart-container">
+        <div class="chart-title">季度营业利润 vs 净利润 (亿美元)</div>
+        <div class="chart-wrap"><canvas id="incomeChart"></canvas></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">CapEx 趋势 (亿美元)</div>
+        <div class="chart-wrap"><canvas id="capexChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>财季</th>
+            <th>营收 ($B)</th>
+            <th>YoY</th>
+            <th>营业利润 ($B)</th>
+            <th>净利润 ($B)</th>
+            <th>EPS (GAAP)</th>
+            <th>毛利率</th>
+            <th>营业利润率</th>
+            <th>净利率</th>
+            <th>CapEx ($B)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Q4 FY2025</td>
+            <td>76.4</td>
+            <td class="positive">+18%</td>
+            <td>34.3</td>
+            <td>27.2</td>
+            <td>$3.65</td>
+            <td>~69%</td>
+            <td>44.9%</td>
+            <td>35.6%</td>
+            <td>~19.0</td>
+          </tr>
+          <tr>
+            <td>Q1 FY2026</td>
+            <td>77.7</td>
+            <td class="positive">+18%</td>
+            <td>38.0</td>
+            <td>27.7</td>
+            <td>$3.72</td>
+            <td>~69%</td>
+            <td>48.9%</td>
+            <td>35.6%</td>
+            <td>~20.0</td>
+          </tr>
+          <tr>
+            <td>Q2 FY2026</td>
+            <td>81.3</td>
+            <td class="positive">+17%</td>
+            <td>38.3</td>
+            <td>38.5*</td>
+            <td>$5.16*</td>
+            <td>~68%</td>
+            <td>47.1%</td>
+            <td>47.4%*</td>
+            <td>~28.7</td>
+          </tr>
+          <tr style="background:#1a2332">
+            <td><strong>Q3 FY2026</strong></td>
+            <td><strong>82.9</strong></td>
+            <td class="positive"><strong>+18.3%</strong></td>
+            <td><strong>38.4</strong></td>
+            <td><strong>31.8</strong></td>
+            <td><strong>$4.27</strong></td>
+            <td><strong>67.6%</strong></td>
+            <td><strong>46.3%</strong></td>
+            <td><strong>38.3%</strong></td>
+            <td><strong>31.9</strong></td>
+          </tr>
+          <tr style="color:#60a5fa">
+            <td>Q4 FY2026 (指引)</td>
+            <td>86.7–87.8</td>
+            <td class="positive">+13–15%</td>
+            <td>~38.1</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>~44%</td>
+            <td>N/A</td>
+            <td>N/A</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:#64748b;margin-top:8px">* Q2 FY2026净利润含OpenAI投资收益$7.6B（GAAP一次性），非GAAP净利润$30.9B，非GAAP EPS $4.14</p>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h3>资产负债表摘要 (FY2025)</h3>
+        <div class="metric-row"><span class="metric-label">总资产</span><span class="metric-value">$619.0B</span></div>
+        <div class="metric-row"><span class="metric-label">总负债</span><span class="metric-value">$275.5B</span></div>
+        <div class="metric-row"><span class="metric-label">股东权益</span><span class="metric-value">$343.5B</span></div>
+        <div class="metric-row"><span class="metric-label">每股账面价值</span><span class="metric-value">$55.78</span></div>
+        <div class="metric-row"><span class="metric-label">负债/权益比</span><span class="metric-value" style="color:#34d399">0.12 (极低)</span></div>
+        <div class="metric-row"><span class="metric-label">流动比率</span><span class="metric-value" style="color:#fbbf24">1.35</span></div>
+      </div>
+      <div class="analysis-card">
+        <h3>盈利能力关键指标</h3>
+        <div class="metric-row"><span class="metric-label">ROE (FY2025)</span><span class="metric-value" style="color:#34d399">29.6%</span></div>
+        <div class="metric-row"><span class="metric-label">ROA (FY2025)</span><span class="metric-value">16.4%</span></div>
+        <div class="metric-row"><span class="metric-label">ROIC</span><span class="metric-value" style="color:#34d399">22.0% (vs WACC 8.8%)</span></div>
+        <div class="metric-row"><span class="metric-label">FY2025 年度FCF</span><span class="metric-value">$71.6B</span></div>
+        <div class="metric-row"><span class="metric-label">FY2025 EPS (GAAP)</span><span class="metric-value">$13.64</span></div>
+        <div class="metric-row"><span class="metric-label">FY2025 营收</span><span class="metric-value">$252B</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. GROWTH DRIVERS ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">5</span>增长驱动与关键指标</div>
+    <div class="charts-2col">
+      <div class="chart-container">
+        <div class="chart-title">云厂商季度CapEx趋势 ($B)</div>
+        <div class="chart-wrap"><canvas id="capexCloudChart"></canvas></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">Azure增速 YoY (%)</div>
+        <div class="chart-wrap"><canvas id="azureGrowthChart"></canvas></div>
+      </div>
+    </div>
+    <div class="kpi-watch-list">
+      <div class="kpi-watch-item">
+        <h4>Azure YoY增速</h4>
+        <div class="kpi-watch-current" style="color:#34d399">+40%</div>
+        <div class="kpi-watch-target">Q3 FY2026 | 预期维持39-40%</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>AI年化收入</h4>
+        <div class="kpi-watch-current" style="color:#60a5fa">$37B</div>
+        <div class="kpi-watch-target">+123% YoY | 高速增长中</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>Copilot商业席位</h4>
+        <div class="kpi-watch-current" style="color:#a78bfa">2000万+</div>
+        <div class="kpi-watch-target">Q3 FY2026 (Q2: 1500万)</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>Azure剩余履约义务</h4>
+        <div class="kpi-watch-current">$625B</div>
+        <div class="kpi-watch-target">同比近翻倍增长</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>FY2026 CapEx指引</h4>
+        <div class="kpi-watch-current" style="color:#fbbf24">$190B</div>
+        <div class="kpi-watch-target">+61% vs FY2025 ($118B)</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>OpenAI持股比例</h4>
+        <div class="kpi-watch-current">27%</div>
+        <div class="kpi-watch-target">Azure首选算力协议至2032</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>M365商业云ARR</h4>
+        <div class="kpi-watch-current">$43B+</div>
+        <div class="kpi-watch-target">Q3 +19% YoY CC</div>
+      </div>
+      <div class="kpi-watch-item">
+        <h4>季度营收增速</h4>
+        <div class="kpi-watch-current" style="color:#34d399">+18%</div>
+        <div class="kpi-watch-target">已连续4季度维持15-18%</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px" class="analysis-grid">
+      <div class="analysis-card">
+        <h3>主权AI与企业AI落地</h3>
+        <ul>
+          <li>微软已与多国政府签署主权云/AI协议（英国、欧盟、中东等）</li>
+          <li>Azure Government专区需求激增，安全认证覆盖度领先</li>
+          <li>Fortune 500企业AI采购加速，Azure AI Studio为首选平台</li>
+          <li>推理负载占比持续提升，边际成本改善空间大</li>
+        </ul>
+      </div>
+      <div class="analysis-card">
+        <h3>CapEx周期与容量约束</h3>
+        <ul>
+          <li>FY2026 CapEx $190B (+61%)，含内存价格上涨$25B影响</li>
+          <li>Q3单季CapEx $31.9B，同比+49%</li>
+          <li>管理层确认Azure容量仍处于供不应求状态</li>
+          <li>数据中心建设周期18-24个月，FY2026-2027将陆续释放</li>
+          <li>折旧压力推高COGS，毛利率短期承压（67.6% vs 历史70%+）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. COMPETITIVE LANDSCAPE ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">6</span>竞争格局</div>
+    <div class="charts-2col">
+      <div class="chart-container">
+        <div class="chart-title">全球云基础设施市场份额 (Q1 2026)</div>
+        <div class="chart-wrap"><canvas id="cloudShareChart"></canvas></div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title">云厂商营收对比 Q3 2026 ($B)</div>
+        <div class="chart-wrap"><canvas id="cloudRevenueBar"></canvas></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th style="color:#60a5fa">Microsoft Azure</th>
+            <th>Amazon AWS</th>
+            <th>Google Cloud</th>
+            <th>Salesforce</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>云市占率</td>
+            <td class="highlight"><strong>23%</strong></td>
+            <td>28%</td>
+            <td>14%</td>
+            <td>N/A (SaaS)</td>
+          </tr>
+          <tr>
+            <td>最新季度云营收</td>
+            <td class="highlight"><strong>$34.7B (IC)</strong></td>
+            <td>~$31B</td>
+            <td>~$12B</td>
+            <td>~$9.8B</td>
+          </tr>
+          <tr>
+            <td>云营收YoY增速</td>
+            <td class="highlight"><strong>+30%</strong></td>
+            <td>+17%</td>
+            <td>+28%</td>
+            <td>+8%</td>
+          </tr>
+          <tr>
+            <td>AI年化收入</td>
+            <td class="highlight"><strong>$37B</strong></td>
+            <td>N/A (不单独披露)</td>
+            <td>N/A</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td>企业套件优势</td>
+            <td class="highlight"><strong>M365/Teams/Dynamics深度集成</strong></td>
+            <td>无原生套件</td>
+            <td>Workspace较弱</td>
+            <td>CRM强，ERP弱</td>
+          </tr>
+          <tr>
+            <td>AI模型合作</td>
+            <td class="highlight"><strong>OpenAI独家（至2032）</strong></td>
+            <td>Anthropic战略合作</td>
+            <td>自研Gemini</td>
+            <td>多模型</td>
+          </tr>
+          <tr>
+            <td>TTM P/E</td>
+            <td class="highlight"><strong>24.7x</strong></td>
+            <td>~38x</td>
+            <td>N/A (Alphabet: 20x)</td>
+            <td>~35x</td>
+          </tr>
+          <tr>
+            <td>FY2026 CapEx指引</td>
+            <td class="highlight"><strong>$190B</strong></td>
+            <td>~$100B+</td>
+            <td>~$75B</td>
+            <td>较低</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h3>Microsoft核心竞争优势矩阵</h3>
+        <div class="metric-row"><span class="metric-label">企业生产力套件锁定</span><span class="metric-value" style="color:#34d399">极强 (M365 3亿+用户)</span></div>
+        <div class="metric-row"><span class="metric-label">OpenAI战略绑定</span><span class="metric-value" style="color:#34d399">独家至2032</span></div>
+        <div class="metric-row"><span class="metric-label">混合云能力</span><span class="metric-value" style="color:#34d399">Azure Arc领先</span></div>
+        <div class="metric-row"><span class="metric-label">开发者生态(GitHub)</span><span class="metric-value" style="color:#34d399">1亿+开发者</span></div>
+        <div class="metric-row"><span class="metric-label">政府/合规云</span><span class="metric-value" style="color:#34d399">GovCloud领先</span></div>
+        <div class="metric-row"><span class="metric-label">客户集中度风险</span><span class="metric-value" style="color:#fbbf24">OpenAI占RPO 45%</span></div>
+      </div>
+      <div class="analysis-card">
+        <h3>潜在颠覆威胁</h3>
+        <ul>
+          <li>Google Cloud AI能力追赶（Gemini系列），企业客户分流</li>
+          <li>AWS Bedrock多模型策略降低对微软AI依赖</li>
+          <li>开源AI模型（Llama/Mistral）压低Azure AI服务定价空间</li>
+          <li>Meta/Google自研定制芯片降低对通用算力依赖</li>
+          <li>Salesforce Agentforce + Slack深度集成冲击M365 Teams</li>
+          <li>自建大模型能力成熟后，OpenAI独家优势或弱化</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. MOAT SCORECARD ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">7</span>护城河评分卡 (巴菲特框架)</div>
+    <div style="text-align:center;margin-bottom:24px">
+      <span style="font-size:18px;font-weight:700;color:#f1f5f9">综合护城河评级：</span>
+      <span class="moat-rating wide-moat" style="font-size:16px;padding:6px 20px">宽护城河 (Wide Moat)</span>
+    </div>
+    <div class="moat-grid">
+      <div class="moat-card">
+        <h4>品牌护城河</h4>
+        <div class="stars">★★★★★</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+        <div style="font-size:13px;color:#94a3b8;margin-top:10px">全球最强企业软件品牌，Windows/Office/Azure企业采购优先考量。品牌溢价在政府/金融/医疗等监管行业尤为显著。</div>
+        <span class="moat-rating wide-moat">宽</span>
+      </div>
+      <div class="moat-card">
+        <h4>转换成本</h4>
+        <div class="stars">★★★★★</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+        <div style="font-size:13px;color:#94a3b8;margin-top:10px">迁移M365全套替换工时数万小时，数据迁移风险高。Azure与企业AD/DevOps深度集成，替换成本数百万至千万美元级。</div>
+        <span class="moat-rating wide-moat">宽</span>
+      </div>
+      <div class="moat-card">
+        <h4>网络效应</h4>
+        <div class="stars">★★★★<span class="stars-empty">★</span></div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:80%"></div></div>
+        <div style="font-size:13px;color:#94a3b8;margin-top:10px">Teams协作平台用户规模带来强网络效应。GitHub 1亿+开发者社区自我强化。LinkedIn职业数据网络效应显著（11亿会员）。</div>
+        <span class="moat-rating wide-moat">宽</span>
+      </div>
+      <div class="moat-card">
+        <h4>成本优势</h4>
+        <div class="stars">★★★★<span class="stars-empty">★</span></div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:80%"></div></div>
+        <div style="font-size:13px;color:#94a3b8;margin-top:10px">规模化数据中心采购优势，微软自研Maia芯片降低AI推理成本。软件交付边际成本趋零，毛利率长期维持高位。</div>
+        <span class="moat-rating wide-moat">宽</span>
+      </div>
+      <div class="moat-card">
+        <h4>无形资产</h4>
+        <div class="stars">★★★★★</div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+        <div style="font-size:13px;color:#94a3b8;margin-top:10px">数万项专利（Azure/AI/安全），OpenAI独家技术合作协议。研发投入$30B+/年，顶尖AI人才吸引力全球领先。</div>
+        <span class="moat-rating wide-moat">宽</span>
+      </div>
+    </div>
+
+    <div style="margin-top:24px" class="analysis-grid">
+      <div class="analysis-card">
+        <h3>巴菲特估值结论</h3>
+        <div class="metric-row"><span class="metric-label">FY2026E 非GAAP EPS</span><span class="metric-value">~$16.84</span></div>
+        <div class="metric-row"><span class="metric-label">合理倍数 (宽护城河)</span><span class="metric-value">28x（高质量软件）</span></div>
+        <div class="metric-row"><span class="metric-label">内在价值估算</span><span class="metric-value" style="color:#60a5fa">~$472/股</span></div>
+        <div class="metric-row"><span class="metric-label">20%安全边际买入区间</span><span class="metric-value" style="color:#34d399">$377 – $420</span></div>
+        <div class="metric-row"><span class="metric-label">当前股价</span><span class="metric-value" style="color:#fbbf24">$413.96 (区间内)</span></div>
+        <div class="metric-row"><span class="metric-label">ROE近3年均值</span><span class="metric-value" style="color:#34d399">~28-30%</span></div>
+      </div>
+      <div class="analysis-card">
+        <h3>护城河量化指标</h3>
+        <div class="metric-row"><span class="metric-label">GitHub开发者数量</span><span class="metric-value">1亿+</span></div>
+        <div class="metric-row"><span class="metric-label">M365商业订阅用户</span><span class="metric-value">3亿+ 席位</span></div>
+        <div class="metric-row"><span class="metric-label">LinkedIn会员数</span><span class="metric-value">11亿+</span></div>
+        <div class="metric-row"><span class="metric-label">Azure剩余履约义务</span><span class="metric-value">$625B</span></div>
+        <div class="metric-row"><span class="metric-label">企业AI Copilot席位</span><span class="metric-value">2000万+</span></div>
+        <div class="metric-row"><span class="metric-label">年度研发支出</span><span class="metric-value">$29-30B+</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. CYCLE & MACRO ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">8</span>周期与宏观分析 (马克斯框架)</div>
+    <div class="sentiment-grid">
+      <div class="sentiment-card">
+        <div class="sentiment-label">PE历史分位 (5年)</div>
+        <div class="sentiment-value bullish">低位</div>
+        <div class="sentiment-sub">当前24.7x vs 5年均值31.9x<br>处于历史低25分位</div>
+      </div>
+      <div class="sentiment-card">
+        <div class="sentiment-label">周期阶段定位</div>
+        <div class="sentiment-value neutral-val">高速成长期</div>
+        <div class="sentiment-sub">AI基础设施投资周期高峰<br>需求仍强劲但CapEx压力大</div>
+      </div>
+      <div class="sentiment-card">
+        <div class="sentiment-label">分析师情绪</div>
+        <div class="sentiment-value bullish">极度乐观</div>
+        <div class="sentiment-sub">51 Buy / 3 Hold / 0 Sell<br>均值目标价 $561</div>
+      </div>
+      <div class="sentiment-card">
+        <div class="sentiment-label">机构持仓</div>
+        <div class="sentiment-value bullish">73.7%</div>
+        <div class="sentiment-sub">机构持仓比例稳定<br>无大规模减持信号</div>
+      </div>
+      <div class="sentiment-card">
+        <div class="sentiment-label">52周表现</div>
+        <div class="sentiment-value bearish">-4.9%</div>
+        <div class="sentiment-sub">52周区间: $356 – $555<br>当前处中低区间</div>
+      </div>
+      <div class="sentiment-card">
+        <div class="sentiment-label">CapEx周期信号</div>
+        <div class="sentiment-value neutral-val">加速期</div>
+        <div class="sentiment-sub">$190B指引 (+61% YoY)<br>折旧压力将在FY2027显现</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">PE历史估值分位参考</div>
+      <div class="chart-wrap"><canvas id="peHistoryChart"></canvas></div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th>风险类型</th>
+            <th>具体描述</th>
+            <th>概率</th>
+            <th>潜在影响</th>
+            <th>评估</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>OpenAI集中度风险</strong></td>
+            <td>OpenAI占Azure RPO达45%，若OpenAI转向自建或竞争对手算力，Azure增速将大幅放缓</td>
+            <td class="risk-medium">中 (20-30%)</td>
+            <td class="risk-high">营收冲击 $5-15B/年</td>
+            <td><span class="risk-badge medium">中风险</span></td>
+          </tr>
+          <tr>
+            <td><strong>CapEx过度投入风险</strong></td>
+            <td>$190B CapEx若AI需求增速放缓，折旧负担将持续压制毛利率，FCF大幅缩水</td>
+            <td class="risk-medium">中 (25-35%)</td>
+            <td class="risk-medium">毛利率下降3-5pp，FCF减少$15-25B</td>
+            <td><span class="risk-badge medium">中风险</span></td>
+          </tr>
+          <tr>
+            <td><strong>竞争加剧风险</strong></td>
+            <td>Google Gemini Ultra/AWS Bedrock AI能力追赶，企业客户分流Azure AI服务</td>
+            <td class="risk-low">低-中 (15-25%)</td>
+            <td class="risk-medium">Azure增速从40%降至25-30%，估值重评</td>
+            <td><span class="risk-badge medium">中风险</span></td>
+          </tr>
+          <tr>
+            <td><strong>估值压缩风险</strong></td>
+            <td>若利率维持高位且AI增速不及预期，PS/PE倍数压缩至均值以下</td>
+            <td class="risk-medium">中 (20-30%)</td>
+            <td class="risk-medium">股价下行空间至 $320-350 (PS 8x)</td>
+            <td><span class="risk-badge medium">中风险</span></td>
+          </tr>
+          <tr>
+            <td><strong>监管/地缘政治风险</strong></td>
+            <td>欧盟AI监管、美国反垄断调查(捆绑销售)、中国市场限制</td>
+            <td class="risk-low">低 (10-15%)</td>
+            <td class="risk-medium">营收影响$2-8B，合规成本上升</td>
+            <td><span class="risk-badge low">低风险</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. VALUATION ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">9</span>三框架估值综合</div>
+
+    <div class="valuation-framework">
+      <!-- Graham -->
+      <div class="val-card">
+        <h3>格雷厄姆安全边际</h3>
+        <table class="check-table">
+          <tr><td class="check-label">P/E ≤ 15x</td><td class="check-value">24.7x</td><td class="check-fail">不通过</td></tr>
+          <tr><td class="check-label">P/B ≤ 1.5x</td><td class="check-value">7.4x</td><td class="check-fail">不通过</td></tr>
+          <tr><td class="check-label">P/E × P/B ≤ 22.5</td><td class="check-value">183x</td><td class="check-fail">不通过</td></tr>
+          <tr><td class="check-label">流动比率 ≥ 2x</td><td class="check-value">1.35x</td><td class="check-fail">不通过</td></tr>
+          <tr><td class="check-label">负债/权益 ≤ 1x</td><td class="check-value">0.12x</td><td class="check-pass">通过</td></tr>
+          <tr><td class="check-label">总资产/总负债 ≥ 2x</td><td class="check-value">2.25x</td><td class="check-pass">通过</td></tr>
+        </table>
+        <div style="margin-top:16px">
+          <div style="font-size:13px;color:#94a3b8">Graham Number = √(22.5 × $16.79 × $55.78)</div>
+          <div style="font-size:22px;font-weight:700;color:#f87171;margin-top:4px">$145.16</div>
+          <div style="font-size:12px;color:#64748b">当前股价溢价: +185%</div>
+        </div>
+        <div class="verdict-badge verdict-red" style="margin-top:12px">减持 — 传统安全边际不满足</div>
+        <div class="verdict" style="margin-top:8px">MSFT为高质量成长型企业，格雷厄姆传统标准不适用，但警示估值风险真实存在</div>
+      </div>
+
+      <!-- Buffett -->
+      <div class="val-card">
+        <h3>巴菲特内在价值</h3>
+        <div style="margin-bottom:16px">
+          <div class="metric-row"><span class="metric-label">护城河评级</span><span class="metric-value" style="color:#34d399">宽 (Wide Moat)</span></div>
+          <div class="metric-row"><span class="metric-label">FY2026E 非GAAP EPS</span><span class="metric-value">~$16.84</span></div>
+          <div class="metric-row"><span class="metric-label">合理估值倍数</span><span class="metric-value">28x</span></div>
+          <div class="metric-row"><span class="metric-label">内在价值</span><span class="metric-value" style="color:#60a5fa">~$472/股</span></div>
+          <div class="metric-row"><span class="metric-label">20%安全边际</span><span class="metric-value" style="color:#34d399">$377 – $420</span></div>
+          <div class="metric-row"><span class="metric-label">当前价与内在价差</span><span class="metric-value" style="color:#fbbf24">-12%（接近合理价）</span></div>
+        </div>
+        <div class="verdict-badge verdict-yellow" style="margin-top:12px">谨慎买入 — 接近内在价值下沿</div>
+        <div class="verdict" style="margin-top:8px">宽护城河+高ROE支撑溢价，当前价格接近合理区间低端，具备中长期持有价值</div>
+      </div>
+
+      <!-- Marks -->
+      <div class="val-card">
+        <h3>马克斯周期定位</h3>
+        <div style="margin-bottom:16px">
+          <div class="metric-row"><span class="metric-label">周期阶段</span><span class="metric-value" style="color:#fbbf24">AI成长期高峰</span></div>
+          <div class="metric-row"><span class="metric-label">PE 5年分位</span><span class="metric-value" style="color:#34d399">~25th百分位（偏低）</span></div>
+          <div class="metric-row"><span class="metric-label">52周区间位置</span><span class="metric-value" style="color:#fbbf24">中低区间（约50%）</span></div>
+          <div class="metric-row"><span class="metric-label">分析师情绪</span><span class="metric-value" style="color:#fbbf24">过度乐观（反向信号）</span></div>
+          <div class="metric-row"><span class="metric-label">CapEx周期</span><span class="metric-value" style="color:#fbbf24">加速期，峰值风险</span></div>
+          <div class="metric-row"><span class="metric-label">综合风险评级</span><span class="metric-value" style="color:#fbbf24">中等</span></div>
+        </div>
+        <div class="verdict-badge verdict-yellow" style="margin-top:12px">谨慎买入 — 估值合理，注意CapEx风险</div>
+        <div class="verdict" style="margin-top:8px">PE已回落至历史低位，但CapEx激增+分析师过度乐观需警惕，分批建仓为宜</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">DCF三情景估值 vs 当前股价</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="dcfChart"></canvas></div>
+    </div>
+
+    <div class="conclusion-card">
+      <h2>三框架综合结论</h2>
+      <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin:16px 0">
+        <div style="text-align:center">
+          <div style="font-size:13px;color:#818cf8;margin-bottom:4px">格雷厄姆</div>
+          <div style="font-size:16px;font-weight:700;color:#f87171">估值偏高</div>
+          <div style="font-size:12px;color:#64748b">传统安全边际不满足</div>
+        </div>
+        <div style="font-size:24px;color:#4b5563;display:flex;align-items:center">+</div>
+        <div style="text-align:center">
+          <div style="font-size:13px;color:#818cf8;margin-bottom:4px">巴菲特</div>
+          <div style="font-size:16px;font-weight:700;color:#34d399">谨慎买入</div>
+          <div style="font-size:12px;color:#64748b">接近合理价低端</div>
+        </div>
+        <div style="font-size:24px;color:#4b5563;display:flex;align-items:center">+</div>
+        <div style="text-align:center">
+          <div style="font-size:13px;color:#818cf8;margin-bottom:4px">马克斯</div>
+          <div style="font-size:16px;font-weight:700;color:#fbbf24">谨慎买入</div>
+          <div style="font-size:12px;color:#64748b">PE低位，注意周期风险</div>
+        </div>
+      </div>
+      <div style="font-size:16px;color:#c7d2fe;margin-bottom:8px">综合建议：<strong>分批谨慎买入</strong></div>
+      <div style="font-size:13px;color:#818cf8;margin-bottom:16px">基于DCF中性情景+巴菲特内在价值，含20%安全边际</div>
+      <div class="buy-range">$360 – $420</div>
+      <div class="buy-range-sub">理想买入区间（含20%安全边际）&nbsp;|&nbsp; 当前价 $413.96 处于区间上沿</div>
+      <div style="margin-top:16px;font-size:13px;color:#64748b">
+        分析师12月均值目标价: $561 (+35.7% upside) &nbsp;|&nbsp; DCF加权内在价值: $497/股
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10. SOURCES ===== -->
+<section>
+  <div class="container">
+    <div class="section-title"><span class="num">10</span>数据来源</div>
+    <ul class="sources-list">
+      <li><a href="https://www.microsoft.com/en-us/investor/earnings/fy-2026-q3/press-release-webcast" target="_blank">Microsoft FY26 Q3 Press Release (Apr 29, 2026)</a></li>
+      <li><a href="https://www.microsoft.com/en-us/investor/earnings/fy-2026-q3/segment-revenues" target="_blank">Microsoft FY26 Q3 Segment Revenues</a></li>
+      <li><a href="https://www.microsoft.com/en-us/investor/earnings/fy-2026-q2/press-release-webcast" target="_blank">Microsoft FY26 Q2 Press Release</a></li>
+      <li><a href="https://www.microsoft.com/en-us/investor/earnings/fy-2026-q1/press-release-webcast" target="_blank">Microsoft FY26 Q1 Press Release</a></li>
+      <li><a href="https://stockanalysis.com/stocks/msft/statistics/" target="_blank">StockAnalysis MSFT Statistics (May 2026)</a></li>
+      <li><a href="https://www.macrotrends.net/stocks/charts/MSFT/microsoft/pe-ratio" target="_blank">MacroTrends MSFT PE Ratio History</a></li>
+      <li><a href="https://news.alphastreet.com/microsoft-msft-q3-fy2026-azure-hits-40-growth-as-ai-business-reaches-37-billion-run-rate/" target="_blank">AlphaStreet: MSFT Q3 FY2026 Azure 40% AI $37B</a></li>
+      <li><a href="https://www.cnbc.com/2026/04/29/microsoft-msft-q3-earnings-report-2026.html" target="_blank">CNBC MSFT Q3 Earnings Report 2026</a></li>
+      <li><a href="https://stockanalysis.com/stocks/msft/financials/ratios/" target="_blank">StockAnalysis MSFT Financial Ratios</a></li>
+      <li><a href="https://www.marketbeat.com/stocks/NASDAQ/MSFT/forecast/" target="_blank">MarketBeat MSFT Analyst Forecast 2026</a></li>
+      <li><a href="https://www.srgresearch.com/articles/cloud-market-share-trends-big-three-together-hold-63-while-oracle-and-the-neoclouds-inch-higher" target="_blank">Synergy Research: Cloud Market Share Q1 2026</a></li>
+      <li><a href="https://finance.yahoo.com/quote/MSFT/" target="_blank">Yahoo Finance MSFT Quote</a></li>
+      <li><a href="https://futurumgroup.com/insights/microsoft-q3-fy-2026-earnings-show-cloud-growth-with-capacity-still-tight/" target="_blank">Futurum: MSFT Q3 FY2026 Earnings Analysis</a></li>
+      <li><a href="https://licenseq.com/microsoft-fy26-q3-results-explained/" target="_blank">LicenseQ: FY26 Q3 Results Explained</a></li>
+    </ul>
+    <div style="margin-top:24px;font-size:12px;color:#475569;border-top:1px solid #1e293b;padding-top:16px">
+      <p>报告生成时间: 2026-05-06 | 分析师: AI Value Research System | 免责声明: 本报告仅供参考，不构成投资建议。所有数据均来自公开信息源，投资决策需自行承担风险。</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// Chart.js default settings
+Chart.defaults.color = '#64748b';
+Chart.defaults.borderColor = '#1e293b';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+// 1. Segment Pie Chart
+new Chart(document.getElementById('segmentPieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Intelligent Cloud', 'Productivity & BP', 'More Personal Computing'],
+    datasets: [{
+      data: [34.7, 35.0, 13.2],
+      backgroundColor: ['#3b82f6', '#8b5cf6', '#64748b'],
+      borderWidth: 2,
+      borderColor: '#111827'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.toFixed(1)}B (${(ctx.parsed/82.9*100).toFixed(1)}%)` } }
+    }
+  }
+});
+
+// 2. Segment Bar Chart (5 quarters)
+new Chart(document.getElementById('segmentBarChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: 'Intelligent Cloud', data: [26.75, 29.9, 31.9, 32.9, 34.7], backgroundColor: '#3b82f6' },
+      { label: 'Productivity & BP', data: [29.9, 33.1, 33.1, 34.1, 35.0], backgroundColor: '#8b5cf6' },
+      { label: 'More PC', data: [13.4, 13.5, 12.7, 14.3, 13.2], backgroundColor: '#475569' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { stacked: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
+  }
+});
+
+// 3. Revenue + YoY Chart
+const revenueCtx = document.getElementById('revenueChart');
+new Chart(revenueCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: '季度营收 ($B)', data: [70.1, 76.4, 77.7, 81.3, 82.9], backgroundColor: '#1d4ed8', yAxisID: 'y' },
+      { label: 'YoY增速 (%)', data: [17, 18, 18, 17, 18.3], type: 'line', borderColor: '#34d399', backgroundColor: 'transparent', pointBackgroundColor: '#34d399', yAxisID: 'y1', tension: 0.3 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { position: 'left', grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } },
+      y1: { position: 'right', grid: { display: false }, ticks: { color: '#34d399', callback: v => v + '%' }, min: 0, max: 30 }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
+  }
+});
+
+// 4. Margin Trend Chart
+new Chart(document.getElementById('marginChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: '毛利率 (%)', data: [69.4, 69.0, 69.4, 68.4, 67.6], borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', tension: 0.3, pointBackgroundColor: '#60a5fa' },
+      { label: '营业利润率 (%)', data: [45.6, 44.9, 48.9, 47.1, 46.3], borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.1)', tension: 0.3, pointBackgroundColor: '#a78bfa' },
+      { label: '净利率 (%)', data: [35.5, 35.6, 35.6, 47.4, 38.3], borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.1)', tension: 0.3, pointBackgroundColor: '#34d399' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => v + '%' }, min: 30, max: 75 }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
+  }
+});
+
+// 5. Operating + Net Income
+new Chart(document.getElementById('incomeChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: '营业利润 ($B)', data: [32.0, 34.3, 38.0, 38.3, 38.4], backgroundColor: '#1d4ed8' },
+      { label: '净利润 ($B)', data: [24.9, 27.2, 27.7, 31.0, 31.8], backgroundColor: '#7c3aed' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.parsed.y.toFixed(1)}B` } } }
+  }
+});
+
+// 6. CapEx Trend
+new Chart(document.getElementById('capexChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: 'CapEx ($B)', data: [21.4, 21.5, 20.0, 28.7, 31.9], backgroundColor: ['#dc2626','#dc2626','#f59e0b','#f59e0b','#f87171'] }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 7. Cloud CapEx comparison
+new Chart(document.getElementById('capexCloudChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26'],
+    datasets: [
+      { label: 'Microsoft', data: [21.4, 21.5, 20.0, 28.7, 31.9], backgroundColor: '#3b82f6' },
+      { label: 'Amazon (AWS+)', data: [24.3, 26.3, 28.0, 26.3, 28.4], backgroundColor: '#f59e0b' },
+      { label: 'Google', data: [12.0, 13.0, 17.2, 14.3, 17.2], backgroundColor: '#34d399' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
+  }
+});
+
+// 8. Azure Growth
+new Chart(document.getElementById('azureGrowthChart'), {
+  type: 'line',
+  data: {
+    labels: ['Q3 FY25', 'Q4 FY25', 'Q1 FY26', 'Q2 FY26', 'Q3 FY26', 'Q4 FY26E'],
+    datasets: [{
+      label: 'Azure YoY增速 (%)',
+      data: [31, 39, 33, 38, 40, 39.5],
+      borderColor: '#60a5fa',
+      backgroundColor: 'rgba(96,165,250,0.15)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#60a5fa',
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => v + '%' }, min: 20, max: 50 }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8' } } }
+  }
+});
+
+// 9. Cloud Market Share
+new Chart(document.getElementById('cloudShareChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['AWS', 'Microsoft Azure', 'Google Cloud', 'Others'],
+    datasets: [{
+      data: [28, 23, 14, 35],
+      backgroundColor: ['#f59e0b', '#3b82f6', '#34d399', '#374151'],
+      borderWidth: 2, borderColor: '#111827'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+    }
+  }
+});
+
+// 10. Cloud Revenue Bar comparison
+new Chart(document.getElementById('cloudRevenueBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Microsoft Intelligent Cloud', 'Amazon AWS', 'Google Cloud', 'Salesforce'],
+    datasets: [{
+      label: '最新季度云营收 ($B)',
+      data: [34.7, 31.0, 12.0, 9.8],
+      backgroundColor: ['#3b82f6', '#f59e0b', '#34d399', '#8b5cf6']
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v + 'B' } },
+      y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// 11. PE History Chart
+new Chart(document.getElementById('peHistoryChart'), {
+  type: 'line',
+  data: {
+    labels: ['2021', '2022', '2023', '2024', '2025', 'May-26'],
+    datasets: [
+      { label: 'MSFT TTM P/E', data: [38, 26, 32, 35, 32, 24.7], borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#60a5fa' },
+      { label: '5年均值 (31.9x)', data: [31.9, 31.9, 31.9, 31.9, 31.9, 31.9], borderColor: '#f59e0b', borderDash: [5,5], backgroundColor: 'transparent', pointRadius: 0 },
+      { label: '15x基准 (格雷厄姆)', data: [15, 15, 15, 15, 15, 15], borderColor: '#f87171', borderDash: [3,3], backgroundColor: 'transparent', pointRadius: 0 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#64748b' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => v + 'x' }, min: 10, max: 45 }
+    },
+    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }
+  }
+});
+
+// 12. DCF Bar Chart
+new Chart(document.getElementById('dcfChart'), {
+  type: 'bar',
+  data: {
+    labels: ['保守情景\n(15%/8%/3%)', '中性情景\n(25%/12%/3%)', '乐观情景\n(35%/15%/4%)', '加权估值\n(30/45/25)', '当前股价'],
+    datasets: [{
+      label: '每股内在价值 ($)',
+      data: [274, 462, 827, 497, 413.96],
+      backgroundColor: ['#374151', '#3b82f6', '#34d399', '#8b5cf6', '#f59e0b'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', callback: v => '$' + v } },
+      y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+    },
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.x.toFixed(0)}/股` } } }
+  }
+});
+</script>
+</body>
+</html>
