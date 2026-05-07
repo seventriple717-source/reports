@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOOG - Alphabet Inc. Value Investment Analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #0f1629;
+    --bg-card: #141c2e;
+    --bg-card-hover: #1a2440;
+    --border: #1e2d4a;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8b9ab5;
+    --text-muted: #4a5568;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --accent-yellow: #f59e0b;
+    --accent-purple: #8b5cf6;
+    --accent-cyan: #06b6d4;
+    --google-blue: #4285F4;
+    --google-red: #EA4335;
+    --google-yellow: #FBBC05;
+    --google-green: #34A853;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero Section */
+  .hero { background: linear-gradient(135deg, #0a0e1a 0%, #0d1530 40%, #101a38 100%); border-bottom: 1px solid var(--border); padding: 48px 0 40px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at 60% 40%, rgba(66,133,244,0.08) 0%, transparent 60%); pointer-events: none; }
+  .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .hero-left { flex: 1; min-width: 280px; }
+  .hero-ticker { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .ticker-badge { background: var(--google-blue); color: #fff; font-size: 22px; font-weight: 800; padding: 6px 18px; border-radius: 8px; letter-spacing: 2px; }
+  .company-name { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+  .company-desc { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+  .hero-price-block { text-align: right; }
+  .price-value { font-size: 44px; font-weight: 800; color: #fff; line-height: 1; }
+  .price-change { font-size: 16px; color: var(--accent-green); margin-top: 4px; }
+  .hero-meta { display: flex; gap: 32px; margin-top: 28px; flex-wrap: wrap; }
+  .hero-meta-item { display: flex; flex-direction: column; }
+  .hero-meta-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .hero-meta-value { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-top: 2px; }
+  .hero-ratings { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .rating-tag { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid; }
+  .rating-green { background: rgba(16,185,129,0.12); border-color: var(--accent-green); color: var(--accent-green); }
+  .rating-yellow { background: rgba(245,158,11,0.12); border-color: var(--accent-yellow); color: var(--accent-yellow); }
+  .rating-blue { background: rgba(59,130,246,0.12); border-color: var(--accent-blue); color: var(--accent-blue); }
+  .rating-red { background: rgba(239,68,68,0.12); border-color: var(--accent-red); color: var(--accent-red); }
+
+  /* Section styles */
+  .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .section-title::before { content: ''; width: 4px; height: 22px; background: var(--google-blue); border-radius: 2px; flex-shrink: 0; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .kpi-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color 0.2s; }
+  .kpi-card:hover { border-color: var(--google-blue); }
+  .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .kpi-sub { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+  .kpi-trend-up { color: var(--accent-green); }
+  .kpi-trend-down { color: var(--accent-red); }
+  .kpi-trend-neutral { color: var(--accent-yellow); }
+
+  /* Cards & Panels */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .card-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+  @media (max-width: 1200px) { .grid-4 { grid-template-columns: 1fr 1fr; } }
+
+  /* Charts */
+  .chart-container { position: relative; height: 300px; }
+  .chart-container-tall { position: relative; height: 360px; }
+
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: rgba(255,255,255,0.04); color: var(--text-secondary); font-weight: 600; padding: 10px 14px; text-align: right; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .data-table th:first-child { text-align: left; }
+  .data-table td { padding: 10px 14px; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-primary); }
+  .data-table td:first-child { text-align: left; color: var(--text-secondary); }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .data-table .highlight { color: var(--accent-green); font-weight: 600; }
+  .data-table .negative { color: var(--accent-red); }
+
+  /* Progress & Stars */
+  .moat-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .moat-label { width: 160px; font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
+  .moat-bar-bg { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+  .moat-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--google-blue), var(--accent-purple)); }
+  .moat-stars { color: var(--accent-yellow); font-size: 14px; width: 80px; text-align: right; flex-shrink: 0; }
+  .moat-score { width: 30px; text-align: right; font-size: 13px; font-weight: 600; color: var(--text-primary); flex-shrink: 0; }
+
+  /* Graham Check */
+  .check-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .check-row:last-child { border-bottom: none; }
+  .check-label { font-size: 13px; color: var(--text-secondary); }
+  .check-value { font-size: 13px; font-weight: 600; }
+  .check-pass { color: var(--accent-green); }
+  .check-fail { color: var(--accent-red); }
+  .check-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 8px; }
+  .badge-pass { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .badge-fail { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+
+  /* Risk matrix */
+  .risk-row { display: grid; grid-template-columns: 2fr 1fr 1fr 3fr; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-name { font-size: 13px; color: var(--text-primary); }
+  .risk-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; text-align: center; }
+  .risk-high { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .risk-medium { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+  .risk-low { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .risk-desc { font-size: 12px; color: var(--text-secondary); }
+
+  /* Conclusion cards */
+  .conclusion-card { border-radius: 12px; padding: 24px; margin-bottom: 16px; border: 1px solid; }
+  .conclusion-green { background: rgba(16,185,129,0.07); border-color: rgba(16,185,129,0.3); }
+  .conclusion-yellow { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.3); }
+  .conclusion-red { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.3); }
+  .conclusion-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .conclusion-green .conclusion-title { color: var(--accent-green); }
+  .conclusion-yellow .conclusion-title { color: var(--accent-yellow); }
+  .conclusion-red .conclusion-title { color: var(--accent-red); }
+  .conclusion-body { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* Buy range */
+  .buy-range-display { background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(59,130,246,0.1)); border: 2px solid rgba(16,185,129,0.4); border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; }
+  .buy-range-label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+  .buy-range-value { font-size: 48px; font-weight: 800; color: var(--accent-green); }
+  .buy-range-note { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+  /* DCF bar */
+  .dcf-bar-container { margin: 12px 0; }
+  .dcf-bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+  .dcf-bar-bg { height: 28px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; position: relative; }
+  .dcf-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .dcf-current-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent-yellow); }
+
+  /* Segment bars */
+  .seg-bar { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+  .seg-name { width: 180px; font-size: 12px; color: var(--text-secondary); flex-shrink: 0; }
+  .seg-bar-bg { flex: 1; height: 18px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .seg-bar-fill { height: 100%; border-radius: 4px; }
+  .seg-pct { width: 50px; font-size: 12px; font-weight: 600; text-align: right; flex-shrink: 0; }
+
+  /* Peer comparison */
+  .peer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+  .peer-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+  .peer-ticker { font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 6px; }
+  .peer-metric { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+  .peer-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+
+  /* KPI tracking */
+  .kpi-track-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .kpi-track-item:last-child { border-bottom: none; }
+  .kpi-track-name { font-size: 13px; color: var(--text-secondary); }
+  .kpi-track-val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .kpi-track-status { font-size: 11px; padding: 2px 8px; border-radius: 8px; margin-left: 8px; }
+  .kpi-good { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .kpi-watch { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+
+  /* Source list */
+  .source-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .source-num { font-size: 12px; color: var(--text-muted); flex-shrink: 0; width: 24px; }
+  .source-url { font-size: 12px; color: var(--accent-blue); word-break: break-all; }
+  .source-date { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+
+  /* Gauge */
+  .gauge-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+  .gauge-label { font-size: 13px; color: var(--text-secondary); margin-top: 10px; }
+  .gauge-value { font-size: 24px; font-weight: 700; color: var(--accent-yellow); }
+
+  /* Valuation summary */
+  .val-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+  @media (max-width: 900px) { .val-summary-grid { grid-template-columns: 1fr; } }
+  .val-framework { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .val-framework-name { font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .val-framework-verdict { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .val-framework-detail { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* Tag styles */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .tag-yellow { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+  .tag-red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* Cycle phase */
+  .cycle-phases { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 16px 0; }
+  .cycle-phase { flex: 1; padding: 14px 10px; text-align: center; font-size: 12px; font-weight: 600; opacity: 0.35; transition: opacity 0.2s; }
+  .cycle-phase.active { opacity: 1; }
+  .phase-early { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+  .phase-growth { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+  .phase-peak { background: rgba(245,158,11,0.15); color: var(--accent-yellow); }
+  .phase-decline { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+
+  /* Flywheel */
+  .flywheel { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .flywheel-item { background: rgba(66,133,244,0.12); border: 1px solid rgba(66,133,244,0.25); border-radius: 20px; padding: 8px 16px; font-size: 12px; color: var(--text-primary); }
+  .flywheel-arrow { color: var(--accent-blue); font-size: 18px; font-weight: 700; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Sticky nav */
+  .sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(10,14,26,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 12px 0; }
+  .nav-links { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 2px; }
+  .nav-link { font-size: 12px; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: color 0.2s; text-decoration: none; }
+  .nav-link:hover { color: var(--accent-blue); }
+
+  /* Info box */
+  .info-box { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-secondary); margin: 16px 0; }
+  .warning-box { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: 14px 16px; font-size: 13px; color: var(--text-secondary); margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-top">
+      <div class="hero-left">
+        <div class="hero-ticker">
+          <span class="ticker-badge">GOOG</span>
+          <div>
+            <div class="company-name">Alphabet Inc.</div>
+            <div class="company-desc">NASDAQ: GOOG &nbsp;|&nbsp; Technology &ndash; Internet &amp; Information Services &nbsp;|&nbsp; Mountain View, CA</div>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Market Cap</span>
+            <span class="hero-meta-value">$4.82T</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">TTM Revenue</span>
+            <span class="hero-meta-value">$422.5B</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">TTM Net Income</span>
+            <span class="hero-meta-value">$160.2B</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">FY2025 FCF</span>
+            <span class="hero-meta-value">$73.3B</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Analysis Date</span>
+            <span class="hero-meta-value">2026-05-06</span>
+          </div>
+        </div>
+        <div class="hero-ratings" style="margin-top: 20px;">
+          <span class="rating-yellow">Graham: Hold / Caution</span>
+          <span class="rating-green">Buffett: Wide Moat &ndash; Buy</span>
+          <span class="rating-yellow">Marks: Growth Phase &ndash; Caution</span>
+          <span class="rating-blue">Analyst Consensus: Strong Buy</span>
+        </div>
+      </div>
+      <div class="hero-price-block">
+        <div class="price-value">$398.04</div>
+        <div class="price-sub" style="font-size:13px;color:var(--text-secondary);margin-top:4px;">As of May 6, 2026</div>
+        <div style="margin-top:12px;text-align:right;">
+          <div style="font-size:12px;color:var(--text-muted);">TTM P/E</div>
+          <div style="font-size:22px;font-weight:700;color:var(--accent-yellow);">30.4x</div>
+        </div>
+        <div style="margin-top:8px;text-align:right;">
+          <div style="font-size:12px;color:var(--text-muted);">Fwd P/E (2026E)</div>
+          <div style="font-size:22px;font-weight:700;color:var(--accent-blue);">29.2x</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sticky Nav -->
+<nav class="sticky-nav">
+  <div class="container">
+    <div class="nav-links">
+      <a class="nav-link" href="#kpi">KPI</a>
+      <a class="nav-link" href="#business">Business Model</a>
+      <a class="nav-link" href="#financials">Financials</a>
+      <a class="nav-link" href="#growth">Growth Drivers</a>
+      <a class="nav-link" href="#competition">Competition</a>
+      <a class="nav-link" href="#moat">Moat</a>
+      <a class="nav-link" href="#cycle">Cycle &amp; Risk</a>
+      <a class="nav-link" href="#valuation">Valuation</a>
+      <a class="nav-link" href="#sources">Sources</a>
+    </div>
+  </div>
+</nav>
+
+<!-- KPI Grid -->
+<section class="section" id="kpi">
+  <div class="container">
+    <h2 class="section-title">Key Performance Indicators</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">TTM Revenue</div>
+        <div class="kpi-value">$422.5B</div>
+        <div class="kpi-sub kpi-trend-up">+22% YoY (Q1 2026)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM Net Income</div>
+        <div class="kpi-value">$160.2B</div>
+        <div class="kpi-sub kpi-trend-up">+60% YoY (TTM)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FY2025 FCF</div>
+        <div class="kpi-value">$73.3B</div>
+        <div class="kpi-sub kpi-trend-up">FCF Margin ~18.2%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q1 2026 Gross Margin</div>
+        <div class="kpi-value">62.4%</div>
+        <div class="kpi-sub kpi-trend-up">+270 bps YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q1 2026 Op. Margin</div>
+        <div class="kpi-value">36.1%</div>
+        <div class="kpi-sub kpi-trend-up">+200 bps YoY</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM Diluted EPS</div>
+        <div class="kpi-value">$13.11</div>
+        <div class="kpi-sub kpi-trend-up">FY2026E: $13.62</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q1 2026 Search Revenue</div>
+        <div class="kpi-value">$60.4B</div>
+        <div class="kpi-sub kpi-trend-up">+19% YoY (all-time high queries)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Q1 2026 Cloud Revenue</div>
+        <div class="kpi-value">$20.0B</div>
+        <div class="kpi-sub kpi-trend-up">+63% YoY, backlog $462B</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">TTM P/E Ratio</div>
+        <div class="kpi-value">30.4x</div>
+        <div class="kpi-sub kpi-trend-neutral">5Y avg ~27x, hist. ~60th pct</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Forward P/E (2026E)</div>
+        <div class="kpi-value">29.2x</div>
+        <div class="kpi-sub kpi-trend-neutral">EPS est. $13.62</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROE (FY2025)</div>
+        <div class="kpi-value">38.9%</div>
+        <div class="kpi-sub kpi-trend-up">ROIC: 28.3&ndash;31.4%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Market Cap</div>
+        <div class="kpi-value">$4.82T</div>
+        <div class="kpi-sub kpi-trend-neutral">4th largest globally</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Business Model Section -->
+<section class="section" id="business">
+  <div class="container">
+    <h2 class="section-title">Business Model Analysis</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Q1 2026 Revenue Segment Mix</div>
+        <div class="chart-container">
+          <canvas id="segmentPieChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Segment Revenue Breakdown</div>
+        <div style="margin-top:8px;">
+          <div class="seg-bar">
+            <div class="seg-name">Search &amp; Other</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:55%;background:var(--google-blue);"></div></div>
+            <div class="seg-pct" style="color:var(--google-blue);">55.0%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$60.4B (+19% YoY)</div>
+
+          <div class="seg-bar">
+            <div class="seg-name">Google Cloud</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:18.2%;background:var(--google-green);"></div></div>
+            <div class="seg-pct" style="color:var(--google-green);">18.2%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$20.0B (+63% YoY)</div>
+
+          <div class="seg-bar">
+            <div class="seg-name">Subscriptions / Devices</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:11.3%;background:var(--accent-purple);"></div></div>
+            <div class="seg-pct" style="color:var(--accent-purple);">11.3%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$12.4B (+19% YoY)</div>
+
+          <div class="seg-bar">
+            <div class="seg-name">YouTube Ads</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:9.0%;background:var(--google-red);"></div></div>
+            <div class="seg-pct" style="color:var(--google-red);">9.0%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$9.9B (+11% YoY)</div>
+
+          <div class="seg-bar">
+            <div class="seg-name">Google Network</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:6.3%;background:var(--accent-cyan);"></div></div>
+            <div class="seg-pct" style="color:var(--accent-cyan);">6.3%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$7.0B (-4% YoY)</div>
+
+          <div class="seg-bar">
+            <div class="seg-name">Other Bets</div>
+            <div class="seg-bar-bg"><div class="seg-bar-fill" style="width:0.4%;background:var(--accent-yellow);"></div></div>
+            <div class="seg-pct" style="color:var(--accent-yellow);">0.4%</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-6px 0 10px 192px;">$0.4B (-9% YoY)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">Revenue Quality Assessment</div>
+        <div style="margin-top:8px;">
+          <div class="check-row">
+            <span class="check-label">Recurring / subscription revenue</span>
+            <span class="check-value check-pass">High <span class="badge badge-pass">+</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Search ad dependency (structural risk)</span>
+            <span class="check-value check-fail">Moderate <span class="badge badge-fail">Risk</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Cloud ARR acceleration (+63% Q1 2026)</span>
+            <span class="check-value check-pass">Excellent <span class="badge badge-pass">+</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">350M paid subscriptions (Gemini, YouTube Premium, etc.)</span>
+            <span class="check-value check-pass">Strong <span class="badge badge-pass">+</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Hardware (Pixel, Nest) revenue predictability</span>
+            <span class="check-value" style="color:var(--accent-yellow);">Low</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Overall Revenue Quality Score</span>
+            <span class="check-value check-pass" style="font-size:16px;">8 / 10</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Search Moat &amp; Pricing Power</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Market Share:</strong> ~90% global search (desktop &amp; mobile), ~79% US desktop.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">AI Overview:</strong> Launched in US (May 2025), UK (July 2025). Search queries at all-time high in Q1 2026 despite AI disruption fears, confirming engagement resilience.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Advertising:</strong> First ad company ever to cross $200B in digital ad revenue (FY2025). Search CPC trends remain positive.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Competitor:</strong> Bing dropped to ~4% global share despite Microsoft AI investment (~$13B). ChatGPT integration shows limited dent in Google usage volume.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">AI Flywheel: Alphabet's Reinforcing Growth Loop</div>
+      <div class="flywheel">
+        <div class="flywheel-item">Google Search (90% mkt share)</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">Data &amp; User Intent Signals</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">Gemini Model Training (16B tokens/min)</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">Better AI Products (AI Overview, Gemini)</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">More Queries (all-time high Q1 2026)</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">Higher Ad Revenue &amp; Cloud Demand</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">CapEx into TPU/Infrastructure</div>
+        <div class="flywheel-arrow">&rarr;</div>
+        <div class="flywheel-item">Google Search (90% mkt share)</div>
+      </div>
+      <div style="margin-top:16px;font-size:13px;color:var(--text-secondary);">
+        Gemini MAU data: 350M paid subscriptions, Gemini Enterprise paid MAU +40% QoQ. API tokens processed: 16B/min (+60% QoQ). GenAI-driven Cloud product revenue +800% YoY. Waymo: 500,000 autonomous rides/week.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Financial Analysis Section -->
+<section class="section" id="financials">
+  <div class="container">
+    <h2 class="section-title">Financial Analysis</h2>
+
+    <!-- Quarterly Revenue Chart -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Quarterly Revenue &amp; YoY Growth</div>
+        <div class="chart-container-tall">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Profit Margin Trends (%)</div>
+        <div class="chart-container-tall">
+          <canvas id="marginChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FCF Chart -->
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">Free Cash Flow Trend (Quarterly, $B)</div>
+        <div class="chart-container">
+          <canvas id="fcfChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Google Cloud Revenue Growth</div>
+        <div class="chart-container">
+          <canvas id="cloudChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quarterly Data Table -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">5-Quarter Financial Summary</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Q1 2025</th>
+              <th>Q2 2025</th>
+              <th>Q3 2025</th>
+              <th>Q4 2025</th>
+              <th>Q1 2026</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Revenue ($B)</td>
+              <td>90.2</td>
+              <td>96.4</td>
+              <td>102.3</td>
+              <td>113.8</td>
+              <td class="highlight">109.9</td>
+            </tr>
+            <tr>
+              <td>YoY Growth</td>
+              <td>+12%</td>
+              <td>+14%</td>
+              <td>+16%</td>
+              <td>+12%</td>
+              <td class="highlight">+22%</td>
+            </tr>
+            <tr>
+              <td>Gross Profit ($B)</td>
+              <td>53.9</td>
+              <td>57.4</td>
+              <td>61.0</td>
+              <td>68.1</td>
+              <td class="highlight">68.6</td>
+            </tr>
+            <tr>
+              <td>Gross Margin</td>
+              <td>59.7%</td>
+              <td>59.5%</td>
+              <td>59.6%</td>
+              <td>59.8%</td>
+              <td class="highlight">62.4%</td>
+            </tr>
+            <tr>
+              <td>Operating Income ($B)</td>
+              <td>30.6</td>
+              <td>31.3</td>
+              <td>31.2</td>
+              <td>35.9</td>
+              <td class="highlight">39.7</td>
+            </tr>
+            <tr>
+              <td>Operating Margin</td>
+              <td>33.9%</td>
+              <td>32.4%</td>
+              <td>30.5%</td>
+              <td>31.6%</td>
+              <td class="highlight">36.1%</td>
+            </tr>
+            <tr>
+              <td>Net Income ($B)</td>
+              <td>34.5</td>
+              <td>28.2</td>
+              <td>35.0</td>
+              <td>34.5</td>
+              <td class="highlight">62.6*</td>
+            </tr>
+            <tr>
+              <td>Diluted EPS</td>
+              <td>$2.81</td>
+              <td>$2.31</td>
+              <td>$2.87</td>
+              <td>$2.82</td>
+              <td class="highlight">$5.11*</td>
+            </tr>
+            <tr>
+              <td>Free Cash Flow ($B)</td>
+              <td>18.95</td>
+              <td>5.30</td>
+              <td>24.46</td>
+              <td>24.55</td>
+              <td class="highlight">10.12</td>
+            </tr>
+            <tr>
+              <td>Search Revenue ($B)</td>
+              <td>50.7</td>
+              <td>54.2</td>
+              <td>56.6</td>
+              <td>60.8</td>
+              <td class="highlight">60.4</td>
+            </tr>
+            <tr>
+              <td>YouTube Ads ($B)</td>
+              <td>8.93</td>
+              <td>~9.8</td>
+              <td>10.26</td>
+              <td>11.38</td>
+              <td class="highlight">9.88</td>
+            </tr>
+            <tr>
+              <td>Google Cloud ($B)</td>
+              <td>12.26</td>
+              <td>13.6</td>
+              <td>15.2</td>
+              <td>17.7</td>
+              <td class="highlight">20.0</td>
+            </tr>
+            <tr>
+              <td>Cloud YoY Growth</td>
+              <td>+28%</td>
+              <td>+32%</td>
+              <td>+34%</td>
+              <td>+48%</td>
+              <td class="highlight">+63%</td>
+            </tr>
+            <tr>
+              <td>CapEx ($B)</td>
+              <td>~17.2</td>
+              <td>~18.1</td>
+              <td>~19.8</td>
+              <td>~27.9</td>
+              <td class="highlight">35.7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">* Q1 2026 net income includes $36.9B unrealized equity securities gains; GAAP net income. FY2025 total CapEx: $91.4B.</div>
+    </div>
+
+    <!-- Balance Sheet -->
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">Balance Sheet Highlights (FY2025)</div>
+        <table class="data-table">
+          <tbody>
+            <tr><td>Total Assets</td><td>$595.3B</td></tr>
+            <tr><td>Total Liabilities</td><td>$180.0B</td></tr>
+            <tr><td>Stockholders' Equity</td><td>$415.3B</td></tr>
+            <tr><td>Book Value Per Share</td><td>$34.35 (FY25) / $39.61 (Q1 26E)</td></tr>
+            <tr><td>Cash + Marketable Securities (Q1 2026)</td><td>$126.8B</td></tr>
+            <tr><td>Total Debt (Q1 2026)</td><td>$77.5B</td></tr>
+            <tr><td>Net Cash (Q1 2026)</td><td>$49.3B</td></tr>
+            <tr><td>Current Ratio</td><td>1.92x</td></tr>
+            <tr><td>Debt / Equity</td><td>0.20x</td></tr>
+            <tr><td>ROE (FY2025)</td><td>38.9%</td></tr>
+            <tr><td>ROIC (FY2025)</td><td>28.3&ndash;31.4%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Annual Financial Summary</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>FY2024</th>
+              <th>FY2025</th>
+              <th>TTM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Revenue ($B)</td><td>350.0</td><td>402.8</td><td class="highlight">422.5</td></tr>
+            <tr><td>Gross Profit ($B)</td><td>203.7</td><td>240.3</td><td class="highlight">255.1</td></tr>
+            <tr><td>Operating Income ($B)</td><td>112.4</td><td>129.0</td><td class="highlight">138.1</td></tr>
+            <tr><td>Net Income ($B)</td><td>100.1</td><td>132.2</td><td class="highlight">160.2</td></tr>
+            <tr><td>Diluted EPS</td><td>$8.05</td><td>$10.82</td><td class="highlight">$13.11</td></tr>
+            <tr><td>Free Cash Flow ($B)</td><td>72.8</td><td>73.3</td><td class="highlight">64.4</td></tr>
+            <tr><td>CapEx ($B)</td><td>~52.5</td><td>91.4</td><td class="highlight">~127B ann.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Growth Drivers Section -->
+<section class="section" id="growth">
+  <div class="container">
+    <h2 class="section-title">Growth Drivers &amp; Key Metrics</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">CapEx Trend ($B per Quarter)</div>
+        <div class="chart-container">
+          <canvas id="capexChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Hyperscaler CapEx Comparison (2025 Annual, $B)</div>
+        <div class="chart-container">
+          <canvas id="hyperscalerCapexChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title" style="font-size:14px;">Google Cloud</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--google-green);">$20.0B</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">Q1 2026, +63% YoY</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Op. margin: 32.9%</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Backlog: $462B</div>
+        <div style="font-size:12px;color:var(--accent-green);margin-top:4px;">Cloud mkt share: ~11%</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:14px;">Gemini / AI</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--accent-blue);">350M</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">Paid subscriptions</div>
+        <div style="font-size:12px;color:var(--text-secondary);">API: 16B tokens/min</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Gemini Ent MAU +40% QoQ</div>
+        <div style="font-size:12px;color:var(--accent-green);margin-top:4px;">GenAI Cloud rev +800% YoY</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:14px;">Waymo</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--accent-purple);">500K</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">Autonomous rides/week</div>
+        <div style="font-size:12px;color:var(--text-secondary);">14M total trips (Dec 2025)</div>
+        <div style="font-size:12px;color:var(--text-secondary);">~2,500 vehicle US fleet</div>
+        <div style="font-size:12px;color:var(--accent-yellow);margin-top:4px;">Testing Gemini in-car AI</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:14px;">2026 CapEx Plan</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--accent-yellow);">$180&ndash;190B</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">vs $91.4B in FY2025</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Q1 2026: $35.7B alone</div>
+        <div style="font-size:12px;color:var(--text-secondary);">60% servers, 40% data centers</div>
+        <div style="font-size:12px;color:var(--accent-yellow);margin-top:4px;">2027 to "significantly increase"</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">Key Performance Indicators to Watch</div>
+      <div class="grid-2">
+        <div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Google Cloud Revenue YoY Growth</span>
+            <span><span class="kpi-track-val">+63%</span><span class="kpi-track-status kpi-good">Excellent</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Cloud Operating Margin</span>
+            <span><span class="kpi-track-val">32.9%</span><span class="kpi-track-status kpi-good">Expanding</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Cloud Backlog Conversion Rate</span>
+            <span><span class="kpi-track-val">$462B</span><span class="kpi-track-status kpi-good">~50% in 24 mo</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Search Revenue YoY Growth</span>
+            <span><span class="kpi-track-val">+19%</span><span class="kpi-track-status kpi-good">Strong</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">YouTube Ad Revenue Growth</span>
+            <span><span class="kpi-track-val">+11%</span><span class="kpi-track-status kpi-watch">Watch</span></span>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">AI-Driven Paid Subscriptions</span>
+            <span><span class="kpi-track-val">350M</span><span class="kpi-track-status kpi-good">Growing</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Operating Margin (Consolidated)</span>
+            <span><span class="kpi-track-val">36.1%</span><span class="kpi-track-status kpi-good">Expanding</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">CapEx / Revenue Ratio (Q1 2026)</span>
+            <span><span class="kpi-track-val">32.5%</span><span class="kpi-track-status kpi-watch">Elevated</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Google Network Ads (Declining)</span>
+            <span><span class="kpi-track-val">-4% YoY</span><span class="kpi-track-status kpi-watch">Structural</span></span>
+          </div>
+          <div class="kpi-track-item">
+            <span class="kpi-track-name">Other Bets Operating Loss</span>
+            <span><span class="kpi-track-val">-$2.1B</span><span class="kpi-track-status kpi-watch">Widening</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Competition Section -->
+<section class="section" id="competition">
+  <div class="container">
+    <h2 class="section-title">Competitive Landscape</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Search Engine Market Share (Global, 2026)</div>
+        <div class="chart-container">
+          <canvas id="searchShareChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Cloud Market Share (2026)</div>
+        <div class="chart-container">
+          <canvas id="cloudShareChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">Peer Comparison Matrix</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>GOOG</th>
+              <th>MSFT</th>
+              <th>META</th>
+              <th>AMZN</th>
+              <th>AAPL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Market Cap</td><td class="highlight">$4.82T</td><td>~$3.2T</td><td>~$1.5T</td><td>~$2.2T</td><td>~$3.1T</td></tr>
+            <tr><td>Revenue (TTM)</td><td class="highlight">$422.5B</td><td>~$270B</td><td>~$168B</td><td>~$590B</td><td>~$390B</td></tr>
+            <tr><td>Op. Margin (Latest Q)</td><td class="highlight">36.1%</td><td>~45%</td><td>~41%</td><td>~11%</td><td>~31%</td></tr>
+            <tr><td>TTM P/E</td><td class="highlight">30.4x</td><td>~35x</td><td>~28x</td><td>~45x</td><td>~33x</td></tr>
+            <tr><td>P/S Ratio</td><td class="highlight">11.4x</td><td>~12x</td><td>~9x</td><td>~4x</td><td>~8x</td></tr>
+            <tr><td>ROE</td><td class="highlight">38.9%</td><td>~37%</td><td>~40%</td><td>~18%</td><td>&gt;100%</td></tr>
+            <tr><td>Revenue Growth (YoY)</td><td class="highlight">+22%</td><td>~15%</td><td>+17%</td><td>+10%</td><td>+4%</td></tr>
+            <tr><td>Cloud Segment</td><td class="highlight">GCP: $20B/Q</td><td>Azure: ~$24B/Q</td><td>N/A</td><td>AWS: ~$29B/Q</td><td>N/A</td></tr>
+            <tr><td>AI Differentiation</td><td class="highlight">Gemini / TPU</td><td>Copilot / OpenAI</td><td>LLaMA</td><td>Trainium / Bedrock</td><td>On-device ML</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">Competitive Risk Assessment: AI Search Disruption</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+        <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Microsoft Bing + Copilot:</strong> Despite $13B+ AI investment and ChatGPT integration, Bing remains at ~4% global market share. Google's queries hit all-time highs in Q1 2026, suggesting AI integration is enhancing rather than disrupting Search demand.</div>
+        <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">OpenAI / ChatGPT:</strong> Bing reached 1B MAU milestone, but primarily incremental to existing search, not replacing Google. Google AI Mode (launched May 2025 US, July 2025 UK) is counteracting with native AI search.</div>
+        <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">AWS vs GCP:</strong> AWS holds ~32% cloud share, GCP ~11%. However, GCP's growth rate (+63%) vastly outpaces AWS (~17%) and Azure (~30%), suggesting share gain acceleration driven by AI workloads.</div>
+        <div><strong style="color:var(--text-primary);">Key risk:</strong> Long-term search monetization of AI-generated answers (zero-click risk for advertisers) remains the structural threat to watch. Currently, Search RPM (revenue per mille) appears stable.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Moat Section -->
+<section class="section" id="moat">
+  <div class="container">
+    <h2 class="section-title">Buffett Moat Analysis</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">5-Dimension Moat Scorecard</div>
+        <div style="margin-top:16px;">
+          <div class="moat-row">
+            <div class="moat-label">Brand / Intangibles</div>
+            <div class="moat-bar-bg"><div class="moat-bar-fill" style="width:90%;"></div></div>
+            <div class="moat-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="moat-score">5/5</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-8px 0 12px 172px;">"Google" is a verb. ~90% global search brand dominance. DeepMind IP.</div>
+
+          <div class="moat-row">
+            <div class="moat-label">Switching Costs</div>
+            <div class="moat-bar-bg"><div class="moat-bar-fill" style="width:72%;"></div></div>
+            <div class="moat-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <div class="moat-score">4/5</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-8px 0 12px 172px;">GCP migration cost high (data, API rewrites). Gmail/Workspace lock-in. Android ecosystem.</div>
+
+          <div class="moat-row">
+            <div class="moat-label">Network Effects</div>
+            <div class="moat-bar-bg"><div class="moat-bar-fill" style="width:90%;"></div></div>
+            <div class="moat-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="moat-score">5/5</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-8px 0 12px 172px;">More users &rarr; more data &rarr; better AI &rarr; more users. YouTube creator/viewer loop. Android/Play Store.</div>
+
+          <div class="moat-row">
+            <div class="moat-label">Cost Advantages</div>
+            <div class="moat-bar-bg"><div class="moat-bar-fill" style="width:72%;"></div></div>
+            <div class="moat-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            <div class="moat-score">4/5</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-8px 0 12px 172px;">Custom TPU chips reduce AI inference cost vs NVIDIA. Massive scale in data centers. Vertical integration.</div>
+
+          <div class="moat-row">
+            <div class="moat-label">Intangible Assets / IP</div>
+            <div class="moat-bar-bg"><div class="moat-bar-fill" style="width:90%;"></div></div>
+            <div class="moat-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="moat-score">5/5</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin:-8px 0 12px 172px;">Patent portfolio, DeepMind research, Gemini models, decades of search algorithm IP, Maps data.</div>
+
+          <div class="divider"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+            <strong style="font-size:15px;color:var(--text-primary);">Composite Moat Rating</strong>
+            <span class="rating-tag rating-green" style="font-size:15px;padding:8px 20px;">WIDE MOAT &mdash; 4.6/5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Buffett Internal Value Estimation</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+          <div class="check-row">
+            <span class="check-label">ROE (5Y avg, ~2021-2025)</span>
+            <span class="check-value check-pass">~30&ndash;39%</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">ROE sustainability</span>
+            <span class="check-value check-pass">Accelerating (38.9% FY25)</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">EPS growth (FY24-FY25)</span>
+            <span class="check-value check-pass">+34% ($8.05 &rarr; $10.82)</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">FCF consistency</span>
+            <span class="check-value check-pass">$72.8B &rarr; $73.3B (FY24-25)</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Debt burden</span>
+            <span class="check-value check-pass">Net cash $49.3B, D/E 0.20x</span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Reinvestment quality (ROIC)</span>
+            <span class="check-value check-pass">28.3&ndash;31.4% ROIC</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:8px;">
+          <strong style="color:var(--text-primary);">Buffett-style Intrinsic Value Estimate:</strong><br>
+          Using FY2025 FCF of $73.3B as base. With ROIC consistently above cost of capital (~10%) and wide moat protecting durable earnings, applying a 20x FCF multiple (conservative for quality) yields intrinsic value near $1,466B equity value / 12.12B shares = <strong style="color:var(--accent-green);">~$121/share</strong> (conservative). At 25x FCF: <strong style="color:var(--accent-green);">~$151/share</strong>. At DCF mid-case (see valuation section): <strong style="color:var(--accent-green);">~$350&ndash;480/share</strong>.<br><br>
+          <strong style="color:var(--accent-yellow);">Note:</strong> FCF is temporarily depressed by $180&ndash;190B in 2026 CapEx (up from $91.4B in FY2025), which Buffett analysis would treat as an investment period. Normalized FCF potential by 2027-28 estimated at $35.5&ndash;68.1B.
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;color:var(--text-muted);">Buffett Fair Value Range (with 20-30% safety margin)</div>
+          <div style="font-size:26px;font-weight:700;color:var(--accent-green);margin-top:4px;">$315 &ndash; $430</div>
+          <div style="font-size:12px;color:var(--text-muted);">Based on mid-case DCF, normalized FCF recovery 2027-28</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cycle & Risk Section -->
+<section class="section" id="cycle">
+  <div class="container">
+    <h2 class="section-title">Cycle Analysis &amp; Risk Matrix (Howard Marks)</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Industry Cycle Position</div>
+        <div class="cycle-phases">
+          <div class="cycle-phase phase-early">Early Stage</div>
+          <div class="cycle-phase phase-growth active">Growth Phase</div>
+          <div class="cycle-phase phase-peak">Overheating</div>
+          <div class="cycle-phase phase-decline">Contraction</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-top:12px;">
+          <strong style="color:var(--text-primary);">Current Phase: Growth (with Overheating signals)</strong><br>
+          Quantitative evidence:<br>
+          &bull; AI infrastructure demand +800% GenAI revenue YoY suggests early-growth in AI monetization<br>
+          &bull; Cloud backlog at $462B (doubled QoQ) signals long-cycle demand commitment<br>
+          &bull; CapEx doubling ($91.4B &rarr; ~$185B) is peak-cycle capital deployment signal<br>
+          &bull; PE ~30x vs historical ~27x average &mdash; modest premium to history<br>
+          &bull; Analyst consensus Strong Buy (0 sells) reflects late-growth optimism
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Valuation Historical Context</div>
+        <div class="chart-container">
+          <canvas id="peHistoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">5 Major Tail Risks</div>
+      <div style="margin-bottom:10px;">
+        <div class="risk-row" style="font-weight:600;font-size:11px;color:var(--text-muted);text-transform:uppercase;">
+          <div>Risk</div>
+          <div>Probability</div>
+          <div>Impact</div>
+          <div>Description</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">AI Search Disruption (Zero-Click)</div>
+          <div><span class="risk-badge risk-medium">Medium (30%)</span></div>
+          <div><span class="risk-badge risk-high">High</span></div>
+          <div class="risk-desc">If AI Overviews reduce ad click-through rates significantly, estimated 10-20% headwind to Search ad revenue ($6-12B annually). Currently contained: Search revenue +19% YoY in Q1 2026.</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">Regulatory / Antitrust</div>
+          <div><span class="risk-badge risk-high">High (50%)</span></div>
+          <div><span class="risk-badge risk-medium">Medium</span></div>
+          <div class="risk-desc">DOJ search monopoly case (potential search agreement loss), EU DMA compliance costs. Q3 2025 included $3.5B EC fine. Structural remedies could force sharing of search index or default browser contracts.</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">CapEx ROI Disappointment</div>
+          <div><span class="risk-badge risk-medium">Medium (35%)</span></div>
+          <div><span class="risk-badge risk-high">High</span></div>
+          <div class="risk-desc">$180-190B 2026 CapEx is 43-46% of revenue. If Cloud/AI revenue does not sustain 50%+ growth, FCF margins will compress severely. 2026 consensus FCF: ~$20.5B (vs $73.3B in FY2025, -72%).</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">Advertising Cycle Downturn</div>
+          <div><span class="risk-badge risk-medium">Medium (25%)</span></div>
+          <div><span class="risk-badge risk-medium">Medium</span></div>
+          <div class="risk-desc">Search + YouTube + Network = ~75% of revenue. A macro recession or ad spend reduction of 10% would remove ~$30B in annual revenue. Google Network (3P ads) already declining -4% YoY.</div>
+        </div>
+        <div class="risk-row">
+          <div class="risk-name">Other Bets Drag</div>
+          <div><span class="risk-badge risk-high">High (70%)</span></div>
+          <div><span class="risk-badge risk-low">Low</span></div>
+          <div class="risk-desc">Other Bets lost $2.1B in Q1 2026 (widening from $1.22B Q1 2025). Waymo requires massive additional investment before profitability. Risk is ongoing cash drag, not existential.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">Market Sentiment Indicators</div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">Analyst Ratings (45 covering)</span>
+          <span><span class="kpi-track-val">39 Buy, 6 Hold, 0 Sell</span><span class="kpi-track-status kpi-good">Strong Buy</span></span>
+        </div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">Consensus Price Target</span>
+          <span><span class="kpi-track-val">$391.60</span><span class="kpi-track-status kpi-watch">Near current</span></span>
+        </div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">High / Low Price Target</span>
+          <span><span class="kpi-track-val">$515 / $190</span><span class="kpi-track-status kpi-watch">Wide range</span></span>
+        </div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">FY2026 EPS Estimate</span>
+          <span><span class="kpi-track-val">$13.62</span><span class="kpi-track-status kpi-good">+26% vs FY25</span></span>
+        </div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">Short Interest</span>
+          <span><span class="kpi-track-val">Low</span><span class="kpi-track-status kpi-good">Minimal</span></span>
+        </div>
+        <div class="kpi-track-item">
+          <span class="kpi-track-name">Institutional Ownership</span>
+          <span><span class="kpi-track-val">High</span><span class="kpi-track-status kpi-good">Widely held</span></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">CapEx Cycle Signal</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">CapEx/Revenue Ratio:</strong> Q1 2026 = 32.5% (vs industry norm ~10-15%). This is historically elevated, indicating peak investment phase.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Industry Context:</strong> The 5 largest US cloud/AI providers collectively committed $660-690B in 2026 CapEx. This synchronized investment cycle resembles the 1999-2000 fiber/internet build-out, though with more visible revenue traction.</div>
+          <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Marks Signal:</strong> When CFOs collectively say CapEx will "significantly increase" in 2027, it suggests optimism not yet tempered by ROI discipline. This is a classic late-growth cycle signal. Position: Cautiously Positive.</div>
+          <div><strong style="color:var(--accent-yellow);">Recommendation:</strong> Phased entry over 6-12 months preferred over lump-sum given elevated CapEx cycle uncertainty and compressed near-term FCF.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Valuation Section -->
+<section class="section" id="valuation">
+  <div class="container">
+    <h2 class="section-title">Three-Framework Valuation</h2>
+
+    <!-- Graham Section -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Framework 1: Graham Safety Margin Analysis</div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;">Safety Checklist</div>
+          <div class="check-row">
+            <span class="check-label">P/E &le; 15x</span>
+            <span class="check-value check-fail">30.4x <span class="check-badge badge-fail">FAIL</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">P/B &le; 1.5x</span>
+            <span class="check-value check-fail">10.1x <span class="check-badge badge-fail">FAIL</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">P/E &times; P/B &le; 22.5</span>
+            <span class="check-value check-fail">307x <span class="check-badge badge-fail">FAIL</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Current Ratio &ge; 2x</span>
+            <span class="check-value check-fail">1.92x <span class="check-badge badge-fail">MARGINAL</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Debt / Equity &le; 1x</span>
+            <span class="check-value check-pass">0.20x <span class="check-badge badge-pass">PASS</span></span>
+          </div>
+          <div class="check-row">
+            <span class="check-label">Assets / Liabilities &ge; 2x</span>
+            <span class="check-value check-pass">3.31x <span class="check-badge badge-pass">PASS</span></span>
+          </div>
+          <div class="divider"></div>
+          <div class="check-row">
+            <span class="check-label">Graham Number = &radic;(22.5 &times; EPS &times; BV)</span>
+            <span class="check-value" style="font-size:12px;">&#8730;(22.5 &times; $13.11 &times; $39.61)</span>
+          </div>
+          <div style="text-align:right;margin-top:4px;">
+            <span style="font-size:18px;font-weight:700;color:var(--accent-yellow);">$108.20</span>
+            <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">vs current $398.04</span>
+          </div>
+          <div style="text-align:right;font-size:12px;color:var(--accent-red);margin-top:4px;">Current price = 268% premium to Graham Number</div>
+          <div class="warning-box" style="margin-top:12px;">
+            Graham's framework was designed for industrial-era asset-heavy companies. Alphabet is a capital-light, high-ROE business with massive intangible value (brand, data, AI). The Graham Number systematically undervalues tech platforms. Treat as floor, not fair value.
+          </div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;">DCF Three-Scenario Analysis</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Base FCF: $73.3B (FY2025) | Discount Rate: 10% | Terminal Year: 10</div>
+
+          <div class="dcf-bar-container">
+            <div class="dcf-bar-label">
+              <span>Conservative (Yr1-5: 15%, Yr6-10: 8%, Terminal: 3%)</span>
+              <span style="color:var(--accent-red);">$273</span>
+            </div>
+            <div class="dcf-bar-bg">
+              <div class="dcf-bar-fill" style="width:55%;background:rgba(239,68,68,0.7);">$273</div>
+              <div class="dcf-current-line" style="left:80%;"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Weight: 30%</div>
+
+          <div class="dcf-bar-container">
+            <div class="dcf-bar-label">
+              <span>Base Case (Yr1-5: 25%, Yr6-10: 12%, Terminal: 3%)</span>
+              <span style="color:var(--accent-blue);">$448</span>
+            </div>
+            <div class="dcf-bar-bg">
+              <div class="dcf-bar-fill" style="width:87%;background:rgba(59,130,246,0.7);">$448</div>
+              <div class="dcf-current-line" style="left:77%;"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">Weight: 45%</div>
+
+          <div class="dcf-bar-container">
+            <div class="dcf-bar-label">
+              <span>Optimistic (Yr1-5: 35%, Yr6-10: 15%, Terminal: 4%)</span>
+              <span style="color:var(--accent-green);">$688</span>
+            </div>
+            <div class="dcf-bar-bg">
+              <div class="dcf-bar-fill" style="width:100%;background:rgba(16,185,129,0.7);">$688</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:16px;">Weight: 25%</div>
+
+          <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:8px;padding:14px;text-align:center;">
+            <div style="font-size:12px;color:var(--text-muted);">Weighted DCF Intrinsic Value</div>
+            <div style="font-size:32px;font-weight:800;color:var(--accent-blue);">$449</div>
+            <div style="font-size:12px;color:var(--text-muted);">0.30&times;$273 + 0.45&times;$448 + 0.25&times;$688</div>
+            <div style="font-size:12px;color:var(--accent-green);margin-top:4px;">+12.8% upside to current $398</div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">Note: DCF uses FY2025 FCF as base; 2026 FCF will be temporarily compressed by massive CapEx ramp. This analysis assumes FCF normalizes from 2027 onward as CapEx investments convert to revenue.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buffett Section -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Framework 2: Buffett Intrinsic Value &amp; Moat Summary</div>
+      <div class="grid-2">
+        <div>
+          <div class="conclusion-card conclusion-green">
+            <div class="conclusion-title">Wide Moat &mdash; Buffett: Cautious Buy / Accumulate on Weakness</div>
+            <div class="conclusion-body">
+              Alphabet possesses one of the deepest competitive moats in technology: 90% global search share built on two decades of data and algorithm IP, a dominant cloud platform with $462B backlog, and the most advanced AI infrastructure outside pure-play AI companies. ROE of 38.9% and ROIC of 28-31% far exceed cost of capital, creating substantial economic value. The CapEx investment cycle ($180-190B in 2026) temporarily compresses FCF but is analogous to Buffett's famous railroad investments &mdash; building durable infrastructure that generates returns over decades. At $398, the stock trades near the DCF base-case intrinsic value of ~$449. With 20-30% safety margin target: ideal entry $315-$360. Patience rewarded.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+            <div class="check-row">
+              <span class="check-label">Wide Moat Confirmed?</span>
+              <span class="check-value check-pass">Yes &mdash; 4.6/5 Score</span>
+            </div>
+            <div class="check-row">
+              <span class="check-label">10Y EPS Growth Trajectory</span>
+              <span class="check-value check-pass">Accelerating (+34% FY25)</span>
+            </div>
+            <div class="check-row">
+              <span class="check-label">Management Capital Allocation</span>
+              <span class="check-value check-pass">ROIC 28-31%, disciplined M&amp;A</span>
+            </div>
+            <div class="check-row">
+              <span class="check-label">Balance Sheet Safety</span>
+              <span class="check-value check-pass">Net cash $49.3B, D/E 0.20x</span>
+            </div>
+            <div class="check-row">
+              <span class="check-label">Dividend + Buyback</span>
+              <span class="check-value check-pass">$0.21/Q dividend + active buybacks</span>
+            </div>
+            <div class="check-row">
+              <span class="check-label">Buffett Fair Value Est.</span>
+              <span class="check-value" style="color:var(--accent-blue);">$350&ndash;$480</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marks Section -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Framework 3: Howard Marks Cycle &amp; Sentiment Analysis</div>
+      <div class="grid-2">
+        <div>
+          <div class="conclusion-card conclusion-yellow">
+            <div class="conclusion-title">Growth Phase with Elevated Optimism &mdash; Marks: Cautious Buy / Phased Entry</div>
+            <div class="conclusion-body">
+              AI infrastructure CapEx cycle ($660-690B collectively in 2026) resembles 1990s telecom buildout in scale. While Google's underlying business is far stronger than that era's players, synchronized peak-CapEx commitment by all hyperscalers historically precedes a 12-24 month period of FCF contraction and potential valuation compression. PE at ~30x (vs 27x 5Y average) reflects moderate optimism but not irrational exuberance. Analyst consensus at 0 sell ratings is a contrarian yellow flag. Position: Cautiously accumulate &mdash; dollar-cost average over 4-6 quarters rather than single-entry. If PE compresses to 23-25x range ($280-$330), accelerate accumulation aggressively.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;margin-top:8px;">
+            <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">PE Percentile (Approx):</strong> Current 30.4x vs 5Y avg ~27x &rarr; ~60th percentile. Not extreme.</div>
+            <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">Optimism Indicators:</strong> 39/45 analysts Buy, 0 Sell. Street near-term target ($391.60) below current price ($398) &mdash; odd divergence suggesting price ran ahead of targets post Q1 2026 earnings surge.</div>
+            <div style="margin-bottom:8px;"><strong style="color:var(--text-primary);">CapEx Cycle Risk:</strong> $35.7B in Q1 2026 alone. If AWS/Azure slow CapEx in 2027 (demand disappointment), GCP growth could decelerate sharply, re-rating stock to 20-22x.</div>
+            <div><strong style="color:var(--text-primary);">Bear Scenario:</strong> If Search AI disruption materializes at scale (30% probability), stock could re-rate to 20-22x base earnings &rarr; $270-$300 range.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Synthesis -->
+    <div class="val-summary-grid">
+      <div class="val-framework">
+        <div class="val-framework-name">Graham</div>
+        <div class="val-framework-verdict" style="color:var(--accent-yellow);">HOLD / CAUTION</div>
+        <div style="font-size:22px;font-weight:700;color:var(--accent-yellow);">$108 Graham #</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin:4px 0;">DCF Weighted: $449</div>
+        <div class="val-framework-detail">Fails 4/6 classic screens. Premium to Graham Number by 268%. Justified by intangible moat, not asset value. DCF base case shows modest upside.</div>
+      </div>
+      <div class="val-framework">
+        <div class="val-framework-name">Buffett</div>
+        <div class="val-framework-verdict" style="color:var(--accent-green);">CAUTIOUS BUY</div>
+        <div style="font-size:22px;font-weight:700;color:var(--accent-green);">Wide Moat 4.6/5</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin:4px 0;">Fair Value: $350&ndash;$480</div>
+        <div class="val-framework-detail">Exceptional moat, ROE 38.9%, ROIC 28-31%. CapEx investment period compresses near-term FCF. Long-term business quality justifies premium. Accumulate at or below $390.</div>
+      </div>
+      <div class="val-framework">
+        <div class="val-framework-name">Marks / Cycle</div>
+        <div class="val-framework-verdict" style="color:var(--accent-yellow);">PHASED ENTRY</div>
+        <div style="font-size:22px;font-weight:700;color:var(--accent-yellow);">Growth Phase</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin:4px 0;">PE ~60th percentile</div>
+        <div class="val-framework-detail">Not euphoric, but optimism elevated. CapEx cycle peak risk. 0 sell ratings is yellow flag. Dollar-cost average over 4-6 quarters. Accelerate if PE compresses to 23-25x.</div>
+      </div>
+    </div>
+
+    <!-- Buy Range -->
+    <div class="buy-range-display">
+      <div class="buy-range-label">Recommended Buy Range (20% Safety Margin to DCF Base Case)</div>
+      <div class="buy-range-value">$315 &ndash; $390</div>
+      <div class="buy-range-note">Current price: $398.04 &nbsp;|&nbsp; DCF Base Case: $448 &nbsp;|&nbsp; Buffett Fair Value: $350-$480 &nbsp;|&nbsp; Bull case (TIKR): ~$609</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-top:12px;max-width:700px;margin-left:auto;margin-right:auto;">
+        At $315-$390, GOOG trades at 23-29x forward P/E (2026E $13.62), representing a fair entry for a Wide Moat business with 22%+ revenue growth, 63% Cloud acceleration, and a $462B Cloud backlog. The ideal entry assumes some near-term FCF compression visibility is priced in.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Data Sources Section -->
+<section class="section" id="sources">
+  <div class="container">
+    <h2 class="section-title">Data Sources &amp; Methodology</h2>
+    <div class="card">
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">All data sourced from public filings, earnings releases, and financial data providers. Analysis conducted: May 6, 2026.</div>
+      <div class="source-item">
+        <div class="source-num">1</div>
+        <div class="source-url">https://s206.q4cdn.com/479360582/files/doc_financials/2026/q1/2026q1-alphabet-earnings-release.pdf</div>
+        <div class="source-date">Apr 29, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">2</div>
+        <div class="source-url">https://www.sec.gov/Archives/edgar/data/1652044/000165204426000043/googexhibit991q12026.htm</div>
+        <div class="source-date">Apr 29, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">3</div>
+        <div class="source-url">https://www.cnbc.com/2026/04/29/alphabet-googl-q1-2026-earnings.html</div>
+        <div class="source-date">Apr 29, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">4</div>
+        <div class="source-url">https://stockanalysis.com/stocks/googl/financials/?p=quarterly</div>
+        <div class="source-date">May 6, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">5</div>
+        <div class="source-url">https://stockanalysis.com/stocks/googl/statistics/</div>
+        <div class="source-date">May 6, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">6</div>
+        <div class="source-url">https://stockanalysis.com/stocks/googl/forecast/</div>
+        <div class="source-date">May 6, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">7</div>
+        <div class="source-url">https://9to5google.com/2026/04/29/alphabet-q1-2026-earnings/</div>
+        <div class="source-date">Apr 29, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">8</div>
+        <div class="source-url">https://finance.biggo.com/news/US_GOOGL_2026-04-29</div>
+        <div class="source-date">Apr 29, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">9</div>
+        <div class="source-url">https://www.tikr.com/blog/alphabet-stock-surged-10-after-q1-2026-earnings-whats-next-for-googl</div>
+        <div class="source-date">Apr 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">10</div>
+        <div class="source-url">https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/googexhibit991q42025.htm</div>
+        <div class="source-date">Feb 4, 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">11</div>
+        <div class="source-url">https://resourcera.com/data/search/search-engine-market-share/ (Search market share)</div>
+        <div class="source-date">2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">12</div>
+        <div class="source-url">https://businesstats.com/big-three-hold-dominant-lead-in-accelerating-cloud-market/ (Cloud market share)</div>
+        <div class="source-date">2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">13</div>
+        <div class="source-url">https://www.gurufocus.com/term/cash-equivalents-marketable-securities/GOOG</div>
+        <div class="source-date">May 2026</div>
+      </div>
+      <div class="source-item">
+        <div class="source-num">14</div>
+        <div class="source-url">https://futurumgroup.com/insights/ai-capex-2026-the-690b-infrastructure-sprint/</div>
+        <div class="source-date">2026</div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+        Disclaimer: This report is for informational purposes only and does not constitute financial advice. All valuations are estimates based on publicly available data. Investors should conduct their own due diligence.
+        Analysis timestamp: May 6, 2026 | Analyst tool: Claude (Anthropic) with live web data.
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Chart defaults
+Chart.defaults.color = '#8b9ab5';
+Chart.defaults.borderColor = '#1e2d4a';
+Chart.defaults.font.family = "'Inter', sans-serif";
+
+// 1. Revenue Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+new Chart(revenueCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+    datasets: [
+      {
+        label: 'Revenue ($B)',
+        data: [90.2, 96.4, 102.3, 113.8, 109.9],
+        backgroundColor: 'rgba(66,133,244,0.7)',
+        borderColor: 'rgba(66,133,244,1)',
+        borderWidth: 1,
+        yAxisID: 'y',
+        order: 2
+      },
+      {
+        label: 'YoY Growth (%)',
+        data: [12, 14, 16, 12, 22],
+        type: 'line',
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16,185,129,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        yAxisID: 'y1',
+        order: 1,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: false, min: 80, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => '$' + v + 'B' } },
+      y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v + '%' } }
+    },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 2. Margin Chart
+const marginCtx = document.getElementById('marginChart').getContext('2d');
+new Chart(marginCtx, {
+  type: 'line',
+  data: {
+    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+    datasets: [
+      {
+        label: 'Gross Margin',
+        data: [59.7, 59.5, 59.6, 59.8, 62.4],
+        borderColor: '#4285F4',
+        backgroundColor: 'rgba(66,133,244,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3
+      },
+      {
+        label: 'Operating Margin',
+        data: [33.9, 32.4, 30.5, 31.6, 36.1],
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16,185,129,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3
+      },
+      {
+        label: 'Net Margin',
+        data: [38.3, 29.2, 34.2, 30.3, 56.9],
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.05)',
+        borderWidth: 2,
+        pointRadius: 4,
+        tension: 0.3,
+        borderDash: [4, 4]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { min: 25, max: 65, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => v + '%' } }
+    },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 3. FCF Chart
+const fcfCtx = document.getElementById('fcfChart').getContext('2d');
+new Chart(fcfCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+    datasets: [{
+      label: 'Free Cash Flow ($B)',
+      data: [18.95, 5.30, 24.46, 24.55, 10.12],
+      backgroundColor: ['rgba(16,185,129,0.7)','rgba(239,68,68,0.5)','rgba(16,185,129,0.7)','rgba(16,185,129,0.7)','rgba(245,158,11,0.7)'],
+      borderColor: ['#10b981','#ef4444','#10b981','#10b981','#f59e0b'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => '$' + v + 'B' } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + 'B' } }
+    }
+  }
+});
+
+// 4. Cloud Chart
+const cloudCtx = document.getElementById('cloudChart').getContext('2d');
+new Chart(cloudCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+    datasets: [
+      {
+        label: 'Cloud Revenue ($B)',
+        data: [12.26, 13.6, 15.2, 17.7, 20.0],
+        backgroundColor: 'rgba(52,168,83,0.7)',
+        borderColor: '#34A853',
+        borderWidth: 1,
+        yAxisID: 'y',
+        order: 2
+      },
+      {
+        label: 'YoY Growth (%)',
+        data: [28, 32, 34, 48, 63],
+        type: 'line',
+        borderColor: '#f59e0b',
+        borderWidth: 2,
+        pointRadius: 4,
+        yAxisID: 'y1',
+        order: 1,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => '$' + v + 'B' } },
+      y1: { position: 'right', grid: { display: false }, ticks: { callback: v => v + '%' } }
+    },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 5. CapEx Chart
+const capexCtx = document.getElementById('capexChart').getContext('2d');
+new Chart(capexCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+    datasets: [{
+      label: 'CapEx ($B)',
+      data: [17.2, 18.1, 19.8, 27.9, 35.7],
+      backgroundColor: 'rgba(139,92,246,0.7)',
+      borderColor: '#8b5cf6',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => '$' + v + 'B' } }
+    },
+    plugins: {
+      legend: { display: false },
+      annotation: {}
+    }
+  }
+});
+
+// 6. Segment Pie Chart
+const segPieCtx = document.getElementById('segmentPieChart').getContext('2d');
+new Chart(segPieCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Search & Other', 'Google Cloud', 'Subscriptions/Devices', 'YouTube Ads', 'Network', 'Other Bets'],
+    datasets: [{
+      data: [55.0, 18.2, 11.3, 9.0, 6.3, 0.4],
+      backgroundColor: ['#4285F4','#34A853','#8b5cf6','#EA4335','#06b6d4','#f59e0b'],
+      borderColor: '#0a0e1a',
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 }, padding: 8 } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + '%' } }
+    }
+  }
+});
+
+// 7. Search Share Chart
+const searchCtx = document.getElementById('searchShareChart').getContext('2d');
+new Chart(searchCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Google', 'Bing', 'Others (Baidu, Yahoo, etc.)'],
+    datasets: [{
+      data: [90, 4, 6],
+      backgroundColor: ['#4285F4','#00A4EF','rgba(255,255,255,0.15)'],
+      borderColor: '#0a0e1a',
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 8. Cloud Share Chart
+const cloudShareCtx = document.getElementById('cloudShareChart').getContext('2d');
+new Chart(cloudShareCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['AWS', 'Azure', 'Google Cloud', 'Others'],
+    datasets: [{
+      data: [32, 24, 11, 33],
+      backgroundColor: ['#f59e0b','#00A4EF','#34A853','rgba(255,255,255,0.15)'],
+      borderColor: '#0a0e1a',
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 9. Hyperscaler CapEx Chart
+const hyperCapexCtx = document.getElementById('hyperscalerCapexChart').getContext('2d');
+new Chart(hyperCapexCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Alphabet', 'Microsoft', 'Amazon', 'Meta', 'Oracle'],
+    datasets: [
+      {
+        label: 'FY2025 CapEx ($B)',
+        data: [91.4, 80, 83, 65, 9],
+        backgroundColor: 'rgba(66,133,244,0.5)',
+        borderColor: '#4285F4',
+        borderWidth: 1
+      },
+      {
+        label: '2026 Guidance ($B)',
+        data: [185, 110, 100, 70, 16],
+        backgroundColor: 'rgba(16,185,129,0.5)',
+        borderColor: '#10b981',
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => '$' + v + 'B' } }
+    },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } }
+  }
+});
+
+// 10. PE History Chart (approximate historical data)
+const peHistCtx = document.getElementById('peHistoryChart').getContext('2d');
+new Chart(peHistCtx, {
+  type: 'line',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024', 'Q1 2025', 'Q1 2026'],
+    datasets: [
+      {
+        label: 'P/E Ratio',
+        data: [27, 35, 28, 20, 26, 23, 24, 30.4],
+        borderColor: '#4285F4',
+        backgroundColor: 'rgba(66,133,244,0.1)',
+        borderWidth: 2,
+        pointRadius: 4,
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: '5Y Average (~27x)',
+        data: [27, 27, 27, 27, 27, 27, 27, 27],
+        borderColor: '#f59e0b',
+        borderWidth: 2,
+        borderDash: [6, 3],
+        pointRadius: 0
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { min: 15, max: 40, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => v + 'x' } }
+    },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } }
+  }
+});
+</script>
+</body>
+</html>
