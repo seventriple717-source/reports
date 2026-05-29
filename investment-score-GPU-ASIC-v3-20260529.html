@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>算力芯片投资评分 v3.0 | NVDA AMD INTC AVGO MRVL</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--accent:#58a6ff;--text:#c9d1d9;--muted:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;
+--nvda:#76e3b0;--avgo:#58a6ff;--mrvl:#bc8cff;--amd:#f0883e;--intc:#e8b04b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:20px 16px;}
+.hdr{text-align:center;padding:36px 0 22px;border-bottom:1px solid var(--border);margin-bottom:22px;}
+.hdr .sub{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.hdr h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;}
+.hdr .meta{color:var(--muted);font-size:11px;}
+.tag{display:inline-block;background:rgba(88,166,255,.1);color:var(--accent);border:1px solid rgba(88,166,255,.3);border-radius:20px;padding:3px 12px;font-size:11px;margin-bottom:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
+.ct{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+/* Scores */
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sc.nvda::before{background:var(--nvda);}.sc.avgo::before{background:var(--avgo);}
+.sc.mrvl::before{background:var(--mrvl);}.sc.amd::before{background:var(--amd);}.sc.intc::before{background:var(--intc);}
+.tk{font-size:17px;font-weight:700;color:#fff;}.cn{font-size:9px;color:var(--muted);margin:2px 0 10px;}
+.fs{font-size:38px;font-weight:800;line-height:1;margin-bottom:3px;}
+.fS{color:#00d26a;}.fA{color:var(--s4);}.fB{color:var(--s3);}.fC{color:var(--s2);}.fD{color:var(--s1);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:8px;}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.m3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;font-size:10px;}
+.m3 label{color:var(--muted);display:block;}.m3 span{font-weight:700;font-size:12px;}
+.delta{font-size:9px;margin-top:6px;color:var(--muted);}
+.delta .up{color:var(--s4);}.delta .dn{color:var(--s2);}
+.vd{font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.5;}
+/* Tables */
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--muted);padding:7px 9px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;}
+.t td{padding:6px 9px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.lc{color:var(--muted);width:150px;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.cn-nvda{color:var(--nvda);}.cn-avgo{color:var(--avgo);}.cn-mrvl{color:var(--mrvl);}.cn-amd{color:var(--amd);}.cn-intc{color:var(--intc);}
+/* Score bar */
+.sr{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.sl{width:150px;font-size:11px;flex-shrink:0;}.sw{font-size:10px;color:var(--muted);}
+.sbw{flex:1;background:rgba(255,255,255,.05);border-radius:3px;height:5px;overflow:hidden;}
+.sb{height:100%;border-radius:3px;}
+.sn{width:22px;text-align:right;font-size:11px;font-weight:700;flex-shrink:0;}
+.swt{width:32px;text-align:right;font-size:10px;color:var(--muted);flex-shrink:0;}
+.ev{font-size:10px;color:var(--muted);margin-left:157px;margin-bottom:7px;padding:4px 7px;background:rgba(255,255,255,.02);border-left:2px solid var(--border);border-radius:0 3px 3px 0;line-height:1.5;}
+.ev.new{border-color:var(--s4);background:rgba(63,185,80,.04);}
+.ev.warn{border-color:var(--s2);}
+.d5{background:var(--s5);}.d4{background:var(--s4);}.d3{background:var(--s3);}.d2{background:var(--s2);}.d1{background:var(--s1);}.d0{background:var(--s0);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}.n0{color:var(--s0);}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:7px;padding:12px;font-family:"SF Mono","Fira Code",monospace;font-size:11px;line-height:1.9;}
+.fml .fr{color:var(--accent);font-size:13px;font-weight:700;}
+/* AI Map */
+.map2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.mb2{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:12px;}
+.mb2 h4{font-size:11px;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;}
+/* Supply chain */
+.sc-row{display:flex;gap:8px;margin-bottom:4px;font-size:10px;align-items:flex-start;}
+.sc-l{width:60px;color:var(--muted);flex-shrink:0;font-weight:600;}
+.sc-node{flex:1;color:var(--text);}
+.sc-status{width:70px;flex-shrink:0;text-align:center;}
+.tight{color:var(--s2);font-weight:700;}.easing{color:var(--s3);font-weight:700;}.ok{color:var(--s4);}
+/* Company section */
+.ctag{font-size:15px;font-weight:700;color:#fff;margin-bottom:10px;display:block;}
+.ctag .ctn{font-size:11px;color:var(--muted);margin-left:8px;font-weight:400;}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;}
+.mbx{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:9px;}
+.mbx .ml{font-size:10px;color:var(--muted);margin-bottom:2px;}.mbx .mv{font-size:13px;font-weight:700;color:#fff;}.mbx .mt{font-size:10px;}
+/* Scenario */
+.sc-item{padding:6px 10px;margin-bottom:4px;border-radius:5px;font-size:10px;line-height:1.6;}
+.sc-v{background:rgba(46,160,67,.07);border-left:3px solid var(--s5);}
+.sc-e{background:rgba(88,166,255,.07);border-left:3px solid var(--accent);}
+.sc-s{background:rgba(210,153,34,.07);border-left:3px solid var(--s3);}
+/* Veto */
+.vi{display:flex;align-items:flex-start;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px;}
+.vok{color:var(--s4);font-size:12px;flex-shrink:0;}.vw{color:var(--s3);font-size:12px;flex-shrink:0;}
+/* Phase pill */
+.pp{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;margin-left:4px;}
+.pp-ee{background:rgba(0,210,106,.1);color:#00d26a;}.pp-fg{background:rgba(63,185,80,.1);color:var(--s4);}
+.pp-sd{background:rgba(210,153,34,.1);color:var(--s3);}
+/* New badge */
+.nbadge{display:inline-block;background:rgba(63,185,80,.15);color:var(--s4);border:1px solid rgba(63,185,80,.3);border-radius:3px;padding:1px 5px;font-size:9px;margin-left:4px;vertical-align:middle;}
+.footer{text-align:center;padding:24px 0;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:28px;}
+@media(max-width:900px){.g5{grid-template-columns:repeat(2,1fr);}.mg{grid-template-columns:repeat(2,1fr);}.map2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="sub">AI 价值投资打分系统 v3.0 — 全链路分析 + 实时数据（最新季报 + 电话会议 + 产品动态）</div>
+  <h1>算力芯片 GPU/ASIC 投资评分报告</h1>
+  <div class="tag">🔲 GPU/ASIC 全产业链 · 数据截至 2026-05-29（MRVL财报2天前刚发）</div>
+  <p style="color:var(--muted);font-size:11px;margin-top:6px">NVDA · AVGO · MRVL · AMD · INTC &nbsp;|&nbsp; v3.0新增：全供应链瓶颈图谱 · 下游场景推演 · 电话会议深度挖掘</p>
+  <div class="meta">生成日期：2026-05-29 &nbsp;|&nbsp; 数据来源：SEC EDGAR · 最新财报 · 电话会议实录 · 实时联网搜索</div>
+</div>
+
+<!-- ====== STEP 0: AI MAP ====== -->
+<div class="card">
+  <div class="ct">📡 Step 0 · AI 技术全景扫描（2026-05 实时）</div>
+  <div style="background:rgba(0,210,106,.06);border:1px solid rgba(0,210,106,.2);border-radius:7px;padding:12px;margin-bottom:12px;">
+    <strong style="color:#00d26a">当前阶段：基础设施超周期 × 推理主导转型期</strong>
+    <p style="color:var(--text);font-size:11px;margin-top:5px;line-height:1.7;">四大超大规模Capex 2026年合计 <strong>$6,500-$7,250亿</strong>（+36-77% YoY），推理算力占比从2023年1/3提升至2026年约2/3。AI Agent正从试点走向大规模企业部署（Gartner：40%企业应用 by 2026内嵌Agent，61%大企业已有生产Agent系统）。</p>
+  </div>
+  <div class="map2">
+    <!-- Supply chain map -->
+    <div class="mb2">
+      <h4>全供应链瓶颈图谱（L0-L7 + 部署端）</h4>
+      <div class="sc-row"><div class="sc-l">L0 原材料</div><div class="sc-node">ABF基板（味之素）紧张；硅晶圆稳定；光刻胶（JSR/TOK）偏紧</div><div class="sc-status"><span class="tight">偏紧</span></div></div>
+      <div class="sc-row"><div class="sc-l">L1 设备</div><div class="sc-node">ASML EUV单季订单€132亿创纪录，2026指引€360-400亿。交期12月+</div><div class="sc-status"><span class="tight">紧张</span></div></div>
+      <div class="sc-row"><div class="sc-l">L2 代工</div><div class="sc-node">TSMC N2/A16 2026-2027产能已售罄；Capex $560亿。Samsung良率不稳</div><div class="sc-status"><span class="tight">极度紧</span></div></div>
+      <div class="sc-row"><div class="sc-l">L3 封装</div><div class="sc-node">CoWoS从3.5万→13万片/月（2026底）；从极紧走向缓解</div><div class="sc-status"><span class="easing">缓解中</span></div></div>
+      <div class="sc-row" style="background:rgba(248,81,73,.05);padding:4px;border-radius:3px;"><div class="sc-l" style="color:var(--s2);font-weight:700">L4 HBM</div><div class="sc-node" style="color:var(--s2)"><strong>SK Hynix 57%占比，短缺延续至2027年+；HBM4进入量产但供给仍紧</strong></div><div class="sc-status"><span class="tight">最紧卡点</span></div></div>
+      <div class="sc-row"><div class="sc-l">L5 DRAM</div><div class="sc-node">产线大规模转向HBM，DDR5标准内存供给收缩，价格压力</div><div class="sc-status"><span class="tight">偏紧</span></div></div>
+      <div class="sc-row"><div class="sc-l">L6 芯片</div><div class="sc-node">GPU训练偏紧；定制ASIC出货增速44.6% vs GPU 16.1%；ASIC市占快速提升</div><div class="sc-status"><span class="easing">GPU偏紧</span></div></div>
+      <div class="sc-row"><div class="sc-l">L7 系统</div><div class="sc-node">服务器组装充足；VRM/连接器随功耗提升成新压力点</div><div class="sc-status"><span class="ok">基本充裕</span></div></div>
+      <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+        <div class="sc-row" style="background:rgba(248,81,73,.05);padding:4px;border-radius:3px;"><div class="sc-l" style="color:var(--s2);font-weight:700">部署·电力</div><div class="sc-node" style="color:var(--s2)"><strong>全球#1瓶颈；50%数据中心项目延期；PJM排队2,600 GW；结构性（5-10年）</strong></div><div class="sc-status"><span class="tight">最紧</span></div></div>
+        <div class="sc-row"><div class="sc-l">部署·光互联</div><div class="sc-node">800G成默认标准；1.6T缺口1000万只；$260亿市场 +57% YoY</div><div class="sc-status"><span class="tight">偏紧</span></div></div>
+        <div class="sc-row"><div class="sc-l">部署·液冷</div><div class="sc-node">AI机架功耗→120-150kW/架，液冷刚需；Vertiv积压$150亿+</div><div class="sc-status"><span class="easing">中高</span></div></div>
+      </div>
+    </div>
+    <!-- Scenarios -->
+    <div class="mb2">
+      <h4>下游 AI 场景推演（三时间维度）</h4>
+      <div style="font-size:10px;color:var(--s5);margin-bottom:4px;font-weight:600">▶ 已验证（有真实收入）</div>
+      <div class="sc-item sc-v">AI编程助手（Cursor/GitHub Copilot）→ $40亿最大品类，占企业AI支出55%<br><span style="color:var(--s2)">冲击</span>：印度IT外包（TCS/Infosys初级岗）</div>
+      <div class="sc-item sc-v">AI医疗（临床记录/影像诊断）→ $6亿 +140% YoY；Healthcare AI独角兽最多<br><span style="color:var(--s2)">冲击</span>：传统医疗记录软件</div>
+      <div class="sc-item sc-v">AI客服/对话（Contact Center AI）→ 企业节省15-30%人工坐席</div>
+      <div style="font-size:10px;color:var(--accent);margin:6px 0 4px;font-weight:600">▶ 1-2年爆发（前提条件+受益分析）</div>
+      <div class="sc-item sc-e">自主AI Agent规模化 → MCP/A2A标准化落地<br>受益：GPU推理算力 / 服务器CPU（编排层）/ 云平台<br><span style="color:var(--s2)">冲击</span>：传统SaaS软件（被Agent直接操作）</div>
+      <div class="sc-item sc-e">AI软件工程师（Devin/SWE-agent）→ 云算力 / 代码执行基础设施受益<br><span style="color:var(--s2)">冲击</span>：初级软件工程师岗位、外包软件公司</div>
+      <div class="sc-item sc-e">推理时计算扩展（test-time compute）→ 小模型+大推理成主流<br>受益：推理专用芯片（Groq/Cerebras/NVDA推理）</div>
+      <div style="font-size:10px;color:var(--s3);margin:6px 0 4px;font-weight:600">▶ 3-5年结构性（价值投资核心推演）</div>
+      <div class="sc-item sc-s">物理AI/机器人（NVIDIA Isaac） → 概率中；受益：NVDA / 传感器<br><span style="color:var(--s2)">冲击</span>：制造业人工、物流人工</div>
+      <div class="sc-item sc-s">主权AI（各国独立AI算力）→ 概率高；20+国已与NVIDIA签约<br>受益：NVDA（非管制市场）/ 本地数据中心</div>
+      <div class="sc-item sc-s">AI自主科研（制药/材料）→ 概率中，2028-2030商业案例<br>受益：AI+生物科技平台（Isomorphic/Recursion）</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;font-size:10px;">
+    <div style="background:rgba(255,255,255,.025);padding:8px;border-radius:6px;"><strong style="color:#fff">AWS 2026 Capex</strong><div class="pos">~$1,600亿</div></div>
+    <div style="background:rgba(255,255,255,.025);padding:8px;border-radius:6px;"><strong style="color:#fff">Azure Capex</strong><div class="pos">~$1,200亿</div></div>
+    <div style="background:rgba(255,255,255,.025);padding:8px;border-radius:6px;"><strong style="color:#fff">GCP Capex</strong><div class="pos">~$1,800-1,900亿</div></div>
+    <div style="background:rgba(255,255,255,.025);padding:8px;border-radius:6px;"><strong style="color:#fff">Meta Capex</strong><div class="pos">$1,250-1,450亿（上调）</div></div>
+  </div>
+  <div style="margin-top:10px;font-size:10px;color:var(--muted)">
+    <strong style="color:var(--text)">出口管制最新（2026年1月）：</strong>BIS将H200/AMD MI325X等改为"逐案审查"（非全面禁止），需50%中国出货上限、KYC程序等。同步对达到性能门槛的芯片加征25% Section 232关税。NVDA已收中国H200订单但Q2指引明确排除中国算力收入。
+  </div>
+</div>
+
+<!-- ====== SUMMARY CARDS ====== -->
+<div class="g5">
+  <div class="sc nvda">
+    <div class="tk">NVDA</div><div class="cn">NVIDIA · Q1 FY2027 2026-05-20</div>
+    <div class="fs fS">90.8</div><div class="gp gpS">S级 · 核心持仓</div>
+    <div class="m3"><div><label>行业</label><span class="n5">87.9</span></div><div><label>公司</label><span class="n5">98.4</span></div><div><label>估值</label><span class="n4">80.0</span></div></div>
+    <div class="delta">vs v2: <span class="up">↑ 89.2→90.8</span>（FCF 60%，前向P/E降至21x）</div>
+    <div class="vd">Q1 FY2027 $81.6B +85%，FCF $49B（60% margin），前向P/E仅21x——唯一好公司+合理估值组合，且估值比之前更便宜。</div>
+  </div>
+  <div class="sc avgo">
+    <div class="tk">AVGO</div><div class="cn">Broadcom · Q1 FY2026 2026-03-04</div>
+    <div class="fs fA">76.6</div><div class="gp gpA">A级 · 重点观察</div>
+    <div class="m3"><div><label>行业</label><span class="n4">73.4</span></div><div><label>公司</label><span class="n4">84.8</span></div><div><label>估值</label><span class="n3">65.0</span></div></div>
+    <div class="delta">vs v2: <span class="up">↑ 72.9→76.6</span>（OpenAI第6 XPU客户，公司质量提升）</div>
+    <div class="vd">OpenAI确认为第6 XPU客户，2027年$100B AI收入目标，Q2 AI $10.7B（+27% QoQ）。</div>
+  </div>
+  <div class="sc mrvl">
+    <div class="tk">MRVL</div><div class="cn">Marvell · Q1 FY2027 2026-05-27 <span class="nbadge">2天前</span></div>
+    <div class="fs fB">66.7</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n5">82.5</span></div><div><label>公司</label><span class="n4">72.0</span></div><div><label>估值</label><span class="n4">72.0</span></div></div>
+    <div class="delta">vs v2: <span class="up">↑ 61.5→66.7</span>（市值$112B↓，FY27指引上调$5B，NVIDIA合作）</div>
+    <div class="vd">FY2027指引+$5B至$11.5B，NVIDIA战略合作，2nm硅首发。市值回调使估值明显改善。</div>
+  </div>
+  <div class="sc amd">
+    <div class="tk">AMD</div><div class="cn">Advanced Micro Devices · Q1 2026 2026-05-06</div>
+    <div class="fs fB">65.6</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n3">69.5</span></div><div><label>公司</label><span class="n3">69.2</span></div><div><label>估值</label><span class="n3">57.0</span></div></div>
+    <div class="delta">vs v2: <span class="up">↑↑ C级54.6→B级65.6</span>（EPYC超Intel，Meta 6GW，市值大降）</div>
+    <div class="vd">EPYC首次46.2%服务器CPU份额超Intel；Meta 6GW协议；FCF $2.6B记录；市值$579B使估值改善。</div>
+  </div>
+  <div class="sc intc">
+    <div class="tk">INTC</div><div class="cn">Intel · Q1 FY2026 2026-04-23</div>
+    <div class="fs fC">45.5</div><div class="gp gpC">C级 · 观察期</div>
+    <div class="m3"><div><label>行业</label><span class="n2">54.2</span></div><div><label>公司</label><span class="n2">41.2</span></div><div><label>估值</label><span class="n2">47.0</span></div></div>
+    <div class="delta">vs v2: <span class="up">↑↑ D级33.6→C级45.5</span>（Q1 EPS 28倍超预期，扭转信号）</div>
+    <div class="vd">Q1 EPS $0.29 vs $0.01预期（28倍），微软确认18A-P，NVIDIA+SoftBank $70亿投资，Lip-Bu Tan执行力超预期。不再是D级。</div>
+  </div>
+</div>
+
+<!-- Key metrics comparison -->
+<div class="card">
+  <div class="ct">📊 最新财报关键数据对比（全部为最新已报告季度）</div>
+  <table class="t">
+    <thead><tr><th class="lc">指标</th><th class="cn-nvda">NVDA (Q1 FY27)</th><th class="cn-avgo">AVGO (Q1 FY26)</th><th class="cn-mrvl">MRVL (Q1 FY27)</th><th class="cn-amd">AMD (Q1 2026)</th><th class="cn-intc">INTC (Q1 FY26)</th></tr></thead>
+    <tbody>
+      <tr><td class="lc">报告日期</td><td class="cn-nvda">2026-05-20</td><td class="cn-avgo">2026-03-04</td><td class="cn-mrvl">2026-05-27 <span class="nbadge">2天前</span></td><td class="cn-amd">2026-05-06</td><td class="cn-intc">2026-04-23</td></tr>
+      <tr><td class="lc">季度营收</td><td class="cn-nvda pos">$81.6B (+85%)</td><td class="cn-avgo pos">$19.31B (+29%)</td><td class="cn-mrvl pos">$2.42B (+28%)</td><td class="cn-amd pos">$10.3B (+38%)</td><td class="cn-intc pos">$13.6B (+7.2%)</td></tr>
+      <tr><td class="lc">AI/数据中心</td><td class="cn-nvda pos">$75.2B DC (+92%)</td><td class="cn-avgo pos">$8.4B AI (+106%)</td><td class="cn-mrvl pos">$1.83B DC (+27%)</td><td class="cn-amd pos">$5.8B DC (+57%)</td><td class="cn-intc">$5.1B DCAI (+22%)</td></tr>
+      <tr><td class="lc">毛利率</td><td class="cn-nvda pos">75.0%</td><td class="cn-avgo pos">~77%</td><td class="cn-mrvl">58.9% (non-GAAP)</td><td class="cn-amd">55.0% (non-GAAP)</td><td class="cn-intc neu">39.4% (↑+250bps)</td></tr>
+      <tr><td class="lc">FCF/利润率</td><td class="cn-nvda pos">$49B (60%!!)</td><td class="cn-avgo pos">$8.0B (41%)</td><td class="cn-mrvl">未单独披露</td><td class="cn-amd pos">$2.6B (25%) 记录</td><td class="cn-intc neg">-$2.54B (季节性)</td></tr>
+      <tr><td class="lc">EPS vs预期</td><td class="cn-nvda pos">$1.87 vs $1.76 (+6%)</td><td class="cn-avgo">$2.05 vs $2.02 (+1.5%)</td><td class="cn-mrvl">$0.80 vs $0.81 (≈持平)</td><td class="cn-amd pos">$1.37 vs $1.29 (+6%)</td><td class="cn-intc pos">$0.29 vs $0.01 (+28倍)</td></tr>
+      <tr><td class="lc">下季指引</td><td class="cn-nvda pos">$91.0B (+12% QoQ)</td><td class="cn-avgo pos">$22.0B AI $10.7B</td><td class="cn-mrvl pos">$2.70B (+12% QoQ)</td><td class="cn-amd pos">$11.2B (+9% QoQ)</td><td class="cn-intc pos">$13.8-14.8B，首次GAAP盈利</td></tr>
+      <tr><td class="lc">重大新事件</td><td class="cn-nvda">Groq $200亿收购，Rubin H2出货</td><td class="cn-avgo">OpenAI第6 XPU客户，VCF 9.1</td><td class="cn-mrvl">NVIDIA战略合作，2nm首发，+$5B指引</td><td class="cn-amd">EPYC 46.2%份额超Intel，Meta 6GW</td><td class="cn-intc">微软18A-P确认，NVIDIA $70亿投资</td></tr>
+      <tr><td class="lc">当前市值</td><td class="cn-nvda">~$5.1-5.2T</td><td class="cn-avgo">~$2.02T</td><td class="cn-mrvl">~$112B</td><td class="cn-amd">~$579B</td><td class="cn-intc">~$510B</td></tr>
+      <tr><td class="lc">前向P/E</td><td class="cn-nvda pos">~21x（低于历史）</td><td class="cn-avgo">~32x</td><td class="cn-mrvl">~43-47x</td><td class="cn-amd">~45-48x</td><td class="cn-intc neu">~54x（含重组摊销）</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ====== SCORES DETAIL ====== -->
+<div class="card">
+  <div class="ct">📈 三层评分详情（v3.0 · 实时数据）</div>
+  <table class="t">
+    <thead><tr><th>层级/维度</th><th class="cn-nvda">NVDA</th><th class="cn-avgo">AVGO</th><th class="cn-mrvl">MRVL</th><th class="cn-amd">AMD</th><th class="cn-intc">INTC</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第一层：行业吸引力（分部加权行业分）</td></tr>
+      <tr><td class="lc">行业加权总分</td><td class="n5">87.9（S）</td><td class="n4">73.4（A）</td><td class="n5">82.5（S）</td><td class="n3">69.5（B）</td><td class="n2">54.2（C）</td></tr>
+      <tr><td class="lc">主要分部占比</td><td>DC GPU 75% + DC Net 14.5%</td><td>VMware软件 42% + ASIC 23%</td><td>ASIC 47% + 光互联 27%</td><td>EPYC 40% + AI PC 30%</td><td>PC CPU 49% + Xeon 27%</td></tr>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第二层：公司质量</td></tr>
+      <tr><td class="lc">成长性（权重20）</td><td class="n5">5/5→20（+85% Q1，$1T可见度）</td><td class="n4">4/5→16（+29%总，AI +106%）</td><td class="n3">3/5→12（+28%，FY27 +40%指引）</td><td class="n3">3/5→12（+38%，DC +57%）</td><td class="n1">1/5→4（+7.2%，逆转第一季）</td></tr>
+      <tr><td class="lc">盈利质量（权重16）</td><td class="n5">5/5→16（GM75%，FCF60%）</td><td class="n5">5/5→16（GM77%，Adj EBITDA68%）</td><td class="n3">3/5→9.6（GM59%，ROIC改善中）</td><td class="n3">3/5→9.6（GM55%↑，FCF25%记录）</td><td class="n2">2/5→6.4（GM39.4%↑，FCF季节负）</td></tr>
+      <tr><td class="lc">结构性护城河（权重18）</td><td class="n5">5/5→18（CUDA+NVLink+$1T锁定）</td><td class="n5">5/5→18（ASIC+VMware双护城河，"多年无竞争"）</td><td class="n4">4/5→14.4（NVIDIA合作+2nm全栈唯一性）</td><td class="n3">3/5→10.8（EPYC跨越Intel，GPU生态弱）</td><td class="n2">2/5→7.2（x86仍有价值，18A新壁垒）</td></tr>
+      <tr><td class="lc">AI技术对齐（权重10）</td><td class="n5">5/5→10</td><td class="n5">5/5→10</td><td class="n5">5/5→10</td><td class="n4">4/5→8（MI400+EPYC Agent推理）</td><td class="n2">2/5→4（Xeon73%GPU服务器，Gaudi仍失败）</td></tr>
+      <tr><td class="lc">财务稳健（权重10）</td><td class="n5">5/5→10（净现金丰厚）</td><td class="n3">3/5→6（净负债$53.5B，D/EBITDA 2x）</td><td class="n4">4/5→8（净负债0.3x EBITDA）</td><td class="n4">4/5→8（净现金$8B，FCF提速）</td><td class="n2">2/5→4（净负债$37B，在改善）</td></tr>
+      <tr><td class="lc">管理层绑定（权重12）</td><td class="n5">5/5→12（Jensen 3.5%，"需求抛物线"执行）</td><td class="n4">4/5→9.6（Hock Tan $120B AI目标对赌）</td><td class="n3">3/5→7.2（Murphy 10b5-1计划减持）</td><td class="n4">4/5→9.6（Lisa Su $1.9B持股）</td><td class="n3">3/5→7.2（Lip-Bu Tan Q1 28x超预期，B0纪律）</td></tr>
+      <tr><td class="lc">客户质量（权重8）</td><td class="n4">4/5→6.4（超大规模集中但分散）</td><td class="n4">4/5→6.4（6客户+$73B积压）</td><td class="n3">3/5→4.8（Amazon+MS+NVIDIA，高集中）</td><td class="n4">4/5→6.4（Meta 6GW，EPYC分散）</td><td class="n3">3/5→4.8（微软18A，NVIDIA投资）</td></tr>
+      <tr><td class="lc">未来可选性（权重6）</td><td class="n5">5/5→6（Rubin/Feynman/机器人/Vera CPU）</td><td class="n5">5/5→6（VCF AI 9.1，$100B 2027路径）</td><td class="n5">5/5→6（2nm，CPO，NVIDIA生态）</td><td class="n4">4/5→4.8（MI400 H2，Venice EPYC）</td><td class="n3">3/5→3.6（18A代工是巨大期权）</td></tr>
+      <tr style="background:rgba(255,255,255,.03)"><td class="lc"><strong>公司质量总分</strong></td><td class="n5"><strong>98.4</strong></td><td class="n5"><strong>84.8</strong>（↑82.2）</td><td class="n4"><strong>72.0</strong>（↑68.2）</td><td class="n3"><strong>69.2</strong>（↑62.8）</td><td class="n2"><strong>41.2</strong>（↑↑25.2）</td></tr>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第三层：估值安全边际</td></tr>
+      <tr><td class="lc">情景上行空间（权重35）</td><td class="n4">4/5→28（40-60% 3yr，Rubin驱动下一轮）</td><td class="n3">3/5→21（$100B 2027 AI路径支撑，但已$2T）</td><td class="n4">4/5→28（$112B vs $11.5B FY27，60-100% 3yr）</td><td class="n3">3/5→21（EPYC超Intel+Meta大单，30-60%）</td><td class="n3">3/5→21（18A成功则大幅上行，失败则下行）</td></tr>
+      <tr><td class="lc">相对估值匹配（权重25）</td><td class="n5">5/5→25（P/E PEG=21/85=0.25，FCF 3.8%）</td><td class="n4">4/5→20（PE PEG=32/47=0.68，FCF 1.6%偏贵）</td><td class="n4">4/5→20（NTM PS/40%=0.24→5/5，PE PEG=1.1→3/5，折中4/5）</td><td class="n3">3/5→15（PE PEG≈1.0，EV/EBITDA TTM 53x高）</td><td class="n2">2/5→10（PS PEG=9.1/5=1.82→2/5，PE不可用）</td></tr>
+      <tr><td class="lc">下行情景保护（权重25）</td><td class="n3">3/5→15（中国出口不确定，4次财报后下跌）</td><td class="n3">3/5→15（净负债$53B，FCF覆盖，悲观-35-50%）</td><td class="n3">3/5→15（净债0.3x EBITDA，市值已大幅回调）</td><td class="n3">3/5→15（净现金$8B，但PE 45x仍有压缩风险）</td><td class="n2">2/5→10（净负债$37B，18A执行风险，DCF$27）</td></tr>
+      <tr><td class="lc">历史同行对比（权重15）</td><td class="n4">4/5→12（21x远低于NVDA历史均值30-60x）</td><td class="n3">3/5→9（前向P/E 32x vs历史20-25x，合理偏高）</td><td class="n3">3/5→9（NTM PS 9.7x合理，历史AI时代偏下）</td><td class="n2">2/5→6（45x仍偏高，但HSBC因估值下调）</td><td class="n2">2/5→6（含困境溢价，传统指标失效）</td></tr>
+      <tr style="background:rgba(255,255,255,.03)"><td class="lc"><strong>估值总分</strong></td><td class="n4"><strong>80.0</strong>（↑75.0）</td><td class="n3"><strong>65.0</strong>（↑57.0）</td><td class="n4"><strong>72.0</strong>（↑57.0）</td><td class="n3"><strong>57.0</strong>（↑32.0）</td><td class="n2"><strong>47.0</strong>（↑35.0）</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ====== FINAL FORMULAS ====== -->
+<div class="card">
+  <div class="ct">⚖️ 最终评分汇总（v3.0）</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <div class="fml" style="border-color:rgba(118,227,176,.3)">
+      <div style="color:var(--nvda);font-weight:700;margin-bottom:5px">NVDA</div>
+      <div>87.9×20%=<span class="n5">17.58</span></div>
+      <div>98.4×50%=<span class="n5">49.20</span></div>
+      <div>80.0×30%=<span class="n4">24.00</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">90.8 · S级↑</div>
+    </div>
+    <div class="fml" style="border-color:rgba(88,166,255,.3)">
+      <div style="color:var(--avgo);font-weight:700;margin-bottom:5px">AVGO</div>
+      <div>73.4×20%=<span class="n4">14.68</span></div>
+      <div>84.8×50%=<span class="n4">42.40</span></div>
+      <div>65.0×30%=<span class="n3">19.50</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">76.6 · A级↑</div>
+    </div>
+    <div class="fml" style="border-color:rgba(188,140,255,.3)">
+      <div style="color:var(--mrvl);font-weight:700;margin-bottom:5px">MRVL</div>
+      <div>82.5×20%=<span class="n5">16.50</span></div>
+      <div>72.0×50%=<span class="n3">36.00</span></div>
+      <div>72.0×30%=<span class="n3">21.60</span></div>
+      <div>置信度×<span class="n4">0.9</span></div>
+      <div class="fr">66.7 · B级↑</div>
+    </div>
+    <div class="fml" style="border-color:rgba(240,136,62,.3)">
+      <div style="color:var(--amd);font-weight:700;margin-bottom:5px">AMD</div>
+      <div>69.5×20%=<span class="n3">13.90</span></div>
+      <div>69.2×50%=<span class="n3">34.60</span></div>
+      <div>57.0×30%=<span class="n3">17.10</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">65.6 · B级↑↑</div>
+    </div>
+    <div class="fml" style="border-color:rgba(232,176,75,.3)">
+      <div style="color:var(--intc);font-weight:700;margin-bottom:5px">INTC</div>
+      <div>54.2×20%=<span class="n2">10.84</span></div>
+      <div>41.2×50%=<span class="n2">20.60</span></div>
+      <div>47.0×30%=<span class="n2">14.10</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">45.5 · C级↑↑</div>
+    </div>
+  </div>
+</div>
+
+<!-- VETO CHECK -->
+<div class="card">
+  <div class="ct">⚖️ 硬性否决项检查</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <div><div style="font-size:11px;font-weight:700;color:var(--nvda);margin-bottom:6px">NVDA — 通过</div>
+      <div class="vi"><span class="vok">✓</span>无财务造假</div><div class="vi"><span class="vok">✓</span>FCF $49B/季，强劲增长</div>
+      <div class="vi"><span class="vw">△</span>Q2指引排除中国收入（政策风险）</div><div class="vi"><span class="vok">✓</span>收入独立可验证</div></div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--avgo);margin-bottom:6px">AVGO — 通过</div>
+      <div class="vi"><span class="vok">✓</span>无财务造假</div><div class="vi"><span class="vok">✓</span>FCF $8B/季稳健</div>
+      <div class="vi"><span class="vok">✓</span>$73B积压订单可验证</div><div class="vi"><span class="vok">✓</span>无单客户&gt;40%</div></div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--mrvl);margin-bottom:6px">MRVL — 通过</div>
+      <div class="vi"><span class="vok">✓</span>无财务造假</div><div class="vi"><span class="vok">✓</span>无重大问题</div>
+      <div class="vi"><span class="vw">△</span>Amazon+MS约60%，高集中但有合同</div><div class="vi"><span class="vok">✓</span>收入可验证</div></div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--amd);margin-bottom:6px">AMD — 通过</div>
+      <div class="vi"><span class="vok">✓</span>无财务造假</div><div class="vi"><span class="vok">✓</span>FCF转正且记录</div>
+      <div class="vi"><span class="vw">△</span>中国政策动态，SAFE Chips Act风险</div></div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--intc);margin-bottom:6px">INTC — 通过（观察）</div>
+      <div class="vi"><span class="vok">✓</span>无财务造假</div>
+      <div class="vi"><span class="vw">△</span>FCF Q1季节性负，趋势改善</div>
+      <div class="vi"><span class="vw">△</span>净负债$37B，在减少</div>
+      <div class="vi"><span class="vok">✓</span>Q2预测首次GAAP盈利</div></div>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+  <div class="ct" style="color:var(--accent)">📌 v3.0综合结论（与v2.0的关键变化）</div>
+  <table class="t" style="margin-bottom:14px">
+    <thead><tr><th>公司</th><th>行业</th><th>公司质量</th><th>估值</th><th>最终(v3)</th><th>最终(v2)</th><th>变化</th><th>投资动作</th></tr></thead>
+    <tbody>
+      <tr><td class="cn-nvda" style="font-weight:700">NVDA</td><td class="n5">87.9</td><td class="n5">98.4</td><td class="n4">80.0</td><td class="n5" style="font-weight:700">90.8</td><td class="n5">89.2</td><td class="n5">+1.6 S</td><td style="color:var(--s5)">核心持仓，积极建仓</td></tr>
+      <tr><td class="cn-avgo" style="font-weight:700">AVGO</td><td class="n4">73.4</td><td class="n4">84.8</td><td class="n3">65.0</td><td class="n4" style="font-weight:700">76.6</td><td class="n4">72.9</td><td class="n4">+3.7 A</td><td style="color:var(--s4)">重点观察，等估值窗口</td></tr>
+      <tr><td class="cn-mrvl" style="font-weight:700">MRVL</td><td class="n5">82.5</td><td class="n4">72.0</td><td class="n4">72.0</td><td class="n3" style="font-weight:700">66.7</td><td class="n3">61.5</td><td class="n4">+5.2 B</td><td style="color:var(--s3)">小仓位/事件驱动</td></tr>
+      <tr><td class="cn-amd" style="font-weight:700">AMD</td><td class="n3">69.5</td><td class="n3">69.2</td><td class="n3">57.0</td><td class="n3" style="font-weight:700">65.6</td><td class="n2">54.6</td><td class="n4">+11.0 C→B</td><td style="color:var(--s3)">小仓位（EPYC结构性变化）</td></tr>
+      <tr><td class="cn-intc" style="font-weight:700">INTC</td><td class="n2">54.2</td><td class="n2">41.2</td><td class="n2">47.0</td><td class="n2" style="font-weight:700">45.5</td><td class="n1">33.6</td><td class="n4">+11.9 D→C</td><td style="color:var(--s2)">观察期（扭转验证中）</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:12px;background:rgba(88,166,255,.05);border:1px solid rgba(88,166,255,.2);border-radius:7px;font-size:11px;line-height:1.9">
+    <strong style="color:var(--accent)">v3.0 vs v2.0 最关键变化：</strong><br>
+    <strong style="color:var(--nvda)">NVDA</strong>：市值升至$5.2T但前向P/E降至21x（FCF $49B/季，60% margin），估值反而比v2更便宜。$1T订单可见度和Groq收购将AI扩张至推理和物理世界。<br>
+    <strong style="color:var(--avgo)">AVGO</strong>：OpenAI确认为第6 XPU客户，Hock Tan说"多年内不见竞争"，护城河升至5/5。2027年$100B AI收入路径更清晰。<br>
+    <strong style="color:var(--mrvl)">MRVL</strong>（2天前财报）：FY2027指引单次上调$5B，NVIDIA战略合作，市值从$174B回调至$112B（估值更吸引），NTM PS仅9.7x。B级顶部。<br>
+    <strong style="color:var(--amd)">AMD ↑↑ C→B</strong>：三个结构性变化叠加——EPYC 46.2%服务器份额首超Intel、Meta 6GW大单、FCF$2.6B记录；且市值从$845B降至$579B估值改善。<br>
+    <strong style="color:var(--intc)">INTC ↑↑ D→C</strong>：v2用的是过期数据。最新Q1 EPS $0.29 vs $0.01预期（28倍超预期），GM从27.5%低谷回升至39.4%，微软确认18A-P生产，NVIDIA+SoftBank $70亿战略投资——不再是D级，是早期扭转信号。但仍需2-3个季度验证持续性，保持C级观察。
+  </div>
+  <div style="margin-top:12px;padding:10px;background:rgba(210,153,34,.05);border:1px solid rgba(210,153,34,.2);border-radius:7px;font-size:11px">
+    <strong style="color:var(--s3)">电话会议关键信号（v3新增）：</strong>
+    Jensen Huang："Demand has gone parabolic" / "Agentic AI has arrived" / Blackwell "off the charts" —— NVDA CEO措辞是8个季度最强。
+    Hock Tan："我们对2027年芯片AI收入超$100B有清晰可见度，COT领域多年内不见竞争" —— 比上季度更有信心。
+    Matt Murphy（MRVL）：$5B指引上调——历史最大单次上调，罕见信号。
+    Lisa Su（AMD）："EPYC Turin首次超过50%数据中心CPU收入份额" + Meta 6GW宣布 —— 结构性转折证据。
+    Lip-Bu Tan（INTC）："18A已进入高产量制造" + "我们是国家宝藏，外部客户正在敲门" —— 与去年"战略失败"叙事截然不同。
+  </div>
+</div>
+
+<div class="footer">AI价值投资打分系统 v3.0（全链路分析+实时数据+电话会议）&nbsp;|&nbsp; 2026-05-29 &nbsp;|&nbsp; 仅供研究参考<br>
+NVDA Q1 FY27（05-20）· AVGO Q1 FY26（03-04）· MRVL Q1 FY27（05-27 2天前）· AMD Q1 2026（05-06）· INTC Q1 FY26（04-23）</div>
+</div>
+</body>
+</html>
