@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>算力芯片 GPU/ASIC 投资评分 | NVDA AMD INTC AVGO MRVL</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--accent:#58a6ff;--text:#c9d1d9;--muted:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;
+--nvda:#76e3b0;--avgo:#58a6ff;--mrvl:#bc8cff;--amd:#f0883e;--intc:#8b949e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+a{color:var(--accent);text-decoration:none;}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px;}
+
+/* Header */
+.hdr{text-align:center;padding:40px 0 28px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.hdr .sub{color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.hdr h1{font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;}
+.hdr .meta{color:var(--muted);font-size:11px;}
+.sector-tag{display:inline-block;background:rgba(88,166,255,.12);color:var(--accent);border:1px solid rgba(88,166,255,.3);border-radius:20px;padding:3px 14px;font-size:11px;margin-bottom:12px;}
+
+/* Card */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px;}
+.card-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;}
+
+/* Summary grid */
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sc.nvda::before{background:var(--nvda);}
+.sc.avgo::before{background:var(--avgo);}
+.sc.mrvl::before{background:var(--mrvl);}
+.sc.amd::before{background:var(--amd);}
+.sc.intc::before{background:var(--intc);}
+.ticker{font-size:18px;font-weight:700;color:#fff;}
+.co-name{font-size:10px;color:var(--muted);margin:3px 0 12px;}
+.fscore{font-size:44px;font-weight:800;line-height:1;margin-bottom:4px;}
+.fS{color:#00d26a;} .fA{color:var(--s4);} .fB{color:var(--s3);} .fC{color:var(--s2);} .fD{color:var(--s1);}
+.grade-pill{display:inline-block;border-radius:5px;padding:2px 10px;font-size:11px;font-weight:700;margin-bottom:12px;}
+.gS{background:rgba(0,210,106,.12);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gA{background:rgba(63,185,80,.12);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gB{background:rgba(210,153,34,.12);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gC{background:rgba(248,81,73,.12);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gD{background:rgba(218,54,51,.12);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.mini3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:10px;}
+.mini3 label{color:var(--muted);display:block;margin-bottom:1px;}
+.mini3 span{font-weight:700;font-size:13px;}
+.verdict{font-size:10px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5;}
+
+/* Score bar */
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.slabel{width:155px;font-size:11px;flex-shrink:0;}
+.sw{font-size:10px;color:var(--muted);}
+.sbwrap{flex:1;background:rgba(255,255,255,.05);border-radius:3px;height:6px;overflow:hidden;}
+.sbar{height:100%;border-radius:3px;}
+.snum{width:24px;text-align:right;font-size:11px;font-weight:700;flex-shrink:0;}
+.swgt{width:36px;text-align:right;font-size:10px;color:var(--muted);flex-shrink:0;}
+.ev{font-size:10px;color:var(--muted);margin-left:163px;margin-bottom:8px;padding:5px 8px;background:rgba(255,255,255,.02);border-left:2px solid var(--border);border-radius:0 3px 3px 0;line-height:1.5;}
+.ev.warn{border-color:var(--s2);color:#f0a0a0;}
+
+/* Score dot colors */
+.d5{background:var(--s5);}.d4{background:var(--s4);}.d3{background:var(--s3);}.d2{background:var(--s2);}.d1{background:var(--s1);}.d0{background:var(--s0);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}.n0{color:var(--s0);}
+
+/* Compare table */
+.cmp{width:100%;border-collapse:collapse;font-size:11px;}
+.cmp th{background:rgba(255,255,255,.03);color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);font-weight:600;}
+.cmp td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp tr:hover td{background:rgba(255,255,255,.015);}
+.lc{color:var(--muted);width:160px;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.cn{color:var(--nvda);}.ca{color:var(--avgo);}.cm{color:var(--mrvl);}.camd{color:var(--amd);}.ci{color:var(--intc);}
+
+/* Formula block */
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:7px;padding:14px;font-family:"SF Mono","Fira Code",monospace;font-size:11px;line-height:2;}
+.fml .fr{color:var(--accent);font-size:13px;font-weight:700;}
+
+/* Assumptions */
+.ai{padding:7px 10px;margin-bottom:5px;border-radius:5px;font-size:11px;line-height:1.6;}
+.ai.bull{background:rgba(46,160,67,.07);border-left:3px solid var(--s5);}
+.ai.bear{background:rgba(248,81,73,.07);border-left:3px solid var(--s2);}
+.ai.cat{background:rgba(88,166,255,.07);border-left:3px solid var(--accent);}
+
+/* Section header */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sh h2{font-size:15px;color:#fff;}
+.sh .badge{background:rgba(255,255,255,.07);color:var(--muted);border-radius:4px;padding:2px 7px;font-size:10px;}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* Company tag */
+.ctag{font-size:16px;font-weight:700;color:#fff;margin-bottom:12px;display:block;}
+.ctag .cn2{font-size:11px;color:var(--muted);margin-left:8px;font-weight:400;}
+
+/* Metrics grid */
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.mb{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:10px;}
+.mb .ml{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.mb .mv{font-size:14px;font-weight:700;color:#fff;}
+.mb .mt{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* Veto */
+.vi{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px;}
+.vok{color:var(--s4);font-size:12px;flex-shrink:0;}
+.vng{color:var(--s2);font-size:12px;flex-shrink:0;}
+.vw{color:var(--s3);font-size:12px;flex-shrink:0;}
+
+/* Footer */
+.footer{text-align:center;padding:28px 0;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:32px;}
+
+/* Industry table */
+.itbl{width:100%;border-collapse:collapse;font-size:11px;}
+.itbl th{background:rgba(255,255,255,.03);color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.itbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+
+@media(max-width:900px){.grid5{grid-template-columns:repeat(2,1fr);}.mg{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.grid5{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<div class="hdr">
+  <div class="sub">AI 价值投资打分系统 v2.0</div>
+  <h1>算力芯片 GPU/ASIC 赛道投资评分报告</h1>
+  <div class="sector-tag">🔲 算力芯片 GPU / ASIC — AI 价值链最顶端</div>
+  <p style="color:var(--muted);font-size:11px;margin-top:6px">NVDA &nbsp;·&nbsp; AMD &nbsp;·&nbsp; INTC &nbsp;·&nbsp; AVGO &nbsp;·&nbsp; MRVL</p>
+  <div class="meta">生成日期：2026-05-29 &nbsp;|&nbsp; 数据来源：SEC EDGAR / 公司财报 / GuruFocus / StockAnalysis</div>
+</div>
+
+<!-- Summary -->
+<div class="grid5">
+  <div class="sc nvda">
+    <div class="ticker">NVDA</div><div class="co-name">NVIDIA · NASDAQ</div>
+    <div class="fscore fS">89.7</div>
+    <div class="grade-pill gS">S级 · 核心持仓</div>
+    <div class="mini3"><div><label>行业</label><span class="n5">90.2</span></div><div><label>公司</label><span class="n5">98.4</span></div><div><label>估值</label><span class="n4">75.0</span></div></div>
+    <div class="verdict">AI GPU绝对主导，前向P/E仅24x（低于历史均值），FY2026营收$215.9B+65%，仍在加速。</div>
+  </div>
+  <div class="sc avgo">
+    <div class="ticker">AVGO</div><div class="co-name">Broadcom · NASDAQ</div>
+    <div class="fscore fA">75.7</div>
+    <div class="grade-pill gA">A级 · 重点观察</div>
+    <div class="mini3"><div><label>行业</label><span class="n5">90.2</span></div><div><label>公司</label><span class="n4">81.2</span></div><div><label>估值</label><span class="n3">57.0</span></div></div>
+    <div class="verdict">自定义AI ASIC + VMware双护城河，$73B AI订单积压，FY2027目标$100B AI收入。</div>
+  </div>
+  <div class="sc mrvl">
+    <div class="ticker">MRVL</div><div class="co-name">Marvell · NASDAQ</div>
+    <div class="fscore fB">62.6</div>
+    <div class="grade-pill gB">B级 · 小仓位</div>
+    <div class="mini3"><div><label>行业</label><span class="n5">90.2</span></div><div><label>公司</label><span class="n3">68.8</span></div><div><label>估值</label><span class="n3">57.0</span></div></div>
+    <div class="verdict">Amazon/Microsoft ASIC设计方，AI收入占比快速提升，但EV/EBITDA 38.8x偏贵。</div>
+  </div>
+  <div class="sc amd">
+    <div class="ticker">AMD</div><div class="co-name">Advanced Micro Devices · NASDAQ</div>
+    <div class="fscore fC">59.0</div>
+    <div class="grade-pill gC">C级 · 暂不操作</div>
+    <div class="mini3"><div><label>行业</label><span class="n5">90.2</span></div><div><label>公司</label><span class="n3">62.8</span></div><div><label>估值</label><span class="n1">32.0</span></div></div>
+    <div class="verdict">MI300X势头良好但NVIDIA生态壁垒难逾越，EV/EBITDA 112x极度透支，出口管制冲击$1.5B。</div>
+  </div>
+  <div class="sc intc">
+    <div class="ticker">INTC</div><div class="co-name">Intel · NASDAQ</div>
+    <div class="fscore fD">41.1</div>
+    <div class="grade-pill gD">D级 · 不考虑</div>
+    <div class="mini3"><div><label>行业</label><span class="n5">90.2</span></div><div><label>公司</label><span class="n0">25.2</span></div><div><label>估值</label><span class="n2">35.0</span></div></div>
+    <div class="verdict">Gaudi &lt;1%市场份额，ROIC -14.19%，IFS亏损$10.3B/年，AI芯片竞争基本失败。</div>
+  </div>
+</div>
+
+<!-- Key metrics comparison -->
+<div class="card">
+  <div class="card-title">📊 关键财务指标对比（最新实际数据）</div>
+  <table class="cmp">
+    <thead><tr><th class="lc">指标</th><th class="cn">NVDA</th><th class="ca">AVGO</th><th class="cm">MRVL</th><th class="camd">AMD</th><th class="ci">INTC</th></tr></thead>
+    <tbody>
+      <tr><td class="lc">最新财年营收</td><td class="cn">$215.9B (FY26)</td><td class="ca">~$74B (FY25)</td><td class="cm">$8.2B (FY26)</td><td class="camd">$33.1B (FY25)</td><td class="ci">$52.9B (FY25)</td></tr>
+      <tr><td class="lc">营收YoY增速</td><td class="cn pos">+65%</td><td class="ca pos">~+37%</td><td class="cm pos">+42%</td><td class="camd pos">+28%</td><td class="ci neg">-1%</td></tr>
+      <tr><td class="lc">毛利率</td><td class="cn pos">75.0%</td><td class="ca pos">~68%</td><td class="cm">~59%</td><td class="camd">~54%</td><td class="ci neg">34.8%</td></tr>
+      <tr><td class="lc">FCF利润率</td><td class="cn pos">46.5%</td><td class="ca pos">~36%</td><td class="cm">24%</td><td class="camd">~25%</td><td class="ci neg">负值</td></tr>
+      <tr><td class="lc">ROIC</td><td class="cn pos">>100%</td><td class="ca pos">高（重新计算中）</td><td class="cm">7-10%</td><td class="camd">1-3%</td><td class="ci neg">-14.19%</td></tr>
+      <tr><td class="lc">净现金/净负债</td><td class="cn pos">净现金+$34.7B</td><td class="ca neg">净负债~$53.5B</td><td class="cm pos">净负债~$1.1B</td><td class="camd pos">净现金+$3.2B</td><td class="ci neg">净负债~$35B</td></tr>
+      <tr><td class="lc">当前市值</td><td class="cn">~$3.3-5.4T</td><td class="ca">~$2.0T</td><td class="cm">$174B</td><td class="camd">$845B</td><td class="ci">$620B</td></tr>
+      <tr><td class="lc">前向P/E</td><td class="cn pos">~24x</td><td class="ca">~37x</td><td class="cm">~52x</td><td class="camd neg">~60x</td><td class="ci neg">不适用（亏损）</td></tr>
+      <tr><td class="lc">EV/EBITDA</td><td class="cn">—</td><td class="ca neg">35.1x</td><td class="cm neg">38.8x</td><td class="camd neg">112x</td><td class="ci neg">不适用</td></tr>
+      <tr><td class="lc">AI/数据中心占比</td><td class="cn pos">88%（$115.2B）</td><td class="ca pos">AI $19.9B（27%）</td><td class="cm pos">75%数据中心</td><td class="camd pos">50%数据中心</td><td class="ci neg">Gaudi &lt;1%市占</td></tr>
+      <tr><td class="lc">CEO/创始人持股</td><td class="cn pos">Jensen Huang ~3.5%</td><td class="ca">Hock Tan ~0.02%</td><td class="cm">Matt Murphy ~0.6%</td><td class="camd pos">Lisa Su ~0.4%（$1.9B）</td><td class="ci neg">前任被迫离职</td></tr>
+      <tr><td class="lc">出口管制影响</td><td class="cn neg">H20禁令$4.5B冲击</td><td class="ca neu">有限</td><td class="cm neu">有限</td><td class="camd neg">MI308禁令$1.5B</td><td class="ci neg">Huawei许可撤销</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Industry Score -->
+<div class="card">
+  <div class="sh"><div class="sdot" style="background:var(--accent)"></div><h2>第一层：行业吸引力评分</h2><span class="badge">算力芯片 GPU/ASIC — 五家共享 90.2 分 S级</span></div>
+  <p style="font-size:11px;color:var(--muted);margin-bottom:16px">算力芯片是 AI 价值链中利润池最高、壁垒最强的节点。CUDA 生态+GPU 算力主导技术主线，本赛道行业分在 12 个 AI 细分赛道中最高。政策地缘给 2/5（出口管制已实质影响）。</p>
+  <table class="itbl">
+    <thead><tr><th>维度</th><th style="text-align:center">权重</th><th style="text-align:center">得分</th><th style="text-align:center">加权分</th><th>核心证据</th></tr></thead>
+    <tbody>
+      <tr><td>长期需求空间</td><td style="text-align:center;color:var(--muted)">18</td><td style="text-align:center" class="n5">5/5</td><td style="text-align:center;font-weight:700">18.0</td><td style="color:var(--muted)">AI GPU 全球 TAM >$500B 且渗透率仍低。NVDA 数据中心单季营收 $35.6B（Q4 FY2026）可独立验证，订单真实。</td></tr>
+      <tr><td>技术演进确定性</td><td style="text-align:center;color:var(--muted)">14</td><td style="text-align:center" class="n5">5/5</td><td style="text-align:center;font-weight:700">14.0</td><td style="color:var(--muted)">GPU 计算 IS Scaling Law 的物理基础。Blackwell 架构验证路线收敛，推理需求爆发进一步延伸需求曲线。</td></tr>
+      <tr><td>利润池位置</td><td style="text-align:center;color:var(--muted)">16</td><td style="text-align:center" class="n5">5/5</td><td style="text-align:center;font-weight:700">16.0</td><td style="color:var(--muted)">NVDA 毛利率 75%，处于 AI 价值链最顶端，上下游无法绕过。AVGO 毛利 68%，MRVL 59%，整个赛道均 >50%。</td></tr>
+      <tr><td>行业壁垒</td><td style="text-align:center;color:var(--muted)">18</td><td style="text-align:center" class="n5">5/5</td><td style="text-align:center;font-weight:700">18.0</td><td style="color:var(--muted)">CUDA 生态（20年+，400万开发者），NVLink 互联，HBM 内存集成，软件栈完整性——新玩家 5-10 年内无法复制。</td></tr>
+      <tr><td>竞争格局</td><td style="text-align:center;color:var(--muted)">12</td><td style="text-align:center" class="n4">4/5</td><td style="text-align:center;font-weight:700">9.6</td><td style="color:var(--muted)">NVDA 主导 >80% 训练市场，但 AMD 获得 4% 份额，AVGO/MRVL 自定义 ASIC 增长。4/5 而非 5/5 是因为格局在演变。</td></tr>
+      <tr><td>资本强度与周期性</td><td style="text-align:center;color:var(--muted)">8</td><td style="text-align:center" class="n3">3/5</td><td style="text-align:center;font-weight:700">4.8</td><td style="color:var(--muted)">Fabless 轻资产，但半导体存在库存/产能周期。2023 年 NVDA 自身也经历了游戏 GPU 库存调整，周期性不可忽视。</td></tr>
+      <tr><td>政策与地缘风险</td><td style="text-align:center;color:var(--muted)">7</td><td style="text-align:center" class="n2">2/5</td><td style="text-align:center;font-weight:700">2.8</td><td style="color:var(--muted)">H100/A100/H20 出口管制、AMD MI308 禁令、中国市场实质关闭，地缘风险是该赛道最大系统性风险。给 2/5。</td></tr>
+      <tr><td>可验证性</td><td style="text-align:center;color:var(--muted)">7</td><td style="text-align:center" class="n5">5/5</td><td style="text-align:center;font-weight:700">7.0</td><td style="color:var(--muted)">全部为纳斯达克上市公司，10-K/10-Q 季度披露，数据中心收入单独列报，可交叉验证。</td></tr>
+    </tbody>
+    <tfoot><tr style="background:rgba(255,255,255,.03)"><td style="padding:8px 10px;font-weight:700;color:#fff">行业总分</td><td style="text-align:center;color:var(--muted)">100</td><td style="text-align:center;font-size:16px;font-weight:800" class="n5">—</td><td style="text-align:center;font-size:16px;font-weight:800" class="n5">90.2</td><td style="color:var(--s5)">S级 — AI 12个赛道中最高分赛道</td></tr></tfoot>
+  </table>
+</div>
+
+<!-- ====== NVDA ====== -->
+<div style="margin-bottom:32px">
+<span class="ctag" style="color:var(--nvda)">NVDA <span class="cn2">NVIDIA Corporation · NASDAQ · GPU / AI 计算平台</span></span>
+<div class="mg">
+  <div class="mb"><div class="ml">FY2026 营收</div><div class="mv">$215.9B</div><div class="mt pos">+65% YoY</div></div>
+  <div class="mb"><div class="ml">FY2025 毛利率</div><div class="mv pos">75.0%</div><div class="mt">历史新高</div></div>
+  <div class="mb"><div class="ml">FY2025 FCF</div><div class="mv pos">$60.7B</div><div class="mt">46.5% FCF Margin</div></div>
+  <div class="mb"><div class="ml">数据中心 FY2025</div><div class="mv pos">$115.2B</div><div class="mt">+142% YoY</div></div>
+  <div class="mb"><div class="ml">净现金</div><div class="mv pos">+$34.7B</div><div class="mt">无实质负债压力</div></div>
+  <div class="mb"><div class="ml">前向 P/E</div><div class="mv pos">~24x</div><div class="mt">低于历史均值</div></div>
+  <div class="mb"><div class="ml">Q2 FY2027 指引</div><div class="mv">$91.0B</div><div class="mt pos">单季营收继续创高</div></div>
+  <div class="mb"><div class="ml">Jensen Huang持股</div><div class="mv pos">~3.5%</div><div class="mt">创始人长期持有</div></div>
+</div>
+<div class="card">
+  <div class="card-title">公司质量评分 · NVDA · 98.4 / 100</div>
+  <div class="srow"><div class="slabel">成长性 <span class="sw">权重20</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→20.0</div></div>
+  <div class="ev">FY2025 +114%，FY2026 +65%，Q1 FY2027 +85%，Q2 FY2027 指引 $91B。连续多季>80% YoY，满足 5/5 标准。</div>
+  <div class="srow"><div class="slabel">盈利质量 <span class="sw">权重16</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→16.0</div></div>
+  <div class="ev">GAAP 毛利率 75%，FCF Margin 46.5%，ROIC >100%（Fabless 资产轻），规模效应持续扩大。完全满足 5/5。</div>
+  <div class="srow"><div class="slabel">结构性护城河 <span class="sw">权重18</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→18.0</div></div>
+  <div class="ev">迁移成本极高（CUDA 代码库迁移成本极大）+ 网络效应（开发者越多工具越丰富）+ 规模经济（研发覆盖越广越合算）。三重壁垒叠加，10年+ 可持续。</div>
+  <div class="srow"><div class="slabel">AI 技术演进对齐 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→10.0</div></div>
+  <div class="ev">AI 计算主线的定义者和领导者，Blackwell 架构为训练和推理提供统一平台，随 AI Scaling 扩张自然受益。</div>
+  <div class="srow"><div class="slabel">财务稳健性 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→10.0</div></div>
+  <div class="ev">现金+有价证券 $43.2B，长期债务 $8.46B，净现金 $34.7B，稀释率低，资本开支极轻（Fabless 模式）。</div>
+  <div class="srow"><div class="slabel">管理层与利益绑定 <span class="sw">权重12</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→12.0</div></div>
+  <div class="ev">创始人 Jensen Huang 持股 ~3.5%（价值超过 $100B+），与股东高度绑定。ROIC >100%，技术判断力业界公认，信披透明。</div>
+  <div class="srow"><div class="slabel">客户与商业模式质量 <span class="sw">权重8</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→6.4</div></div>
+  <div class="ev">Microsoft/Google/Meta/Amazon/Oracle 等超大规模云厂商，客户分散性好。但超大规模客户集中度偏高，无单一 >40%，4/5。</div>
+  <div class="srow"><div class="slabel">未来可选性 <span class="sw">权重6</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→6.0</div></div>
+  <div class="ev">CUDA 平台延伸至机器人（Isaac）、自动驾驶（DRIVE）、医药（Clara）、数字孪生（Omniverse）——从芯片公司向 AI 操作系统公司演进。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">公司质量总分</span><span style="font-size:22px;font-weight:800;color:var(--s5)">98.4</span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">估值安全边际评分 · NVDA · 75.0 / 100</div>
+  <div class="srow"><div class="slabel">情景估值上行空间 <span class="sw">权重35</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→28.0</div></div>
+  <div class="ev">FY2027 分析师营收共识 $272-367B。基准情景（$300B营收 × 20x PS 或 30x P/E）对应市值 $6T，相对当前 $3.3T 有 80%+ 上行。4/5。</div>
+  <div class="srow"><div class="slabel">相对估值与成长匹配 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→20.0</div></div>
+  <div class="ev">前向 P/E 24x（GuruFocus 2026-05-28）/ 营收增速 65% → PE-PEG = 0.37（规则：&lt;0.5 = 5/5）。FCF yield 基于 FY2027 预期 $100B+ FCF / $3.3T ≈ 3%（合理区间）。综合 4/5。</div>
+  <div class="srow"><div class="slabel">下行情景保护 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→15.0</div></div>
+  <div class="ev">主要下行风险：中国出口管制扩大（已造成 $4.5B 冲击）、AI 资本开支周期转弯。净现金 $34.7B + 24x P/E 提供一定保护，悲观情景下行 35-50%。3/5。</div>
+  <div class="srow"><div class="slabel">历史与同行估值对比 <span class="sw">权重15</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→12.0</div></div>
+  <div class="ev">前向 P/E 24x 低于 NVDA 近 3 年历史均值（曾达 60x+），NTM PS 26.5x（39% 高于 10 年中位 19x）。对比同行，NVDA 是 5 家中估值最合理的。4/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">估值安全边际总分</span><span style="font-size:22px;font-weight:800;color:var(--s4)">75.0</span>
+  </div>
+</div>
+<div class="fml">
+  <div>行业分 × 20% = 90.2 × 0.20 = <span style="color:var(--s5)">18.04</span></div>
+  <div>公司质量 × 50% = 98.4 × 0.50 = <span style="color:var(--s5)">49.20</span></div>
+  <div>估值安全 × 30% = 75.0 × 0.30 = <span style="color:var(--s4)">22.50</span></div>
+  <div>基础分 = 18.04 + 49.20 + 22.50 = 89.74 &nbsp;·&nbsp; 置信度 <span style="color:var(--s5)">1.0</span></div>
+  <div class="fr">最终调整分 = 89.74 × 1.0 = <strong>89.7 &nbsp;·&nbsp; S级 · 核心持仓候选</strong></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+  <div><div style="font-size:10px;color:var(--muted);margin-bottom:6px;text-transform:uppercase">支撑假设</div>
+    <div class="ai bull">Scaling Law 持续有效，Blackwell 系列顺利量产并满足供应</div>
+    <div class="ai bull">AI 推理市场爆发，NVDA 从训练向推理的营收重心转移顺利</div>
+    <div class="ai bull">软件（CUDA）收入化进一步提高利润率和客户粘性</div>
+  </div>
+  <div><div style="font-size:10px;color:var(--muted);margin-bottom:6px;text-transform:uppercase">核心风险</div>
+    <div class="ai bear">中国出口管制进一步扩大，H20 替代方案受阻，损失超 $10B 年营收</div>
+    <div class="ai bear">超大规模客户（Google/Meta/Amazon）自研 ASIC 份额持续扩大</div>
+    <div class="ai cat">催化剂：Q2 FY2027 指引 $91B 若实现，前向 P/E 将进一步压缩至 20x 以下</div>
+  </div>
+</div>
+</div>
+
+<!-- ====== AVGO ====== -->
+<div style="margin-bottom:32px">
+<span class="ctag" style="color:var(--avgo)">AVGO <span class="cn2">Broadcom Inc · NASDAQ · 自定义 AI ASIC + 基础设施软件</span></span>
+<div class="mg">
+  <div class="mb"><div class="ml">FY2025 营收</div><div class="mv">~$74B</div><div class="mt pos">+37% YoY</div></div>
+  <div class="mb"><div class="ml">AI 营收 FY2025</div><div class="mv pos">$19.9B</div><div class="mt pos">+63% YoY</div></div>
+  <div class="mb"><div class="ml">FCF FY2025</div><div class="mv pos">$26.9B</div><div class="mt">FCF Margin ~36%</div></div>
+  <div class="mb"><div class="ml">毛利率</div><div class="mv pos">~68%</div><div class="mt">持续扩张</div></div>
+  <div class="mb"><div class="ml">AI 订单积压</div><div class="mv pos">$73B</div><div class="mt">已锁定至2029-2031</div></div>
+  <div class="mb"><div class="ml">Q1 FY2026 AI 收入</div><div class="mv pos">$8.4B</div><div class="mt pos">+106% YoY</div></div>
+  <div class="mb"><div class="ml">净负债</div><div class="mv neg">$53.5B</div><div class="mt">D/EBITDA 2.1x，快速下降</div></div>
+  <div class="mb"><div class="ml">前向 P/E</div><div class="mv">~37x</div><div class="mt neu">从历史高位 175x 回归</div></div>
+</div>
+<div class="card">
+  <div class="card-title">公司质量评分 · AVGO · 81.2 / 100</div>
+  <div class="srow"><div class="slabel">成长性 <span class="sw">权重20</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→16.0</div></div>
+  <div class="ev">FY2024 +44%，FY2025 ~37%，Q1 FY2026 AI 收入 +106%。AI 部分增速接近 5/5，整体公司营收 37% 处于 4/5 区间（50-80% 门槛取 4 分）。</div>
+  <div class="srow"><div class="slabel">盈利质量 <span class="sw">权重16</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→12.8</div></div>
+  <div class="ev">毛利率 68%（扩张中），FCF $26.9B（36%+ Margin），Adj EBITDA $43B（FY2025）。ROIC 因 VMware 巨额商誉被摊薄，但现金产出极强。4/5。</div>
+  <div class="srow"><div class="slabel">结构性护城河 <span class="sw">权重18</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→14.4</div></div>
+  <div class="ev">双护城河：① 自定义 ASIC（超大客户多年联合研发，切换代价极高）② VMware 软件（企业级基础设施，迁移成本 3-5 年以上）。4/5。</div>
+  <div class="srow"><div class="slabel">AI 技术演进对齐 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→10.0</div></div>
+  <div class="ev">Google TPU / Meta MTIA / OpenAI 等超大客户定制 AI 芯片的主要设计合作方，$73B 积压订单验证，直接处于 AI 训练/推理主线。</div>
+  <div class="srow"><div class="slabel">财务稳健性 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→6.0</div></div>
+  <div class="ev">净负债 $53.5B（VMware 收购遗留），但 D/EBITDA 已从 3.5x 降至 2.1x，FCF $26.9B 年化覆盖能力强。3/5，下行中。</div>
+  <div class="srow"><div class="slabel">管理层与利益绑定 <span class="sw">权重12</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→9.6</div></div>
+  <div class="ev">Hock Tan 持股 $336M，薪酬 $205M（99% 为股权，绑定 AI 营收 $120B by 2030 的对赌），15 年连续分红增长，并购纪律严。4/5。</div>
+  <div class="srow"><div class="slabel">客户与商业模式质量 <span class="sw">权重8</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→6.4</div></div>
+  <div class="ev">Google/Meta/Microsoft/OpenAI 四大 AI 超大规模客户，$73B 积压订单提供强可见性，VMware 软件有订阅续费收入。4/5。</div>
+  <div class="srow"><div class="slabel">未来可选性 <span class="sw">权重6</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→6.0</div></div>
+  <div class="ev">路径至 $100B AI 年收入（2027），Ethernet AI 组网市场，VMware AI 化（Private AI 平台），新超大客户 ASIC 赢得机会持续。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">公司质量总分</span><span style="font-size:22px;font-weight:800;color:var(--s4)">81.2</span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">估值安全边际评分 · AVGO · 57.0 / 100</div>
+  <div class="srow"><div class="slabel">情景估值上行空间 <span class="sw">权重35</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→21.0</div></div>
+  <div class="ev">$2T 市值，FY2027 AI 收入目标 $40B+，若总营收 $100B × 20x PS = $2T（持平）。需要成长来支撑。3-年基准回报 30-50%。3/5。</div>
+  <div class="srow"><div class="slabel">相对估值与成长匹配 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→15.0</div></div>
+  <div class="ev">前向 P/E 37x / 营收增速 37% → PE-PEG = 1.0（3/5 门槛）。FCF yield 1.3%（偏贵）。EV/EBITDA 35.1x 偏高。综合 3/5。</div>
+  <div class="srow"><div class="slabel">下行情景保护 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→15.0</div></div>
+  <div class="ev">FCF $26.9B 覆盖能力强，积极削债，$73B 订单提供收入可见性。净负债 $53.5B 是主要下行风险。悲观情景下行 35-50%。3/5。</div>
+  <div class="srow"><div class="slabel">历史与同行估值对比 <span class="sw">权重15</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→6.0</div></div>
+  <div class="ev">P/E 43x 从 2024 年 11 月的 175x 高位回落，但仍高于历史 2019-2022 的 20-25x 均值范围。历史 50-75% 分位。2/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">估值总分</span><span style="font-size:22px;font-weight:800;color:var(--s3)">57.0</span>
+  </div>
+</div>
+<div class="fml">
+  <div>行业分 × 20% = 90.2 × 0.20 = <span style="color:var(--s5)">18.04</span></div>
+  <div>公司质量 × 50% = 81.2 × 0.50 = <span style="color:var(--s4)">40.60</span></div>
+  <div>估值安全 × 30% = 57.0 × 0.30 = <span style="color:var(--s3)">17.10</span></div>
+  <div>基础分 = 75.74 &nbsp;·&nbsp; 置信度 <span style="color:var(--s5)">1.0</span></div>
+  <div class="fr">最终调整分 = 75.74 × 1.0 = <strong>75.7 &nbsp;·&nbsp; A级 · 重点观察，等估值窗口</strong></div>
+</div>
+</div>
+
+<!-- ====== MRVL ====== -->
+<div style="margin-bottom:32px">
+<span class="ctag" style="color:var(--mrvl)">MRVL <span class="cn2">Marvell Technology · NASDAQ · 自定义 AI ASIC + 光互联</span></span>
+<div class="mg">
+  <div class="mb"><div class="ml">FY2026 营收</div><div class="mv">$8.195B</div><div class="mt pos">+42% YoY</div></div>
+  <div class="mb"><div class="ml">数据中心占比</div><div class="mv pos">75%</div><div class="mt pos">FY2026 +90%</div></div>
+  <div class="mb"><div class="ml">FCF FY2025</div><div class="mv">$1.4B</div><div class="mt">FCF Margin 24%</div></div>
+  <div class="mb"><div class="ml">FY2027 指引</div><div class="mv pos">~$11.5B</div><div class="mt pos">~+40%</div></div>
+  <div class="mb"><div class="ml">AI 客户设计赢单</div><div class="mv pos">18个</div><div class="mt">云厂商</div></div>
+  <div class="mb"><div class="ml">净负债</div><div class="mv">$1.1B</div><div class="mt pos">D/EBITDA 0.3x</div></div>
+  <div class="mb"><div class="ml">EV/EBITDA</div><div class="mv neg">38.8x</div><div class="mt">估值偏贵</div></div>
+  <div class="mb"><div class="ml">Non-GAAP GM</div><div class="mv">58-59%</div><div class="mt neu">略有下行</div></div>
+</div>
+<div class="card">
+  <div class="card-title">公司质量评分 · MRVL · 68.8 / 100</div>
+  <div class="srow"><div class="slabel">成长性 <span class="sw">权重20</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→12.0</div></div>
+  <div class="ev">FY2026 +42%，FY2027 指引 +40%，数据中心 +90%。处于 30-50% 区间，接近 4/5 门槛，但整体营收基数小，大客户依赖度较高。3/5。</div>
+  <div class="srow"><div class="slabel">盈利质量 <span class="sw">权重16</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→9.6</div></div>
+  <div class="ev">Non-GAAP GM 58-59%（良好），FCF Margin 24%，ROIC 7-10%（改善中但尚未达理想水平）。3/5 较合理。</div>
+  <div class="srow"><div class="slabel">结构性护城河 <span class="sw">权重18</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→10.8</div></div>
+  <div class="ev">与 Amazon Trainium / Microsoft Maia 的深度联合研发关系是核心壁垒（切换成本极高）。但 AVGO 是同类竞争对手，MRVL 并未独家垄断市场。3/5。</div>
+  <div class="srow"><div class="slabel">AI 技术演进对齐 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d5" style="width:100%"></div></div><div class="snum n5">5/5</div><div class="swgt">→10.0</div></div>
+  <div class="ev">Trainium/Maia 系列是 AI 训练主线的重要组成，数据中心互联（光模块/CXL）同样在 AI 推理扩张主线上，5/5。</div>
+  <div class="srow"><div class="slabel">财务稳健性 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→8.0</div></div>
+  <div class="ev">净负债仅 $1.1B（D/EBITDA 0.3x），现金 $3.8B，FCF 正且增长。资产负债表健康，4/5。</div>
+  <div class="srow"><div class="slabel">管理层与利益绑定 <span class="sw">权重12</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→7.2</div></div>
+  <div class="ev">CEO Matt Murphy 持股约 85.7 万股（价值约 $1.3M），通过 10b5-1 计划适度减持，执行能力强但绑定程度中等。3/5。</div>
+  <div class="srow"><div class="slabel">客户与商业模式质量 <span class="sw">权重8</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→6.4</div></div>
+  <div class="ev">Amazon/Microsoft/Meta/Google 四大超大客户，18 个云厂商设计赢单，客户分散度合理，大合同可见性高。4/5。</div>
+  <div class="srow"><div class="slabel">未来可选性 <span class="sw">权重6</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→4.8</div></div>
+  <div class="ev">2nm 路线图、硅光子 DCI、$10B+ AI 收入路径（FY2029），光互联增速 +70%，可选性丰富且路径清晰。4/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">公司质量总分</span><span style="font-size:22px;font-weight:800;color:var(--s3)">68.8</span>
+  </div>
+</div>
+<div class="fml">
+  <div>行业分 × 20% = 90.2 × 0.20 = <span style="color:var(--s5)">18.04</span></div>
+  <div>公司质量 × 50% = 68.8 × 0.50 = <span style="color:var(--s3)">34.40</span></div>
+  <div>估值安全 × 30% = 57.0 × 0.30 = <span style="color:var(--s3)">17.10</span></div>
+  <div>基础分 = 69.54 &nbsp;·&nbsp; 置信度 <span style="color:var(--s4)">0.9</span>（业务高速转型中，部分假设待验证）</div>
+  <div class="fr">最终调整分 = 69.54 × 0.9 = <strong>62.6 &nbsp;·&nbsp; B级 · 小仓位 / 等待估值回调</strong></div>
+</div>
+</div>
+
+<!-- ====== AMD ====== -->
+<div style="margin-bottom:32px">
+<span class="ctag" style="color:var(--amd)">AMD <span class="cn2">Advanced Micro Devices · NASDAQ · GPU + CPU</span></span>
+<div class="mg">
+  <div class="mb"><div class="ml">FY2025 营收</div><div class="mv">$33.1B</div><div class="mt pos">+28% YoY</div></div>
+  <div class="mb"><div class="ml">数据中心 FY2025</div><div class="mv pos">$16.6B</div><div class="mt pos">~+107% YoY</div></div>
+  <div class="mb"><div class="ml">Non-GAAP GM</div><div class="mv">53-54%</div><div class="mt neu">受出口管制压制</div></div>
+  <div class="mb"><div class="ml">FCF Margin</div><div class="mv">25%</div><div class="mt pos">改善中</div></div>
+  <div class="mb"><div class="ml">ROIC</div><div class="mv neg">1-3%</div><div class="mt">Xilinx 商誉稀释</div></div>
+  <div class="mb"><div class="ml">出口管制冲击</div><div class="mv neg">$1.5B</div><div class="mt">MI308 禁令 FY2025</div></div>
+  <div class="mb"><div class="ml">EV/EBITDA</div><div class="mv neg">112x</div><div class="mt">严重透支</div></div>
+  <div class="mb"><div class="ml">前向 P/E</div><div class="mv neg">~60x</div><div class="mt">历史峰值 1144x</div></div>
+</div>
+<div class="card">
+  <div class="card-title">公司质量评分 · AMD · 62.8 / 100</div>
+  <div class="srow"><div class="slabel">成长性 <span class="sw">权重20</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→12.0</div></div>
+  <div class="ev">FY2025 总营收 +28%，数据中心 +107%，MI300X 出货超预期。FY2026 Q1 +27%，Q2 指引 +46%，增速回升。3/5（处于30-50%区间）。</div>
+  <div class="srow"><div class="slabel">盈利质量 <span class="sw">权重16</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→9.6</div></div>
+  <div class="ev">Non-GAAP GM 53-54%（AI 业务高时 57%+），FCF Margin 25%。ROIC 1-3% 因 Xilinx 商誉 $37B 而被压制，真实运营效率更好。3/5。</div>
+  <div class="srow"><div class="slabel">结构性护城河 <span class="sw">权重18</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→7.2</div></div>
+  <div class="ev">ROCm 软件生态远不及 CUDA，AMD 主要靠性价比赢单（MI300X ~50% 价格优势）而非生态锁定。护城河单薄，主要是 CPU（EPYC）端。2/5。</div>
+  <div class="srow"><div class="slabel">AI 技术演进对齐 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→8.0</div></div>
+  <div class="ev">MI300X/MI325X/MI350 明确在 AI 训练主线上，每年一代新品。ROCm 在改进，部分超大客户（Meta）积极采用。4/5。</div>
+  <div class="srow"><div class="slabel">财务稳健性 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→8.0</div></div>
+  <div class="ev">净现金 +$3.2B，低负债，稀释率合理，FCF 转正并增长。4/5。</div>
+  <div class="srow"><div class="slabel">管理层与利益绑定 <span class="sw">权重12</span></div><div class="sbwrap"><div class="sbar d4" style="width:80%"></div></div><div class="snum n4">4/5</div><div class="swgt">→9.6</div></div>
+  <div class="ev">Lisa Su 持股约 376 万股（$1.9B），长期持有，10b5-1 计划有序减持，ROIC 改善趋势清晰，信披透明。4/5。</div>
+  <div class="srow"><div class="slabel">客户与商业模式质量 <span class="sw">权重8</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→4.8</div></div>
+  <div class="ev">Meta/Microsoft/Oracle 等主要超大规模客户，数据中心 GPU 客户集中度偏高（中国市场关闭后更明显）。3/5。</div>
+  <div class="srow"><div class="slabel">未来可选性 <span class="sw">权重6</span></div><div class="sbwrap"><div class="sbar d3" style="width:60%"></div></div><div class="snum n3">3/5</div><div class="swgt">→3.6</div></div>
+  <div class="ev">MI350 → MI400 清晰路线图，EPYC CPU+GPU 协同，AI PC（Ryzen AI）。路径合理但仍在追赶阶段。3/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">公司质量总分</span><span style="font-size:22px;font-weight:800;color:var(--s3)">62.8</span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">估值安全边际评分 · AMD · 32.0 / 100 ⚠️ 严重透支</div>
+  <div class="srow"><div class="slabel">情景估值上行空间 <span class="sw">权重35</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→14.0</div></div>
+  <div class="ev">市值 $845B，EV/EBITDA 112x。要使当前估值合理，需要假设未来 5 年持续 30%+ 增长且利润率大幅改善。基准 3 年回报不确定，2/5。</div>
+  <div class="srow"><div class="slabel">相对估值与成长匹配 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d1" style="width:20%"></div></div><div class="snum n1">1/5</div><div class="swgt">→5.0</div></div>
+  <div class="ev">EV/EBITDA 112x（历史峰值），前向 P/E 60x / 增速 28% → PE-PEG = 2.14（2/5 边界）。EV/Revenue 19.75x（历史中位 7.24x，高出 173%）。综合 1/5。</div>
+  <div class="srow"><div class="slabel">下行情景保护 <span class="sw">权重25</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→10.0</div></div>
+  <div class="ev">净现金正提供轻微保护，但极高 EV/EBITDA 意味着任何增长放缓将引发大幅估值压缩。中国出口管制 $1.5B 冲击已发生，2/5。</div>
+  <div class="srow"><div class="slabel">历史与同行估值对比 <span class="sw">权重15</span></div><div class="sbwrap"><div class="sbar d1" style="width:20%"></div></div><div class="snum n1">1/5</div><div class="swgt">→3.0</div></div>
+  <div class="ev">EV/Revenue 19.75x（历史 10 年中位 7.24x），历史 75%+ 分位。相比 NVDA 前向 P/E 24x，AMD 的 60x 溢价难以被 4% 市场份额（vs NVDA 80%+）支撑。1/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">估值总分</span><span style="font-size:22px;font-weight:800;color:var(--s1)">32.0</span>
+  </div>
+</div>
+<div class="fml">
+  <div>行业分 × 20% = 90.2 × 0.20 = <span style="color:var(--s5)">18.04</span></div>
+  <div>公司质量 × 50% = 62.8 × 0.50 = <span style="color:var(--s3)">31.40</span></div>
+  <div>估值安全 × 30% = 32.0 × 0.30 = <span style="color:var(--s1)">9.60</span></div>
+  <div>基础分 = 59.04 &nbsp;·&nbsp; 置信度 <span style="color:var(--s5)">1.0</span></div>
+  <div class="fr">最终调整分 = 59.04 × 1.0 = <strong>59.0 &nbsp;·&nbsp; C级 · 仅观察，暂不操作</strong></div>
+</div>
+</div>
+
+<!-- ====== INTC ====== -->
+<div style="margin-bottom:32px">
+<span class="ctag" style="color:var(--intc)">INTC <span class="cn2">Intel Corporation · NASDAQ · x86 CPU + Gaudi AI（转型中）</span></span>
+<div class="mg">
+  <div class="mb"><div class="ml">FY2025 营收</div><div class="mv neg">$52.9B</div><div class="mt neg">-1% YoY</div></div>
+  <div class="mb"><div class="ml">GAAP 毛利率</div><div class="mv neg">34.8%</div><div class="mt neg">从55%+崩溃</div></div>
+  <div class="mb"><div class="ml">ROIC</div><div class="mv neg">-14.19%</div><div class="mt neg">严重亏损</div></div>
+  <div class="mb"><div class="ml">IFS 亏损 FY2025</div><div class="mv neg">$10.3B</div><div class="mt neg">内部使用99.8%</div></div>
+  <div class="mb"><div class="ml">净负债</div><div class="mv neg">~$35B</div><div class="mt neg">现金$8.2B vs 债$43B</div></div>
+  <div class="mb"><div class="ml">Gaudi 市占</div><div class="mv neg">&lt;1%</div><div class="mt neg">$500M 预测被放弃</div></div>
+  <div class="mb"><div class="ml">CEO 变动</div><div class="mv neg">被迫离职</div><div class="mt">Lip-Bu Tan 接任</div></div>
+  <div class="mb"><div class="ml">CHIPS法案资助</div><div class="mv pos">$5.7B</div><div class="mt">Q3 2025 收到</div></div>
+</div>
+<div class="card">
+  <div class="card-title">公司质量评分 · INTC · 25.2 / 100</div>
+  <div class="srow"><div class="slabel">成长性 <span class="sw">权重20</span></div><div class="sbwrap"><div class="sbar d1" style="width:20%"></div></div><div class="snum n1">1/5</div><div class="swgt">→4.0</div></div>
+  <div class="ev">FY2022 峰值 $63.1B 后持续下滑至 $52.9B（FY2025）。Gaudi AI 增速叙事破灭，数据中心 CPU 受 AMD EPYC 侵蚀。1/5。</div>
+  <div class="srow"><div class="slabel">盈利质量 <span class="sw">权重16</span></div><div class="sbwrap"><div class="sbar d1" style="width:20%"></div></div><div class="snum n1">1/5</div><div class="swgt">→1.6</div></div>
+  <div class="ev">GAAP GM 34.8%（Q2 2025 低至 27.5%），ROIC -14.19%，FCF 多年负值，IFS 亏损 $10.3B/年。Q3 2025 盈利主要靠 $3B+ 资产出售。1/5（有 Q3 改善迹象但尚不确定）。</div>
+  <div class="srow"><div class="slabel">结构性护城河 <span class="sw">权重18</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→7.2</div></div>
+  <div class="ev">x86 CPU 生态（Windows 兼容性）仍有一定护城河，但 ARM（Apple/Qualcomm）在 PC 侵蚀，AMD EPYC 在服务器领先。护城河持续缩小。2/5。</div>
+  <div class="srow"><div class="slabel">AI 技术演进对齐 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d0" style="width:0%"></div></div><div class="snum n0">0/5</div><div class="swgt">→0.0</div></div>
+  <div class="ev class="ev warn">Gaudi AI 加速器 &lt;1% 市场份额，$500M FY2024 营收预测被放弃，远落后于 NVDA（$100B+）和 AMD（$5B+）。AI 芯片竞争实质失败。0/5。</div>
+  <div class="srow"><div class="slabel">财务稳健性 <span class="sw">权重10</span></div><div class="sbwrap"><div class="sbar d1" style="width:20%"></div></div><div class="snum n1">1/5</div><div class="swgt">→2.0</div></div>
+  <div class="ev">净负债 ~$35B（现金 $8.2B vs 债务 $43B），现金覆盖不足。已暂停分红，依赖 CHIPS Act 及 Altera 出售资金。1/5（未触发否决：运营现金流仍正，但接近边界）。</div>
+  <div class="srow"><div class="slabel">管理层与利益绑定 <span class="sw">权重12</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→4.8</div></div>
+  <div class="ev">Pat Gelsinger 被迫离职（战略失误，$19B 九个月亏损）。新 CEO Lip-Bu Tan 策略尚未被市场验证。历史管理层信誉受损。2/5。</div>
+  <div class="srow"><div class="slabel">客户与商业模式质量 <span class="sw">权重8</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→3.2</div></div>
+  <div class="ev">PC OEM 和企业服务器市场，客户粘性降低（AMD EPYC 替换加速），AI 买家基本转向 NVDA/AVGO/MRVL。2/5。</div>
+  <div class="srow"><div class="slabel">未来可选性 <span class="sw">权重6</span></div><div class="sbwrap"><div class="sbar d2" style="width:40%"></div></div><div class="snum n2">2/5</div><div class="swgt">→2.4</div></div>
+  <div class="ev">IFS 代工（如执行成功）有巨大潜力，但 Q3 2025 外部客户收入仅 $800 万（总 $4.2B 的 0.2%）。可选性存在但实现路径高度不确定。2/5。</div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;align-items:center">
+    <span style="color:var(--muted);font-size:11px">公司质量总分</span><span style="font-size:22px;font-weight:800;color:var(--s0)">25.2</span>
+  </div>
+</div>
+<div class="fml">
+  <div>行业分 × 20% = 90.2 × 0.20 = <span style="color:var(--s5)">18.04</span></div>
+  <div>公司质量 × 50% = 25.2 × 0.50 = <span style="color:var(--s0)">12.60</span></div>
+  <div>估值安全 × 30% = 35.0 × 0.30 = <span style="color:var(--s2)">10.50</span></div>
+  <div>基础分 = 41.14 &nbsp;·&nbsp; 置信度 <span style="color:var(--s5)">1.0</span></div>
+  <div class="fr">最终调整分 = 41.14 × 1.0 = <strong>41.1 &nbsp;·&nbsp; D级 · 移出候选池</strong></div>
+</div>
+<div style="margin-top:10px;padding:12px;background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:7px;font-size:11px;color:var(--text)">
+  <strong style="color:var(--s2)">⚠️ 特别说明：</strong>INTC 未触发硬性否决项（FCF 并非完全依赖外部融资，运营现金流仍为正），但公司质量 25.2 分本身导致最终得分低至 D 级。核心问题是 Gaudi AI 彻底失败（0/5）导致整个评分大幅拉低。若 IFS 外部客户突破 10%，值得重新审视。
+</div>
+</div>
+
+<!-- Veto Check -->
+<div class="card">
+  <div class="card-title">⚖️ 硬性否决项检查</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
+    <div><div style="font-size:11px;font-weight:700;color:var(--nvda);margin-bottom:8px">NVDA</div>
+      <div class="vi"><span class="vok">✓</span><span>无财务造假</span></div>
+      <div class="vi"><span class="vok">✓</span><span>管理层无问题</span></div>
+      <div class="vi"><span class="vok">✓</span><span>FCF 强劲增长</span></div>
+      <div class="vi"><span class="vw">△</span><span>H20 出口管制已$4.5B冲击，但非产品替代</span></div>
+      <div class="vi"><span class="vok">✓</span><span>收入可独立验证</span></div>
+    </div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--avgo);margin-bottom:8px">AVGO</div>
+      <div class="vi"><span class="vok">✓</span><span>无财务造假</span></div>
+      <div class="vi"><span class="vok">✓</span><span>管理层无问题</span></div>
+      <div class="vi"><span class="vok">✓</span><span>FCF $26.9B 强健</span></div>
+      <div class="vi"><span class="vok">✓</span><span>核心产品无替代威胁</span></div>
+      <div class="vi"><span class="vok">✓</span><span>收入可独立验证</span></div>
+    </div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--mrvl);margin-bottom:8px">MRVL</div>
+      <div class="vi"><span class="vok">✓</span><span>无财务造假</span></div>
+      <div class="vi"><span class="vok">✓</span><span>管理层无重大问题</span></div>
+      <div class="vi"><span class="vok">✓</span><span>FCF $1.4B 正且增长</span></div>
+      <div class="vi"><span class="vok">✓</span><span>核心产品无替代威胁</span></div>
+      <div class="vi"><span class="vok">✓</span><span>收入可独立验证</span></div>
+    </div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--amd);margin-bottom:8px">AMD</div>
+      <div class="vi"><span class="vok">✓</span><span>无财务造假</span></div>
+      <div class="vi"><span class="vok">✓</span><span>管理层无问题</span></div>
+      <div class="vi"><span class="vok">✓</span><span>FCF 转正</span></div>
+      <div class="vi"><span class="vw">△</span><span>出口管制$1.5B，非产品替代</span></div>
+      <div class="vi"><span class="vok">✓</span><span>收入可独立验证</span></div>
+    </div>
+    <div><div style="font-size:11px;font-weight:700;color:var(--intc);margin-bottom:8px">INTC</div>
+      <div class="vi"><span class="vok">✓</span><span>无财务造假</span></div>
+      <div class="vi"><span class="vw">△</span><span>前任CEO战略失误被迫离职</span></div>
+      <div class="vi"><span class="vw">△</span><span>FCF 长期负值（近边界）</span></div>
+      <div class="vi"><span class="vw">△</span><span>Gaudi 实质失败（但未快速替代）</span></div>
+      <div class="vi"><span class="vok">✓</span><span>收入可独立验证</span></div>
+    </div>
+  </div>
+  <div style="margin-top:12px;font-size:10px;color:var(--muted)">✓ = 通过 &nbsp;&nbsp; △ = 存在风险但未触发否决 &nbsp;&nbsp; ✗ = 触发否决（本次无公司触发）</div>
+</div>
+
+<!-- Final Summary -->
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+  <div class="card-title" style="color:var(--accent)">📌 综合投资结论</div>
+  <table class="cmp" style="margin-bottom:16px">
+    <thead><tr><th>公司</th><th>行业</th><th>公司质量</th><th>估值安全</th><th>置信度</th><th>最终分</th><th>级别</th><th>投资动作</th></tr></thead>
+    <tbody>
+      <tr><td class="cn" style="font-weight:700">NVDA</td><td>90.2</td><td class="pos">98.4</td><td class="pos">75.0</td><td>1.0</td><td class="pos" style="font-weight:700">89.7</td><td><span class="grade-pill gS">S</span></td><td style="color:var(--s5)">核心持仓，积极建仓</td></tr>
+      <tr><td class="ca" style="font-weight:700">AVGO</td><td>90.2</td><td class="pos">81.2</td><td class="neu">57.0</td><td>1.0</td><td class="neu" style="font-weight:700">75.7</td><td><span class="grade-pill gA">A</span></td><td style="color:var(--s4)">重点观察，等估值窗口</td></tr>
+      <tr><td class="cm" style="font-weight:700">MRVL</td><td>90.2</td><td class="neu">68.8</td><td class="neu">57.0</td><td>0.9</td><td class="neu" style="font-weight:700">62.6</td><td><span class="grade-pill gB">B</span></td><td style="color:var(--s3)">小仓位/事件驱动</td></tr>
+      <tr><td class="camd" style="font-weight:700">AMD</td><td>90.2</td><td class="neu">62.8</td><td class="neg">32.0</td><td>1.0</td><td class="neg" style="font-weight:700">59.0</td><td><span class="grade-pill gC">C</span></td><td style="color:var(--s2)">仅观察，暂不操作</td></tr>
+      <tr><td class="ci" style="font-weight:700">INTC</td><td>90.2</td><td class="neg">25.2</td><td class="neg">35.0</td><td>1.0</td><td class="neg" style="font-weight:700">41.1</td><td><span class="grade-pill gD">D</span></td><td style="color:var(--s1)">移出候选池</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:14px;background:rgba(88,166,255,.05);border:1px solid rgba(88,166,255,.2);border-radius:8px;font-size:11px;line-height:1.8">
+    <strong style="color:var(--accent)">核心判断：</strong>同处 S 级赛道（90.2分），五家公司因公司质量和估值的差异形成鲜明分化。<br>
+    • <strong style="color:var(--nvda)">NVDA</strong>：好公司（99分）+ 合理估值（前向P/E仅24x）= 稀缺的S+组合。出口管制是唯一系统性风险，但已有 $4.5B 冲击被成功消化。<br>
+    • <strong style="color:var(--avgo)">AVGO</strong>：双护城河（ASIC+VMware）绝佳，$73B 积压订单锁定未来，唯一遗憾是 $53.5B 净负债和 35x EV/EBITDA 的溢价。<br>
+    • <strong style="color:var(--mrvl)">MRVL</strong>：自定义 ASIC 执行出色，但体量小、EV/EBITDA 38.8x 偏贵，0.9 置信度反映业务转型仍在进行中。<br>
+    • <strong style="color:var(--amd)">AMD</strong>：好生意但坏价格——EV/EBITDA 112x 在 4% GPU 市场份额的基础上严重透支，C 级等待大幅回调。<br>
+    • <strong style="color:var(--intc)">INTC</strong>：AI 芯片竞争失败（Gaudi 0/5），ROIC -14%，IFS 年亏损 $10B，属于困境反转投机而非价值投资标的。
+  </div>
+</div>
+
+<div class="footer">
+  AI 价值投资打分系统 v2.0 &nbsp;|&nbsp; 数据截至 2026-05-29 &nbsp;|&nbsp; 本报告仅供研究参考，不构成投资建议<br>
+  NVDA · AMD · INTC · AVGO · MRVL &nbsp;|&nbsp; 数据来源：SEC EDGAR · 公司 IR · GuruFocus · StockAnalysis · MacroTrends
+</div>
+</div>
+</body>
+</html>
