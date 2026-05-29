@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI电力基础设施投资评分 | EME · PWR · PLPC</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --accent: #58a6ff; --text: #c9d1d9; --muted: #8b949e;
+    --s5: #2ea043; --s4: #3fb950; --s3: #d29922;
+    --s2: #f85149; --s1: #da3633; --s0: #6e040e;
+    --green: #3fb950; --red: #f85149; --yellow: #d29922;
+    --eme: #58a6ff; --pwr: #bc8cff; --plpc: #79c0ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Header */
+  .header { text-align: center; padding: 48px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .header .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .header .meta { color: var(--muted); font-size: 12px; }
+  .sector-badge { display: inline-block; background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: 12px; margin-bottom: 16px; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+
+  /* Summary Row */
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; position: relative; overflow: hidden; }
+  .summary-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .summary-card.eme::before { background: var(--eme); }
+  .summary-card.pwr::before { background: var(--pwr); }
+  .summary-card.plpc::before { background: var(--plpc); }
+  .company-ticker { font-size: 22px; font-weight: 700; color: #fff; }
+  .company-name { font-size: 12px; color: var(--muted); margin: 4px 0 16px; }
+  .final-score { font-size: 52px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .score-60-69 { color: var(--yellow); }
+  .score-70-79 { color: var(--green); }
+  .score-80 { color: #00d26a; }
+  .score-below-60 { color: var(--red); }
+  .grade-badge { display: inline-block; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+  .grade-A { background: rgba(63,185,80,0.15); color: var(--s4); border: 1px solid rgba(63,185,80,0.3); }
+  .grade-B { background: rgba(210,153,34,0.15); color: var(--s3); border: 1px solid rgba(210,153,34,0.3); }
+  .grade-C { background: rgba(248,81,73,0.15); color: var(--s2); border: 1px solid rgba(248,81,73,0.3); }
+  .grade-D { background: rgba(218,54,51,0.15); color: var(--s1); border: 1px solid rgba(218,54,51,0.3); }
+  .score-breakdown-mini { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; text-align: center; font-size: 11px; }
+  .mini-item label { color: var(--muted); display: block; margin-bottom: 2px; }
+  .mini-item span { font-weight: 600; font-size: 15px; }
+  .verdict { font-size: 12px; color: var(--muted); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+
+  /* Score bar */
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .score-label { width: 160px; font-size: 12px; color: var(--text); flex-shrink: 0; }
+  .score-label .weight { color: var(--muted); font-size: 11px; }
+  .score-bar-wrap { flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .score-num { width: 28px; text-align: right; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .score-weighted { width: 40px; text-align: right; font-size: 11px; color: var(--muted); flex-shrink: 0; }
+  .evidence { font-size: 11px; color: var(--muted); margin-left: 170px; margin-bottom: 10px; padding: 6px 10px; background: rgba(255,255,255,0.03); border-left: 2px solid var(--border); border-radius: 0 4px 4px 0; line-height: 1.5; }
+
+  /* Dimension score color */
+  .d5 { background: var(--s5); }
+  .d4 { background: var(--s4); }
+  .d3 { background: var(--s3); }
+  .d2 { background: var(--s2); }
+  .d1 { background: var(--s1); }
+  .d0 { background: var(--s0); }
+  .n5 { color: var(--s5); }
+  .n4 { color: var(--s4); }
+  .n3 { color: var(--s3); }
+  .n2 { color: var(--s2); }
+  .n1 { color: var(--s1); }
+  .n0 { color: var(--s0); }
+
+  /* Comparison table */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .cmp-table th { background: rgba(255,255,255,0.04); color: var(--muted); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .cmp-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: top; }
+  .cmp-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .cmp-table .label-col { color: var(--muted); width: 180px; }
+  .eme-col { color: #a3c4f3; }
+  .pwr-col { color: #d4b3ff; }
+  .plpc-col { color: #9bd4ff; }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .neutral { color: var(--yellow); }
+
+  /* Veto checklist */
+  .veto-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+  .veto-ok { color: var(--green); font-size: 14px; flex-shrink: 0; }
+  .veto-trigger { color: var(--red); font-size: 14px; flex-shrink: 0; }
+
+  /* Formula block */
+  .formula-block { background: rgba(88,166,255,0.05); border: 1px solid rgba(88,166,255,0.2); border-radius: 8px; padding: 16px; font-family: "SF Mono", "Fira Code", monospace; font-size: 12px; line-height: 2; }
+  .formula-block .f-line { color: var(--text); }
+  .formula-block .f-result { color: var(--accent); font-size: 14px; font-weight: 700; }
+
+  /* Section header */
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .section-header h2 { font-size: 16px; color: #fff; }
+  .section-header .badge { background: rgba(255,255,255,0.08); color: var(--muted); border-radius: 4px; padding: 2px 8px; font-size: 11px; }
+
+  /* Tab navigation */
+  .company-section { margin-bottom: 40px; }
+  .company-tag { display: inline-block; color: #fff; font-size: 18px; font-weight: 700; padding: 6px 0; margin-bottom: 16px; }
+  .company-tag .tag-name { font-size: 13px; color: var(--muted); margin-left: 8px; font-weight: 400; }
+
+  /* Key metrics table */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .metric-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .metric-box .m-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .metric-box .m-value { font-size: 16px; font-weight: 700; color: #fff; }
+  .metric-box .m-trend { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Assumptions/Risks */
+  .assumption-item { padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; font-size: 12px; line-height: 1.6; }
+  .assumption { background: rgba(46,160,67,0.08); border-left: 3px solid var(--s5); }
+  .risk { background: rgba(248,81,73,0.08); border-left: 3px solid var(--s2); }
+  .catalyst { background: rgba(88,166,255,0.08); border-left: 3px solid var(--accent); }
+
+  /* Footer */
+  .footer { text-align: center; padding: 32px 0; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); margin-top: 40px; }
+
+  /* SVG Radar */
+  .radar-wrap { display: flex; justify-content: center; margin: 12px 0; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: repeat(2,1fr); }
+    .score-label { width: 120px; }
+    .evidence { margin-left: 130px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <div class="subtitle">AI 价值投资打分系统 v2.0</div>
+  <h1>AI 电力基础设施赛道评分报告</h1>
+  <div class="sector-badge">⚡ 电力基础设施 / AI 建设链</div>
+  <p style="color:var(--muted);font-size:12px;margin-top:8px;">EME (EMCOR Group) &nbsp;·&nbsp; PWR (Quanta Services) &nbsp;·&nbsp; PLPC (Preformed Line Products)</p>
+  <div class="meta">生成日期：2026-05-29 &nbsp;|&nbsp; 数据来源：SEC EDGAR / 公司财报 / Bloomberg</div>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-grid">
+
+  <!-- EME -->
+  <div class="summary-card eme">
+    <div class="company-ticker">EME</div>
+    <div class="company-name">EMCOR Group &nbsp;·&nbsp; NYSE</div>
+    <div class="final-score score-60-69">61.4</div>
+    <div class="grade-badge grade-B">小仓位 / 事件驱动</div>
+    <div class="score-breakdown-mini">
+      <div class="mini-item"><label>行业分</label><span style="color:var(--s4)">71.4</span></div>
+      <div class="mini-item"><label>公司质量</label><span style="color:var(--s3)">60.0</span></div>
+      <div class="mini-item"><label>估值安全</label><span style="color:var(--s2)">57.0</span></div>
+    </div>
+    <div class="verdict">好公司、好赛道，但估值已充分定价。零负债+$1.3B现金是最大安全垫，等待估值回调或业绩超预期窗口。</div>
+  </div>
+
+  <!-- PWR -->
+  <div class="summary-card pwr">
+    <div class="company-ticker">PWR</div>
+    <div class="company-name">Quanta Services &nbsp;·&nbsp; NYSE</div>
+    <div class="final-score score-below-60">52.9</div>
+    <div class="grade-badge grade-D">暂不操作</div>
+    <div class="score-breakdown-mini">
+      <div class="mini-item"><label>行业分</label><span style="color:var(--s4)">71.4</span></div>
+      <div class="mini-item"><label>公司质量</label><span style="color:var(--s3)">58.0</span></div>
+      <div class="mini-item"><label>估值安全</label><span style="color:var(--s1)">32.0</span></div>
+    </div>
+    <div class="verdict">赛道顶级、护城河强劲，但估值严重透支：P/E 45-53x、EV/EBITDA 37.6x。CEO抛售$1.2亿股票是重要警示信号。</div>
+  </div>
+
+  <!-- PLPC -->
+  <div class="summary-card plpc">
+    <div class="company-ticker">PLPC</div>
+    <div class="company-name">Preformed Line Products &nbsp;·&nbsp; NASDAQ</div>
+    <div class="final-score score-below-60">53.2</div>
+    <div class="grade-badge grade-D">暂不操作</div>
+    <div class="score-breakdown-mini">
+      <div class="mini-item"><label>行业分</label><span style="color:var(--s3)">63.0</span></div>
+      <div class="mini-item"><label>公司质量</label><span style="color:var(--s2)">54.0</span></div>
+      <div class="mini-item"><label>估值安全</label><span style="color:var(--s3)">65.0</span></div>
+    </div>
+    <div class="verdict">家族控股>50%、净现金正、护城河尚可。但2024年通信市场崩盘暴露周期脆弱性，关税压制利润率，AI敞口间接且有限。</div>
+  </div>
+
+</div><!-- end summary grid -->
+
+<!-- Key Financial Metrics Comparison -->
+<div class="card">
+  <div class="card-title">📊 关键财务指标对比（2024-2025实际数据）</div>
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th class="label-col">指标</th>
+        <th class="eme-col">EME (EMCOR)</th>
+        <th class="pwr-col">PWR (Quanta)</th>
+        <th class="plpc-col">PLPC</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="label-col">FY2024 营收</td><td class="eme-col">$14.57B</td><td class="pwr-col">$23.67B</td><td class="plpc-col">$593.7M</td></tr>
+      <tr><td class="label-col">FY2025 营收</td><td class="eme-col">$17.0B (+16.6%)</td><td class="pwr-col">$28.48B (+20.3%)</td><td class="plpc-col">$672M (+13%)</td></tr>
+      <tr><td class="label-col">毛利率（FY2024）</td><td class="eme-col">19.0%</td><td class="pwr-col">~23.0%</td><td class="plpc-col">32.0%</td></tr>
+      <tr><td class="label-col">经营利润率（FY2024）</td><td class="eme-col">9.2%</td><td class="pwr-col">~4-6%</td><td class="plpc-col">8.5%</td></tr>
+      <tr><td class="label-col">FCF（FY2024）</td><td class="eme-col"><span class="positive">$1.34B（9.2%）</span></td><td class="pwr-col">$1.55B（6.5%）</td><td class="plpc-col">$52.8M（8.9%）</td></tr>
+      <tr><td class="label-col">ROIC</td><td class="eme-col"><span class="positive">26.67%</span></td><td class="pwr-col"><span class="neutral">8.80%</span></td><td class="plpc-col"><span class="negative">7.7%</span></td></tr>
+      <tr><td class="label-col">净现金/净负债</td><td class="eme-col"><span class="positive">净现金 +$1.3B</span></td><td class="pwr-col"><span class="negative">净负债 ~$5.3B</span></td><td class="plpc-col"><span class="positive">净现金 +$15M</span></td></tr>
+      <tr><td class="label-col">订单/RPO</td><td class="eme-col">$13.25B（+31%）</td><td class="pwr-col">$48.5B（+27%）</td><td class="plpc-col">N/A（项目制）</td></tr>
+      <tr><td class="label-col">当前市值</td><td class="eme-col">$41.07B</td><td class="pwr-col">$108.56B</td><td class="plpc-col">$1.43B</td></tr>
+      <tr><td class="label-col">EV/EBITDA</td><td class="eme-col"><span class="neutral">18.5x</span>（历史中位 10.7x）</td><td class="pwr-col"><span class="negative">37.6x</span>（历史 13-15x）</td><td class="plpc-col"><span class="positive">13.5x</span>（历史 14.3x）</td></tr>
+      <tr><td class="label-col">前向 P/E</td><td class="eme-col">~33x</td><td class="pwr-col"><span class="negative">45-53x</span></td><td class="plpc-col">30.7x（利润压缩）</td></tr>
+      <tr><td class="label-col">数据中心/AI敞口</td><td class="eme-col"><span class="positive">20-25% 营收，+55% YoY</span></td><td class="pwr-col">电网>80%，间接受益</td><td class="plpc-col">~5-10%，通信/能源硬件</td></tr>
+      <tr><td class="label-col">管理层持股</td><td class="eme-col"><span class="neutral">CEO 0.37%（套现中）</span></td><td class="pwr-col"><span class="negative">CEO 0.44%，抛售$1.2亿</span></td><td class="plpc-col"><span class="positive">Ruhlman家族 >50%</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Industry Score -->
+<div class="card">
+  <div class="section-header">
+    <div class="section-dot" style="background:#58a6ff"></div>
+    <h2>第一层：行业吸引力评分</h2>
+    <span class="badge">AI 电力基础设施赛道</span>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">EME / PWR 共享行业分 <strong style="color:#fff">71.4</strong>（A级），PLPC 为 <strong style="color:var(--s3)">63.0</strong>（B级），差异源于PLPC的AI敞口较弱及更高的地缘/周期风险。公式：维度分 = (原始分/5)×权重</p>
+
+  <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px">
+    <thead>
+      <tr style="background:rgba(255,255,255,0.03)">
+        <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);color:var(--muted)">权重</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);color:var(--eme)">EME/PWR分</th>
+        <th style="padding:8px;text-align:center;border-bottom:1px solid var(--border);color:var(--plpc)">PLPC分</th>
+        <th style="padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">核心证据</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">长期需求空间</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">18</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n4"><strong>4/5</strong> → 14.4</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 10.8</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">全球数据中心功率需求 2022-2026 CAGR ~25%。美国 IRA+基础设施法案驱动电网万亿级投资。PWR $48.5B 订单已验证真实需求。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">技术演进确定性</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">14</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 8.4</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 8.4</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">不在 AI 技术主线核心，但属于不可绕过的使能基础设施。每个 100MW 数据中心需要数亿美元电气建设。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">利润池位置</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">16</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 9.6</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 9.6</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">EPC 承包商毛利率偏薄（15-25%），但数据中心专项工程正在溢价。EME 经营利润率 3 年内从 5.1% 扩张至 10.1%，证明定价权改善。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">行业壁垒</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">18</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n4"><strong>4/5</strong> → 14.4</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 10.8</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">大规模电气施工的核心壁垒是劳动力：PWR 6 万+自有工人，EME 3.3 万+专业电工。培训周期 5-10 年，急单期间无法快速复制。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">竞争格局</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">12</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 7.2</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 7.2</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">头部集中于 EME/PWR/MYR，但竞争仍在。超大型数据中心项目能承接的只有 3-4 家。价格战有限（劳动力短缺保护定价权）。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">资本强度与周期性</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">8</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 4.8</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 4.8</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">服务型模式相对轻资产（EME Capex/收入仅 0.4%）。但 PLPC 通信业务 2024 年下滑 -11.3%，暴露周期脆弱性。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04)">政策与地缘风险</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">7</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n4"><strong>4/5</strong> → 5.6</td>
+        <td style="padding:8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)" class="n3"><strong>3/5</strong> → 4.2</td>
+        <td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted)">EME/PWR 主要业务在美国，IRA/IIJA 政策顺风。PLPC 国际收入 ~50%，面临关税成本压力（Q1 2026 毛利率受压）。</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px">可验证性</td>
+        <td style="padding:8px;text-align:center;color:var(--muted)">7</td>
+        <td style="padding:8px;text-align:center" class="n5"><strong>5/5</strong> → 7.0</td>
+        <td style="padding:8px;text-align:center" class="n4"><strong>4/5</strong> → 5.6</td>
+        <td style="padding:8px 12px;color:var(--muted)">三家均为 SEC 上市公司，10-K/10-Q 可查。EME/PWR 订单数据季度更新；PLPC 小市值，分析师覆盖较少。</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr style="background:rgba(255,255,255,0.03)">
+        <td style="padding:10px 12px;font-weight:700;color:#fff">行业总分</td>
+        <td style="padding:10px 8px;text-align:center;color:var(--muted)">100</td>
+        <td style="padding:10px 8px;text-align:center;font-size:16px;font-weight:800" class="n4">71.4 <small style="font-size:11px">A级</small></td>
+        <td style="padding:10px 8px;text-align:center;font-size:16px;font-weight:800" class="n3">63.0 <small style="font-size:11px">B级</small></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- ====================== EME ====================== -->
+<div class="company-section">
+  <div class="company-tag">EME <span class="tag-name">EMCOR Group · NYSE · 电气与机械建设承包商</span></div>
+
+  <!-- Key metrics -->
+  <div class="metrics-grid" style="margin-bottom:16px">
+    <div class="metric-box"><div class="m-label">FY2025 营收</div><div class="m-value">$17.0B</div><div class="m-trend positive">+16.6% YoY</div></div>
+    <div class="metric-box"><div class="m-label">经营利润率</div><div class="m-value">10.1%</div><div class="m-trend positive">+320bps 3年扩张</div></div>
+    <div class="metric-box"><div class="m-label">ROIC</div><div class="m-value positive">26.67%</div><div class="m-trend">远超行业均值</div></div>
+    <div class="metric-box"><div class="m-label">净现金</div><div class="m-value positive">+$1.3B</div><div class="m-trend">零有息负债</div></div>
+    <div class="metric-box"><div class="m-label">FCF（FY2024）</div><div class="m-value">$1.34B</div><div class="m-trend positive">+60% YoY</div></div>
+    <div class="metric-box"><div class="m-label">订单（RPO）</div><div class="m-value">$13.25B</div><div class="m-trend positive">+31% YoY，历史新高</div></div>
+    <div class="metric-box"><div class="m-label">EV/EBITDA</div><div class="m-value neutral">18.5x</div><div class="m-trend negative">历史中位仅 10.7x</div></div>
+    <div class="metric-box"><div class="m-label">数据中心敞口</div><div class="m-value positive">~25%</div><div class="m-trend positive">+55% YoY</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">公司质量评分 · EME · 总分 60.0 / 100</div>
+
+    <!-- 成长性 -->
+    <div class="score-row"><div class="score-label">成长性 <span class="weight">权重20</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 8.0</div></div>
+    <div class="evidence">FY2025 营收 +16.6%，处于 10-30% 区间（规则：2/5）。但 EPS +31%（经营杠杆）、数据中心 +55%、RPO $13.25B（+31%），成长质量优于营收增速体现。</div>
+
+    <!-- 盈利质量 -->
+    <div class="score-row"><div class="score-label">盈利质量 <span class="weight">权重16</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 9.6</div></div>
+    <div class="evidence">毛利率 19%（建筑业顶级，行业均值 10-15%），FCF Margin 9.2%，ROIC 26.67%（远超 20% 的 5/5 门槛）。综合判断：3/5（注：评分框架为科技公司校准，此处以 ROIC 为核心加权）。</div>
+
+    <!-- 护城河 -->
+    <div class="score-row"><div class="score-label">结构性护城河 <span class="weight">权重18</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 10.8</div></div>
+    <div class="evidence">壁垒：① 规模效应（$17B 全美最大专业承包商）② 人才积累（3.3万专业电工，培训周期长）③ 超大客户关系（AWS/Google/Meta/Azure 超大规模数据中心）。非软件型护城河，但结构性壁垒真实。</div>
+
+    <!-- AI 对齐度 -->
+    <div class="score-row"><div class="score-label">AI技术演进对齐 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 6.0</div></div>
+    <div class="evidence">数据中心收入占 20-25%（2025 年占比持续提升），年增速 55%。提供机电集成（电气+暖通+消防），是数据中心建设不可绕过的承包商。非 AI 原生但直接受益，3/5。</div>
+
+    <!-- 财务稳健 -->
+    <div class="score-row"><div class="score-label">财务稳健性 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d5" style="width:100%"></div></div><div class="score-num n5">5/5</div><div class="score-weighted">→ 10.0</div></div>
+    <div class="evidence">现金 $1.3B + 零有息负债 + 稀释率极低 + Capex/收入仅 0.4%。2024年净利息收入转正（355.9x 利息保障倍数）。完全满足 5/5 标准。</div>
+
+    <!-- 管理层 -->
+    <div class="score-row"><div class="score-label">管理层与利益绑定 <span class="weight">权重12</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 7.2</div></div>
+    <div class="evidence">CEO Guzzi 持股 0.37%（偏低），近期有减持记录。但资本配置纪律严谨：2024年7次战略并购（含 Miller Electric），ROIC 从 21% 提升至 26.67%，信披透明，历史承诺兑现率高。综合 3/5。</div>
+
+    <!-- 客户质量 -->
+    <div class="score-row"><div class="score-label">客户与商业模式 <span class="weight">权重8</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 4.8</div></div>
+    <div class="evidence">项目制（无 NRR），但超大型客户（超大规模云厂商）黏性极强。RPO $13.25B 相当于 0.78x 年收入，提供较好可见性。客户集中度管理良好（无单客户 >40%）。</div>
+
+    <!-- 可选性 -->
+    <div class="score-row"><div class="score-label">未来可选性 <span class="weight">权重6</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 3.6</div></div>
+    <div class="evidence">数据中心比重从 10% 增至 25%，仍有扩张空间。服务/维护业务（非建设）是高利润率增长方向。2025 年完成 EMCOR UK 出售，集中北美高增长。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">公司质量总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s3)">60.0</span>
+    </div>
+  </div>
+
+  <!-- EME 估值 -->
+  <div class="card">
+    <div class="card-title">估值安全边际评分 · EME · 总分 57.0 / 100</div>
+
+    <div class="score-row"><div class="score-label">情景估值上行空间 <span class="weight">权重35</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 21.0</div></div>
+    <div class="evidence">FY2026E 营收 ~$18.5B，EBITDA ~$2.2B，基准 EV/EBITDA 15x → EV ~$33B，加现金 $1.3B → 目标市值 ~$34.3B（当前 $41B）。基准情景微下行。乐观情景（EV/EBITDA 20x + 高增长）可给出 30-50% 上行，故 3/5。</div>
+
+    <div class="score-row"><div class="score-label">相对估值匹配度 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 15.0</div></div>
+    <div class="evidence">PS 约 2.3x / 营收增速 16.6% → PS PEG = 0.14（规则给 5/5）。但 EV/EBITDA 18.5x（高于历史中位 10.7x 的 73%）、P/E~33x / EPS 增速 31% → PE PEG ≈ 1.1（规则 3/5）。综合判断 3/5，注明 PS 指标不完全适用于建筑业。</div>
+
+    <div class="score-row"><div class="score-label">下行情景保护 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 15.0</div></div>
+    <div class="evidence">$1.3B 净现金 + 零负债 = 强大安全垫。RPO $13.25B 锁定收入可见性。悲观情景（EV/EBITDA 压回 12x）约下行 35%，有现金兜底，整体 3/5。</div>
+
+    <div class="score-row"><div class="score-label">历史与同行对比 <span class="weight">权重15</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 6.0</div></div>
+    <div class="evidence">EV/EBITDA 18.5x 处于历史 75%+ 分位（10 年中位 10.7x），溢价 73%。与 MYR Group、Comfort Systems 等同行相比处于高位，表明 AI 主题溢价已充分定价，历史对比 2/5。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">估值安全边际总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s2)">57.0</span>
+    </div>
+  </div>
+
+  <!-- EME 最终公式 -->
+  <div class="formula-block">
+    <div class="f-line">行业分 × 20% &nbsp;&nbsp;&nbsp;&nbsp;= 71.4 × 0.20 = <span style="color:var(--s4)">14.28</span></div>
+    <div class="f-line">公司质量分 × 50% = 60.0 × 0.50 = <span style="color:var(--s3)">30.00</span></div>
+    <div class="f-line">估值安全分 × 30% = 57.0 × 0.30 = <span style="color:var(--s2)">17.10</span></div>
+    <div class="f-line">基础分 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 14.28 + 30.00 + 17.10 = 61.38</div>
+    <div class="f-line">置信度系数 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span style="color:var(--s5)">1.0</span>（上市15年+，财报透明，业务清晰）</div>
+    <div class="f-result">最终调整分 = 61.38 × 1.0 = <strong>61.4</strong></div>
+  </div>
+
+  <!-- EME 假设与风险 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">支撑假设</div>
+      <div class="assumption-item assumption">数据中心工作量继续主导 RPO，FY2026E 数据中心收入占比突破 30%</div>
+      <div class="assumption-item assumption">经营利润率维持 9.5-10.5%，经营杠杆持续兑现</div>
+      <div class="assumption-item assumption">超大客户（AWS/GOOG/META）Capex 承诺未回调</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">核心风险</div>
+      <div class="assumption-item risk">EV/EBITDA 73% 高于历史中位，高利率环境下估值压缩风险显著</div>
+      <div class="assumption-item risk">数据中心建设周期如放缓（如超大客户 Capex 削减），RPO 增速下行</div>
+      <div class="assumption-item catalyst">催化剂：FY2026 Q1 数据中心 RPO 超越 $4B 可重新进入触发条件</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== PWR ====================== -->
+<div class="company-section">
+  <div class="company-tag">PWR <span class="tag-name">Quanta Services · NYSE · 电力基础设施 EPC 承包商</span></div>
+
+  <div class="metrics-grid" style="margin-bottom:16px">
+    <div class="metric-box"><div class="m-label">FY2025 营收</div><div class="m-value">$28.48B</div><div class="m-trend positive">+20.3% YoY</div></div>
+    <div class="metric-box"><div class="m-label">Q1 2026 营收</div><div class="m-value">$7.87B</div><div class="m-trend positive">+26.3% YoY</div></div>
+    <div class="metric-box"><div class="m-label">记录订单</div><div class="m-value">$48.5B</div><div class="m-trend positive">Q1 2026 新高</div></div>
+    <div class="metric-box"><div class="m-label">ROIC</div><div class="m-value neutral">8.80%</div><div class="m-trend">低于市场均值 11.4%</div></div>
+    <div class="metric-box"><div class="m-label">FCF（FY2024）</div><div class="m-value">$1.55B</div><div class="m-trend">FCF Margin 6.5%</div></div>
+    <div class="metric-box"><div class="m-label">净负债</div><div class="m-value negative">~$5.3B</div><div class="m-trend">D/E 0.56x</div></div>
+    <div class="metric-box"><div class="m-label">前向 P/E</div><div class="m-value negative">45-53x</div><div class="m-trend negative">历史均值仅 23.78x</div></div>
+    <div class="metric-box"><div class="m-label">EV/EBITDA</div><div class="m-value negative">37.6x</div><div class="m-trend negative">历史均值 13-15x</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">公司质量评分 · PWR · 总分 58.0 / 100</div>
+
+    <div class="score-row"><div class="score-label">成长性 <span class="weight">权重20</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 12.0</div></div>
+    <div class="evidence">FY2025 营收 +20.3%，Q1 2026 加速至 +26.3%。订单 $48.5B（1.7x 年营收），提供多年可见性。增速接近 30%+ 的 4/5 门槛，但尚未完全突破。</div>
+
+    <div class="score-row"><div class="score-label">盈利质量 <span class="weight">权重16</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 6.4</div></div>
+    <div class="evidence">毛利率 ~23%，GAAP 经营利润率仅 4-6%，ROIC 8.80%（低于市场均值 11.4%），FCF Margin 6.5%。盈利质量中等偏低，规模效应尚未充分转化为利润。</div>
+
+    <div class="score-row"><div class="score-label">结构性护城河 <span class="weight">权重18</span></div><div class="score-bar-wrap"><div class="score-bar d4" style="width:80%"></div></div><div class="score-num n4">4/5</div><div class="score-weighted">→ 14.4</div></div>
+    <div class="evidence">全美最大自有劳动力电力承包商（6万+工人），高压输电专项能力稀缺，自我施工模式（非分包）。这是 PWR 最核心的护城河：在劳动力极度短缺的市场，人力本身即壁垒。</div>
+
+    <div class="score-row"><div class="score-label">AI技术演进对齐 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 6.0</div></div>
+    <div class="evidence">电力基础设施业务 >80% 营收，是 AI 数据中心电力供应的上游承接方。但属于基础设施使能层，非 AI 技术直接参与者。3/5。</div>
+
+    <div class="score-row"><div class="score-label">财务稳健性 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 6.0</div></div>
+    <div class="evidence">净负债 ~$5.3B，D/E 0.56x（可控）。FCF $1.55B 可覆盖利息。2024 年发行 $1.25B 债券，债务有所增加。评 3/5：财务健康但并非无瑕，需关注供应链战略资本开支计划。</div>
+
+    <div class="score-row"><div class="score-label">管理层与利益绑定 <span class="weight">权重12</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 4.8</div></div>
+    <div class="evidence" style="color:var(--red)">⚠️ CEO Duke Austin 于 2026 年 5 月套现 $1.2 亿（155,992 股）。在股价历史高位附近的大规模减持是重要警示。持股仅 0.44%，利益绑定程度有限。</div>
+
+    <div class="score-row"><div class="score-label">客户与商业模式 <span class="weight">权重8</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 4.8</div></div>
+    <div class="evidence">公用事业 + 超大规模云厂商客户组合，关系稳定。项目制无 NRR，但 $48.5B 订单提供可见性。客户分散，无单一客户集中风险。</div>
+
+    <div class="score-row"><div class="score-label">未来可选性 <span class="weight">权重6</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 3.6</div></div>
+    <div class="evidence">供应链垂直整合战略（投资自有电缆等材料制造），与 Zachry 50% JV 承接燃气轮机项目，新能源/核能潜在市场。路径合理但尚在早期。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">公司质量总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s3)">58.0</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">估值安全边际评分 · PWR · 总分 32.0 / 100 ⚠️ 严重透支</div>
+
+    <div class="score-row"><div class="score-label">情景估值上行空间 <span class="weight">权重35</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 14.0</div></div>
+    <div class="evidence">当前市值 $108.56B，EV $100.66B。FY2026E EBITDA ~$4B，即便给 25x（历史溢价）仅 $100B EV。基准情景几乎无上行。乐观情景下行空间 2/5。</div>
+
+    <div class="score-row"><div class="score-label">相对估值匹配度 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d1" style="width:20%"></div></div><div class="score-num n1">1/5</div><div class="score-weighted">→ 5.0</div></div>
+    <div class="evidence">EV/EBITDA 37.6x（历史均值 13-15x，溢价 150%+）。前向 P/E 45-53x（历史均值 23.78x，溢价 100%+）。P/E-PEG = 45/20 = 2.25（规则：1.5-2.5 = 2/5，>2.5 = 1/5）。综合判断 1/5。</div>
+
+    <div class="score-row"><div class="score-label">下行情景保护 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 10.0</div></div>
+    <div class="evidence">极高估值 + 净负债 = 在坏消息情景下极脆弱。若 EV/EBITDA 压回 15-20x，当前价格下行 40-60%。净负债 $5.3B 减少安全垫。CEO 同步大规模减持进一步确认风险。</div>
+
+    <div class="score-row"><div class="score-label">历史与同行对比 <span class="weight">权重15</span></div><div class="score-bar-wrap"><div class="score-bar d1" style="width:20%"></div></div><div class="score-num n1">1/5</div><div class="score-weighted">→ 3.0</div></div>
+    <div class="evidence">P/E 比建筑行业中位数（14.05x）高出 281%。PS 3.7x（历史均值 1.6x，高出 131%）。EV/EBITDA 37.6x（历史高位区间）。同行中当前估值最贵。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">估值安全边际总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s1)">32.0</span>
+    </div>
+  </div>
+
+  <div class="formula-block">
+    <div class="f-line">行业分 × 20% &nbsp;&nbsp;&nbsp;&nbsp;= 71.4 × 0.20 = <span style="color:var(--s4)">14.28</span></div>
+    <div class="f-line">公司质量分 × 50% = 58.0 × 0.50 = <span style="color:var(--s3)">29.00</span></div>
+    <div class="f-line">估值安全分 × 30% = 32.0 × 0.30 = <span style="color:var(--s1)">9.60</span></div>
+    <div class="f-line">基础分 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 14.28 + 29.00 + 9.60 = 52.88</div>
+    <div class="f-line">置信度系数 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span style="color:var(--s5)">1.0</span>（上市20年+，财报透明）</div>
+    <div class="f-result">最终调整分 = 52.88 × 1.0 = <strong>52.9</strong></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">支撑假设</div>
+      <div class="assumption-item assumption">$48.5B 订单在未来 3 年内顺利转化为营收，年增速维持 20%+</div>
+      <div class="assumption-item assumption">ROIC 持续向 11-12% 改善（供应链自有化降低成本）</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">核心风险</div>
+      <div class="assumption-item risk">CEO 在历史高位大规模套现 $1.2 亿，管理层对估值可能存在内部判断</div>
+      <div class="assumption-item risk">EV/EBITDA 37.6x 意味着市场已透支未来 5-7 年的完美执行</div>
+      <div class="assumption-item catalyst">等待机会：回调至 EV/EBITDA 20x 以内（约 -45% 从当前水平）再审视</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== PLPC ====================== -->
+<div class="company-section">
+  <div class="company-tag">PLPC <span class="tag-name">Preformed Line Products · NASDAQ · 电力&通信硬件制造商</span></div>
+
+  <div class="metrics-grid" style="margin-bottom:16px">
+    <div class="metric-box"><div class="m-label">FY2024 营收</div><div class="m-value">$593.7M</div><div class="m-trend negative">-11.3%（通信下滑）</div></div>
+    <div class="metric-box"><div class="m-label">FY2025 营收</div><div class="m-value">$672M</div><div class="m-trend positive">+13% 复苏</div></div>
+    <div class="metric-box"><div class="m-label">毛利率</div><div class="m-value">32%</div><div class="m-trend negative">关税压制中</div></div>
+    <div class="metric-box"><div class="m-label">ROIC</div><div class="m-value negative">7.7%</div><div class="m-trend">低于资本成本</div></div>
+    <div class="metric-box"><div class="m-label">净现金</div><div class="m-value positive">+$15M</div><div class="m-trend">D/E 极低 0.04</div></div>
+    <div class="metric-box"><div class="m-label">家族持股</div><div class="m-value positive">>50%</div><div class="m-trend">Ruhlman 家族</div></div>
+    <div class="metric-box"><div class="m-label">EV/EBITDA</div><div class="m-value positive">13.5x</div><div class="m-trend positive">近历史均值 14.3x</div></div>
+    <div class="metric-box"><div class="m-label">国际收入</div><div class="m-value">~50%</div><div class="m-trend">巴西/欧洲/亚太</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">公司质量评分 · PLPC · 总分 54.0 / 100</div>
+
+    <div class="score-row"><div class="score-label">成长性 <span class="weight">权重20</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 8.0</div></div>
+    <div class="evidence">营收 2022→2023 +5.1%，2024 下滑 -11.3%（通信市场崩溃），2025 复苏 +13%，Q1 2026 +19%。增速在 10-30% 范围，具有周期性而非持续高增长特征，2/5。</div>
+
+    <div class="score-row"><div class="score-label">盈利质量 <span class="weight">权重16</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 6.4</div></div>
+    <div class="evidence">毛利率 32%（尚可），FCF Margin ~8.9%，但 ROIC 7.7% 低于资本成本（~10%）。关税导致 Q1 2026 毛利率从 32.8% 降至 31.3%。整体 2/5，等待利润率修复。</div>
+
+    <div class="score-row"><div class="score-label">结构性护城河 <span class="weight">权重18</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 10.8</div></div>
+    <div class="evidence">电力公用事业客户（极度保守，迁移成本高）。COYOTE® 光纤闭合系统是行业标准。专业工程积累几十年。但规模较小（$1.4B 市值），护城河宽度有限，3/5。</div>
+
+    <div class="score-row"><div class="score-label">AI技术演进对齐 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 4.0</div></div>
+    <div class="evidence">MICOS 子公司提供数据中心机柜、光纤闭合等产品，但占比极小。能源电网产品间接受益于 AI 电力需求，但不在核心受益链上。AI 敞口较有限，2/5。</div>
+
+    <div class="score-row"><div class="score-label">财务稳健性 <span class="weight">权重10</span></div><div class="score-bar-wrap"><div class="score-bar d4" style="width:80%"></div></div><div class="score-num n4">4/5</div><div class="score-weighted">→ 8.0</div></div>
+    <div class="evidence">长期负债仅 $18.4M，D/E 0.04，净现金正，资本开支 $14.7M（FCF $52.8M 轻松覆盖）。资产负债表极为健康，4/5。</div>
+
+    <div class="score-row"><div class="score-label">管理层与利益绑定 <span class="weight">权重12</span></div><div class="score-bar-wrap"><div class="score-bar d4" style="width:80%"></div></div><div class="score-num n4">4/5</div><div class="score-weighted">→ 9.6</div></div>
+    <div class="evidence">Ruhlman 家族持股 >50%（Barbara Ruhlman 独立持股 29%，Robert Ruhlman ~10%），利益与公众股东高度一致。家族式经营风格保守稳健，无过度激励问题。4/5（对标巴菲特偏好的股东利益一致型管理）。</div>
+
+    <div class="score-row"><div class="score-label">客户与商业模式 <span class="weight">权重8</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 4.8</div></div>
+    <div class="evidence">电力公用事业客户群黏性强（换供应商风险高），地理多元化（50% 国际）。但通信市场的 2024 年崩盘说明单业务周期风险较高。3/5。</div>
+
+    <div class="score-row"><div class="score-label">未来可选性 <span class="weight">权重6</span></div><div class="score-bar-wrap"><div class="score-bar d2" style="width:40%"></div></div><div class="score-num n2">2/5</div><div class="score-weighted">→ 2.4</div></div>
+    <div class="evidence">巴西 JAP Telecom（2025）/ Delta Star（2026）两次收购扩展拉美市场，波兰新工厂 2026 年投产（产能+30%）。但可选性空间有限，主要是地理扩张而非品类扩张，2/5。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">公司质量总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s2)">54.0</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">估值安全边际评分 · PLPC · 总分 65.0 / 100</div>
+
+    <div class="score-row"><div class="score-label">情景估值上行空间 <span class="weight">权重35</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 21.0</div></div>
+    <div class="evidence">若毛利率从当前 31% 恢复至历史 ~35%，经营利润率将从 8.5% 升至 ~12%，EBITDA 改善显著。在正常化盈利下，EV/EBITDA 接近历史均值，3 年回报 30-50%，3/5。</div>
+
+    <div class="score-row"><div class="score-label">相对估值匹配度 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 15.0</div></div>
+    <div class="evidence">EV/EBITDA 13.5x 略低于历史均值 14.3x，属于公允估值。P/E 30.7x 偏高，但反映利润率压缩而非过热。若关税影响消退/利润恢复，P/E 将自然回归至 15-18x 合理区间。3/5。</div>
+
+    <div class="score-row"><div class="score-label">下行情景保护 <span class="weight">权重25</span></div><div class="score-bar-wrap"><div class="score-bar d4" style="width:80%"></div></div><div class="score-num n4">4/5</div><div class="score-weighted">→ 20.0</div></div>
+    <div class="evidence">净现金正、零负债、EV/EBITDA 近历史均值（无估值泡沫）、家族大股东稳定持有提供下行保护。悲观情景下跌估计 <30%（无高估值杠杆），4/5。</div>
+
+    <div class="score-row"><div class="score-label">历史与同行对比 <span class="weight">权重15</span></div><div class="score-bar-wrap"><div class="score-bar d3" style="width:60%"></div></div><div class="score-num n3">3/5</div><div class="score-weighted">→ 9.0</div></div>
+    <div class="evidence">EV/EBITDA 13.5x vs 历史均值 14.3x，处于历史 25-50% 分位，与同行持平偏下。没有明显高估，也没有明显低估，3/5。</div>
+
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:12px">
+      <span style="color:var(--muted);font-size:12px">估值安全边际总分</span>
+      <span style="font-size:24px;font-weight:800;color:var(--s3)">65.0</span>
+    </div>
+  </div>
+
+  <div class="formula-block">
+    <div class="f-line">行业分 × 20% &nbsp;&nbsp;&nbsp;&nbsp;= 63.0 × 0.20 = <span style="color:var(--s3)">12.60</span></div>
+    <div class="f-line">公司质量分 × 50% = 54.0 × 0.50 = <span style="color:var(--s2)">27.00</span></div>
+    <div class="f-line">估值安全分 × 30% = 65.0 × 0.30 = <span style="color:var(--s3)">19.50</span></div>
+    <div class="f-line">基础分 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 12.60 + 27.00 + 19.50 = 59.10</div>
+    <div class="f-line">置信度系数 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span style="color:var(--s4)">0.9</span>（上市多年但小市值，分析师覆盖有限）</div>
+    <div class="f-result">最终调整分 = 59.10 × 0.9 = <strong>53.2</strong></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">支撑假设</div>
+      <div class="assumption-item assumption">关税影响消退或公司成功提价，毛利率恢复至 34-35%</div>
+      <div class="assumption-item assumption">通信基建需求在 5G 第二波/AI 光纤驱动下持续恢复</div>
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">核心风险</div>
+      <div class="assumption-item risk">关税成本可能持续压制利润率（Q1 2026 已出现净利润同比下降）</div>
+      <div class="assumption-item risk">通信业务历史证明具有强周期性，2024 年 -11.3% 非偶发</div>
+      <div class="assumption-item catalyst">观察点：连续 2 季度毛利率恢复至 33%+ 可重新评估入场</div>
+    </div>
+  </div>
+</div>
+
+<!-- Veto Check -->
+<div class="card">
+  <div class="card-title">⚖️ 硬性否决项检查（三家公司均通过）</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--eme);margin-bottom:10px">EME</div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无财务造假疑点</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>管理层无诚信问题</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>FCF 持续正且增长</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>核心产品无替代威胁</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>收入可独立验证</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无单客户 >40%</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无出口管制风险</span></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--pwr);margin-bottom:10px">PWR</div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无财务造假疑点</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>管理层无诚信问题</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>FCF 持续正</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>核心产品无替代威胁</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>收入可独立验证</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无单客户 >40%</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无出口管制风险</span></div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--plpc);margin-bottom:10px">PLPC</div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无财务造假疑点</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>管理层无诚信问题</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>FCF 持续正</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>核心产品无替代威胁</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>收入可独立验证</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>无单客户 >40%</span></div>
+      <div class="veto-item"><span class="veto-ok">✓</span><span>关税风险已在评分中反映</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Conclusion -->
+<div class="card" style="border-color:rgba(88,166,255,0.3)">
+  <div class="card-title" style="color:var(--accent)">📌 综合投资结论</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;font-size:12px;line-height:1.7">
+    <div>
+      <div style="color:var(--eme);font-weight:700;margin-bottom:8px">EME · 61.4分 · 关注但等待</div>
+      <p style="color:var(--text)">三家中质量最优：ROIC 26.67%、零负债、FCF $1.34B、数据中心订单创历史新高。<strong style="color:var(--yellow)">唯一障碍是估值</strong>：EV/EBITDA 18.5x（历史中位 10.7x）已充分反映 AI 主题。</p>
+      <p style="color:var(--muted);margin-top:6px">操作策略：若 EV/EBITDA 回至 13-14x（约 -25% 股价），或下一季度 RPO 超 $15B + 数据中心占比突破 30%，可进入核心候选。</p>
+    </div>
+    <div>
+      <div style="color:var(--pwr);font-weight:700;margin-bottom:8px">PWR · 52.9分 · 好公司、坏价格</div>
+      <p style="color:var(--text)">护城河评分三家最高（4/5）：6万自有电工、$48.5B 订单不可复制。<strong style="color:var(--red)">但 EV/EBITDA 37.6x 意味着市场已透支未来 5-7 年的完美执行。</strong></p>
+      <p style="color:var(--muted);margin-top:6px">操作策略：CEO 大规模套现是重要警示。等 EV/EBITDA 回到 18-22x（约 -40-50% 从当前水平）才有较好安全边际。</p>
+    </div>
+    <div>
+      <div style="color:var(--plpc);font-weight:700;margin-bottom:8px">PLPC · 53.2分 · 周期复苏观察</div>
+      <p style="color:var(--text)">家族持股 >50% + 净现金 + EV/EBITDA 近历史均值，估值下行风险最小。但 ROIC 低于资本成本、AI 敞口有限、通信业务周期脆弱性已被证实。</p>
+      <p style="color:var(--muted);margin-top:6px">操作策略：不在 AI 主线核心。如果持仓逻辑是"电力硬件复苏"而非 AI，需要确认关税压力消退，毛利率连续恢复至 33%+。</p>
+    </div>
+  </div>
+  <div style="margin-top:20px;padding:14px;background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.2);border-radius:8px;font-size:12px;color:var(--text)">
+    <strong style="color:var(--accent)">核心判断：</strong>这三家公司代表 AI 电力基础设施赛道的三个层次——EME（建设承包商）、PWR（电网服务商）、PLPC（硬件供应商）。赛道确定性强（A 级），但当前市场已将 AI 电力主题全面定价，<strong>估值是最大制约</strong>。在现价评分下，三家均未达到主动建仓门槛（80+），EME 最接近（61分），待估值修正后重新审视。
+  </div>
+</div>
+
+<div class="footer">
+  AI 价值投资打分系统 v2.0 &nbsp;|&nbsp; 数据截至 2026-05-29 &nbsp;|&nbsp; 本报告仅供研究参考，不构成投资建议<br>
+  数据来源：SEC EDGAR · 公司 IR · Bloomberg · GuruFocus · StockAnalysis · MacroTrends
+</div>
+
+</div><!-- end container -->
+</body>
+</html>
