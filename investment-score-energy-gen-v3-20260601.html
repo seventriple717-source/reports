@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<title>AI能源评分v3 · CEG VST BE FSLR OKLO SMR</title><style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:20px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hdr h1{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;}
+.pre-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:10px;margin:7px 0;}
+.pre-box h4{font-size:10px;color:var(--acc);font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+.warn-box{background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:5px;padding:8px;margin:6px 0;font-size:10px;line-height:1.6;}
+.ok-box{background:rgba(63,185,80,.05);border:1px solid rgba(63,185,80,.2);border-radius:5px;padding:8px;margin:6px 0;font-size:10px;line-height:1.6;}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:9px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:6px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.yr-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-top:6px;}
+.yr-tbl th{background:rgba(255,255,255,.04);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.yr-tbl td{padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.03);}
+.dcf-box{background:rgba(0,0,0,.2);border-radius:5px;padding:8px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.7;margin:6px 0;}
+.tag-up{background:rgba(63,185,80,.2);color:var(--s4);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-dn{background:rgba(248,81,73,.2);color:var(--s2);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-new{background:rgba(88,166,255,.2);color:var(--acc);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.footer{text-align:center;padding:14px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:18px;}
+</style></head><body>
+<div class="wrap">
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">AI能源基础设施专项投资打分 v3.0 · Secular框架 · 文件1/3</div>
+  <h1>发电类 + 先进核能（SMR）</h1>
+  <p style="color:var(--mu);font-size:11px">CEG VST BE FSLR OKLO SMR &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 核心升级：Secular退出倍数+核电发展节奏+OKLO/SMR首次覆盖</p>
+</div>
+<div class="card" style="border-color:rgba(118,227,176,.3);">
+<div class="ct" style="color:#76e3b0">⚛️ 核电发展节奏——技术现状深度分析（2026-06-01实时）</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:10px;">
+<div>
+<strong style="color:#fff;display:block;margin-bottom:6px">四波次发展路径</strong>
+<table class="t" style="font-size:10px;">
+<tr><td class="neu" style="font-weight:700;width:80px">第一波<br>2025-2027</td><td>存量重启<br>Palisades ~800MW（已开始）<br>TMI 835MW（NRC决定预计2026年6月）<br>累计：~1,635MW可用</td></tr>
+<tr><td class="neu" style="font-weight:700">第二波<br>2027-2031</td><td>传输补建期 ⚠️<br>TMI重启但PJM传输升级至2031年才完成<br>Duane Arnold 615MW（Google 25年PPA）2029<br>TMI 2027-2031 = 市场销售，而非微软PPA</td></tr>
+<tr><td class="pos" style="font-weight:700">第三波<br>2028-2031</td><td>首批SMR（极小规模）<br>Oklo Aurora 75MW @ INL（2027底-2028初）<br>NuScale TVA：2030s初期<br>累计：75-200MW，覆盖缺口&lt;1%</td></tr>
+<tr><td class="pos" style="font-weight:700">第四波<br>2031-2035</td><td>SMR规模化<br>X-energy Amazon 960MW（2030s中）<br>NuScale Standard Power 1,848MW<br>届时才能实质性缓解AI电力缺口</td></tr>
+</table>
+</div>
+<div>
+<strong style="color:#fff;display:block;margin-bottom:6px">供需缺口量级</strong>
+<table class="t" style="font-size:10px;">
+<tr><td class="lc" style="color:var(--mu)">2026 AI DC需求</td><td class="neg">8.2 GW</td></tr>
+<tr><td class="lc" style="color:var(--mu)">2028 AI DC需求</td><td class="neg">74 GW（预测）</td></tr>
+<tr><td class="lc" style="color:var(--mu)">2028 可用供给</td><td class="neg">25 GW → 49 GW缺口</td></tr>
+<tr><td class="lc" style="color:var(--mu)">2031前核电容量</td><td class="neu">~2,325 MW（仅覆盖缺口5%）</td></tr>
+<tr><td class="lc" style="color:var(--mu)">核电实质缓解缺口</td><td class="pos">2032-2035（SMR规模化后）</td></tr>
+</table>
+<div class="warn-box" style="margin-top:8px">
+⚠️ <strong>关键洞察：TMI传输延迟</strong><br>
+TMI 2027物理重启 ≠ 微软PPA交付。PJM传输升级要到<strong>2031年12月</strong>才完成。
+2027-2031年CEG必须以市场价出售TMI电力（对CEG财务中性甚至有利），但微软要等到2031年才收到承诺的绿色电力。
+这意味着CEG的"20年PPA"实际上是"2031年开始的20年PPA"。
+</div>
+<div class="ok-box">
+✅ <strong>真正的当前瓶颈不是核电，是变压器</strong><br>
+美国50%+数据中心项目因<strong>变压器/开关设备短缺</strong>延期（非劳动力/资金）。变压器交期160周=3年以上。这让HUBB/POWL/ETN的建设周期更长，EPC需求更持续——这是<strong>secular延长因子</strong>。
+</div>
+</div>
+</div>
+</div>
+<div class="card" style="border-color:rgba(210,153,34,.3);">
+<div class="ct" style="color:var(--s3)">📐 v3估值方法论升级：Secular成长 vs 周期性退出倍数</div>
+<table class="t" style="font-size:11px;">
+<thead><tr><th>需求类型</th><th>定义</th><th>退出倍数</th><th>本轮适用公司</th></tr></thead>
+<tbody>
+<tr><td class="pos" style="font-weight:700">Secular成长型</td><td>10年+结构性需求，AI/能源转型驱动，不受单一周期影响</td><td class="pos"><strong>16-22x EV/EBITDA</strong></td><td>EME、MYRG、HUBB（变压器secular短缺）</td></tr>
+<tr><td class="pos" style="font-weight:700">核电运营（PPA锁定）</td><td>20年PPA锁定，监管保护，高可见度</td><td class="pos"><strong>16-20x EV/EBITDA</strong></td><td>CEG</td></tr>
+<tr><td class="neu">受监管公用事业</td><td>监管锁定回报，最高确定性</td><td class="neu">14-18x</td><td>传统电力公司</td></tr>
+<tr><td class="neu">液冷/DC电力设备</td><td>AI刚需但较短锁定期</td><td class="neu">22-28x</td><td>VRT</td></tr>
+<tr><td class="neg">传统周期型EPC</td><td>政府支出/商业地产周期驱动</td><td class="neg">10-14x</td><td>历史基准</td></tr>
+<tr><td class="neg">Pre-revenue（SMR/OKLO）</td><td>期权价值，传统倍数完全不适用</td><td class="neg">情景概率加权法</td><td>OKLO、SMR</td></tr>
+</tbody>
+</table>
+<div style="margin-top:8px;font-size:10px;color:var(--mu)"><strong style="color:var(--text)">核心逻辑</strong>：变压器160周交期是物理约束，不是情绪周期。EPC积压$15B+（EME）/\$48.5B（PWR）覆盖1-2年以上工作量。这种10年以上的结构性需求，应该用secular成长股的参照系而非历史周期倍数。v1/v2 用12x EV/EBITDA是<strong>方法论错误</strong>，今天修正。</div>
+</div>
+
+<div style="margin-bottom:20px;border-left:3px solid #76e3b0;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  星座能源（CEG）<span style="color:#76e3b0;font-size:12px;margin-left:6px">核电运营</span>
+  <span class="gp gpS" style="margin-left:8px">S级 核心持仓</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">81.8</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1 2026营收</td><td><strong style="font-size:10px">$11.1B (+64%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">TMI NRC决定</td><td><strong style="font-size:10px">预计2026年6月</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">传输升级</td><td><strong style="font-size:10px">2031年12月（PJM要求）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">EV/EBITDA</td><td><strong style="font-size:10px">15.48x</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">~$104B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>92.8×20%+83.2×50%+72.0×30%</div>
+      <div class="fr">最终分 = 81.8 · S级 | 置信度×1.0</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：核电PPA锁定 18x EV/EBITDA</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$7.0B<br>Year5=$7.0B×(1.12)^5=$12.3B×18x=$221B EV<br>净债务$20B→股权$201B<br>5年股息~$3.1B<br>综合年化≈13.5%（4/5）</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>传输延迟2031修正：2027-2031年TMI市场销售（中性），2031后PPA交付微软。财务影响中性，但PPA确定性被高估。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #f0883e;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  Vistra Corp（VST）<span style="color:#f0883e;font-size:12px;margin-left:6px">IPP（核+气）</span>
+  <span class="gp gpB" style="margin-left:8px">B级 小仓位</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">66.3</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$5.64B (+43%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">EBITDA指引</td><td><strong style="font-size:10px">$6.8-7.6B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Meta核电</td><td><strong style="font-size:10px">2.6GW/20年</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">信用</td><td><strong style="font-size:10px">BBB-（新升级）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">~$55B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>75.7×20%+78.0×50%+65.0×30%</div>
+      <div class="fr">最终分 = 66.3 · B级 | 置信度×0.9</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：IPP混合 10x EV/EBITDA（含核溢价11x）</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$7.2B<br>Year5=$7.2B×(1.15)^5=$14.5B×10x=$145B EV<br>净债务$18B→股权$127B<br>5年股息$1.5B<br>综合年化≈19%（4/5，气电折扣后加权~11%）</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>Comanche Peak核电+Cogentrix气电。核电部分受益AI PPA，气电部分有碳风险。Meta 2.6GW核电PPA是核心价值。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #bc8cff;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  Bloom Energy（BE）<span style="color:#bc8cff;font-size:12px;margin-left:6px">燃料电池（SOFC）</span>
+  <span class="gp gpD" style="margin-left:8px">D级 移出/期权</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">44.0</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$751M (+130%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Oracle合同</td><td><strong style="font-size:10px">2.8GW</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">AEP合同</td><td><strong style="font-size:10px">$2.65B/1GW</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">FY2026指引</td><td><strong style="font-size:10px">$3.4-3.8B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">$81.1B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>83.6×20%+82.0×50%+17.0×30%</div>
+      <div class="fr">最终分 = 44.0 · D级 | 置信度×0.7</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：高增长成长股（pre-profitability） 20x EV/EBITDA（Year5盈利后）</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$900M<br>Year5=$900M×(1.40)^5×20x≈$96B EV<br>vs当前$81B→年化~3.4%（几乎零）<br>即使最乐观（50% CAGR×25x）：~16%年化<br>概率加权≈0.2%</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>SOFC绕过电网互联排队（最紧卡点的解决方案）是真实价值。Oracle 2.8GW+AEP $2.65B是真实合同。问题：$81B市值已完全透支。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #ffd700;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  第一太阳能（FSLR）<span style="color:#ffd700;font-size:12px;margin-left:6px">太阳能制造</span>
+  <span class="gp gpA" style="margin-left:8px">A级 重点观察</span>
+  <span style="margin-left:6px"><span class="tag-up">↑73.3→74.8</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$1.04B (+24%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">毛利率</td><td><strong style="font-size:10px">47%</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">SC新工厂</td><td><strong style="font-size:10px">3.7GW 2026底</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">CuRe</td><td><strong style="font-size:10px">Perrysburg首发</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">~$30B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>77.6×20%+79.6×50%+65.0×30%</div>
+      <div class="fr">最终分 = 74.8 · A级 | 置信度×1.0</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：Secular成长制造商 16x EV/EBITDA（关税保护+CuRe溢价）</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$1.65B<br>Year5=$1.65B×(1.18)^5×16x=$63.2B EV<br>净现金$2B→股权$65B<br>5年无分红<br>综合年化≈16.7%（4/5）</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>CdTe薄膜技术+美国唯一大规模制造+关税保护=三重护城河。CuRe技术提升$0.6B额外收入路径（2027-2028）。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #58a6ff;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  Oklo Inc（OKLO）<span style="color:#58a6ff;font-size:12px;margin-left:6px">先进快堆（SMR）</span>
+  <span class="gp gpD" style="margin-left:8px">D级 移出/期权</span>
+  <span style="margin-left:6px"><span class="tag-new">NEW</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">$11.63B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">股价</td><td><strong style="font-size:10px">$67.20</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">现金</td><td><strong style="font-size:10px">$2.5B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">年烧钱(含Capex)</td><td><strong style="font-size:10px">$430-550M</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Meta合同</td><td><strong style="font-size:10px">1.2GW（绑定！）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Aurora INL</td><td><strong style="font-size:10px">75MW 目标2027底</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>88.0×20%+54.0×50%+49.0×30%</div>
+      <div class="fr">最终分 = 35.6 · D级 | 置信度×0.6</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：期权价值（Pre-revenue） 情景概率加权</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">成功情景（25%）：Aurora INL成功+Meta Ohio Phase1→$80B市值→年化48%<br>部分成功（35%）：延迟1-2年，缩减规模→$20B→年化11%<br>延迟失败（25%）：燃料/监管受阻→$6B→年化-12%<br>彻底失败（15%）：First-of-kind失败→$2B→年化-28%<br>概率加权：≈$28.8B vs当前$11.6B→年化约20%（4/5理论值）<br>但考虑extreme binary风险：实际风险调整后得分2/5</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>⭐ OKLO关键事实（2026-06-01）：<br>• Meta 1.2GW绑定合同（唯一绑定客户！）<br>• 现金$2.5B，运营烧钱$80-100M/年（25年+跑道）<br>• Aurora 75MW @ INL：目标2027底-2028初（历史性首个商业快堆）<br>• NRC PDC审批比正常流程快一半（2026年5月批准）<br>• Sam Altman：已于2025年4月辞去董事长（持股4.3%）<br>• 风险：第一台设备，燃料供应链未成熟，建设成本不确定
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #e8b04b;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  NuScale Power（SMR）<span style="color:#e8b04b;font-size:12px;margin-left:6px">SMR（轻水堆）</span>
+  <span class="gp gpD" style="margin-left:8px">D级 移出/期权</span>
+  <span style="margin-left:6px"><span class="tag-new">NEW</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">$4.63B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">股价</td><td><strong style="font-size:10px">$12.66</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">现金</td><td><strong style="font-size:10px">~$890M</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">年烧钱</td><td><strong style="font-size:10px">~$1.26B（Q1异常高）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">TVA协议</td><td><strong style="font-size:10px">非绑定MOU</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Fluor</td><td><strong style="font-size:10px">已完全退出❌</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>82.0×20%+40.8×50%+37.0×30%</div>
+      <div class="fr">最终分 = 24.0 · D级 | 置信度×0.5</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：期权价值（Pre-revenue） 情景概率加权</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">成功（20%）：TVA转化+Standard Power解决→$50B→年化61%<br>部分成功（30%）：TVA进展缓慢，2030s收入→$8B→年化12%<br>失败（35%）：伙伴流失续集，需再融资→$2B→年化-15%<br>彻底失败（15%）：资金枯竭→$0.5B→年化-33%<br>概率加权：≈$13.5B vs当前$4.63B→理论年化24%<br>但Fluor完全退出+TVA非绑定+现金跑道仅1年是重大折扣</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>⚠️ SMR关键风险（2026-06-01）：<br>• 现金仅$890M，年烧$1.26B（来自Q1异常）→实际约$200-300M→1-2年跑道<br>• Fluor（最大战略股东）已完全退出（套现$24亿！）<br>• TVA 6GW协议 = 非绑定MOU（非合同！）<br>• Standard Power合同遭short seller质疑（法律争议中）<br>• 罗马尼亚项目推迟至2033年<br>• NRC设计认证✓（唯一获批设计，真实优势）<br>• 需要新一轮大规模融资才能生存
+</div>
+</div>
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">📌 综合评分（v3·Secular框架·含正确估值方法论）</div>
+<table class="t"><thead><tr><th>公司</th><th>赛道</th><th>行业</th><th>质量</th><th>估值</th><th>最终</th><th>级别</th><th>退出倍数（新）</th></tr></thead>
+<tbody><tr><td class="n5" style="font-weight:700;color:#76e3b0">CEG</td><td style="color:var(--mu)">核电运营</td><td class="n5">92.8</td><td class="n4">83.2</td><td class="n5">72.0</td><td class="n5" style="font-weight:700">81.8</td><td><span class="gp gpS">S</span></td><td style="font-size:10px;color:var(--mu)">18x EV/EBITDA</td></tr><tr><td class="n3" style="font-weight:700;color:#f0883e">VST</td><td style="color:var(--mu)">IPP（核+气）</td><td class="n4">75.7</td><td class="n4">78.0</td><td class="n4">65.0</td><td class="n3" style="font-weight:700">66.3</td><td><span class="gp gpB">B</span></td><td style="font-size:10px;color:var(--mu)">10x EV/EBITDA（含核溢价11x）</td></tr><tr><td class="n1" style="font-weight:700;color:#bc8cff">BE</td><td style="color:var(--mu)">燃料电池（SOFC）</td><td class="n4">83.6</td><td class="n4">82.0</td><td class="n1">17.0</td><td class="n1" style="font-weight:700">44.0</td><td><span class="gp gpD">D</span></td><td style="font-size:10px;color:var(--mu)">20x EV/EBITDA（Year5盈利后）</td></tr><tr><td class="n4" style="font-weight:700;color:#ffd700">FSLR</td><td style="color:var(--mu)">太阳能制造</td><td class="n4">77.6</td><td class="n4">79.6</td><td class="n4">65.0</td><td class="n4" style="font-weight:700">74.8</td><td><span class="gp gpA">A</span></td><td style="font-size:10px;color:var(--mu)">16x EV/EBITDA（关税保护+CuRe溢价）</td></tr><tr><td class="n1" style="font-weight:700;color:#58a6ff">OKLO</td><td style="color:var(--mu)">先进快堆（SMR）</td><td class="n5">88.0</td><td class="n2">54.0</td><td class="n3">49.0</td><td class="n1" style="font-weight:700">35.6</td><td><span class="gp gpD">D</span></td><td style="font-size:10px;color:var(--mu)">情景概率加权</td></tr><tr><td class="n1" style="font-weight:700;color:#e8b04b">SMR</td><td style="color:var(--mu)">SMR（轻水堆）</td><td class="n4">82.0</td><td class="n2">40.8</td><td class="n2">37.0</td><td class="n1" style="font-weight:700">24.0</td><td><span class="gp gpD">D</span></td><td style="font-size:10px;color:var(--mu)">情景概率加权</td></tr></tbody></table></div>
+<div class="footer">AI能源基础设施专项投资打分系统 v3.0（Secular框架+辩证预检）&nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考</div>
+</div></body></html>
