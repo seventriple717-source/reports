@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI能源评分 · 设备与电力系统 | VRT ETN HUBB POWL MPWR</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;
+--vrt:#58a6ff;--etn:#76e3b0;--hubb:#bc8cff;--powl:#f0883e;--mpwr:#ffd700;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1280px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:24px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.hdr h1{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.hdr p{color:var(--mu);font-size:11px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sc.vrt::before{background:var(--vrt);}.sc.etn::before{background:var(--etn);}
+.sc.hubb::before{background:var(--hubb);}.sc.powl::before{background:var(--powl);}.sc.mpwr::before{background:var(--mpwr);}
+.tk{font-size:15px;font-weight:700;color:#fff;}.cn{font-size:9px;color:var(--mu);margin:2px 0 7px;}
+.fs{font-size:34px;font-weight:800;line-height:1;margin-bottom:2px;}
+.fA{color:var(--s4);}.fB{color:var(--s3);}.fC{color:var(--s2);}
+.gp{display:inline-block;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:700;margin-bottom:6px;}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.m3{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:10px;}
+.m3 label{color:var(--mu);display:block;}.m3 span{font-weight:700;font-size:11px;}
+.vd{font-size:10px;color:var(--mu);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);line-height:1.5;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:5px 7px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 7px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.sr{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.sl{width:155px;font-size:10px;flex-shrink:0;}
+.sbw{flex:1;background:rgba(255,255,255,.05);border-radius:3px;height:4px;overflow:hidden;}
+.sb{height:100%;border-radius:3px;}
+.sn{width:20px;text-align:right;font-size:10px;font-weight:700;flex-shrink:0;}
+.swt{width:30px;text-align:right;font-size:10px;color:var(--mu);flex-shrink:0;}
+.ev{font-size:10px;color:var(--mu);margin-left:161px;margin-bottom:5px;padding:3px 6px;background:rgba(255,255,255,.02);border-left:2px solid var(--border);border-radius:0 3px 3px 0;line-height:1.5;}
+.ev.g{border-color:var(--s4);background:rgba(63,185,80,.03);}
+.ev.w{border-color:var(--s2);}
+.d5{background:var(--s5);}.d4{background:var(--s4);}.d3{background:var(--s3);}.d2{background:var(--s2);}.d1{background:var(--s1);}.d0{background:var(--s0);}
+.dcf{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:11px;margin-top:8px;}
+.dcf h4{font-size:10px;color:var(--acc);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.df{font-family:"SF Mono","Fira Code",monospace;font-size:10px;background:rgba(0,0,0,.3);padding:8px;border-radius:4px;line-height:1.8;margin:5px 0;}
+.dfr{color:var(--acc);font-weight:700;}
+.st{width:100%;border-collapse:collapse;font-size:10px;margin-top:5px;}
+.st th{background:rgba(255,255,255,.04);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.st td{padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.03);}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:10px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:7px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.co{margin-bottom:24px;}
+.ctag{font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;display:block;}
+.ctag .ctn{font-size:11px;color:var(--mu);margin-left:7px;font-weight:400;}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+.mbx{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:6px;padding:7px;}
+.mbx .ml{font-size:10px;color:var(--mu);margin-bottom:1px;}.mbx .mv{font-size:12px;font-weight:700;color:#fff;}.mbx .mt{font-size:10px;}
+.nb{display:inline-block;background:rgba(63,185,80,.15);color:var(--s4);border:1px solid rgba(63,185,80,.3);border-radius:3px;padding:1px 5px;font-size:9px;margin-left:3px;}
+.wb{display:inline-block;background:rgba(248,81,73,.15);color:var(--s2);border:1px solid rgba(248,81,73,.3);border-radius:3px;padding:1px 5px;font-size:9px;margin-left:3px;}
+.sc-tbl{width:100%;border-collapse:collapse;font-size:10px;}
+.sc-tbl th{background:rgba(255,255,255,.03);color:var(--mu);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);}
+.sc-tbl td{padding:4px 7px;border-bottom:1px solid rgba(255,255,255,.04);}
+.tight{color:var(--s2);font-weight:700;}.ease{color:var(--s3);font-weight:700;}.ok{color:var(--s4);}
+.footer{text-align:center;padding:18px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:20px;}
+@media(max-width:1000px){.g5{grid-template-columns:repeat(2,1fr);}.mg{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">AI能源基础设施专项投资打分系统 v1.0 · 文件2/3：设备与电力系统</div>
+  <h1>AI电力与能源投资评分报告 · 设备与电力系统类</h1>
+  <p>VRT（Vertiv）· ETN（Eaton）· HUBB（Hubbell）· POWL（Powell Industries）· MPWR（Monolithic Power）&nbsp;|&nbsp;2026-06-01</p>
+</div>
+
+<!-- COMPACT LANDSCAPE -->
+<div class="card" style="border-color:rgba(248,81,73,.2);background:rgba(248,81,73,.03);">
+  <div class="ct" style="color:var(--s2)">📡 Step 0 · AI能源全景摘要（完整版见文件1）</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:11px;">
+    <div>
+      <strong style="color:var(--s2)">当前阶段：供需严重失衡</strong>
+      <div style="color:var(--mu);margin-top:4px;line-height:1.7;">全球DC用电1,100 TWh (+50% AI贡献)，50%项目因电力延期。<strong class="neg">变压器交期128周</strong>，电网互联排队5年。超大规模Capex $700-725B合计(+77%)。</div>
+    </div>
+    <div>
+      <strong style="color:var(--text)">设备赛道核心卡点（本文件相关）</strong>
+      <table class="sc-tbl" style="margin-top:5px;">
+        <tr><td>变压器</td><td><span class="tight">极度紧张</span></td><td>128周交期 价格+77%</td></tr>
+        <tr><td>开关设备</td><td><span class="tight">紧张</span></td><td>POWL $400M+数据中心单笔</td></tr>
+        <tr><td>液冷系统</td><td><span class="ease">中等</span></td><td>$5.6-6B市场 +25-31%</td></tr>
+        <tr><td>UPS/配电</td><td><span class="ease">中等</span></td><td>数据中心订单+240%</td></tr>
+        <tr><td>AI服务器电源IC</td><td><span class="tight">偏紧</span></td><td>MPWR NVIDIA平台份额70%</td></tr>
+      </table>
+    </div>
+    <div>
+      <strong style="color:var(--text)">超大规模科技公司最新动态</strong>
+      <div style="color:var(--mu);margin-top:4px;line-height:1.7;">
+        微软：Virginia $50M+ Eaton电网→芯片制造扩张<br>
+        亚马逊：Eaton数据中心电力管理优先供应商<br>
+        NVIDIA：Vera Rubin GPU → MPWR 70%潜在份额<br>
+        超大规模DC建设：美国32 GW在建，165-228 GW规划2030
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="g5">
+  <div class="sc vrt">
+    <div class="tk">VRT</div><div class="cn">Vertiv · NYSE</div>
+    <div class="fs fA">73.2</div><div class="gp gpA">A级 · 重点观察</div>
+    <div class="m3"><div><label>行业</label><span class="n5">92.6</span></div><div><label>公司</label><span class="n5">87.2</span></div><div><label>估值</label><span class="n2">37.0</span></div></div>
+    <div class="vd">液冷+DC电源领导者。EV/EBITDA 52.7x是最大制约。$15B+积压单支撑，但估值已充分定价。</div>
+  </div>
+  <div class="sc mpwr" style="border-color:rgba(255,215,0,.2);">
+    <div class="tk">MPWR</div><div class="cn">Monolithic Power · NASDAQ</div>
+    <div class="fs fB">68.2</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n4">71.4</span></div><div><label>公司</label><span class="n5">91.6</span></div><div><label>估值</label><span class="n3">67.0</span></div></div>
+    <div class="vd">NVIDIA Vera Rubin平台70%潜在份额，企业数据+85% YoY，55%毛利率。半导体公司但AI电源核心。</div>
+  </div>
+  <div class="sc etn">
+    <div class="tk">ETN</div><div class="cn">Eaton · NYSE</div>
+    <div class="fs fB">65.7</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n4">71.6</span></div><div><label>公司</label><span class="n4">80.0</span></div><div><label>估值</label><span class="n2">38.0</span></div></div>
+    <div class="vd">数据中心订单+240%，Boyd Thermal $9.5B收购。多元化（航空/汽车）稀释AI暴露度，EV/EBITDA 24-27x偏贵。</div>
+  </div>
+  <div class="sc hubb">
+    <div class="tk">HUBB</div><div class="cn">Hubbell · NYSE</div>
+    <div class="fs fB">61.4</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n4">80.0</span></div><div><label>public">公司</label><span class="n4">72.8</span></div><div><label>估值</label><span class="n2">30.0</span></div></div>
+    <div class="vd">变压器短缺最直接受益，DMC Power收购进入DC市场。"高于公允价值152%"——B级下沿。</div>
+  </div>
+  <div class="sc powl">
+    <div class="tk">POWL</div><div class="cn">Powell Industries · NASDAQ</div>
+    <div class="fs fC">54.2</div><div class="gp gpC">C级 · 观察</div>
+    <div class="m3"><div><label>行业</label><span class="n5">85.0</span></div><div><label>公司</label><span class="n4">80.4</span></div><div><label>估值</label><span class="n0">10.0</span></div></div>
+    <div class="vd">订单+97%，$400M+数据中心单笔历史最大。但股价+162%/年，P/E 55x，5yr DCF加权回报为负。</div>
+  </div>
+</div>
+
+<!-- ===== VRT ===== -->
+<div class="co">
+<span class="ctag" style="color:var(--vrt)">VRT <span class="ctn">Vertiv Holdings · 数据中心液冷+电源管理领导者 · AI电力基础设施核心设备商</span></span>
+<div class="mg">
+  <div class="mbx"><div class="ml">Q1 2026营收</div><div class="mv pos">$2,650M</div><div class="mt pos">+30% YoY，有机+23%</div></div>
+  <div class="mbx"><div class="ml">调整运营利润率</div><div class="mv pos">20.8%</div><div class="mt pos">+430bps YoY</div></div>
+  <div class="mbx"><div class="ml">项目积压</div><div class="mv pos">>$15B</div><div class="mt pos">同比翻倍以上</div></div>
+  <div class="mbx"><div class="ml">Q4 2025订单增速</div><div class="mv pos">+252% YoY</div><div class="mt">历史最高单季</div></div>
+  <div class="mbx"><div class="ml">FY2026指引营收</div><div class="mv pos">$13.25-13.75B</div><div class="mt">有机增长27-29%</div></div>
+  <div class="mbx"><div class="ml">FY2026 Adj EPS指引</div><div class="mv pos">$5.97-6.07</div><div class="mt">+43-56% vs FY2025</div></div>
+  <div class="mbx"><div class="ml">EV/EBITDA</div><div class="mv neg">52.7x</div><div class="mt neg">估值最大制约</div></div>
+  <div class="mbx"><div class="ml">市值</div><div class="mv">$121.26B</div><div class="mt">2026-05-29</div></div>
+</div>
+<div class="card">
+  <div class="ct">行业吸引力 · VRT · 92.6分（液冷+DC电力管理S级赛道）</div>
+  <div class="sr"><div class="sl">长期需求空间 18</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→18.0</div></div>
+  <div class="ev g">AI机架功耗→120-150kW/架，液冷从可选变刚需。$15B+积压超过全年营收。30%新AI DC部署液冷（2030年目标）。5/5。</div>
+  <div class="sr"><div class="sl">技术演进确定性 14</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→14.0</div></div>
+  <div class="ev g">液冷是AI热管理唯一可行方案——无替代品。Vertiv Q4 2025收购Strategic Thermal Labs强化技术壁垒。来源：Markets and Markets 2026液冷报告。5/5。</div>
+  <div class="sr"><div class="sl">利润池位置 16</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→16.0</div></div>
+  <div class="ev g">调整运营利润率20.8%且持续扩张，定价权强（backlog需求远超供给），卖方市场。5/5。</div>
+  <div class="sr"><div class="sl">行业壁垒 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev">规模+技术深度（PerchRight+STL收购）+客户关系，但Schneider Electric等加速进入。4/5。</div>
+  <div class="sr"><div class="sl">竞争格局 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+  <div class="sr"><div class="sl">资本回收 8</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→8.0</div></div>
+  <div class="ev g">设备制造轻资产模式，backlog覆盖capex，现金回报高度可见。5/5。</div>
+  <div class="sr"><div class="sl">政策监管 7</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→5.6</div></div>
+  <div class="sr"><div class="sl">可验证性 7</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→7.0</div></div>
+  <div style="text-align:right;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><span class="n5" style="font-size:16px;font-weight:700">行业 92.6</span></div>
+</div>
+<div class="card">
+  <div class="ct">公司质量 · VRT · 87.2分</div>
+  <div class="sr"><div class="sl">成长性 20</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→20.0</div></div>
+  <div class="ev g">有机增长23%；FY2026指引27-29%；backlog $15B+超过全年营收；Q4 2025订单+252%。5/5。</div>
+  <div class="sr"><div class="sl">盈利质量与价值创造 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+  <div class="ev">调整运营利润20.8%（+430bps），Adj EPS+43-56%；LBO遗留债务有所稀释但FCF覆盖强。4/5。</div>
+  <div class="sr"><div class="sl">结构性护城河 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev">液冷技术深度+超大规模客户黏性+服务/监控业务复发收入；护城河稳定但竞争者加速追赶。4/5。</div>
+  <div class="sr"><div class="sl">AI数据中心对齐 10</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→10.0</div></div>
+  <div class="ev g">Vertiv IS数据中心电力基础设施。NVIDIA/Microsoft/Amazon/Google均为核心客户。5/5。</div>
+  <div class="sr"><div class="sl">财务稳健 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="sr"><div class="sl">管理层 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+  <div class="ev">Giordano Albertazzi CEO，持续上调指引，PerchRight+STL收购时机准确。4/5。</div>
+  <div class="sr"><div class="sl">客户质量 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="sr"><div class="sl">未来可选性 6</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→6.0</div></div>
+  <div class="ev g">热管理技术延伸至AI机器人、高密度推理集群；液冷即服务模式（循环收入）；APAC/EMEA市场扩张。5/5。</div>
+  <div style="text-align:right;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><span class="n5" style="font-size:16px;font-weight:700">公司质量 87.2</span></div>
+</div>
+<div class="dcf">
+  <h4>估值安全边际 · VRT · 37.0分 ⚠️ EV/EBITDA 52.7x是最大制约</h4>
+  <div class="df">
+FY2026E EBITDA = $13.5B × 20.5% ≈ $2.77B
+Year 5 EBITDA = $2.77B × (1.25)^5 = $8.45B
+Year 5 目标EV = $8.45B × 22x = $185.9B
+Year 5 净债务（估）≈ $0（到时净现金）
+Year 5 股权价值 ≈ $190B
+vs 当前市值 $121.26B
+概率加权年化回报 ≈ <span style="color:var(--s3)">4.5%（2/5）</span>
+—— EV/EBITDA 52.7x透支大部分5年增长</div>
+  <table class="st">
+    <tr><th>情景</th><th>概率</th><th>年化</th></tr>
+    <tr><td>基准 CAGR 25%, 22x退出</td><td>50%</td><td class="neu">9.4%</td></tr>
+    <tr><td>乐观 CAGR 30%, 26x退出</td><td>25%</td><td class="pos">17%</td></tr>
+    <tr><td>悲观 CAGR 12%, 14x退出</td><td>20%</td><td class="neg">-10%</td></tr>
+    <tr><td>颠覆 液冷被替代</td><td>5%</td><td class="neg">-60%</td></tr>
+    <tr style="font-weight:700"><td colspan="2">概率加权</td><td class="neu">4.5%</td></tr>
+  </table>
+  <div style="margin-top:6px;font-size:10px;color:var(--mu)"><strong style="color:var(--text)">10年：更强。</strong>液冷成为数据中心标准配置，市场$20-30B by 2030，Vertiv领导地位稳固。10年市值可见$300-500B。<strong style="color:var(--s3)">问题是当前$121B已定价了这部分。</strong></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px;">
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">情景上行(35)</div><div class="n2">2/5→14</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">相对估值(25)</div><div class="n1">1/5→5</div><div style="font-size:9px;color:var(--mu)">52.7x EV/EBITDA极高</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">下行保护(25)</div><div class="n3">3/5→15</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">历史对比(15)</div><div class="n1">1/5→3</div></div>
+  </div>
+</div>
+<div class="fml" style="margin-top:7px;">
+  <div>92.6×20%=<span class="n5">18.52</span> &nbsp; 87.2×50%=<span class="n5">43.60</span> &nbsp; 37.0×30%=<span class="n2">11.10</span> &nbsp; ×<span class="n5">1.0</span></div>
+  <div class="fr">VRT最终分 = 73.2 · A级 · 重点观察（等回调至EV/EBITDA 35x以下）</div>
+</div>
+</div>
+
+<!-- ===== MPWR ===== -->
+<div class="co">
+<span class="ctag" style="color:var(--mpwr)">MPWR <span class="ctn">Monolithic Power Systems · 电源管理半导体 · AI服务器功率芯片核心供应商</span></span>
+<div style="background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:6px;padding:9px;margin-bottom:9px;font-size:11px;">
+  <strong style="color:var(--mpwr)">⚠️ 分类说明：</strong>MPWR是半导体公司（电源管理IC），更接近AI算力赛道（可用/investment-score-ai深度分析），但因其直接管理AI数据中心服务器的电力效率和分配，在本能源报告中作为"AI服务器电源系统"赛道纳入。
+</div>
+<div class="mg">
+  <div class="mbx"><div class="ml">Q1 2026营收</div><div class="mv pos">$804.2M</div><div class="mt pos">+26.1% YoY</div></div>
+  <div class="mbx"><div class="ml">企业数据增速</div><div class="mv pos">~85% YoY</div><div class="mt pos">FY2026管理层上调指引</div></div>
+  <div class="mbx"><div class="ml">毛利率</div><div class="mv pos">55.4%</div><div class="mt">半导体行业高水平</div></div>
+  <div class="mbx"><div class="ml">Q2 2026指引</div><div class="mv pos">$890-910M</div><div class="mt">继续加速</div></div>
+  <div class="mbx"><div class="ml">NVIDIA Vera Rubin</div><div class="mv pos">70%潜在份额</div><div class="mt">VR200 NVL144/R200 HGX</div></div>
+  <div class="mbx"><div class="ml">通讯增速</div><div class="mv pos">>50% YoY</div><div class="mt">第二大增速驱动</div></div>
+  <div class="mbx"><div class="ml">2030E营收目标</div><div class="mv pos">~$7.3B</div><div class="mt">当前$3.2B → 2.3x</div></div>
+  <div class="mbx"><div class="ml">Goldman AI电力预测</div><div class="mv neg">+165% by 2030</div><div class="mt">AI占全球用电40%+</div></div>
+</div>
+<div class="card">
+  <div class="ct">三层评分 · MPWR · 公司质量出众，估值需验证</div>
+  <div style="font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">行业分（复合）：71.4分 · 企业数据/AI电源45% + 通讯15% + 汽车15% + 消费工业25%</div>
+  <table class="t" style="font-size:10px;margin-bottom:8px;">
+    <tr><td style="color:var(--mu)">企业数据/AI服务器电源（45%）</td><td>行业分88（AI服务器电源芯片刚需）× 45% = 39.6</td></tr>
+    <tr><td style="color:var(--mu)">通讯（15%）</td><td>行业分65 × 15% = 9.75</td></tr>
+    <tr><td style="color:var(--mu)">汽车（15%）</td><td>行业分60 × 15% = 9.0</td></tr>
+    <tr><td style="color:var(--mu)">消费/工业（25%）</td><td>行业分52 × 25% = 13.0</td></tr>
+    <tr style="font-weight:700"><td>加权行业总分</td><td class="n4">71.4</td></tr>
+  </table>
+  <div style="font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">公司质量：91.6分（极优质半导体公司）</div>
+  <div class="sr"><div class="sl">成长性 20</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→20.0</div></div>
+  <div class="ev g">企业数据+85% YoY（管理层上调），Q2指引$890-910M(+12% QoQ)，2030E目标$7.3B = 当前2.3倍。5/5。</div>
+  <div class="sr"><div class="sl">盈利质量与价值创造 16</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→16.0</div></div>
+  <div class="ev g">毛利率55.4%（半导体高端）；ROIC极高（Fabless轻资产）；每颗AI服务器需要的电源IC都贡献royalty-like经济。5/5。</div>
+  <div class="sr"><div class="sl">结构性护城河 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev">NVIDIA平台设计赢单（一旦设计进入很难替换）+专有电源管理技术IP+高度依赖设计合作关系。4/5。</div>
+  <div class="sr"><div class="sl">AI数据中心对齐 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="ev">NVIDIA Vera Rubin平台70%潜在份额=$100M+增量；数据中心每台服务器都需要MPWR的电源芯片。4/5。</div>
+  <div class="sr"><div class="sl">财务稳健 10</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→10.0</div></div>
+  <div class="ev g">Fabless模式，极低capex，强FCF，净现金正，无负债。5/5。</div>
+  <div class="sr"><div class="sl">管理层 12</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→12.0</div></div>
+  <div class="ev g">Michael Hsing创始人持股，历史ROIC极高，2030年$7.3B目标明确，以股权为主激励机制。5/5。</div>
+  <div class="sr"><div class="sl">客户质量 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="ev">NVIDIA/大型OEM = 顶级客户，设计赢单粘性高，但NVIDIA集中度存在。4/5。</div>
+  <div class="sr"><div class="sl">未来可选性 6</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→4.8</div></div>
+  <div style="text-align:right;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><span class="n5" style="font-size:16px;font-weight:700">公司质量 91.6</span></div>
+</div>
+<div class="dcf">
+  <h4>估值建模 · MPWR（市值估算~$35B）</h4>
+  <div class="df">
+注：MPWR市值未在研究中明确，基于FY2026E营收$3.2B × 典型P/S 10x = ~$32B估计
+FY2026E EBITDA ≈ $3.2B × 28% ≈ $896M（非GAAP运营利润率~30%）
+Year 5 EBITDA = $896M × (1.25)^5 = $2.73B
+Year 5 EV = $2.73B × 30x（半导体成长溢价）= $81.9B
+vs 当前市值~$35B
+5年年化回报 ≈ <span class="dfr">~18.5%（4/5）</span></div>
+  <table class="st">
+    <tr><th>情景</th><th>概率</th><th>年化</th></tr>
+    <tr><td>基准 CAGR 25%, 30x</td><td>50%</td><td class="pos">18.5%</td></tr>
+    <tr><td>乐观 CAGR 35%, 38x（NVIDIA垄断）</td><td>25%</td><td class="pos">34%</td></tr>
+    <tr><td>悲观 CAGR 12%, 18x</td><td>20%</td><td class="neg">-4%</td></tr>
+    <tr><td>颠覆 NVIDIA换供应商</td><td>5%</td><td class="neg">-50%</td></tr>
+    <tr style="font-weight:700"><td colspan="2">概率加权</td><td class="pos">16.5%</td></tr>
+  </table>
+  <div style="margin-top:5px;font-size:10px;color:var(--s3)">⚠️ 注意：市值约估值，实际需确认当前股价。若市值>$60B，回报将显著下降。建议在/investment-score-ai中单独深度分析MPWR。</div>
+</div>
+<div class="fml" style="margin-top:7px;">
+  <div>71.4×20%=<span class="n4">14.28</span> &nbsp; 91.6×50%=<span class="n5">45.80</span> &nbsp; 67.0×30%=<span class="n3">20.10</span> &nbsp; ×<span class="n4">0.85</span>（非传统能源公司，市值不确定）</div>
+  <div class="fr">MPWR最终分 = 80.18 × 0.85 = 68.2 · B级</div>
+</div>
+</div>
+
+<!-- ===== ETN ===== -->
+<div class="co">
+<span class="ctag" style="color:var(--etn)">ETN <span class="ctn">Eaton Corporation · 多元化电力管理 · 变压器+开关+UPS+液冷</span></span>
+<div class="mg">
+  <div class="mbx"><div class="ml">Q1 2026营收</div><div class="mv pos">$7.5B（记录）</div><div class="mt pos">+17% YoY</div></div>
+  <div class="mbx"><div class="ml">数据中心订单</div><div class="mv pos">+240% YoY</div><div class="mt pos">电气业务最强驱动</div></div>
+  <div class="mbx"><div class="ml">电气Americas订单</div><div class="mv pos">+60% YoY</div><div class="mt">持续加速</div></div>
+  <div class="mbx"><div class="ml">Boyd Thermal收购</div><div class="mv pos">$9.5B</div><div class="mt">液冷进入数据中心</div></div>
+  <div class="mbx"><div class="ml">段利润率</div><div class="mv pos">22.7%</div><div class="mt">记录水平</div></div>
+  <div class="mbx"><div class="ml">EV/EBITDA</div><div class="mv neg">24-27x</div><div class="mt neg">高于行业中位41%</div></div>
+  <div class="mbx"><div class="ml">FY2026 Adj EPS</div><div class="mv">$13.05-13.50</div><div class="mt">+10% YoY</div></div>
+  <div class="mbx"><div class="ml">市值</div><div class="mv">$156.36B</div><div class="mt">2026-05-22</div></div>
+</div>
+<div class="card">
+  <div class="ct">三层评分 · ETN · 行业加权71.6分（多元化）</div>
+  <table class="t" style="font-size:10px;margin-bottom:8px;">
+    <tr><td style="color:var(--mu)">Electrical Americas（35%）→ 行业分88</td><td class="pos">30.8</td></tr>
+    <tr><td style="color:var(--mu)">Electrical Global（25%）→ 行业分80</td><td class="pos">20.0</td></tr>
+    <tr><td style="color:var(--mu)">Aerospace（20%）→ 行业分55（非AI能源）</td><td class="neu">11.0</td></tr>
+    <tr><td style="color:var(--mu)">Mobility（15%）→ 行业分45</td><td class="neg">6.75</td></tr>
+    <tr><td style="color:var(--mu)">eMobility（5%）→ 行业分60</td><td>3.0</td></tr>
+    <tr style="font-weight:700"><td>加权行业分</td><td class="n4">71.6</td></tr>
+  </table>
+  <div style="font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">公司质量：80.0分</div>
+  <div class="sr"><div class="sl">成长性 20</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→16.0</div></div>
+  <div class="ev g">DC订单+240%，电气Americas+60%，Boyd Thermal+$1.7B销售贡献。3年增速轨迹向上确定。4/5。</div>
+  <div class="sr"><div class="sl">盈利质量 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+  <div class="ev">段利润率22.7%记录，FCF +245% YoY，Boyd Thermal加速ROIC提升。4/5。</div>
+  <div class="sr"><div class="sl">结构性护城河 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev">全产品线电力管理（grid-to-chip）+Boyd Thermal液冷+Eaton品牌；护城河稳定扩展。4/5。</div>
+  <div class="sr"><div class="sl">AI数据中心对齐 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="ev">Boyd Thermal专门针对AI液冷（+70% YoY）；$50M+Virginia工厂扩张；DC订单+240%。但非纯AI公司——航空/汽车业务稀释。4/5。</div>
+  <div class="sr"><div class="sl">财务稳健 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="sr"><div class="sl">管理层 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+  <div class="ev">Craig Arnold CEO，Boyd Thermal收购时机准确，Virginia扩张战略明确。4/5。</div>
+  <div class="sr"><div class="sl">客户质量 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="sr"><div class="sl">未来可选性 6</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→4.8</div></div>
+  <div style="text-align:right;margin-top:6px;padding-top:6px;border-top:1px solid var(--border)"><span class="n4" style="font-size:16px;font-weight:700">公司质量 80.0</span></div>
+</div>
+<div class="dcf">
+  <h4>估值 · ETN · 38.0分（多元化折价+高估值）</h4>
+  <div class="df">
+FY2026E EBITDA ≈ $6.8B（22.7%×$30B估计）
+Year 5 EBITDA = $6.8B × (1.12)^5 = $11.97B
+Year 5 EV = $11.97B × 18x = $215.5B
+Year 5 净债务 ≈ -$15B
+Year 5 股权价值 ≈ $200B
+5年股息累计 ≈ $8.6B
+加权年化回报 ≈ <span style="color:var(--s3)">3.2%（1/5）</span>——$156B市值过高</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px;">
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">情景上行(35)</div><div class="n1">1/5→7</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">相对估值(25)</div><div class="n2">2/5→10</div><div style="font-size:9px;color:var(--mu)">EV/EBITDA 41%高于中位</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">下行保护(25)</div><div class="n3">3/5→15</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">历史对比(15)</div><div class="n2">2/5→6</div></div>
+  </div>
+</div>
+<div class="fml" style="margin-top:7px;">
+  <div>71.6×20%=<span class="n4">14.32</span> &nbsp; 80.0×50%=<span class="n4">40.00</span> &nbsp; 38.0×30%=<span class="n2">11.40</span> &nbsp; ×<span class="n5">1.0</span></div>
+  <div class="fr">ETN最终分 = 65.7 · B级</div>
+</div>
+</div>
+
+<!-- ===== HUBB ===== -->
+<div class="co">
+<span class="ctag" style="color:var(--hubb)">HUBB <span class="ctn">Hubbell Inc · 电气设备（变压器+开关）+ DMC Power数据中心 · 电网短缺最直接受益</span></span>
+<div class="mg">
+  <div class="mbx"><div class="ml">Q1 2026营收</div><div class="mv pos">$1,516.7M</div><div class="mt pos">+11% YoY，有机+8%</div></div>
+  <div class="mbx"><div class="ml">调整EPS</div><div class="mv pos">$3.93</div><div class="mt pos">+16% YoY</div></div>
+  <div class="mbx"><div class="ml">调整运营利润率</div><div class="mv pos">19.8%</div><div class="mt">持续扩张</div></div>
+  <div class="mbx"><div class="ml">DMC Power收购</div><div class="mv pos">$825M</div><div class="mt">DC电力基础设施</div></div>
+  <div class="mbx"><div class="ml">变压器行业交期</div><div class="mv neg">128周（行业）</div><div class="mt neg">HUBB订单积压增厚</div></div>
+  <div class="mbx"><div class="ml">FY2026 Adj EPS指引</div><div class="mv">$19.30-19.85</div><div class="mt">上调</div></div>
+  <div class="mbx"><div class="ml">P/E</div><div class="mv neg">28.61x</div><div class="mt neg">研究方：高于公允152%</div></div>
+  <div class="mbx"><div class="ml">市值</div><div class="mv">~$26B</div><div class="mt">2026-05-27</div></div>
+</div>
+<div class="card">
+  <div class="ct">三层评分 · HUBB · 行业80分（变压器短缺核心受益）· 公司质量72.8分</div>
+  <div class="sr"><div class="sl">长期需求空间 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev g">变压器30%供应缺口，$30B全球DC电气基础设施市场，格栅现代化长期趋势。4/5。</div>
+  <div class="sr"><div class="sl">技术演进确定性 14</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→14.0</div></div>
+  <div class="ev g">变压器是刚需，无替代品，无法绕过。短缺将持续至2027-2028年（新产能建设中）。5/5。</div>
+  <div class="sr"><div class="sl">利润池位置 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+  <div class="ev">变压器价格+77%，Hubbell从中获益；但产品种类多样，定价权分散。4/5。</div>
+  <div class="sr"><div class="sl">行业壁垒 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="sr"><div class="sl">竞争格局 12</div><div class="sbw"><div class="sb d3" style="width:60%"></div></div><div class="sn n3">3/5</div><div class="swt">→7.2</div></div>
+  <div class="sr"><div class="sl">资本回收 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="sr"><div class="sl">政策监管 7</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→5.6</div></div>
+  <div class="sr"><div class="sl">可验证性 7</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→5.6</div></div>
+  <!-- Company quality abbreviated -->
+  <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+    <div style="font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">公司质量：72.8分</div>
+    <div class="sr"><div class="sl">成长性 20</div><div class="sbw"><div class="sb d3" style="width:60%"></div></div><div class="sn n3">3/5</div><div class="swt">→12.0</div></div>
+    <div class="ev">营收+11%（有机+8%）——transformer shortage顺风但非爆发性；DMC增量有限（2026约$0.20 EPS）。3/5。</div>
+    <div class="sr"><div class="sl">盈利质量 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+    <div class="ev g">调整利润率19.8%，EPS+16%，ROIC超过WACC，价值创造正向。4/5。</div>
+    <div class="sr"><div class="sl">结构性护城河 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+    <div class="sr"><div class="sl">AI数据中心对齐 10</div><div class="sbw"><div class="sb d3" style="width:60%"></div></div><div class="sn n3">3/5</div><div class="swt">→6.0</div></div>
+    <div class="ev">DMC Power收购直接进入DC电力；变压器短缺间接受益。但非AI纯暴露。3/5。</div>
+    <div class="sr"><div class="sl">财务稳健 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+    <div class="sr"><div class="sl">管理层 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+    <div class="sr"><div class="sl">客户质量 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+    <div class="sr"><div class="sl">未来可选性 6</div><div class="sbw"><div class="sb d3" style="width:60%"></div></div><div class="sn n3">3/5</div><div class="swt">→3.6</div></div>
+  </div>
+</div>
+<div class="dcf">
+  <h4>估值 · HUBB · 30.0分 ⚠️ "高于公允价值152%"</h4>
+  <div class="df">
+FY2026E EBITDA ≈ $1.3B（估计）
+Year 5 EBITDA = $1.3B × (1.10)^5 = $2.1B × 16x = $33.6B
+vs 当前$26B → 5yr年化 ≈ 2.1%（仅含价格上涨；股息+$1.7B）
+综合5yr年化 ≈ <span style="color:var(--s2)">3.6%（1/5）</span>
+— 变压器短缺高峰溢价已定价，2028年产能扩张后收益压缩</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px;">
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">情景上行(35)</div><div class="n1">1/5→7</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">相对估值(25)</div><div class="n1">1/5→5</div><div style="font-size:9px;color:var(--mu)">P/E 28.6x，高于公允152%</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">下行保护(25)</div><div class="n3">3/5→15</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">历史对比(15)</div><div class="n1">1/5→3</div></div>
+  </div>
+</div>
+<div class="fml" style="margin-top:7px;">
+  <div>80.0×20%=<span class="n4">16.00</span> &nbsp; 72.8×50%=<span class="n4">36.40</span> &nbsp; 30.0×30%=<span class="n2">9.00</span> &nbsp; ×<span class="n5">1.0</span></div>
+  <div class="fr">HUBB最终分 = 61.4 · B级下沿（好公司，等估值修正）</div>
+</div>
+</div>
+
+<!-- ===== POWL ===== -->
+<div class="co">
+<span class="ctag" style="color:var(--powl)">POWL <span class="ctn">Powell Industries · 定制开关设备 · $400M+数据中心历史最大单笔合同</span></span>
+<div class="mg">
+  <div class="mbx"><div class="ml">Q2 FY2026营收</div><div class="mv pos">$296.6M</div><div class="mt pos">+6% YoY</div></div>
+  <div class="mbx"><div class="ml">新订单</div><div class="mv pos">$490M</div><div class="mt pos">+97% YoY</div></div>
+  <div class="mbx"><div class="ml">积压订单</div><div class="mv pos">$1.8B</div><div class="mt pos">+33% YoY，延伸至2028</div></div>
+  <div class="mbx"><div class="ml">历史最大数据中心单笔</div><div class="mv pos">>$400M</div><div class="mt pos">Q2季后获得</div></div>
+  <div class="mbx"><div class="ml">P/E</div><div class="mv neg">55.58x</div><div class="mt neg">极高</div></div>
+  <div class="mbx"><div class="ml">股价12月涨幅</div><div class="mv neg">+162%</div><div class="mt neg">历史高点$328</div></div>
+  <div class="mbx"><div class="ml">市值</div><div class="mv">~$10.7B</div><div class="mt">2026-05-31</div></div>
+  <div class="mbx"><div class="ml">3-for-1拆股</div><div class="mv pos">董事会批准</div><div class="mt">流动性改善</div></div>
+</div>
+<div class="card">
+  <div class="ct">三层评分 · POWL · 行业85分（开关设备赛道S级）· 估值严重透支</div>
+  <div style="font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">行业：85分（开关设备 = 数据中心上电的关键节点）</div>
+  <div class="sr"><div class="sl">长期需求空间 18</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→18.0</div></div>
+  <div class="ev g">$400M+单笔DC订单；美国27%数据中心到2030离网；订单积压$1.8B延伸至2028。5/5。</div>
+  <div class="sr"><div class="sl">技术演进确定性 14</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→14.0</div></div>
+  <div class="ev g">定制开关设备是任何电力安装的必经节点，无绕过方式。离网数据中心+在线发电需求推动。5/5。</div>
+  <div class="sr"><div class="sl">利润池位置 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+  <div class="sr"><div class="sl">行业壁垒 18</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→14.4</div></div>
+  <div class="ev">定制设计+Houston工厂专业化+规模扩张；小公司规模限制了护城河宽度。4/5。</div>
+  <div class="sr"><div class="sl">竞争格局 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+  <div class="sr"><div class="sl">资本回收 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="sr"><div class="sl">政策监管 7</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→5.6</div></div>
+  <div class="sr"><div class="sl">可验证性 7</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→5.6</div></div>
+  <div style="text-align:right;margin-top:4px;padding-top:4px;border-top:1px solid var(--border)"><span class="n5" style="font-size:14px;font-weight:700">行业 85.0</span></div>
+  <div style="margin-top:8px;font-size:10px;color:var(--acc);font-weight:700;margin-bottom:5px;">公司质量：80.4分</div>
+  <div class="sr"><div class="sl">成长性 20</div><div class="sbw"><div class="sb d5" style="width:100%"></div></div><div class="sn n5">5/5</div><div class="swt">→20.0</div></div>
+  <div class="ev g">新订单+97%，$400M+历史最大单笔，积压$1.8B(+33%)延至2028。5/5。</div>
+  <div class="sr"><div class="sl">盈利质量 16</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→12.8</div></div>
+  <div class="ev">毛利率29.6%，净利润+19%，ROIC改善中。4/5。</div>
+  <div class="sr"><div class="sl">结构性护城河 18</div><div class="sbw"><div class="sb d3" style="width:60%"></div></div><div class="sn n3">3/5</div><div class="swt">→10.8</div></div>
+  <div class="ev">小规模公司（$10B市值），定制化有壁垒但规模有限。3/5。</div>
+  <div class="sr"><div class="sl">AI数据中心对齐 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="ev g">$400M+历史最大DC单笔，on-site generation switchgear直接服务AI数据中心离网部署。4/5。</div>
+  <div class="sr"><div class="sl">财务稳健 10</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→8.0</div></div>
+  <div class="sr"><div class="sl">管理层 12</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→9.6</div></div>
+  <div class="sr"><div class="sl">客户质量 8</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→6.4</div></div>
+  <div class="sr"><div class="sl">未来可选性 6</div><div class="sbw"><div class="sb d4" style="width:80%"></div></div><div class="sn n4">4/5</div><div class="swt">→4.8</div></div>
+  <div style="text-align:right;margin-top:4px;padding-top:4px;border-top:1px solid var(--border)"><span class="n4" style="font-size:14px;font-weight:700">公司质量 80.4</span></div>
+</div>
+<div class="dcf">
+  <h4>估值 · POWL · 10.0分 ⚠️ P/E 55.6x，股价+162%，5yr DCF为负</h4>
+  <div class="df">
+FY2026E EBITDA ≈ $250M（估）
+Year 5 EBITDA = $250M × (1.20)^5 = $622M × 18x = $11.2B
+vs 当前$10.7B → 年化仅0.9%
+Bull(30% CAGR,22x): $927M × 22x = $20.4B → 13.7%年化
+Bear(10%,12x): $402M × 12x = $4.83B → -14.2%年化
+概率加权 = <span style="color:var(--s2)">-2.3%（0/5）</span>——162%涨幅已透支</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px;">
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">情景上行(35)</div><div class="n0">0/5→0</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">相对估值(25)</div><div class="n0">0/5→0</div><div style="font-size:9px;color:var(--mu)">P/E 55.6x极高</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">下行保护(25)</div><div class="n2">2/5→10</div></div>
+    <div style="background:rgba(255,255,255,.025);border-radius:4px;padding:5px;font-size:10px;"><div style="color:var(--mu)">历史对比(15)</div><div class="n0">0/5→0</div></div>
+  </div>
+</div>
+<div class="fml" style="margin-top:7px;">
+  <div>85.0×20%=<span class="n5">17.00</span> &nbsp; 80.4×50%=<span class="n4">40.20</span> &nbsp; 10.0×30%=<span class="n0">3.00</span> &nbsp; ×<span class="n4">0.9</span></div>
+  <div class="fr">POWL最终分 = 60.2 × 0.9 = 54.2 · C级（好公司坏价格，等调整至P/E 25x以下）</div>
+</div>
+</div>
+
+<!-- SUMMARY TABLE -->
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+  <div class="ct" style="color:var(--acc)">📌 设备与电力系统类综合结论（文件2/3）</div>
+  <table class="t">
+    <thead><tr><th>公司</th><th>赛道</th><th>行业</th><th>公司质量</th><th>估值</th><th>置信度</th><th>最终</th><th>级别</th><th>核心判断</th></tr></thead>
+    <tbody>
+      <tr><td class="n4" style="font-weight:700;color:var(--vrt)">VRT</td><td style="color:var(--mu)">液冷/DC电力</td><td class="n5">92.6</td><td class="n5">87.2</td><td class="n2">37.0</td><td>1.0</td><td class="n4" style="font-weight:700">73.2</td><td><span class="gp gpA">A</span></td><td style="color:var(--s4)">液冷必须品，等EV/EBITDA 35x以下入场</td></tr>
+      <tr><td class="n3" style="font-weight:700;color:var(--mpwr)">MPWR</td><td style="color:var(--mu)">AI电源半导体</td><td class="n4">71.4</td><td class="n5">91.6</td><td class="n3">67.0</td><td>0.85</td><td class="n3" style="font-weight:700">68.2</td><td><span class="gp gpB">B</span></td><td style="color:var(--s3)">NVIDIA Vera Rubin 70%潜在份额，建议/investment-score-ai深析</td></tr>
+      <tr><td class="n3" style="font-weight:700;color:var(--etn)">ETN</td><td style="color:var(--mu)">多元化电力</td><td class="n4">71.6</td><td class="n4">80.0</td><td class="n2">38.0</td><td>1.0</td><td class="n3" style="font-weight:700">65.7</td><td><span class="gp gpB">B</span></td><td style="color:var(--s3)">DC订单+240%，Boyd Thermal，多元化稀释纯AI暴露</td></tr>
+      <tr><td class="n3" style="font-weight:700;color:var(--hubb)">HUBB</td><td style="color:var(--mu)">变压器/开关</td><td class="n4">80.0</td><td class="n4">72.8</td><td class="n2">30.0</td><td>1.0</td><td class="n3" style="font-weight:700">61.4</td><td><span class="gp gpB">B</span></td><td style="color:var(--s3)">变压器短缺最直接受益，但"高于公允152%"</td></tr>
+      <tr><td class="n2" style="font-weight:700;color:var(--powl)">POWL</td><td style="color:var(--mu)">定制开关设备</td><td class="n5">85.0</td><td class="n4">80.4</td><td class="n0">10.0</td><td>0.9</td><td class="n2" style="font-weight:700">54.2</td><td><span class="gp gpC">C</span></td><td style="color:var(--s2)">股价+162%，P/E 55x，5yr DCF负回报，观察等待</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top:10px;padding:9px;background:rgba(88,166,255,.05);border:1px solid rgba(88,166,255,.2);border-radius:6px;font-size:11px;line-height:1.8;">
+    <strong style="color:var(--acc)">设备类核心洞察：</strong>整个赛道基本面极强（DC订单全面爆发），但股价已充分反映。<strong>VRT是其中估值最合理的（A级）</strong>，但EV/EBITDA 52.7x仍高。<strong>MPWR公司质量最高（91.6分）</strong>但作为半导体公司更适合AI算力框架。<strong>POWL最典型的"好公司坏价格"</strong>——+162%涨幅后DCF为负，等P/E回落到25-30x再看。
+  </div>
+</div>
+
+<div class="footer">AI能源基础设施专项投资打分系统 v1.0 · 文件2/3：设备与电力系统 &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考<br>
+VRT Q1 2026(04-22) · ETN Q1 2026(05-05) · HUBB Q1 2026(04-30) · POWL Q2 FY2026(05-04) · MPWR Q1 2026(04-30)</div>
+</div>
+</body>
+</html>
