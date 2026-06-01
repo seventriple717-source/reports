@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<title>AI能源评分v2 · 设备类 | VRT ETN HUBB POWL MPWR</title><style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:22px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hdr h1{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;}
+.pre-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:11px;margin:8px 0;}
+.pre-box h4{font-size:10px;color:var(--acc);font-weight:700;text-transform:uppercase;margin-bottom:7px;}
+.warn-box{background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:6px;padding:9px;margin:7px 0;font-size:10px;}
+.ok-box{background:rgba(63,185,80,.05);border:1px solid rgba(63,185,80,.2);border-radius:6px;padding:9px;margin:7px 0;font-size:10px;}
+.qp-box{background:rgba(210,153,34,.05);border:1px solid rgba(210,153,34,.2);border-radius:7px;padding:10px;margin:8px 0;font-size:10px;line-height:1.7;}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:10px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:7px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.cmp-row{display:flex;gap:6px;align-items:center;font-size:10px;margin-bottom:4px;}
+.yr-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-top:7px;}
+.yr-tbl th{background:rgba(255,255,255,.04);padding:4px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.yr-tbl td{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.03);}
+.footer{text-align:center;padding:16px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:20px;}
+.tag{display:inline-block;border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-up{background:rgba(63,185,80,.2);color:var(--s4);}
+.tag-dn{background:rgba(248,81,73,.2);color:var(--s2);}
+.tag-same{background:rgba(139,148,158,.2);color:var(--mu);}
+</style></head><body>
+<div class="wrap">
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">AI能源基础设施专项投资打分 v2.0 · 辩证框架更新 · 文件2/3：设备类</div>
+  <h1>AI电力与能源投资评分报告（v2·辩证框架）</h1>
+  <p>VRT · ETN · HUBB · POWL · MPWR &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 核心变化：成本输入预检 → HUBB B降C</p>
+</div>
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">🔄 v2辩证框架核心变化说明</div>
+<table class="t" style="font-size:11px;">
+<thead><tr><th>预检项</th><th>v1 的错误</th><th>v2 的修正</th></tr></thead>
+<tbody>
+<tr><td class="neg">预检一<br>战略重要性≠投资吸引力</td><td>战略重要 → 直接高分，不检查估值是否已定价</td><td>每个高分维度必须检验"是否已被股价完全反映"</td></tr>
+<tr><td class="neg">预检二<br>分类标签锚定</td><td>"EPC=项目制=薄利"标签直接决定盈利质量低分</td><td>逐公司追踪实际合同结构（固定vs成本加成vs可调）</td></tr>
+<tr><td class="neg">预检三<br>成本输入可控性</td><td>假设设备商利润稳定，EPC利润脆弱——方向相反</td><td>HUBB铜60%+成本暴露→降分；EME本土劳动力+传导→不降分</td></tr>
+<tr><td class="neg">预检四<br>合同确定性压力测试</td><td>CEG 20年PPA直接接受"高确定性"</td><td>追问传输延迟2030年→PPA实际交付缺口→护城河/客户质量降分</td></tr>
+<tr><td class="pos">新增：技术中立性溢价</td><td>EPC技术演进不确定性评3/5（与核电同等或更低）</td><td>EPC技术中立（核/气/SMR/太阳能均需其施工）→技术演进确定性+1分</td></tr>
+<tr><td class="pos">新增：物理执行约束</td><td>EPC护城河低于核电执照</td><td>物理执行约束是真实护城河——EME 3→4分，PWR 4→5分</td></tr>
+<tr><td class="pos">新增：质量vs价格分离</td><td>分低=公司差（混淆）</td><td>低分明确标注：业务质量问题 or 估值透支，给出重评触发价格</td></tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #58a6ff;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Vertiv Holdings <span style="color:#58a6ff;font-size:13px;margin-left:6px">液冷+DC电源</span>
+  <span class="gp gpA" style="margin-left:8px">A级</span>
+  <span class="tag tag-dn">↓ 73.2→71.6</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$2,650M (+30%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">有机增速</td><td><strong>23%</strong></td></tr><tr><td class="lc" style="color:var(--mu)">积压</td><td><strong>$15B+</strong></td></tr><tr><td class="lc" style="color:var(--mu)">FY2026 EPS指引</td><td><strong>$5.97-6.07</strong></td></tr><tr><td class="lc" style="color:var(--mu)">EV/EBITDA</td><td><strong>52.7x</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n5">92.6</td><td style="color:var(--mu)">公司质量</td><td class="n4">84.0</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n2">37.0</td><td style="color:var(--mu)">置信度</td><td>1.0</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>92.6×20%=18.52 + 84.0×50%=42.00 + 37.0×30%=11.10</div>
+      <div class="fr">最终分 = 71.6 · A级 · 重点观察</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>⚠️ 铜（液冷管路/铝材/钢材）是主要原材料，全球大宗商品，价格波动VRT难以完全对冲。分析结论：→ 盈利质量从4/5降至3/5（铜价风险在固定价格合同下由VRT吸收部分）</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>通过。VRT的商业模式是设备销售+服务合同，非长期PPA，无发电量交付义务。订单积压$15B+由具体项目合同支撑。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>✅ 液冷设备是AI数据中心刚需，业务质量高（A级）。评分微降（73.2→71.6）源于铜成本暴露的正确定价，不是业务变坏。
+若EV/EBITDA从52.7x降至35x（股价约-34%），5yr DCF年化回报将从4.5%升至约12%，届时应重新评估至S级。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$190B，年化<strong>9.4%（base），4.5%加权</strong></td><td>$300-500B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，液冷成标准配置</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #ffd700;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Monolithic Power <span style="color:#ffd700;font-size:13px;margin-left:6px">AI服务器电源IC</span>
+  <span class="gp gpB" style="margin-left:8px">B级</span>
+  <span class="tag tag-same">→ 68.2</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$804M (+26%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">企业数据增速</td><td><strong>~85% YoY</strong></td></tr><tr><td class="lc" style="color:var(--mu)">毛利率</td><td><strong>55.4%</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Q2指引</td><td><strong>$890-910M</strong></td></tr><tr><td class="lc" style="color:var(--mu)">NVIDIA Vera Rubin</td><td><strong>70%潜在份额</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">71.4</td><td style="color:var(--mu)">公司质量</td><td class="n5">91.6</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n3">67.0</td><td style="color:var(--mu)">置信度</td><td>0.85</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>71.4×20%=14.28 + 91.6×50%=45.80 + 67.0×30%=20.10</div>
+      <div class="fr">最终分 = 68.2 · B级 · 小仓位</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>主要成本：晶圆代工（TSMC）= 技术IP边际成本趋零。Fabless模式，几乎无大宗商品暴露。→ 成本结构最优，无降分，加分考虑（但已体现在5/5盈利质量评分中）。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>NVIDIA平台设计赢单是合同锁定型（一旦设计进入很难替换）。通过。非PPA，无发电量交付风险。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>✅ MPWR是五家设备公司中公司质量最高（91.6分）。评分B级主要反映估值不确定性（市值估算偏差风险）。
+建议用/investment-score-ai深度分析（它是半导体公司，非传统能源公司）。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>~$95B（若市值$35B），年化<strong>~22%</strong></td><td>$150-250B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，AI电源IC不可或缺</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #76e3b0;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Eaton Corporation <span style="color:#76e3b0;font-size:13px;margin-left:6px">多元化电力管理</span>
+  <span class="gp gpB" style="margin-left:8px">B级</span>
+  <span class="tag tag-dn">↓ 65.7→64.1</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$7.5B (+17%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">DC订单</td><td><strong>+240% YoY</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Boyd Thermal</td><td><strong>$9.5B收购</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Adj EPS指引</td><td><strong>$13.05-13.50</strong></td></tr><tr><td class="lc" style="color:var(--mu)">市值</td><td><strong>$156B</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">71.6</td><td style="color:var(--mu)">公司质量</td><td class="n4">76.8</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n2">38.0</td><td style="color:var(--mu)">置信度</td><td>1.0</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>71.6×20%=14.32 + 76.8×50%=38.40 + 38.0×30%=11.40</div>
+      <div class="fr">最终分 = 64.1 · B级 · 小仓位</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>⚠️ 铜绕组+矽钢片（电气分部主要原材料）+ 航空级铝合金/钛（航空分部）= 多元素全球大宗商品暴露。Boyd Thermal也有铜/铝制冷管路风险。→ 盈利质量从4/5降至3/5</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>Boyd Thermal收购专门针对AI液冷——设备销售合同，非PPA。通过。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>B级维持，评分微降（65.7→64.1）。业务质量实际上比预期好（DC订单+240%），但成本暴露和多元化稀释AI敞口是真实制约。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$200B，年化<strong>5.4%（base）</strong></td><td>$250-400B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，grid-to-chip布局</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #bc8cff;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Hubbell Inc <span style="color:#bc8cff;font-size:13px;margin-left:6px">变压器/开关设备</span>
+  <span class="gp gpC" style="margin-left:8px">C级 <span class="tag tag-dn">B→C</span></span>
+  <span class="tag tag-dn">↓ 61.4→59.8</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$1,517M (+11%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">变压器交期</td><td><strong>行业128周</strong></td></tr><tr><td class="lc" style="color:var(--mu)">DMC Power</td><td><strong>$825M收购</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Adj EPS指引</td><td><strong>$19.30-19.85</strong></td></tr><tr><td class="lc" style="color:var(--mu)">市值</td><td><strong>~$26B</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">80.0</td><td style="color:var(--mu)">公司质量</td><td class="n3">69.6</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n2">30.0</td><td style="color:var(--mu)">置信度</td><td>1.0</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>80.0×20%=16.00 + 69.6×50%=34.80 + 30.0×30%=9.00</div>
+      <div class="fr">最终分 = 59.8 · C级 · 观察期</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>🔴 最关键的成本输入发现：变压器铜绕组+矽钢片=成本60%+，全部是全球大宗商品。铜价2021-2025年大幅波动（+65%），矽钢片中国/巴西产能集中。HUBB无法完全将成本上涨传导给客户（部分固定价格合同）。→ 盈利质量从4/5降至3/5（这是v2最重要的分析修正之一）
+这直接导致HUBB从B级降至C级。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>变压器短缺确实有利，但年调节有限——HUBB主要卖给公用事业和承包商，合同期限较短，无长期PPA类型的收入锁定。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>⚠️ HUBB是v2中变化最大的公司：B→C级。业务本身不差（电网现代化是长期趋势），但：①铜成本暴露被v1严重低估②P/E 28.6x已充分定价变压器短缺溢价。
+若铜价下行且P/E降至20x（股价约-28%），应重新评估至B级。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$29B，年化<strong>3.6%（含股息）</strong></td><td>$35-50B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">稳定，短缺解决后利润率正常化</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #f0883e;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Powell Industries <span style="color:#f0883e;font-size:13px;margin-left:6px">定制开关设备</span>
+  <span class="gp gpC" style="margin-left:8px">C级</span>
+  <span class="tag tag-same">→ 54.2</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q2 FY2026营收</td><td><strong>$296.6M (+6%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">新订单</td><td><strong>$490M (+97%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">积压</td><td><strong>$1.8B</strong></td></tr><tr><td class="lc" style="color:var(--mu)">$400M+数据中心单笔</td><td><strong>历史最大</strong></td></tr><tr><td class="lc" style="color:var(--mu)">P/E</td><td><strong>55.6x</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">85.0</td><td style="color:var(--mu)">公司质量</td><td class="n4">80.4</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n1">10.0</td><td style="color:var(--mu)">置信度</td><td>0.9</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>85.0×20%=17.00 + 80.4×50%=40.20 + 10.0×30%=3.00</div>
+      <div class="fr">最终分 = 54.2 · C级 · 观察期</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>开关设备主要原材料：铜+钢（占成本约40-50%）。但POWL的产品高度定制化，客户比较少（LNG/数据中心大型项目），有一定定价权。净评估：成本暴露存在但定价权部分抵消，盈利质量维持4/5（不降分）。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>$400M+数据中心单笔合同：on-site generation switchgear，这是离网数据中心的关键组件。通过——设备销售合同，非PPA。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>⚠️ 典型'好公司贵价格'：业务质量80.4分（很好），但P/E 55.6x和股价+162%完全透支。
+若股价下跌至P/E 25-28x（约-45-50%），5yr DCF年化回报将达到13%+，届时应重新评估至A级。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$11.5B，年化<strong>0.9%（接近零）</strong></td><td>$15-30B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，若DC switchgear标准化</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">📌 设备类综合结论（v2辩证框架）</div>
+<table class="t"><thead><tr><th>公司</th><th>行业</th><th>质量</th><th>估值</th><th>最终</th><th>级别</th><th>v1→v2最大变化</th></tr></thead><tbody>
+<tr><td class="n4" style="font-weight:700;color:var(--acc)">VRT</td><td class="n5">92.6</td><td class="n4">84.0</td><td class="n2">37.0</td><td class="n4" style="font-weight:700">71.6 A</td><td><span class="gp gpA">A↓</span></td><td>铜/铝成本暴露→盈利质量4→3分（73.2→71.6，仍A）</td></tr>
+<tr><td class="n3" style="font-weight:700;color:#ffd700">MPWR</td><td class="n4">71.4</td><td class="n5">91.6</td><td class="n3">67.0</td><td class="n3" style="font-weight:700">68.2 B</td><td><span class="gp gpB">B=</span></td><td>无变化。Fabless成本最优，建议AI skill深度分析</td></tr>
+<tr><td class="n3" style="font-weight:700;color:#76e3b0">ETN</td><td class="n4">71.6</td><td class="n4">76.8</td><td class="n2">38.0</td><td class="n3" style="font-weight:700">64.1 B</td><td><span class="gp gpB">B↓</span></td><td>铜绕组+航空级材料→盈利质量4→3分（65.7→64.1）</td></tr>
+<tr><td class="n2" style="font-weight:700;color:#bc8cff">HUBB</td><td class="n4">80.0</td><td class="n3">69.6</td><td class="n2">30.0</td><td class="n2" style="font-weight:700">59.8 C</td><td><span class="gp gpC">B→C</span></td><td>🔴最大变化：铜60%+成本暴露→B降为C。好公司但成本脆弱性被v1严重低估</td></tr>
+<tr><td class="n2" style="font-weight:700;color:#f0883e">POWL</td><td class="n5">85.0</td><td class="n4">80.4</td><td class="n0">10.0</td><td class="n2" style="font-weight:700">54.2 C</td><td><span class="gp gpC">C=</span></td><td>无变化。好公司贵价格（P/E 55x），等-45%回调</td></tr>
+</tbody></table>
+<div style="margin-top:9px;padding:9px;background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:6px;font-size:11px">
+<strong style="color:var(--s2)">v2关键洞察：</strong>v1错误假设设备商利润稳定，EPC利润脆弱。实际上：HUBB铜60%成本暴露比EME的本土劳动力更脆弱。这是预检三最重要的分析修正。
+</div>
+</div>
+<div class="footer">AI能源基础设施专项投资打分系统 v2.0（辩证框架）&nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考</div>
+</div></body></html>
