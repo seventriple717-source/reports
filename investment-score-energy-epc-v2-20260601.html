@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<title>AI能源评分v2 · EPC类 | EME PWR MYRG PLPC AMSC</title><style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:22px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hdr h1{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;}
+.pre-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:11px;margin:8px 0;}
+.pre-box h4{font-size:10px;color:var(--acc);font-weight:700;text-transform:uppercase;margin-bottom:7px;}
+.warn-box{background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:6px;padding:9px;margin:7px 0;font-size:10px;}
+.ok-box{background:rgba(63,185,80,.05);border:1px solid rgba(63,185,80,.2);border-radius:6px;padding:9px;margin:7px 0;font-size:10px;}
+.qp-box{background:rgba(210,153,34,.05);border:1px solid rgba(210,153,34,.2);border-radius:7px;padding:10px;margin:8px 0;font-size:10px;line-height:1.7;}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:10px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:7px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.cmp-row{display:flex;gap:6px;align-items:center;font-size:10px;margin-bottom:4px;}
+.yr-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-top:7px;}
+.yr-tbl th{background:rgba(255,255,255,.04);padding:4px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.yr-tbl td{padding:3px 8px;border-bottom:1px solid rgba(255,255,255,.03);}
+.footer{text-align:center;padding:16px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:20px;}
+.tag{display:inline-block;border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-up{background:rgba(63,185,80,.2);color:var(--s4);}
+.tag-dn{background:rgba(248,81,73,.2);color:var(--s2);}
+.tag-same{background:rgba(139,148,158,.2);color:var(--mu);}
+</style></head><body>
+<div class="wrap">
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">AI能源基础设施专项投资打分 v2.0 · 辩证框架更新 · 文件3/3：EPC类</div>
+  <h1>AI电力与能源投资评分报告（v2·辩证框架）</h1>
+  <p>EME · PWR · MYRG · PLPC · AMSC &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 核心变化：物理执行约束 + 技术中立性 + 质量vs价格分离</p>
+</div>
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">🔄 v2辩证框架核心变化说明</div>
+<table class="t" style="font-size:11px;">
+<thead><tr><th>预检项</th><th>v1 的错误</th><th>v2 的修正</th></tr></thead>
+<tbody>
+<tr><td class="neg">预检一<br>战略重要性≠投资吸引力</td><td>战略重要 → 直接高分，不检查估值是否已定价</td><td>每个高分维度必须检验"是否已被股价完全反映"</td></tr>
+<tr><td class="neg">预检二<br>分类标签锚定</td><td>"EPC=项目制=薄利"标签直接决定盈利质量低分</td><td>逐公司追踪实际合同结构（固定vs成本加成vs可调）</td></tr>
+<tr><td class="neg">预检三<br>成本输入可控性</td><td>假设设备商利润稳定，EPC利润脆弱——方向相反</td><td>HUBB铜60%+成本暴露→降分；EME本土劳动力+传导→不降分</td></tr>
+<tr><td class="neg">预检四<br>合同确定性压力测试</td><td>CEG 20年PPA直接接受"高确定性"</td><td>追问传输延迟2030年→PPA实际交付缺口→护城河/客户质量降分</td></tr>
+<tr><td class="pos">新增：技术中立性溢价</td><td>EPC技术演进不确定性评3/5（与核电同等或更低）</td><td>EPC技术中立（核/气/SMR/太阳能均需其施工）→技术演进确定性+1分</td></tr>
+<tr><td class="pos">新增：物理执行约束</td><td>EPC护城河低于核电执照</td><td>物理执行约束是真实护城河——EME 3→4分，PWR 4→5分</td></tr>
+<tr><td class="pos">新增：质量vs价格分离</td><td>分低=公司差（混淆）</td><td>低分明确标注：业务质量问题 or 估值透支，给出重评触发价格</td></tr>
+</tbody>
+</table>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #58a6ff;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  EMCOR Group <span style="color:#58a6ff;font-size:13px;margin-left:6px">电气机械建设EPC</span>
+  <span class="gp gpB" style="margin-left:8px">B级</span>
+  <span class="tag tag-up">↑ 63.7→66.3</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$4.63B (+19.7%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">RPO积压</td><td><strong>$15.62B (+32.9%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">净现金</td><td><strong>$916M</strong></td></tr><tr><td class="lc" style="color:var(--mu)">债务</td><td><strong>$0</strong></td></tr><tr><td class="lc" style="color:var(--mu)">P/E</td><td><strong>~27x</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">74.0</td><td style="color:var(--mu)">公司质量</td><td class="n4">77.2</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n2">43.0</td><td style="color:var(--mu)">置信度</td><td>1.0</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>74.0×20%=14.80 + 77.2×50%=38.60 + 43.0×30%=12.90</div>
+      <div class="fr">最终分 = 66.3 · B级 · 小仓位</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>✅ 技术中立性验证：EME建数据中心也建核电站（TMI传输升级承包商之一）也建太阳能也建医院——完全技术中立。
+成本输入：劳动力占80%+（美国本土，工会谈判）+ 材料（大量成本可调合同）→ 无大宗商品降分。
+→ 技术演进确定性从3/5升至4/5（技术中立+1）；护城河从3/5升至4/5（物理执行约束确立）</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>RPO积压$15.62B是工程合同，含成本调整条款——大型数据中心客户（超大规模科技公司）接受材料价格可调。通过。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>✅ EME是EPC类中最优。评分从63.7升至66.3，体现了：①物理执行约束是真实护城河②技术中立性被v1低估。低分主要原因是P/E 27x已充分定价（估值问题，非质量问题）。
+若P/E降至20x（股价约-26%），5yr DCF年化回报将达到9-10%，届时应重新评估。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$44B，年化<strong>2.7%（含股息）</strong></td><td>$60-80B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，零债务复利效应</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #bc8cff;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Quanta Services <span style="color:#bc8cff;font-size:13px;margin-left:6px">电网基础设施EPC</span>
+  <span class="gp gpC" style="margin-left:8px">C级</span>
+  <span class="tag tag-up">↑ 54.3→57.0</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$7.87B (+26.4%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">积压记录</td><td><strong>$48.5B (+45%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Adj EBITDA</td><td><strong>$686.4M</strong></td></tr><tr><td class="lc" style="color:var(--mu)">CEO套现</td><td><strong>$1.2亿（历史高位）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">EV/EBITDA</td><td><strong>37.6x</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">75.6</td><td style="color:var(--mu)">公司质量</td><td class="n3">68.8</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n1">25.0</td><td style="color:var(--mu)">置信度</td><td>1.0</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>75.6×20%=15.12 + 68.8×50%=34.40 + 25.0×30%=7.50</div>
+      <div class="fr">最终分 = 57.0 · C级 · 观察期</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>✅ 技术中立性：PWR建输电线路（核电/太阳能/风电共用）、建变电站（所有电源共用）、建气电厂——最典型的技术中立型EPC。
+成本输入：自有6万+电工（美国本土）+ 材料（大型合同含价格可调）→ 无降分。
+→ 技术演进确定性从3/5升至4/5；护城河从4/5升至5/5（6万+自有专业电工，5年内无法替代）</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>$48.5B积压：已签项目合同，有定价和交付时间表，成本调整机制完善。通过。CEO套现$1.2亿属于管理层维度减分，已在评分中体现。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>⚠️ 这是v2最重要的重新认识：PWR业务质量其实不低（68.8分），C级的核心原因是：①EV/EBITDA 37.6x远超历史均值13-15x②CEO大规模套现（管理层信号）→纯粹'估值透支'型低分，而非'业务差'。
+若EV/EBITDA降至17-18x（股价约-53%），5yr DCF年化回报将达到15%+，届时应重新评估至A级。这是价值陷阱的正确解读：好生意+坏价格≠永久不考虑。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$50B（EV/EBITDA 10x退出），年化<strong>-4%～-5%（基准）</strong></td><td>$80-130B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，但需等价格修正</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #76e3b0;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  MYR Group <span style="color:#76e3b0;font-size:13px;margin-left:6px">T&D+商业工业EPC</span>
+  <span class="gp gpC" style="margin-left:8px">C级</span>
+  <span class="tag tag-up">↑ 54.5→55.9</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$1.00B（记录，+20%）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">净利润</td><td><strong>$46.8M（记录）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">积压</td><td><strong>$2.84B (+7.7%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">净负债</td><td><strong>$9.4M（几乎为零）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">EV/EBITDA</td><td><strong>18.21x</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n4">78.5</td><td style="color:var(--mu)">公司质量</td><td class="n4">70.0</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n2">38.0</td><td style="color:var(--mu)">置信度</td><td>0.9</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>78.5×20%=15.70 + 70.0×50%=35.00 + 38.0×30%=11.40</div>
+      <div class="fr">最终分 = 55.9 · C级 · 观察期</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>✅ 技术中立性：T&D电线是传输核电/太阳能/风电/气电的共用基础设施。C&I段建数据中心/医院/工厂——典型技术中立。→ 技术演进确定性+1分（3/5→4/5）。成本输入：本土劳动力为主，无降分。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>积压$2.84B含T&D公用事业合同+数据中心施工合同，均含材料价格可调条款。通过。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>C级主要是估值问题（P/E 37.9x EPC偏高，股价+22%后）。业务质量70分较好，特别是极低负债是EPC同类中罕见的财务优势。
+若P/E降至20-22x（股价约-40%），应重新评估至B级。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$7.7B，年化<strong>1.4%（接近零）</strong></td><td>$12-18B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">更强，T&D+DC双增长</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #f0883e;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  Preformed Line Products <span style="color:#f0883e;font-size:13px;margin-left:6px">电力/通信线路硬件</span>
+  <span class="gp gpC" style="margin-left:8px">C级</span>
+  <span class="tag tag-same">→ 54.8</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">Q1 2026营收</td><td><strong>$176.3M (+19%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">毛利率</td><td><strong>31.3%（关税压制）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">家族持股</td><td><strong>>50%</strong></td></tr><tr><td class="lc" style="color:var(--mu)">净现金</td><td><strong>正（D/E 0.04）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">EV/EBITDA</td><td><strong>~13.5x（近均值）</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n3">62.0</td><td style="color:var(--mu)">公司质量</td><td class="n3">58.0</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n3">65.0</td><td style="color:var(--mu)">置信度</td><td>0.9</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>62.0×20%=12.40 + 58.0×50%=29.00 + 65.0×30%=19.50</div>
+      <div class="fr">最终分 = 54.8 · C级 · 观察期</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>连接件/线路工具：铜+铝是主要原材料（全球大宗商品），50%国际业务受汇率影响。关税已在Q1出现毛利率压缩证据。→ 盈利质量维持2/5（已反映在原始评分中）。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>PLPC的商业模式是产品销售（非PPA），无长期交付义务风险。通过。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>C级中估值最合理（EV/EBITDA近历史均值14.3x）。质量偏低主要是：AI敞口有限+关税实际压制利润+ROIC 7.7%低于资本成本。等关税压力缓解+毛利率恢复至33%+后重新评估。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>$1.77B，年化<strong>7.1%（含股息）</strong></td><td>$2-3B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">稳健，非AI核心</td></tr>
+  </table>
+</div>
+</div>
+
+<div style="margin-bottom:22px;border-left:3px solid #e8b04b;padding-left:12px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:8px;">
+  美国超导 AMSC <span style="color:#e8b04b;font-size:13px;margin-left:6px">电网优化+风机控制</span>
+  <span class="gp gpD" style="margin-left:8px">D级</span>
+  <span class="tag tag-same">→ 43.0</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <table class="t" style="font-size:10px;"><tr><td class="lc" style="color:var(--mu)">FY2026营收</td><td><strong>$299.2M (+34%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Q4 EPS</td><td><strong>$0.30（超预期$0.19）</strong></td></tr><tr><td class="lc" style="color:var(--mu)">积压</td><td><strong>~$280M (+40%)</strong></td></tr><tr><td class="lc" style="color:var(--mu)">Comtrafo</td><td><strong>巴西变压器收购</strong></td></tr><tr><td class="lc" style="color:var(--mu)">市值估算</td><td><strong>~$500-800M</strong></td></tr></table>
+  <div>
+    <table class="t" style="font-size:10px;">
+      <tr><td style="color:var(--mu)">行业分</td><td class="n3">67.8</td><td style="color:var(--mu)">公司质量</td><td class="n3">58.4</td></tr>
+      <tr><td style="color:var(--mu)">估值分</td><td class="n3">62.0</td><td style="color:var(--mu)">置信度</td><td>0.7</td></tr>
+    </table>
+    <div class="fml" style="margin-top:6px;">
+      <div>67.8×20%=13.56 + 58.4×50%=29.20 + 62.0×30%=18.60</div>
+      <div class="fr">最终分 = 43.0 · D级 · 移出候选池</div>
+    </div>
+  </div>
+</div>
+
+<div class="pre-box" style="margin-top:8px;">
+  <h4>辩证预检结果（v2新增）</h4>
+  <div style="margin-bottom:6px;"><strong style="color:var(--s3)">预检三（成本输入可控性）：</strong>电网优化系统：主要是技术软件+硬件集成，大宗商品占比相对低。Comtrafo变压器部分有铜/硅钢暴露。综合影响有限，维持原评分。</div>
+  <div><strong style="color:var(--acc)">预检四（合同确定性测试）：</strong>通过（产品+服务合同，非PPA）。</div>
+</div>
+
+<div class="qp-box">
+  <strong style="color:var(--s3)">质量 vs 价格分离：</strong>D级原因：不是业务质量差（增速34%、积压+40%、Comtrafo战略准确），而是极小规模（$300M营收）+历史执行波动+置信度0.7折扣。若市值估算（$650M）正确且增长持续，理论回报约18-28%。需持续跟踪2-3个季度后重新评估。
+</div>
+
+<div style="margin-top:8px;">
+  <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px;">📅 5年 vs 10年估值对比</div>
+  <table class="yr-tbl">
+    <tr><th>维度</th><th style="color:var(--acc)">5年目标</th><th style="color:var(--s3)">10年方向</th></tr>
+    <tr><td style="color:var(--mu)">目标股权价值/年化回报</td><td>~$2.2B，年化<strong>~28%（若$650M市值正确）</strong></td><td>$2-6B</td></tr>
+    <tr><td style="color:var(--mu)">10年行业地位</td><td colspan="2">执行成功则更强</td></tr>
+  </table>
+</div>
+</div>
+
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">📌 EPC与基础设施类综合结论（v2辩证框架）</div>
+<table class="t"><thead><tr><th>公司</th><th>行业</th><th>质量</th><th>估值</th><th>最终</th><th>级别</th><th>v2核心重新认识</th></tr></thead><tbody>
+<tr><td class="n3" style="font-weight:700;color:var(--acc)">EME</td><td class="n4">74.0</td><td class="n4">77.2</td><td class="n2">43.0</td><td class="n3" style="font-weight:700">66.3 B</td><td><span class="gp gpB">B↑</span></td><td>物理执行约束护城河3→4分；技术中立性+1；成本结构验证优于设备商</td></tr>
+<tr><td class="n3" style="font-weight:700;color:#bc8cff">PWR</td><td class="n4">75.6</td><td class="n3">68.8</td><td class="n1">25.0</td><td class="n3" style="font-weight:700">57.0 C</td><td><span class="gp gpC">C↑</span></td><td>业务质量68.8分（被v1低估）；C级是估值透支问题，非业务差；6万+电工是真实护城河</td></tr>
+<tr><td class="n2" style="font-weight:700;color:#76e3b0">MYRG</td><td class="n4">78.5</td><td class="n3">70.0</td><td class="n2">38.0</td><td class="n2" style="font-weight:700">55.9 C</td><td><span class="gp gpC">C↑</span></td><td>技术中立性+1；极低负债是EPC同类中财务最优；C级主要因估值</td></tr>
+<tr><td class="n2" style="font-weight:700;color:#f0883e">PLPC</td><td class="n3">62.0</td><td class="n3">58.0</td><td class="n3">65.0</td><td class="n2" style="font-weight:700">54.8 C</td><td><span class="gp gpC">C=</span></td><td>无变化。估值最合理（EV/EBITDA近均值），等关税缓解</td></tr>
+<tr><td class="n1" style="font-weight:700;color:#e8b04b">AMSC</td><td class="n3">67.8</td><td class="n3">58.4</td><td class="n3">62.0</td><td class="n1" style="font-weight:700">43.0 D</td><td><span class="gp gpD">D=</span></td><td>无变化。D是规模极小+置信度折扣，不是业务差</td></tr>
+</tbody></table>
+<div style="margin-top:9px;padding:9px;background:rgba(63,185,80,.05);border:1px solid rgba(63,185,80,.2);border-radius:6px;font-size:11px">
+<strong style="color:var(--s4)">v2 EPC类最重要重新认识：</strong>EPC公司的物理执行约束（技术中立+劳动力不可复制）是被v1系统性低估的护城河。PWR 68.8的业务质量分证明这不是差公司——C级完全源于37.6x EV/EBITDA的估值透支和CEO套现信号。"好公司贵价格"≠永久移出候选池。
+</div>
+</div>
+<div class="footer">AI能源基础设施专项投资打分系统 v2.0（辩证框架）&nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考</div>
+</div></body></html>
