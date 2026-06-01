@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<title>AI能源评分v3 · EME PWR MYRG PLPC AMSC</title><style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:20px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hdr h1{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;}
+.pre-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:10px;margin:7px 0;}
+.pre-box h4{font-size:10px;color:var(--acc);font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+.warn-box{background:rgba(248,81,73,.05);border:1px solid rgba(248,81,73,.2);border-radius:5px;padding:8px;margin:6px 0;font-size:10px;line-height:1.6;}
+.ok-box{background:rgba(63,185,80,.05);border:1px solid rgba(63,185,80,.2);border-radius:5px;padding:8px;margin:6px 0;font-size:10px;line-height:1.6;}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:9px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:6px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.yr-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-top:6px;}
+.yr-tbl th{background:rgba(255,255,255,.04);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.yr-tbl td{padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.03);}
+.dcf-box{background:rgba(0,0,0,.2);border-radius:5px;padding:8px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.7;margin:6px 0;}
+.tag-up{background:rgba(63,185,80,.2);color:var(--s4);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-dn{background:rgba(248,81,73,.2);color:var(--s2);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.tag-new{background:rgba(88,166,255,.2);color:var(--acc);border-radius:3px;padding:1px 6px;font-size:9px;font-weight:700;}
+.footer{text-align:center;padding:14px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:18px;}
+</style></head><body>
+<div class="wrap">
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">AI能源基础设施专项投资打分 v3.0 · Secular框架 · 文件3/3</div>
+  <h1>EPC与基础设施</h1>
+  <p style="color:var(--mu);font-size:11px">EME PWR MYRG PLPC AMSC &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 核心升级：Secular退出倍数+核电发展节奏+OKLO/SMR首次覆盖</p>
+</div>
+
+<div class="card" style="border-color:rgba(210,153,34,.3);">
+<div class="ct" style="color:var(--s3)">📐 v3估值方法论升级：Secular成长 vs 周期性退出倍数</div>
+<table class="t" style="font-size:11px;">
+<thead><tr><th>需求类型</th><th>定义</th><th>退出倍数</th><th>本轮适用公司</th></tr></thead>
+<tbody>
+<tr><td class="pos" style="font-weight:700">Secular成长型</td><td>10年+结构性需求，AI/能源转型驱动，不受单一周期影响</td><td class="pos"><strong>16-22x EV/EBITDA</strong></td><td>EME、MYRG、HUBB（变压器secular短缺）</td></tr>
+<tr><td class="pos" style="font-weight:700">核电运营（PPA锁定）</td><td>20年PPA锁定，监管保护，高可见度</td><td class="pos"><strong>16-20x EV/EBITDA</strong></td><td>CEG</td></tr>
+<tr><td class="neu">受监管公用事业</td><td>监管锁定回报，最高确定性</td><td class="neu">14-18x</td><td>传统电力公司</td></tr>
+<tr><td class="neu">液冷/DC电力设备</td><td>AI刚需但较短锁定期</td><td class="neu">22-28x</td><td>VRT</td></tr>
+<tr><td class="neg">传统周期型EPC</td><td>政府支出/商业地产周期驱动</td><td class="neg">10-14x</td><td>历史基准</td></tr>
+<tr><td class="neg">Pre-revenue（SMR/OKLO）</td><td>期权价值，传统倍数完全不适用</td><td class="neg">情景概率加权法</td><td>OKLO、SMR</td></tr>
+</tbody>
+</table>
+<div style="margin-top:8px;font-size:10px;color:var(--mu)"><strong style="color:var(--text)">核心逻辑</strong>：变压器160周交期是物理约束，不是情绪周期。EPC积压$15B+（EME）/\$48.5B（PWR）覆盖1-2年以上工作量。这种10年以上的结构性需求，应该用secular成长股的参照系而非历史周期倍数。v1/v2 用12x EV/EBITDA是<strong>方法论错误</strong>，今天修正。</div>
+</div>
+
+<div style="margin-bottom:20px;border-left:3px solid #58a6ff;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  EMCOR Group（EME）<span style="color:#58a6ff;font-size:12px;margin-left:6px">电气机械建设EPC</span>
+  <span class="gp gpA" style="margin-left:8px">A级 重点观察</span>
+  <span style="margin-left:6px"><span class="tag-up">↑66.3→75.0</span></span><span class="tag-up">↑B→A</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$4.63B (+19.7%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">RPO积压</td><td><strong style="font-size:10px">$15.62B (+32.9%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">净债务</td><td><strong style="font-size:10px">$0（净现金+$916M）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">P/E</td><td><strong style="font-size:10px">~30x（forward）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">~$39B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>74.0×20%+77.2×50%+72.0×30%</div>
+      <div class="fr">最终分 = 75.0 · A级 | 置信度×1.0</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：Secular成长EPC（AI建设不可绕过执行层） 18x EV/EBITDA</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$1.65B<br>Year5=$1.65B×(1.18)^5×18x=$68B EV<br>净现金+$4.5B→股权$72.5B<br>5年股息$0.7B<br>综合年化≈13.2%（4/5）<br>关键：设备短缺延长建设周期→secular duration更长</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>零债务+$916M净现金是EPC行业罕见的财务优势。RPO $15.62B(+32.9%)。物理执行约束+技术中立性是真实护城河。ROIC 26.67%超越HUBB(~12%)，应该用更高退出倍数。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #bc8cff;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  Quanta Services（PWR）<span style="color:#bc8cff;font-size:12px;margin-left:6px">电网基础设施EPC</span>
+  <span class="gp gpC" style="margin-left:8px">C级 观察期</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">57.0</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$7.87B (+26.4%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">积压</td><td><strong style="font-size:10px">$48.5B（记录）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">CEO套现</td><td><strong style="font-size:10px">$1.2亿（2026年5月）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">EV/EBITDA</td><td><strong style="font-size:10px">37.6x（历史均值13-15x）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值</td><td><strong style="font-size:10px">~$90B</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>75.6×20%+68.8×50%+25.0×30%</div>
+      <div class="fr">最终分 = 57.0 · C级 | 置信度×1.0</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：Secular成长EPC但当前倍数过高 15x EV/EBITDA（secular，但CEO套现信号折扣）</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$3.2B<br>Year5=$3.2B×(1.18)^5×15x=$109B EV<br>净债务$14B→股权$95B<br>vs当前$90B→年化1.2%（还是1/5）<br>即使secular框架也难以消化52x P/E</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>业务质量68.8分（被低估）。6万+自有电工=真实护城河。积压$48.5B=超强可见度。问题是CEO在历史高位套现$1.2亿+EV/EBITDA 37.6x，即使用secular框架也回报有限。等候-40%回调。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #76e3b0;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  MYR Group（MYRG）<span style="color:#76e3b0;font-size:12px;margin-left:6px">T&D+商业工业EPC</span>
+  <span class="gp gpB" style="margin-left:8px">B级 小仓位</span>
+  <span style="margin-left:6px"><span class="tag-up">↑55.9→59.7</span></span><span class="tag-up">↑C→B</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$1.00B（记录，+20%）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">净利润</td><td><strong style="font-size:10px">$46.8M（记录）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">积压</td><td><strong style="font-size:10px">$2.84B</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">有息负债</td><td><strong style="font-size:10px">仅$9.4M</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">EV/EBITDA</td><td><strong style="font-size:10px">18.21x</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>78.5×20%+70.0×50%+52.0×30%</div>
+      <div class="fr">最终分 = 59.7 · B级 | 置信度×0.9</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：Secular成长中型EPC（T&D技术中立） 15x EV/EBITDA</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$326M<br>Year5=$326M×(1.18)^5×15x=$11.2B EV<br>净现金+$0.5B→股权$11.7B<br>vs当前$7.29B→年化9.9%（3/5）</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>极低负债（有息负债仅$9.4M）是EPC行业最健康财务之一。T&D技术中立。DC分部从6%快速扩张。设备短缺延长建设周期=更持续需求。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #f0883e;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  Preformed Line Products（PLPC）<span style="color:#f0883e;font-size:12px;margin-left:6px">电力/通信线路硬件</span>
+  <span class="gp gpC" style="margin-left:8px">C级 观察期</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">54.8</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">Q1营收</td><td><strong style="font-size:10px">$176.3M (+19%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">毛利率</td><td><strong style="font-size:10px">31.3%（关税压制）</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">家族持股</td><td><strong style="font-size:10px">>50%</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">净现金</td><td><strong style="font-size:10px">正</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">EV/EBITDA</td><td><strong style="font-size:10px">~13.5x</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>62.0×20%+58.0×50%+65.0×30%</div>
+      <div class="fr">最终分 = 54.8 · C级 | 置信度×0.9</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：成熟稳健（近历史均值） 13x EV/EBITDA（含关税风险折扣）</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$85M<br>Year5=$85M×(1.10)^5×13x=$1.77B EV<br>vs当前$1.43B→年化4.4%+股息=7.1%（2/5）</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>估值最合理（EV/EBITDA近历史均值14.3x）。家族持股>50%是稳定器。关税压毛利率31.3%（从32.8%）是当前制约。等关税压力缓解+毛利率恢复至33%+。
+</div>
+</div><div style="margin-bottom:20px;border-left:3px solid #e8b04b;padding-left:11px;">
+<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;">
+  美国超导 AMSC（AMSC）<span style="color:#e8b04b;font-size:12px;margin-left:6px">电网优化+风机控制</span>
+  <span class="gp gpD" style="margin-left:8px">D级 移出/期权</span>
+  <span style="margin-left:6px"><span style="color:var(--mu);font-size:9px">43.0</span></span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <table class="t" style="font-size:10px;"><tr><td style="color:var(--mu);font-size:10px">FY2026营收</td><td><strong style="font-size:10px">$299.2M (+34%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">积压</td><td><strong style="font-size:10px">~$280M (+40%)</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">Comtrafo</td><td><strong style="font-size:10px">巴西变压器收购</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">市值估算</td><td><strong style="font-size:10px">~$500-800M</strong></td></tr><tr><td style="color:var(--mu);font-size:10px">置信度</td><td><strong style="font-size:10px">0.7（小市值信息不足）</strong></td></tr></table>
+    <div class="fml" style="margin-top:6px;">
+      <div>67.8×20%+58.4×50%+62.0×30%</div>
+      <div class="fr">最终分 = 43.0 · D级 | 置信度×0.7</div>
+      <div style="color:var(--mu);font-size:9px">退出倍数：成长小市值 15x EV/EBITDA</div>
+    </div>
+  </div>
+  <div>
+    <div class="pre-box">
+      <h4>5年DCF（Secular/期权框架）</h4>
+      <div class="dcf-box">FY2026E EBITDA≈$60M<br>Year5=$60M×(1.20)^5×15x=$2.24B<br>vs当前~$650M→年化约28%（理论5/5）<br>但置信度0.7折扣→实际D级</div>
+    </div>
+  </div>
+</div>
+<div style="margin-top:6px;padding:7px 9px;background:rgba(255,255,255,.025);border-radius:5px;font-size:10px;color:var(--mu);line-height:1.6">
+  <strong style="color:var(--text)">技术判断：</strong>FY2026+34%，Comtrafo并购进入变压器市场。D级是规模极小（$300M营收）+置信度折扣，不是业务质量差。若市值$650M估算正确，2-3季度验证后可重评。
+</div>
+</div>
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+<div class="ct" style="color:var(--acc)">📌 综合评分（v3·Secular框架·含正确估值方法论）</div>
+<table class="t"><thead><tr><th>公司</th><th>赛道</th><th>行业</th><th>质量</th><th>估值</th><th>最终</th><th>级别</th><th>退出倍数（新）</th></tr></thead>
+<tbody><tr><td class="n4" style="font-weight:700;color:#58a6ff">EME</td><td style="color:var(--mu)">电气机械建设EPC</td><td class="n4">74.0</td><td class="n4">77.2</td><td class="n5">72.0</td><td class="n4" style="font-weight:700">75.0</td><td><span class="gp gpA">A</span></td><td style="font-size:10px;color:var(--mu)">18x EV/EBITDA</td></tr><tr><td class="n2" style="font-weight:700;color:#bc8cff">PWR</td><td style="color:var(--mu)">电网基础设施EPC</td><td class="n4">75.6</td><td class="n3">68.8</td><td class="n2">25.0</td><td class="n2" style="font-weight:700">57.0</td><td><span class="gp gpC">C</span></td><td style="font-size:10px;color:var(--mu)">15x EV/EBITDA（secular，但CEO套现信号折扣）</td></tr><tr><td class="n3" style="font-weight:700;color:#76e3b0">MYRG</td><td style="color:var(--mu)">T&D+商业工业EP</td><td class="n4">78.5</td><td class="n4">70.0</td><td class="n3">52.0</td><td class="n2" style="font-weight:700">59.7</td><td><span class="gp gpB">B</span></td><td style="font-size:10px;color:var(--mu)">15x EV/EBITDA</td></tr><tr><td class="n2" style="font-weight:700;color:#f0883e">PLPC</td><td style="color:var(--mu)">电力/通信线路硬件</td><td class="n3">62.0</td><td class="n3">58.0</td><td class="n4">65.0</td><td class="n2" style="font-weight:700">54.8</td><td><span class="gp gpC">C</span></td><td style="font-size:10px;color:var(--mu)">13x EV/EBITDA（含关税风险折扣）</td></tr><tr><td class="n1" style="font-weight:700;color:#e8b04b">AMSC</td><td style="color:var(--mu)">电网优化+风机控制</td><td class="n3">67.8</td><td class="n3">58.4</td><td class="n4">62.0</td><td class="n1" style="font-weight:700">43.0</td><td><span class="gp gpD">D</span></td><td style="font-size:10px;color:var(--mu)">15x EV/EBITDA</td></tr></tbody></table></div>
+<div class="footer">AI能源基础设施专项投资打分系统 v3.0（Secular框架+辩证预检）&nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考</div>
+</div></body></html>
