@@ -1,0 +1,1613 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<title>AI能源评分v4 · VRT ETN HUBB POWL MPWR</title><style>
+
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--acc:#58a6ff;--text:#c9d1d9;--mu:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1400px;margin:0 auto;padding:18px 14px;}
+.hdr{text-align:center;padding:20px 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+.hdr h1{font-size:19px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:10px;}
+.ct{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--mu);padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpC{background:rgba(248,81,73,.1);color:var(--s2);border:1px solid rgba(248,81,73,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;}
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:6px;padding:9px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.8;margin-top:6px;}
+.fml .fr{color:var(--acc);font-size:12px;font-weight:700;}
+.pre-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:7px;padding:10px;margin:7px 0;}
+.pre-box h4{font-size:10px;color:var(--acc);font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+.dcf-box{background:rgba(0,0,0,.2);border-radius:5px;padding:8px;font-family:"SF Mono","Fira Code",monospace;font-size:10px;line-height:1.7;margin:6px 0;}
+.yr-tbl{width:100%;border-collapse:collapse;font-size:10px;margin-top:6px;}
+.yr-tbl th{background:rgba(255,255,255,.04);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);color:var(--mu);}
+.yr-tbl td{padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.03);}
+.dim-tbl{width:100%;border-collapse:collapse;font-size:10px;}
+.dim-tbl th{background:rgba(255,255,255,.025);color:var(--mu);padding:4px 7px;text-align:left;border-bottom:1px solid var(--border);font-size:9px;}
+.dim-tbl td{padding:4px 7px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top;}
+.score-bar{display:inline-block;height:6px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.footer{text-align:center;padding:14px 0;color:var(--mu);font-size:10px;border-top:1px solid var(--border);margin-top:18px;}
+.co-hdr{border-left:3px solid;padding-left:12px;margin-bottom:14px;padding-top:4px;padding-bottom:4px;}
+.section-title{font-size:10px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px;}
+.veto-item{display:flex;align-items:flex-start;gap:6px;padding:3px 0;font-size:10px;}
+.catalyst-item{font-size:10px;padding:2px 0;color:var(--mu);}
+
+</style></head><body>
+<div class="wrap">
+<div class="hdr">
+  <div style="font-size:10px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">AI能源基础设施专项投资打分 v4.0 · 完整维度打分版 · 文件2/3</div>
+  <h1>电力设备类（液冷+变压器+开关+电源IC）</h1>
+  <p style="color:var(--mu);font-size:11px">VRT ETN HUBB POWL MPWR &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; v4新增：逐维度打分+DCF四情景+5年/10年对比</p>
+</div>
+
+<div class="card" style="border-color:rgba(88,166,255,.2);margin-bottom:10px;">
+<div class="ct">📡 Step 0 · AI能源需求全景扫描（2026-06-01 实时）— 设备/液冷专项视角</div>
+<div style="background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.2);border-radius:7px;padding:10px;margin-bottom:11px;">
+  <strong style="color:var(--s2);font-size:11px;">当前阶段：设备短缺主导——变压器/开关/液冷是最大卡点，而非资金或劳动力</strong>
+  <p style="font-size:10px;color:var(--text);margin-top:5px;line-height:1.7;">
+  <strong>变压器交期160周（3年+），价格+77%，30%供应缺口</strong>。50%以上美国DC项目因此延期。AI机架功耗从40kW/架升至120-150kW/架，液冷从可选→刚需。四大超大规模Capex合计<strong>$700-725B（+77% YoY）</strong>，设备需求无可置疑。
+  </p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:11px;">
+<div>
+<div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px;">🔗 供应链卡点（本文件核心）</div>
+<table class="t" style="font-size:10px;">
+<tr><td style="font-weight:700;color:var(--s2);width:80px">变压器🔴</td><td>160周交期，价格+77%，30%供应缺口。新产能2027-2028上线。受益：<strong>HUBB/ETN变压器部门</strong></td></tr>
+<tr><td style="font-weight:700;color:var(--s2)">电网互联🔴</td><td>PJM平均等待5年，FERC改革推进中。受益：<strong>全体EPC+ETN/HUBB</strong></td></tr>
+<tr><td style="font-weight:700;color:var(--s3)">定制开关🟡</td><td>POWL $400M+单笔历史最大，离网DC推动需求。受益：<strong>POWL/ETN开关部门</strong></td></tr>
+<tr><td style="font-weight:700;color:var(--s3)">液冷系统🟡</td><td>$5.6-6B市场+25-31%CAGR，120-150kW/架→200kW+。受益：<strong>VRT主导</strong></td></tr>
+<tr><td style="font-weight:700;color:var(--s3)">AI服务器电源🟡</td><td>GB200/300每架需更多PMIC/VR。受益：<strong>MPWR主导</strong></td></tr>
+<tr><td style="font-weight:700;color:var(--mu)">UPS/PDU🟢</td><td>DC基础配置，稳定增长。受益：VRT/ETN/Schneider</td></tr>
+</table>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px;">⚡ 超大规模Capex + AI机架趋势</div>
+<table class="t" style="font-size:10px;">
+<tr><td style="color:var(--mu)">AWS</td><td class="pos">~$1,600亿（2026E）</td></tr>
+<tr><td style="color:var(--mu)">Azure/MS</td><td class="pos">~$1,200亿</td></tr>
+<tr><td style="color:var(--mu)">GCP</td><td class="pos">~$1,900亿（最大）</td></tr>
+<tr><td style="color:var(--mu)">Meta</td><td class="pos">$1,250-1,450亿</td></tr>
+<tr style="background:rgba(63,185,80,.04)"><td style="font-weight:700">合计</td><td class="pos" style="font-weight:700">~$700-725B（+77% YoY）</td></tr>
+</table>
+<table class="t" style="font-size:10px;margin-top:5px;">
+<tr><td style="color:var(--mu)">当前AI机架功耗</td><td class="neg">120-150 kW/架（→VRT液冷刚需）</td></tr>
+<tr><td style="color:var(--mu)">下一代（GB300）</td><td class="neg">200 kW+/架（→更大液冷需求）</td></tr>
+<tr><td style="color:var(--mu)">每架电源IC需求</td><td class="pos">+30-50%（→MPWR受益）</td></tr>
+<tr><td style="color:var(--mu)">变压器需求量</td><td class="neg">随Capex线性增加（+77% YoY）</td></tr>
+</table>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px;">📊 本文件5公司在价值链中的位置</div>
+<table class="t" style="font-size:10px;">
+<tr><td style="font-weight:700;color:#58a6ff;width:45px">VRT</td><td>液冷+UPS+PDU（DC基础设施主宰）<br><span style="color:var(--s5)">最直接受益，AI机架密度→液冷刚需</span></td></tr>
+<tr><td style="font-weight:700;color:#76e3b0">ETN</td><td>变压器+开关+液冷+航空汽车（多元）<br><span style="color:var(--s4)">DC电气65%占比，多元稀释整体</span></td></tr>
+<tr><td style="font-weight:700;color:#bc8cff">HUBB</td><td>配电变压器+开关设备（美国#1）<br><span style="color:var(--s4)">变压器短缺直接受益者，定价权强</span></td></tr>
+<tr><td style="font-weight:700;color:#f0883e">POWL</td><td>定制开关设备（DC/石化/公用事业）<br><span style="color:var(--s3)">好业务，但$400M合同已被55x EV/EBITDA透支</span></td></tr>
+<tr><td style="font-weight:700;color:#ffd700">MPWR</td><td>AI服务器PMIC/VR电源IC（Fabless）<br><span style="color:var(--s4)">直接受益AI算力密度，ROIC最高</span></td></tr>
+</table>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+<div>
+<div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px;">🌐 三时间维度 × 设备赛道判断</div>
+<div style="font-size:10px;line-height:1.65;">
+<div style="padding:4px 7px;background:rgba(46,160,67,.07);border-left:3px solid var(--s5);border-radius:0 3px 3px 0;margin-bottom:3px;"><strong style="color:var(--s5)">0-12月</strong>：变压器定价权最强（160周无法快速增产）；液冷渗透率快速上升；POWL $400M合同开始交付验证</div>
+<div style="padding:4px 7px;background:rgba(88,166,255,.07);border-left:3px solid var(--acc);border-radius:0 3px 3px 0;margin-bottom:3px;"><strong style="color:var(--acc)">1-3年</strong>：变压器新产能2027-2028上线→短缺缓解但需求持续；VRT液冷占比突破40%；MPWR GB300平台胜负</div>
+<div style="padding:4px 7px;background:rgba(210,153,34,.07);border-left:3px solid var(--s3);border-radius:0 3px 3px 0;"><strong style="color:var(--s3)">3-10年</strong>：液冷进入服务/维护收入期（高粘性）；变压器从短缺到正常化（需关注HUBB竞争格局）；AI机架200kW+时代推动下一轮液冷需求</div>
+</div>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:6px;">📐 Secular退出倍数 × 本文件适用</div>
+<table class="t" style="font-size:10px;">
+<tr><td style="font-weight:700;color:var(--s4)">VRT液冷/DC基础</td><td class="pos">22-28x EV/EBITDA（AI刚需，25x）</td></tr>
+<tr><td style="font-weight:700;color:var(--s4)">MPWR AI半导体</td><td class="pos">30x EV/EBITDA（高质量Fabless）</td></tr>
+<tr><td style="font-weight:700;color:var(--s3)">ETN多元工业</td><td class="neu">18-20x EV/EBITDA（电气溢价+多元折扣）</td></tr>
+<tr><td style="font-weight:700;color:var(--s3)">HUBB变压器Secular</td><td class="neu">16x EV/EBITDA（短缺持续至2027-28）</td></tr>
+<tr><td style="font-weight:700;color:var(--s2)">POWL定制开关</td><td class="neg">22x（理论），当前55x=严重透支</td></tr>
+</table>
+</div>
+</div>
+</div>
+
+
+<div class="card" style="border-color:rgba(210,153,34,.3);margin-bottom:10px;">
+<div class="ct" style="color:var(--s3)">📐 v4估值方法论：Secular成长 vs 周期性退出倍数</div>
+<table class="t" style="font-size:11px;">
+<thead><tr><th>需求类型</th><th>定义</th><th>退出倍数</th><th>本文件适用</th></tr></thead>
+<tbody>
+<tr><td class="pos" style="font-weight:700">液冷/DC基础设施</td><td>AI算力密度必然→液冷从可选到刚需，secular成长</td><td class="pos"><strong>22-28x EV/EBITDA</strong></td><td>VRT（25x）</td></tr>
+<tr><td class="pos" style="font-weight:700">AI半导体Fabless</td><td>AI服务器算力密度→电源IC需求，ROIC超20%</td><td class="pos"><strong>30x EV/EBITDA</strong></td><td>MPWR（30x）</td></tr>
+<tr><td class="neu">多元化工业（含AI电气）</td><td>AI电气65%，其余航空/汽车，综合</td><td class="neu">18-20x EV/EBITDA</td><td>ETN（18x）</td></tr>
+<tr><td class="neu">变压器（Secular短缺）</td><td>160周交期=物理约束，非情绪短缺</td><td class="neu">16x EV/EBITDA</td><td>HUBB（16x）</td></tr>
+<tr><td class="neg">定制开关（AI机会定价完毕）</td><td>理论secular，但55x EV/EBITDA已透支</td><td class="neg">22x理论 vs 55x现实</td><td>POWL（当前不推荐）</td></tr>
+</tbody>
+</table>
+</div>
+
+
+<div class="co-hdr" style="border-color:#58a6ff;margin-top:24px">
+  <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">
+    VRT · Vertiv Holdings
+    <span style="font-size:11px;color:#58a6ff;margin-left:6px">液冷+DC电源管理</span>
+    <span class="gp gpA" style="margin-left:8px">A级</span>
+    <span style="color:var(--mu);font-size:11px;margin-left:6px">最终 75.2</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+<div class="card">
+<div class="ct">关键指标（2026-06-01）</div>
+<table class="t"><tr><td style="color:var(--mu);width:140px">Q1 2026营收</td><td><strong class="pos">$2.35B</strong> <span style="color:var(--mu);font-size:9px">(+26% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">有机订单增速</td><td><strong class="pos">+54% YoY</strong> <span style="color:var(--mu);font-size:9px">积压持续创新高</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">调整后EBITDA Margin</td><td><strong class="pos">~19.5%</strong> <span style="color:var(--mu);font-size:9px">持续扩张</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EV/EBITDA（NTM）</td><td><strong class="neu">~25x</strong> <span style="color:var(--mu);font-size:9px">液冷DC成长股合理区间</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">液冷产品占比</td><td><strong class="pos">~30%+</strong> <span style="color:var(--mu);font-size:9px">快速上升</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">AI机架功耗趋势</td><td><strong class="neg">120-150kW/架→200kW+</strong> <span style="color:var(--mu);font-size:9px">需求驱动力</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">市值</td><td><strong class="neu">~$50B</strong> <span style="color:var(--mu);font-size:9px">2026-06-01</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">净现金</td><td><strong class="pos">~+$2B</strong> <span style="color:var(--mu);font-size:9px">财务灵活</span></td></tr>
+</table>
+</div>
+<div class="card">
+<div class="ct">最终评分公式</div>
+<div class="fml">
+行业94.6 × 20% + 质量95.6 × 50% + 估值57.0 × 30%<br>
+基础分 = 83.8 × 置信度1.0 = <span class="fr">83.8</span>
+<div style="color:var(--mu);font-size:9px;margin-top:3px">退出倍数：25x EV/EBITDA（液冷DC基础设施（Secular成长））| 置信度1.0</div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#58a6ff">第一层：行业吸引力（满分100） — VRT — 94.6分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">长期需求空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">AI机架功耗从40kW→120-150kW/架→未来200kW+，液冷从可选变刚需。$5.6-6B市场+25-31% CAGR，TAM来自技术演进而非市场预测，已签合同可验证。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">技术演进确定性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×14</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">14.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">液冷是AI高密度计算的物理必要解决方案。热密度超过一定阈值（150kW/架），风冷物理不可行。Vertiv是行业标准制定者，技术演进方向极为确定。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">利润池位置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Vertiv在液冷/UPS/PDU等DC关键基础设施中处于价值链核心，超大规模客户无法轻易切换。EBITDA Margin~19.5%且仍在扩张，产品可定价。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">行业壁垒</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">三重壁垒：①超大规模DC整合（跨站点一致性）②工程定制化（非标准品）③与NVDA/Meta/Google长期合作关系。迁移成本极高，新进入者难以复制。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">竞争格局</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">9.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Vertiv+Eaton+Schneider Electric三家寡头，Vertiv液冷领先。市场集中，理性竞争，无明显价格战。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">资本强度与周期性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">6.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">相对轻资产，主要靠工程能力而非重制造。订单积压高，周期性低。Capex可控。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">政策与监管风险</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">6.3</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">IRA能效补贴支持，欧盟DC能效标准带动欧洲液冷需求。政策风险极低，几乎全为顺风。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">可验证性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">6.3</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">有机订单增速+54%，EBITDA Margin透明，液冷产品营收单独披露。信息透明度高。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">行业吸引力合计</td><td style="font-weight:700;color:var(--acc)">94.6</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#3fb950">第二层：公司质量（满分100） — VRT — 95.6分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">成长性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×20</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">20.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">有机订单+54% YoY，营收+26%，液冷产品占比持续上升。AI算力密度→液冷→Vertiv的传导链条清晰。未来2-3年高成长可见度高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">盈利质量与价值创造</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EBITDA Margin~19.5%且上升，ROIC超20%，FCF强劲，净现金+$2B。价值创造质量高，规模效应清晰可见。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">结构性护城河</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">超大规模客户无法轻易切换（DC整合+工程定制），创始人Giordano领导团队执行力强。护城河正在因液冷主导地位而加深。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">AI数据中心需求对齐</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">10.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Vertiv是AI数据中心液冷的#1供应商，直接受益于每一个高密度AI计算节点的部署。对齐度完美。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">财务稳健性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">净现金+$2B，无债务压力，FCF充沛，投资级信用。财务状况极佳。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">管理层与资本配置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">10.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Giordano带领团队从私募被收购后成功上市并持续超预期。资本配置纪律好，无不必要并购。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">客户与商业模式</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">8.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">微软/Google/Meta/Amazon等超大规模客户+液冷工程定制合同=高粘性、高续约率。商业模式质量顶级。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">未来可选性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×6</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">5.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">液冷服务/维护收入（长期稳定）；边缘计算扩张；国际市场（欧洲DC能效规范）；下一代冷却技术研发。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(63,185,80,.06)"><td colspan="3" style="font-weight:700;color:var(--s4)">公司质量合计</td><td style="font-weight:700;color:var(--s4)">95.6</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#d29922">第三层：估值安全边际（满分100） — VRT — 57.0分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>估值判断依据</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">情景估值上行空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×35</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">21.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">5年DCF：25x退出×CAGR 25%→年化约11%（基准）。高增速已部分定价，安全边际中等。见下方模型。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">相对估值与成长匹配</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">15.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EV/EBITDA ~25x，液冷DC基础设施成长股合理，但AI主题溢价已较高，PEG等效处于中等水平。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">下行情景保护</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">15.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">净现金+$2B提供底部支撑，但25x EV/EBITDA下行保护有限。悲观情景（AI Capex放缓）跌幅30-40%。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">历史与同行估值对比</td>
+<td style="width:40px;color:var(--mu);text-align:center">×15</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s2);font-weight:700;font-size:11px">2.0/5</span>
+  <span class="score-bar" style="width:40px;background:var(--s2);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s2);font-weight:700;text-align:center">6.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">当前处于历史估值高区，AI重估后接近历史75%分位，较同行基础设施设备商溢价明显。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(210,153,34,.06)"><td colspan="3" style="font-weight:700;color:var(--s3)">估值安全边际合计</td><td style="font-weight:700;color:var(--s3)">57.0</td><td></td></tr></tfoot>
+</table>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div>
+<div class="section-title">📐 5年DCF建模（液冷DC基础设施（Secular成长））</div>
+<div class="dcf-box">
+FY2026E EBITDA ≈ $2.77B<br>
+CAGR 25% → Year5 EBITDA ≈ $8.43B<br>
+退出倍数 25x → Year5 EV ≈ $210.8B<br>
+Year5净债务 $-2.5B → 目标股权 $213.3B<br>
+5年累计股息 $0.5B | 当前市值 $50B<br>
+基准年化总回报 ≈ <strong style="color:var(--s4)">11.0%</strong>
+</div>
+<div class="section-title">📊 四情景概率加权</div>
+<table class="yr-tbl">
+<thead><tr><th>概率</th><th>情景</th><th>核心假设</th><th>年化回报</th></tr></thead>
+<tbody><tr><td>50%</td><td style="font-weight:600">基准</td><td style="font-size:9px;color:var(--mu)">AI Capex维持，液冷需求如期，CAGR 25%，25x退出</td><td class="pos">11.0%</td></tr>
+<tr><td>25%</td><td style="font-weight:600">乐观</td><td style="font-size:9px;color:var(--mu)">液冷渗透率超预期+AI机架功耗加速+28x退出</td><td class="pos">25.0%</td></tr>
+<tr><td>20%</td><td style="font-weight:600">悲观</td><td style="font-size:9px;color:var(--mu)">AI Capex放缓+液冷竞争加剧+18x退出</td><td class="neg">-15.0%</td></tr>
+<tr><td>5%</td><td style="font-weight:600">颠覆</td><td style="font-size:9px;color:var(--mu)">AI Capex大幅削减+新冷却技术替代</td><td class="neg">-50.0%</td></tr>
+</tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">概率加权年化回报</td><td class="pos" style="font-weight:700">9.5%</td></tr></tfoot>
+</table>
+</div>
+<div>
+<div class="section-title">📅 5年 vs 10年对比判断</div>
+<table class="yr-tbl">
+<thead><tr><th>维度</th><th>5年判断</th><th>10年方向</th></tr></thead>
+<tbody>
+<tr><td>EBITDA量级</td><td>$8.4B</td><td>见下方分析</td></tr>
+<tr><td>目标EV</td><td>$210.8B</td><td>$150-300B</td></tr>
+<tr><td>目标股权价值</td><td>$213.3B</td><td>参考区间</td></tr>
+<tr><td>年化总回报</td><td>11.0%（基准）</td><td>加权9.5%</td></tr>
+<tr><td>与当前比较</td><td>低估</td><td>确定性上升</td></tr>
+</tbody>
+</table>
+<div class="pre-box" style="margin-top:6px">
+<h4>10年方向性判断</h4>
+<div style="font-size:10px;color:var(--mu);line-height:1.6">液冷是AI数据中心长期必需基础设施。10年内Vertiv若维持液冷领导地位，市值可达$150-300B。AI机架功耗200kW+时代到来将是下一轮催化剂。</div>
+</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div class="card">
+<div class="ct">否决项检查</div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>无财务造假疑点</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>净现金，无债务压力</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>液冷技术路线验证（已大规模部署）</span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ EV/EBITDA 25x，估值不便宜  <em style="color:var(--mu);font-size:9px">持续跟踪：若AI Capex放缓需重评</em></span></div>
+
+</div>
+<div class="card">
+<div class="ct">近期可跟踪催化剂（不进公式）</div>
+<div class="catalyst-item">→ AI DC新大型合同（微软/Meta/Google新园区液冷定制）</div>
+<div class="catalyst-item">→ 液冷占比突破40%（单季度报告）</div>
+<div class="catalyst-item">→ EBITDA Margin突破21%</div>
+<div class="catalyst-item">→ 欧洲DC能效规范落地带动海外订单</div>
+
+</div>
+</div>
+
+<div class="co-hdr" style="border-color:#76e3b0;margin-top:24px">
+  <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">
+    ETN · 伊顿公司 Eaton Corporation
+    <span style="font-size:11px;color:#76e3b0;margin-left:6px">多元化电力管理（含液冷/电气/航空）</span>
+    <span class="gp gpB" style="margin-left:8px">B级</span>
+    <span style="color:var(--mu);font-size:11px;margin-left:6px">最终 66.2</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+<div class="card">
+<div class="ct">关键指标（2026-06-01）</div>
+<table class="t"><tr><td style="color:var(--mu);width:140px">Q1 2026营收</td><td><strong class="pos">$6.37B</strong> <span style="color:var(--mu);font-size:9px">(+12% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">电气部门营收占比</td><td><strong class="pos">~65%</strong> <span style="color:var(--mu);font-size:9px">核心AI受益部门</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">调整后EPS</td><td><strong class="pos">$3.01</strong> <span style="color:var(--mu);font-size:9px">(+15% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">FY2026指引EPS</td><td><strong class="pos">$12.0-12.40</strong> <span style="color:var(--mu);font-size:9px">管理层指引</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EV/EBITDA</td><td><strong class="neu">~20x</strong> <span style="color:var(--mu);font-size:9px">多元工业合理</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">数据中心电气增速</td><td><strong class="pos">+30%+ YoY</strong> <span style="color:var(--mu);font-size:9px">DC业务加速</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">市值</td><td><strong class="neu">~$140B</strong> <span style="color:var(--mu);font-size:9px">2026-06-01</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">股息收益率</td><td><strong class="neu">~1.0%</strong> <span style="color:var(--mu);font-size:9px">长期成长型</span></td></tr>
+</table>
+</div>
+<div class="card">
+<div class="ct">最终评分公式</div>
+<div class="fml">
+行业78.0 × 20% + 质量78.6 × 50% + 估值58.5 × 30%<br>
+基础分 = 72.5 × 置信度1.0 = <span class="fr">72.5</span>
+<div style="color:var(--mu);font-size:9px;margin-top:3px">退出倍数：18x EV/EBITDA（多元化工业（电气+20%，航空/汽车-10%，综合18x））| 置信度1.0</div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#58a6ff">第一层：行业吸引力（满分100） — ETN — 78.0分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">长期需求空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气部门（~65%）直接受益AI DC需求。变压器/开关设备/UPS/PDU均是DC必需品，数据中心电气增速+30%+。但航空（~20%）和汽车等板块拉低整体AI受益程度。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">技术演进确定性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×14</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">11.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">ETN电气部门技术路线确定（标准化+定制化），DC电力系统无可替代。但非液冷专家，在DC基础设施价值链位置略低于Vertiv。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">利润池位置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气部门利润池强（变压器+开关设备有定价权），但航空/汽车稀释整体EBITDA Margin。综合利润池中等偏高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">行业壁垒</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气产品有技术壁垒+认证壁垒，但多元化使集中度分散。相比Vertiv（液冷专家）和HUBB（变压器专家），ETN是多面手。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">竞争格局</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">8.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气领域ABB/Siemens/Schneider竞争，但ETN有美国本土优势。多元化导致在每个细分市场都不是绝对龙头。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">资本强度与周期性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">重资产制造，但订单积压有保护。航空/汽车增加周期性风险。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">政策与监管风险</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">IRA/基础设施法案双重受益，能效政策推动升级需求。政策支持面广。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">可验证性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">财务报告透明，电气/工业/航空分部独立披露。DC收入可追踪。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">行业吸引力合计</td><td style="font-weight:700;color:var(--acc)">78.0</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#3fb950">第二层：公司质量（满分100） — ETN — 78.6分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">成长性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×20</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">16.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气部门+30%+，整体+12%（航空/汽车拖累）。FY2026 EPS指引$12.0-12.40持续超预期。增速中等偏好，但有轨迹向上。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">盈利质量与价值创造</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">调整后EBITDA Margin~22%，ROIC超15%，FCF强，股息稳定增长。多元化工业典范，盈利质量高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">结构性护城河</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">ETN在电气/液压/航空各领域有独立护城河，但无一是绝对主导。品牌+认证+客户关系综合形成强大壁垒。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">AI数据中心需求对齐</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">7.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电气部门（65%）与DC对齐度高，但整体公司AI敞口约35-40%（其他业务不受益）。实际AI对齐度中等。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">财务稳健性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">A级信用评级，净债务/EBITDA~2x，FCF充沛，股息连续增长50年+（Dividend Aristocrat）。财务极为稳健。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">管理层与资本配置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">9.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Craig Arnold CEO执行纪律好，并购历史理性（无白象项目）。电气部门AI机会抓得准。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">客户与商业模式</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">客户多元（超大规模DC+工业+政府），无单一依赖。但多元化降低了在AI DC领域的专注度。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">未来可选性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×6</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">4.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">液冷扩张；电网现代化EV充电；航空电气化；工业自动化。路径多但每个都不是主线。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(63,185,80,.06)"><td colspan="3" style="font-weight:700;color:var(--s4)">公司质量合计</td><td style="font-weight:700;color:var(--s4)">78.6</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#d29922">第三层：估值安全边际（满分100） — ETN — 58.5分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>估值判断依据</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">情景估值上行空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×35</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">21.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">5年DCF年化约8.8%，考虑股息后约9.5%。有安全边际但不突出，更像稳健增长股。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">相对估值与成长匹配</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">2.5/5</span>
+  <span class="score-bar" style="width:50px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">12.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EV/EBITDA ~20x，多元工业历史14-18x，AI溢价推高约2-3x，略贵。DC+航空组合难以简单比较。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">下行情景保护</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">17.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">A级信用+股息历史+多元化保护。悲观情景下跌估计25-35%，比纯液冷成长股更有支撑。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">历史与同行估值对比</td>
+<td style="width:40px;color:var(--mu);text-align:center">×15</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">2.5/5</span>
+  <span class="score-bar" style="width:50px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">7.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">历史75%分位附近，AI主题重估后较历史均值溢价约30%，需要电气部门持续超预期支撑。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(210,153,34,.06)"><td colspan="3" style="font-weight:700;color:var(--s3)">估值安全边际合计</td><td style="font-weight:700;color:var(--s3)">58.5</td><td></td></tr></tfoot>
+</table>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div>
+<div class="section-title">📐 5年DCF建模（多元化工业（电气+20%，航空/汽车-10%，综合18x））</div>
+<div class="dcf-box">
+FY2026E EBITDA ≈ $6.80B<br>
+CAGR 12% → Year5 EBITDA ≈ $11.98B<br>
+退出倍数 18x → Year5 EV ≈ $215.6B<br>
+Year5净债务 $15.0B → 目标股权 $200.6B<br>
+5年累计股息 $8.6B | 当前市值 $140B<br>
+基准年化总回报 ≈ <strong style="color:var(--s4)">8.8%</strong>
+</div>
+<div class="section-title">📊 四情景概率加权</div>
+<table class="yr-tbl">
+<thead><tr><th>概率</th><th>情景</th><th>核心假设</th><th>年化回报</th></tr></thead>
+<tbody><tr><td>50%</td><td style="font-weight:600">基准</td><td style="font-size:9px;color:var(--mu)">电气+12%，DC持续超预期，CAGR 12%，18x退出</td><td class="pos">8.8%</td></tr>
+<tr><td>25%</td><td style="font-weight:600">乐观</td><td style="font-size:9px;color:var(--mu)">DC电气加速+航空恢复+20x退出</td><td class="pos">18.0%</td></tr>
+<tr><td>20%</td><td style="font-weight:600">悲观</td><td style="font-size:9px;color:var(--mu)">航空/汽车周期下行+DC Capex放缓</td><td class="neg">-10.0%</td></tr>
+<tr><td>5%</td><td style="font-weight:600">颠覆</td><td style="font-size:9px;color:var(--mu)">经济衰退+多元化板块同步下行</td><td class="neg">-35.0%</td></tr>
+</tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">概率加权年化回报</td><td class="pos" style="font-weight:700">8.0%</td></tr></tfoot>
+</table>
+</div>
+<div>
+<div class="section-title">📅 5年 vs 10年对比判断</div>
+<table class="yr-tbl">
+<thead><tr><th>维度</th><th>5年判断</th><th>10年方向</th></tr></thead>
+<tbody>
+<tr><td>EBITDA量级</td><td>$12.0B</td><td>见下方分析</td></tr>
+<tr><td>目标EV</td><td>$215.6B</td><td>$200-350B</td></tr>
+<tr><td>目标股权价值</td><td>$200.6B</td><td>参考区间</td></tr>
+<tr><td>年化总回报</td><td>8.8%（基准）</td><td>加权8.0%</td></tr>
+<tr><td>与当前比较</td><td>合理</td><td>确定性上升</td></tr>
+</tbody>
+</table>
+<div class="pre-box" style="margin-top:6px">
+<h4>10年方向性判断</h4>
+<div style="font-size:10px;color:var(--mu);line-height:1.6">ETN 10年的核心是电气部门比重能否继续提升（从65%→75%+）。若电气主导化完成，10年市值$200-350B区间。稳健的股息贵族+AI受益工业股。</div>
+</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div class="card">
+<div class="ct">否决项检查</div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>无财务造假疑点</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>A级信用，股息贵族，无债务压力</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>多元化保护，无单一业务依赖</span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ 航空/汽车周期性拖累整体AI受益程度  <em style="color:var(--mu);font-size:9px">非否决，但影响相对纯液冷公司的评分</em></span></div>
+
+</div>
+<div class="card">
+<div class="ct">近期可跟踪催化剂（不进公式）</div>
+<div class="catalyst-item">→ 电气部门季报超预期（DC订单持续加速）</div>
+<div class="catalyst-item">→ 液冷产品新合同</div>
+<div class="catalyst-item">→ FY2026 EPS指引上调</div>
+<div class="catalyst-item">→ 工业自动化+AI结合产品发布</div>
+
+</div>
+</div>
+
+<div class="co-hdr" style="border-color:#bc8cff;margin-top:24px">
+  <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">
+    HUBB · Hubbell Incorporated
+    <span style="font-size:11px;color:#bc8cff;margin-left:6px">变压器/开关设备（Secular短缺）</span>
+    <span class="gp gpB" style="margin-left:8px">B级</span>
+    <span style="color:var(--mu);font-size:11px;margin-left:6px">最终 67.9</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+<div class="card">
+<div class="ct">关键指标（2026-06-01）</div>
+<table class="t"><tr><td style="color:var(--mu);width:140px">Q1 2026营收</td><td><strong class="pos">$1.6B</strong> <span style="color:var(--mu);font-size:9px">(+14% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">变压器积压订单</td><td><strong class="pos">多年积压</strong> <span style="color:var(--mu);font-size:9px">160周交期</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">电气产品价格涨幅</td><td><strong class="pos">+高个位数</strong> <span style="color:var(--mu);font-size:9px">定价权体现</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">FY2026 EPS指引</td><td><strong class="pos">$17.0-17.30</strong> <span style="color:var(--mu);font-size:9px">超市场预期</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EBITDA Margin</td><td><strong class="pos">~22-24%</strong> <span style="color:var(--mu);font-size:9px">变压器短缺获益</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EV/EBITDA</td><td><strong class="neu">~16x</strong> <span style="color:var(--mu);font-size:9px">合理区间</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">市值</td><td><strong class="neu">~$22B</strong> <span style="color:var(--mu);font-size:9px">2026-06-01</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">主要产品</td><td><strong class="neu">配电变压器/开关设备/连接件</strong> <span style="color:var(--mu);font-size:9px">DC电力必需品</span></td></tr>
+</table>
+</div>
+<div class="card">
+<div class="ct">最终评分公式</div>
+<div class="fml">
+行业85.5 × 20% + 质量77.6 × 50% + 估值72.0 × 30%<br>
+基础分 = 77.5 × 置信度1.0 = <span class="fr">77.5</span>
+<div style="color:var(--mu);font-size:9px;margin-top:3px">退出倍数：16x EV/EBITDA（变压器Secular短缺（160周交期=结构性））| 置信度1.0</div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#58a6ff">第一层：行业吸引力（满分100） — HUBB — 85.5分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">长期需求空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器是AI数据中心电力基础设施的#1硬性卡点（160周=3年+交期）。50%+美国DC项目因变压器短缺延期，需求来自真实项目积压而非预测。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">技术演进确定性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×14</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">12.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器是无可替代的物理设施（铜/钢/绝缘油组成），无技术替代威胁。数字化变压器是升级而非替代，HUBB技术演进方向确定。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">利润池位置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器160周交期=制造商定价权极强，行业整体在提价（+高个位数YoY）。HUBB在配电变压器领域是美国市场主导者之一。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">行业壁垒</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器制造需要：大型制造基地+技术工人+铜/钢供应链管理+长期客户认证。新进入者需要5年+才能达到竞争性规模。HUBB有历史积累。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">竞争格局</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">9.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">美国变压器市场ABB/HUBB/SPX少数几家主导，市场集中，定价理性。进口变压器因关税受限，竞争格局有利。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">资本强度与周期性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">6.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器是成熟制造业，Capex可预期。但当前扩产Capex较大（需要新产能应对积压）。订单积压保护资本回收。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">政策与监管风险</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">6.3</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">IRA/基础设施法案直接带动电网升级需求（变压器是核心），FERC改革支持，政策顺风强劲。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">可验证性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">财务数据透明，变压器价格涨幅行业可独立验证，积压订单有指引。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">行业吸引力合计</td><td style="font-weight:700;color:var(--acc)">85.5</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#3fb950">第二层：公司质量（满分100） — HUBB — 77.6分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">成长性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×20</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">16.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Q1+14% YoY，变压器短缺带动持续提价+量增。FY2026 EPS指引超预期。增速中等但趋势secular，轨迹向上确定。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">盈利质量与价值创造</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">11.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EBITDA Margin~22-24%，ROIC~12%（低于EME的27%+），但变压器定价权支撑。FCF良好，股息稳定。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">结构性护城河</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">14.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器制造积累（设备+工人+供应链）+客户认证+品牌。护城河稳定，因160周供给约束而在扩大。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">AI数据中心需求对齐</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">变压器是AI DC电力基础设施的物理必需品，50%+DC项目延期的直接原因。AI对齐度高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">财务稳健性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">8.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">投资级BBB+信用，净债务适中，FCF覆盖股息，无资金压力。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">管理层与资本配置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">8.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Gerben Bakker CEO稳健经营，产能扩张决策及时。但变压器周期管理历史上有过低点（疫情期间库存过低）。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">客户与商业模式</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">6.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">公用事业+工业+DC开发商客户组合，分散且优质。长期框架合同为主。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">未来可选性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×6</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">4.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">国际市场扩张（变压器全球短缺）；数字化变压器（监测+效率）；新兴市场电网投资。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(63,185,80,.06)"><td colspan="3" style="font-weight:700;color:var(--s4)">公司质量合计</td><td style="font-weight:700;color:var(--s4)">77.6</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#d29922">第三层：估值安全边际（满分100） — HUBB — 72.0分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>估值判断依据</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">情景估值上行空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×35</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">28.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">5年DCF年化约12-14%（含股息），变压器secular短缺支撑。见下方模型。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">相对估值与成长匹配</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">17.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EV/EBITDA ~16x，变压器Secular短缺合理区间14-18x，当前位于中位，有吸引力。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">下行情景保护</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">17.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">投资级信用+变压器物理需求地板+股息保护。悲观情景（短缺结束）下跌估计25-35%，有一定支撑。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">历史与同行估值对比</td>
+<td style="width:40px;color:var(--mu);text-align:center">×15</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">历史中位数附近，Secular框架支撑略高于历史均值，与同行变压器厂商对比合理。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(210,153,34,.06)"><td colspan="3" style="font-weight:700;color:var(--s3)">估值安全边际合计</td><td style="font-weight:700;color:var(--s3)">72.0</td><td></td></tr></tfoot>
+</table>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div>
+<div class="section-title">📐 5年DCF建模（变压器Secular短缺（160周交期=结构性））</div>
+<div class="dcf-box">
+FY2026E EBITDA ≈ $1.30B<br>
+CAGR 10% → Year5 EBITDA ≈ $2.09B<br>
+退出倍数 16x → Year5 EV ≈ $33.4B<br>
+Year5净债务 $3.0B → 目标股权 $30.4B<br>
+5年累计股息 $1.7B | 当前市值 $22B<br>
+基准年化总回报 ≈ <strong style="color:var(--s4)">12.0%</strong>
+</div>
+<div class="section-title">📊 四情景概率加权</div>
+<table class="yr-tbl">
+<thead><tr><th>概率</th><th>情景</th><th>核心假设</th><th>年化回报</th></tr></thead>
+<tbody><tr><td>50%</td><td style="font-weight:600">基准</td><td style="font-size:9px;color:var(--mu)">变压器短缺维持，CAGR 10%，16x退出，含股息12%年化</td><td class="pos">12.0%</td></tr>
+<tr><td>25%</td><td style="font-weight:600">乐观</td><td style="font-size:9px;color:var(--mu)">价格继续提升+国际扩张+18x退出</td><td class="pos">22.0%</td></tr>
+<tr><td>20%</td><td style="font-weight:600">悲观</td><td style="font-size:9px;color:var(--mu)">新产能上线加速+短缺缓解+14x退出</td><td class="neg">-5.0%</td></tr>
+<tr><td>5%</td><td style="font-weight:600">颠覆</td><td style="font-size:9px;color:var(--mu)">需求大幅下降+价格战</td><td class="neg">-30.0%</td></tr>
+</tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">概率加权年化回报</td><td class="pos" style="font-weight:700">10.5%</td></tr></tfoot>
+</table>
+</div>
+<div>
+<div class="section-title">📅 5年 vs 10年对比判断</div>
+<table class="yr-tbl">
+<thead><tr><th>维度</th><th>5年判断</th><th>10年方向</th></tr></thead>
+<tbody>
+<tr><td>EBITDA量级</td><td>$2.1B</td><td>见下方分析</td></tr>
+<tr><td>目标EV</td><td>$33.4B</td><td>$35-55B</td></tr>
+<tr><td>目标股权价值</td><td>$30.4B</td><td>参考区间</td></tr>
+<tr><td>年化总回报</td><td>12.0%（基准）</td><td>加权10.5%</td></tr>
+<tr><td>与当前比较</td><td>低估</td><td>确定性上升</td></tr>
+</tbody>
+</table>
+<div class="pre-box" style="margin-top:6px">
+<h4>10年方向性判断</h4>
+<div style="font-size:10px;color:var(--mu);line-height:1.6">变压器短缺预计持续至2027-2028（新产能上线），届时定价权将回落。HUBB 10年价值取决于能否向数字化变压器转型。保守10年市值$35-55B区间。</div>
+</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div class="card">
+<div class="ct">否决项检查</div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>无财务造假疑点</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>BBB+信用，无债务压力</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>变压器物理需求地板（无技术替代）</span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ 2027-2028新产能上线后短缺缓解是核心风险  <em style="color:var(--mu);font-size:9px">需持续跟踪：短缺结束时间线</em></span></div>
+
+</div>
+<div class="card">
+<div class="ct">近期可跟踪催化剂（不进公式）</div>
+<div class="catalyst-item">→ 变压器新产能公告（上调FY2027产量指引）</div>
+<div class="catalyst-item">→ 大型DC园区变压器供货合同</div>
+<div class="catalyst-item">→ 价格维持高位的季报证据</div>
+<div class="catalyst-item">→ FERC互联改革加速带来的公用事业升级订单</div>
+
+</div>
+</div>
+
+<div class="co-hdr" style="border-color:#f0883e;margin-top:24px">
+  <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">
+    POWL · Powell Industries
+    <span style="font-size:11px;color:#f0883e;margin-left:6px">定制开关设备（数据中心/石化/公用事业）</span>
+    <span class="gp gpC" style="margin-left:8px">C级</span>
+    <span style="color:var(--mu);font-size:11px;margin-left:6px">最终 54.9</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+<div class="card">
+<div class="ct">关键指标（2026-06-01）</div>
+<table class="t"><tr><td style="color:var(--mu);width:140px">FY2025营收</td><td><strong class="pos">$1.01B</strong> <span style="color:var(--mu);font-size:9px">(+36% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">积压订单</td><td><strong class="pos">$1.36B</strong> <span style="color:var(--mu);font-size:9px">历史高点</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">FY2026指引营收</td><td><strong class="pos">$1.3-1.4B</strong> <span style="color:var(--mu);font-size:9px">持续增长</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EBITDA Margin</td><td><strong class="pos">~17%</strong> <span style="color:var(--mu);font-size:9px">改善趋势</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EV/EBITDA</td><td><strong class="neg">~55x</strong> <span style="color:var(--mu);font-size:9px">严重溢价</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">市值</td><td><strong class="neg">~$10.7B</strong> <span style="color:var(--mu);font-size:9px">年初涨幅大</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">DC单笔合同</td><td><strong class="pos">$400M+历史最大</strong> <span style="color:var(--mu);font-size:9px">2025年Q3公告</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">P/E（NTM）</td><td><strong class="neg">~55x</strong> <span style="color:var(--mu);font-size:9px">透支未来</span></td></tr>
+</table>
+</div>
+<div class="card">
+<div class="ct">最终评分公式</div>
+<div class="fml">
+行业84.6 × 20% + 质量84.8 × 50% + 估值21.5 × 30%<br>
+基础分 = 65.8 × 置信度0.9 = <span class="fr">59.2</span>
+<div style="color:var(--mu);font-size:9px;margin-top:3px">退出倍数：22x EV/EBITDA（Secular成长小市值开关设备（数据中心标准化机会））| 置信度0.9</div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#58a6ff">第一层：行业吸引力（满分100） — POWL — 84.6分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">长期需求空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制开关设备是离网/专用DC园区的必需品（POWL $400M+单笔历史最大合同），需求来自超大规模DC建设浪潮。石化/LNG/公用事业三线驱动，TAM稳定扩大。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">技术演进确定性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×14</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">11.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">开关设备技术成熟，无颠覆性替代威胁。AI DC需求推动定制化升级。但POWL属于定制制造商，不是技术引领者。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">利润池位置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制开关设备有技术门槛，价格议价空间好于标准品。但客户多元（DC+石化+公用事业），无单一垄断定价权。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">行业壁垒</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制制造（工程能力+认证）+细分市场规模（POWL是美国最大独立开关设备商之一）。壁垒实在，但主要靠工程积累。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">竞争格局</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">9.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制开关设备市场相对集中（ABB/POWL/少数专家），理性竞争，定制品价格战少。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">资本强度与周期性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制制造资本轻（主要是工程+技工），但受石化/LNG周期影响，有一定周期性。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">政策与监管风险</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">IRA/基础设施法案支持，DC建设持续，石化/LNG有政策支持。整体政策中性偏正面。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">可验证性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">5.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">积压订单定期披露，DC合同$400M公告透明，营收可追踪。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">行业吸引力合计</td><td style="font-weight:700;color:var(--acc)">84.6</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#3fb950">第二层：公司质量（满分100） — POWL — 84.8分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">成长性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×20</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">FY2025+36% YoY，FY2026指引$1.3-1.4B，积压$1.36B历史高点，成长动力强劲。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">盈利质量与价值创造</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EBITDA Margin~17%改善中，ROIC提升，FCF正。盈利质量良好且趋势向上。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">结构性护城河</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">定制工程能力+认证体系+小市值（客户/大型项目认证积累难以复制）。相对规模的护城河意外坚固。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">AI数据中心需求对齐</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">$400M+DC单笔历史最大合同验证了POWL对AI DC的直接价值。开关设备是DC园区电力分配的关键。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">财务稳健性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">8.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">无息负债，净现金，FCF覆盖。小市值公司财务非常稳健。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">管理层与资本配置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">9.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Brett Cope CEO执行力强，持续超预期指引。小公司管理层集中度高，决策灵活。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">客户与商业模式</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">6.4</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">超大规模DC+石化+公用事业客户多元，$400M+合同证明超大规模客户信任度。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">未来可选性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×6</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">4.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">DC园区标准化（从定制到规模化）；国际开关设备需求；LNG出口扩张带动配电需求。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(63,185,80,.06)"><td colspan="3" style="font-weight:700;color:var(--s4)">公司质量合计</td><td style="font-weight:700;color:var(--s4)">84.8</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#d29922">第三层：估值安全边际（满分100） — POWL — 21.5分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>估值判断依据</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">情景估值上行空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×35</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s1);font-weight:700;font-size:11px">0.5/5</span>
+  <span class="score-bar" style="width:10px;background:var(--s1);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s1);font-weight:700;text-align:center">3.5</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">5年DCF：即使CAGR 20%×22x退出→Year5 EV ~$13.7B，vs当前$10.7B市值→年化仅5.1%+。$400M+单合同涨幅已被充分定价，进一步上行有限。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">相对估值与成长匹配</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s1);font-weight:700;font-size:11px">1.0/5</span>
+  <span class="score-bar" style="width:20px;background:var(--s1);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s1);font-weight:700;text-align:center">5.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EV/EBITDA ~55x，即使用FY2026E也超30x。开关设备制造商历史10-18x，当前溢价极大。PEG等效严重透支。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">下行情景保护</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s2);font-weight:700;font-size:11px">2.0/5</span>
+  <span class="score-bar" style="width:40px;background:var(--s2);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s2);font-weight:700;text-align:center">10.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">净现金+积压订单提供一定底部，但55x EV/EBITDA下行空间很大。悲观情景跌幅40-50%。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">历史与同行估值对比</td>
+<td style="width:40px;color:var(--mu);text-align:center">×15</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s1);font-weight:700;font-size:11px">1.0/5</span>
+  <span class="score-bar" style="width:20px;background:var(--s1);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s1);font-weight:700;text-align:center">3.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">历史最高估值区域，AI主题泡沫化，明显高于同行。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(210,153,34,.06)"><td colspan="3" style="font-weight:700;color:var(--s3)">估值安全边际合计</td><td style="font-weight:700;color:var(--s3)">21.5</td><td></td></tr></tfoot>
+</table>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div>
+<div class="section-title">📐 5年DCF建模（Secular成长小市值开关设备（数据中心标准化机会））</div>
+<div class="dcf-box">
+FY2026E EBITDA ≈ $0.25B<br>
+CAGR 20% → Year5 EBITDA ≈ $0.62B<br>
+退出倍数 22x → Year5 EV ≈ $13.6B<br>
+Year5净债务 $-0.5B → 目标股权 $14.1B<br>
+5年累计股息 $0.2B | 当前市值 $10.7B<br>
+基准年化总回报 ≈ <strong style="color:var(--s4)">5.1%</strong>
+</div>
+<div class="section-title">📊 四情景概率加权</div>
+<table class="yr-tbl">
+<thead><tr><th>概率</th><th>情景</th><th>核心假设</th><th>年化回报</th></tr></thead>
+<tbody><tr><td>50%</td><td style="font-weight:600">基准</td><td style="font-size:9px;color:var(--mu)">积压执行，CAGR 20%，22x退出，年化5%（不够吸引力）</td><td class="pos">5.1%</td></tr>
+<tr><td>25%</td><td style="font-weight:600">乐观</td><td style="font-size:9px;color:var(--mu)">DC需求超预期+大额新合同+25x退出</td><td class="pos">18.0%</td></tr>
+<tr><td>20%</td><td style="font-weight:600">悲观</td><td style="font-size:9px;color:var(--mu)">$400M合同后无后续，周期回落+15x退出</td><td class="neg">-40.0%</td></tr>
+<tr><td>5%</td><td style="font-weight:600">颠覆</td><td style="font-size:9px;color:var(--mu)">DC Capex大幅削减+竞争加剧</td><td class="neg">-70.0%</td></tr>
+</tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">概率加权年化回报</td><td class="pos" style="font-weight:700">3.5%</td></tr></tfoot>
+</table>
+</div>
+<div>
+<div class="section-title">📅 5年 vs 10年对比判断</div>
+<table class="yr-tbl">
+<thead><tr><th>维度</th><th>5年判断</th><th>10年方向</th></tr></thead>
+<tbody>
+<tr><td>EBITDA量级</td><td>$0.6B</td><td>见下方分析</td></tr>
+<tr><td>目标EV</td><td>$13.6B</td><td>$20-40B</td></tr>
+<tr><td>目标股权价值</td><td>$14.1B</td><td>参考区间</td></tr>
+<tr><td>年化总回报</td><td>5.1%（基准）</td><td>加权3.5%</td></tr>
+<tr><td>与当前比较</td><td>合理</td><td>不确定</td></tr>
+</tbody>
+</table>
+<div class="pre-box" style="margin-top:6px">
+<h4>10年方向性判断</h4>
+<div style="font-size:10px;color:var(--mu);line-height:1.6">POWL 10年取决于能否从定制小批量转向DC园区标准化大批量。若成功，市值$20-40B区间。但当前$10.7B的起点已经定价了相当多的成功。</div>
+</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div class="card">
+<div class="ct">否决项检查</div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>无财务造假疑点</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>净现金，无债务压力</span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ EV/EBITDA ~55x，估值严重透支成长  <em style="color:var(--mu);font-size:9px">核心否决边缘：Layer 3打分拉低最终分</em></span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ 小市值，信息不透明度高于大公司  <em style="color:var(--mu);font-size:9px">持续跟踪季报验证</em></span></div>
+
+</div>
+<div class="card">
+<div class="ct">近期可跟踪催化剂（不进公式）</div>
+<div class="catalyst-item">→ 连续两季度新DC合同超$200M（验证不是one-time）</div>
+<div class="catalyst-item">→ EBITDA Margin突破20%</div>
+<div class="catalyst-item">→ 积压订单继续创新高</div>
+<div class="catalyst-item">→ 市值回落到6-8x NTM EV/EBITDA（估值修正后重评）</div>
+
+</div>
+</div>
+
+<div class="co-hdr" style="border-color:#ffd700;margin-top:24px">
+  <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">
+    MPWR · Monolithic Power Systems
+    <span style="font-size:11px;color:#ffd700;margin-left:6px">AI服务器电源管理IC（Fabless半导体）</span>
+    <span class="gp gpB" style="margin-left:8px">B级</span>
+    <span style="color:var(--mu);font-size:11px;margin-left:6px">最终 68.2</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+<div class="card">
+<div class="ct">关键指标（2026-06-01）</div>
+<table class="t"><tr><td style="color:var(--mu);width:140px">Q1 2026营收</td><td><strong class="pos">$704M</strong> <span style="color:var(--mu);font-size:9px">(+32% YoY)</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">毛利率</td><td><strong class="pos">55.6%</strong> <span style="color:var(--mu);font-size:9px">Fabless高水平</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">EV/EBITDA（NTM）</td><td><strong class="neg">~40x</strong> <span style="color:var(--mu);font-size:9px">AI半导体估值</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">AI/云营收占比</td><td><strong class="pos">~50%+</strong> <span style="color:var(--mu);font-size:9px">快速上升</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">市值</td><td><strong class="neu">~$35B</strong> <span style="color:var(--mu);font-size:9px">2026-06-01估算</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">核心产品</td><td><strong class="pos">AI服务器电源PMIC/VR</strong> <span style="color:var(--mu);font-size:9px">GB200 NVL72覆盖</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">竞争对手</td><td><strong class="neu">TI/Renesas/Infineon</strong> <span style="color:var(--mu);font-size:9px">半导体巨头</span></td></tr>
+<tr><td style="color:var(--mu);width:140px">FY2026指引</td><td><strong class="pos">持续高增长</strong> <span style="color:var(--mu);font-size:9px">管理层预期</span></td></tr>
+</table>
+</div>
+<div class="card">
+<div class="ct">最终评分公式</div>
+<div class="fml">
+行业78.4 × 20% + 质量99.2 × 50% + 估值67.0 × 30%<br>
+基础分 = 85.4 × 置信度0.85 = <span class="fr">72.6</span>
+<div style="color:var(--mu);font-size:9px;margin-top:3px">退出倍数：30x EV/EBITDA（AI服务器电源IC Fabless（高质量成长））| 置信度0.85</div>
+</div>
+</div>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#58a6ff">第一层：行业吸引力（满分100） — MPWR — 78.4分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">长期需求空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">AI服务器电源IC随AI算力扩张高度相关。GB200/GB300每个机架需要更多更精密的电源管理芯片，TAM增速快于整体DC Capex。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">技术演进确定性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×14</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">11.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">电源IC技术路线（PWM控制/PMIC/VR）与AI芯片演进高度绑定。但TI/Renesas等巨头也在加码，技术路线不唯一。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">利润池位置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.8</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Fabless商业模式，毛利率~55%，利润池良好。但半导体中层（电源IC非顶层像GPU/HBM），上下游都有压力。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">行业壁垒</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">12.6</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">AI服务器认证壁垒（Nvidia/超大规模平台认证）+IP积累+工程师团队。壁垒实在但非不可逾越。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">竞争格局</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">7.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">TI/Renesas/Infineon均在进攻AI服务器市场，竞争比Vertiv更激烈。MPWR技术领先但份额竞争激烈。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">资本强度与周期性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">7.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Fabless模式轻资产，周期性低于IDM。利用台积电产能，资本开支极低。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">政策与监管风险</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">3.5/5</span>
+  <span class="score-bar" style="width:70px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">4.9</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">出口管制风险（对中国AI芯片限制可能波及上游电源IC，但影响有限）。整体风险中等。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">可验证性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×7</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">6.3</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Fabless标准披露，营收分产品线可见，毛利率透明。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">行业吸引力合计</td><td style="font-weight:700;color:var(--acc)">78.4</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#3fb950">第二层：公司质量（满分100） — MPWR — 99.2分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>核心证据（当前40%+轨迹60%）</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">成长性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×20</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">20.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Q1+32% YoY，AI/云占比50%+快速上升。每一代AI加速器更新（GB200→GB300）都是MPWR的新机会。增速快且有可见度。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">盈利质量与价值创造</td>
+<td style="width:40px;color:var(--mu);text-align:center">×16</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">16.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">毛利率~55.6%，ROIC超20%，FCF充沛，轻资产Fabless模式。价值创造质量优秀，规模效应持续体现。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">结构性护城河</td>
+<td style="width:40px;color:var(--mu);text-align:center">×18</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">18.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">AI服务器平台认证（一旦进入GB200/300供应链极难被替换）+高工程复杂度IP+Michael Hsing创始人技术积累。护城河因AI机遇而在拓宽。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">AI数据中心需求对齐</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">10.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">MPWR是AI服务器GPU机架电源IC的核心供应商，直接随AI算力扩张受益，技术对齐度最高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">财务稳健性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×10</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">10.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">净现金充足，无债务，FCF覆盖远超股息，稀释率极低。Fabless财务典范。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">管理层与资本配置</td>
+<td style="width:40px;color:var(--mu);text-align:center">×12</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">12.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Michael Hsing创始人/CEO持股显著（~4%），30年技术积累，并购历史谨慎，ROIC历史超20%。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">客户与商业模式</td>
+<td style="width:40px;color:var(--mu);text-align:center">×8</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">4.5/5</span>
+  <span class="score-bar" style="width:90px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">7.2</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">Nvidia/Meta/Google/Amazon平台认证客户，合同周期相对短（半导体行业特性），但AI平台粘性极高。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">未来可选性</td>
+<td style="width:40px;color:var(--mu);text-align:center">×6</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s5);font-weight:700;font-size:11px">5.0/5</span>
+  <span class="score-bar" style="width:100px;background:var(--s5);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s5);font-weight:700;text-align:center">6.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">下一代AI加速器（GB300/次世代）电源IC机会；汽车电气化（进入大市场）；工业自动化。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(63,185,80,.06)"><td colspan="3" style="font-weight:700;color:var(--s4)">公司质量合计</td><td style="font-weight:700;color:var(--s4)">99.2</td><td></td></tr></tfoot>
+</table>
+</div>
+<div class="card" style="margin-bottom:6px">
+<div class="ct" style="color:#d29922">第三层：估值安全边际（满分100） — MPWR — 67.0分</div>
+<table class="dim-tbl">
+<thead><tr><th>维度</th><th>权重</th><th>打分</th><th>加权分</th><th>估值判断依据</th></tr></thead>
+<tbody><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">情景估值上行空间</td>
+<td style="width:40px;color:var(--mu);text-align:center">×35</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s4);font-weight:700;font-size:11px">4.0/5</span>
+  <span class="score-bar" style="width:80px;background:var(--s4);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s4);font-weight:700;text-align:center">28.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">5年DCF年化约19%（基准），AI服务器持续扩张支撑。Fabless半导体成长溢价合理。见下方模型。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">相对估值与成长匹配</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">15.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">EV/EBITDA ~40x，AI半导体同行中中等（NVDA更贵），但相比MPWR增速溢价合理。PEG等效约1.2-1.5x，勉强可接受。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">下行情景保护</td>
+<td style="width:40px;color:var(--mu);text-align:center">×25</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">15.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">净现金+Fabless轻资产，但40x EV/EBITDA下行保护有限。若AI Capex放缓或竞争加剧，跌幅可能35-50%。</td>
+</tr><tr>
+<td style="width:120px;font-weight:600;color:var(--text)">历史与同行估值对比</td>
+<td style="width:40px;color:var(--mu);text-align:center">×15</td>
+<td style="width:80px;text-align:center">
+  <span style="color:var(--s3);font-weight:700;font-size:11px">3.0/5</span>
+  <span class="score-bar" style="width:60px;background:var(--s3);opacity:.7"></span>
+</td>
+<td style="width:50px;color:var(--s3);font-weight:700;text-align:center">9.0</td>
+<td style="color:var(--mu);font-size:9px;line-height:1.5">历史75%分位附近，AI主题重估后较传统工业估值溢价明显，但在AI半导体中并非最贵。</td>
+</tr></tbody>
+<tfoot><tr style="background:rgba(210,153,34,.06)"><td colspan="3" style="font-weight:700;color:var(--s3)">估值安全边际合计</td><td style="font-weight:700;color:var(--s3)">67.0</td><td></td></tr></tfoot>
+</table>
+<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div>
+<div class="section-title">📐 5年DCF建模（AI服务器电源IC Fabless（高质量成长））</div>
+<div class="dcf-box">
+FY2026E EBITDA ≈ $0.90B<br>
+CAGR 25% → Year5 EBITDA ≈ $2.72B<br>
+退出倍数 30x → Year5 EV ≈ $81.5B<br>
+Year5净债务 $-3.0B → 目标股权 $84.5B<br>
+5年累计股息 $0.3B | 当前市值 $35B<br>
+基准年化总回报 ≈ <strong style="color:var(--s4)">19.2%</strong>
+</div>
+<div class="section-title">📊 四情景概率加权</div>
+<table class="yr-tbl">
+<thead><tr><th>概率</th><th>情景</th><th>核心假设</th><th>年化回报</th></tr></thead>
+<tbody><tr><td>50%</td><td style="font-weight:600">基准</td><td style="font-size:9px;color:var(--mu)">AI服务器维持，CAGR 25%，30x退出，年化19%</td><td class="pos">19.2%</td></tr>
+<tr><td>25%</td><td style="font-weight:600">乐观</td><td style="font-size:9px;color:var(--mu)">GB300+超出预期+35x退出</td><td class="pos">35.0%</td></tr>
+<tr><td>20%</td><td style="font-weight:600">悲观</td><td style="font-size:9px;color:var(--mu)">竞争加剧+AI Capex回落+20x退出</td><td class="neg">-20.0%</td></tr>
+<tr><td>5%</td><td style="font-weight:600">颠覆</td><td style="font-size:9px;color:var(--mu)">竞争者抢占关键平台认证+技术被替代</td><td class="neg">-60.0%</td></tr>
+</tbody>
+<tfoot><tr style="background:rgba(88,166,255,.06)"><td colspan="3" style="font-weight:700;color:var(--acc)">概率加权年化回报</td><td class="pos" style="font-weight:700">15.0%</td></tr></tfoot>
+</table>
+</div>
+<div>
+<div class="section-title">📅 5年 vs 10年对比判断</div>
+<table class="yr-tbl">
+<thead><tr><th>维度</th><th>5年判断</th><th>10年方向</th></tr></thead>
+<tbody>
+<tr><td>EBITDA量级</td><td>$2.7B</td><td>见下方分析</td></tr>
+<tr><td>目标EV</td><td>$81.5B</td><td>$100-200B</td></tr>
+<tr><td>目标股权价值</td><td>$84.5B</td><td>参考区间</td></tr>
+<tr><td>年化总回报</td><td>19.2%（基准）</td><td>加权15.0%</td></tr>
+<tr><td>与当前比较</td><td>低估</td><td>确定性上升</td></tr>
+</tbody>
+</table>
+<div class="pre-box" style="margin-top:6px">
+<h4>10年方向性判断</h4>
+<div style="font-size:10px;color:var(--mu);line-height:1.6">MPWR 10年取决于能否维持每代AI加速器的核心供应商地位。若持续，10年市值$100-200B区间。但每次平台切换都是风险点，需要持续的技术投入证明。</div>
+</div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+<div class="card">
+<div class="ct">否决项检查</div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>无财务造假疑点</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>净现金，Fabless轻资产，无债务压力</span></div>
+<div class="veto-item"><span style="color:var(--s4)">✅</span><span>AI服务器平台认证护城河实质验证</span></div>
+<div class="veto-item"><span style="color:var(--s3)">⚠️</span><span>⚠️ EV/EBITDA ~40x，半导体竞争加剧风险  <em style="color:var(--mu);font-size:9px">需持续跟踪：TI/Renesas是否抢占份额</em></span></div>
+
+</div>
+<div class="card">
+<div class="ct">近期可跟踪催化剂（不进公式）</div>
+<div class="catalyst-item">→ GB300平台MPWR电源IC设计赢单公告</div>
+<div class="catalyst-item">→ 毛利率突破57%</div>
+<div class="catalyst-item">→ AI/云收入占比突破60%</div>
+<div class="catalyst-item">→ 汽车/工业新产品线首笔大额合同</div>
+
+</div>
+</div>
+
+<div class="card" style="margin-top:20px">
+<div class="ct" style="color:var(--acc)">📌 综合评分汇总（v4·完整维度打分·Secular框架）</div>
+<table class="t">
+<thead><tr><th>公司</th><th>赛道</th><th>行业</th><th>质量</th><th>估值</th><th>最终</th><th>级别</th><th>置信度</th></tr></thead>
+<tbody><tr><td style="font-weight:700;color:#58a6ff">VRT</td><td style="color:var(--mu)">液冷+DC电源管理</td><td class="n5">94.6</td><td class="n5">95.6</td><td class="n4">57.0</td><td class="n5" style="font-weight:700">83.8</td><td><span class="gp gpA">A</span></td><td style="color:var(--mu);font-size:9px">置信度×1.0</td></tr>
+<tr><td style="font-weight:700;color:#76e3b0">ETN</td><td style="color:var(--mu)">多元化电力管理（含液冷/电气/航空）</td><td class="n4">78.0</td><td class="n4">78.6</td><td class="n4">58.5</td><td class="n4" style="font-weight:700">72.5</td><td><span class="gp gpB">B</span></td><td style="color:var(--mu);font-size:9px">置信度×1.0</td></tr>
+<tr><td style="font-weight:700;color:#bc8cff">HUBB</td><td style="color:var(--mu)">变压器/开关设备（Secular短缺）</td><td class="n5">85.5</td><td class="n4">77.6</td><td class="n5">72.0</td><td class="n4" style="font-weight:700">77.5</td><td><span class="gp gpB">B</span></td><td style="color:var(--mu);font-size:9px">置信度×1.0</td></tr>
+<tr><td style="font-weight:700;color:#f0883e">POWL</td><td style="color:var(--mu)">定制开关设备（数据中心/石化/公用事业）</td><td class="n4">84.6</td><td class="n4">84.8</td><td class="n2">21.5</td><td class="n2" style="font-weight:700">59.2</td><td><span class="gp gpC">C</span></td><td style="color:var(--mu);font-size:9px">置信度×0.9</td></tr>
+<tr><td style="font-weight:700;color:#ffd700">MPWR</td><td style="color:var(--mu)">AI服务器电源管理IC（Fabless半导体）</td><td class="n4">78.4</td><td class="n5">99.2</td><td class="n4">67.0</td><td class="n4" style="font-weight:700">72.6</td><td><span class="gp gpB">B</span></td><td style="color:var(--mu);font-size:9px">置信度×0.85</td></tr>
+</tbody>
+</table>
+</div>
+<div class="footer">AI能源基础设施专项投资打分系统 v4.0（完整维度打分+Secular框架）&nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考</div>
+</div></body></html>
