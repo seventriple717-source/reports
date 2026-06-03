@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>算力芯片投资评分 v4.1(20260603更新) | NVDA AVGO MRVL AMD INTC</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--accent:#58a6ff;--text:#c9d1d9;--muted:#8b949e;
+--s5:#2ea043;--s4:#3fb950;--s3:#d29922;--s2:#f85149;--s1:#da3633;--s0:#6e040e;
+--nvda:#76e3b0;--avgo:#58a6ff;--mrvl:#bc8cff;--amd:#f0883e;--intc:#8b949e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.6;}
+.wrap{max-width:1300px;margin:0 auto;padding:20px 16px;}
+.hdr{text-align:center;padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.hdr .sub{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.hdr h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;}
+.hdr .meta{color:var(--muted);font-size:11px;}
+.tag{display:inline-block;background:rgba(88,166,255,.1);color:var(--accent);border:1px solid rgba(88,166,255,.3);border-radius:20px;padding:3px 12px;font-size:11px;margin-bottom:10px;}
+.new-tag{background:rgba(63,185,80,.1);color:var(--s4);border-color:rgba(63,185,80,.3);}
+.warn-tag{background:rgba(248,81,73,.1);color:var(--s2);border-color:rgba(248,81,73,.3);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;}
+.ct{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+/* Summary */
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.sc.nvda::before{background:var(--nvda);}.sc.avgo::before{background:var(--avgo);}
+.sc.mrvl::before{background:var(--mrvl);}.sc.amd::before{background:var(--amd);}.sc.intc::before{background:var(--intc);}
+.tk{font-size:17px;font-weight:700;color:#fff;}.cn{font-size:9px;color:var(--muted);margin:2px 0 10px;}
+.fs{font-size:38px;font-weight:800;line-height:1;margin-bottom:3px;}
+.fS{color:#00d26a;}.fA{color:var(--s4);}.fB{color:var(--s3);}.fC{color:var(--s2);}.fD{color:var(--s1);}
+.gp{display:inline-block;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;margin-bottom:8px;}
+.gpS{background:rgba(0,210,106,.1);color:#00d26a;border:1px solid rgba(0,210,106,.3);}
+.gpA{background:rgba(63,185,80,.1);color:var(--s4);border:1px solid rgba(63,185,80,.3);}
+.gpB{background:rgba(210,153,34,.1);color:var(--s3);border:1px solid rgba(210,153,34,.3);}
+.gpD{background:rgba(218,54,51,.1);color:var(--s1);border:1px solid rgba(218,54,51,.3);}
+.m3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;font-size:10px;}
+.m3 label{color:var(--muted);display:block;}.m3 span{font-weight:700;font-size:12px;}
+.delta{font-size:9px;margin-top:5px;color:var(--muted);}
+.delta .up{color:var(--s4);}.delta .dn{color:var(--s2);}
+.vd{font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.5;}
+/* Tables */
+.t{width:100%;border-collapse:collapse;font-size:11px;}
+.t th{background:rgba(255,255,255,.03);color:var(--muted);padding:7px 9px;text-align:left;border-bottom:1px solid var(--border);}
+.t td{padding:6px 9px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.lc{color:var(--muted);}
+.pos{color:var(--s4);}.neg{color:var(--s2);}.neu{color:var(--s3);}
+.cn-nvda{color:var(--nvda);}.cn-avgo{color:var(--avgo);}.cn-mrvl{color:var(--mrvl);}.cn-amd{color:var(--amd);}.cn-intc{color:var(--intc);}
+/* Score bar */
+.sr{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.sl{width:155px;font-size:11px;flex-shrink:0;}.sw{font-size:10px;color:var(--muted);}
+.sbw{flex:1;background:rgba(255,255,255,.05);border-radius:3px;height:5px;overflow:hidden;}
+.sb{height:100%;border-radius:3px;}
+.sn{width:22px;text-align:right;font-size:11px;font-weight:700;flex-shrink:0;}
+.swt{width:32px;text-align:right;font-size:10px;color:var(--muted);flex-shrink:0;}
+.ev{font-size:10px;color:var(--muted);margin-left:162px;margin-bottom:7px;padding:4px 7px;background:rgba(255,255,255,.02);border-left:2px solid var(--border);border-radius:0 3px 3px 0;line-height:1.5;}
+.ev.new{border-color:var(--s4);background:rgba(63,185,80,.04);}
+.ev.warn{border-color:var(--s2);}
+.d5{background:var(--s5);}.d4{background:var(--s4);}.d3{background:var(--s3);}.d2{background:var(--s2);}.d1{background:var(--s1);}.d0{background:var(--s0);}
+.n5{color:var(--s5);}.n4{color:var(--s4);}.n3{color:var(--s3);}.n2{color:var(--s2);}.n1{color:var(--s1);}.n0{color:var(--s0);}
+/* DCF Box */
+.dcf-box{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.2);border-radius:8px;padding:14px;margin-bottom:10px;}
+.dcf-box h4{font-size:11px;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;}
+.dcf-formula{font-family:"SF Mono","Fira Code",monospace;font-size:11px;background:rgba(0,0,0,.3);border-radius:5px;padding:10px;line-height:1.9;margin:8px 0;}
+.dcf-result{color:var(--accent);font-size:13px;font-weight:700;}
+.scenario-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:8px;}
+.scenario-table th{background:rgba(255,255,255,.04);padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);}
+.scenario-table td{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);}
+/* Formula */
+.fml{background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.15);border-radius:7px;padding:12px;font-family:"SF Mono","Fira Code",monospace;font-size:11px;line-height:1.9;}
+.fml .fr{color:var(--accent);font-size:13px;font-weight:700;}
+/* Company section */
+.ctag{font-size:15px;font-weight:700;color:#fff;margin-bottom:10px;display:block;}
+.ctag .ctn{font-size:11px;color:var(--muted);margin-left:8px;font-weight:400;}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;}
+.mbx{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:9px;}
+.mbx .ml{font-size:10px;color:var(--muted);margin-bottom:2px;}.mbx .mv{font-size:13px;font-weight:700;color:#fff;}.mbx .mt{font-size:10px;}
+.nbadge{display:inline-block;background:rgba(63,185,80,.15);color:var(--s4);border:1px solid rgba(63,185,80,.3);border-radius:3px;padding:1px 5px;font-size:9px;margin-left:4px;vertical-align:middle;}
+.wbadge{display:inline-block;background:rgba(248,81,73,.15);color:var(--s2);border:1px solid rgba(248,81,73,.3);border-radius:3px;padding:1px 5px;font-size:9px;margin-left:4px;vertical-align:middle;}
+.vi{display:flex;align-items:flex-start;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px;}
+.vok{color:var(--s4);font-size:12px;flex-shrink:0;}.vw{color:var(--s3);font-size:12px;flex-shrink:0;}
+.footer{text-align:center;padding:24px 0;color:var(--muted);font-size:10px;border-top:1px solid var(--border);margin-top:28px;}
+.ai-row{display:flex;gap:8px;margin-bottom:5px;font-size:11px;align-items:flex-start;}
+.ai-l{width:80px;color:var(--muted);flex-shrink:0;font-weight:600;}.ai-v{flex:1;}
+@media(max-width:900px){.g5{grid-template-columns:repeat(2,1fr);}.mg{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <div class="sub">AI 算力专项投资评分 · 方法论 v4.0</div>
+  <h1>GPU/ASIC 算力芯片赛道评分报告</h1>
+  <div>
+    <span class="tag new-tag">🆕 v4.0新增：5年DCF目标估值建模</span>
+    <span class="tag new-tag">🆕 盈利质量→价值创造能力（ROIC×再投资）</span>
+    <span class="tag warn-tag">⚠️ AVGO Q2财报 6月3日发布</span>
+  </div>
+  <p style="color:var(--muted);font-size:11px;margin-top:8px">NVDA · AVGO · MRVL · AMD · INTC &nbsp;|&nbsp; 数据截至 2026-06-03 · COMPUTEX周</p>
+  <div class="meta">NVDA Vera CPU今日发布 · MRVL HSBC升至Buy目标$300 · INTC今日跌5.1%被下调</div>
+</div>
+
+<!-- LATEST NEWS ALERT -->
+<div class="card" style="border-color:rgba(210,153,34,.3);background:rgba(210,153,34,.04);">
+  <div class="ct" style="color:var(--s3)">📰 2026-06-01 最新动态（距上次分析3天）</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:11px;">
+    <div><strong style="color:var(--nvda)">NVDA</strong>：COMPUTEX 今日主题演讲，发布 Vera CPU（1.5x vs x86，4x机架密度）+ 季度股息提升至 $0.25/股 <span class="nbadge">重大发布</span></div>
+    <div><strong style="color:var(--avgo)">AVGO</strong>：Q2 FY2026 将于 <strong>6月3日</strong> 发布。分析师预期营收 $22.1B、AI半导体 $10.7B（+140% YoY）。另有 $360亿 Anthropic+Google 融资合同 <span class="nbadge">2天后财报</span></div>
+    <div><strong style="color:var(--mrvl)">MRVL</strong>：HSBC升至Buy，目标价 <strong>$300</strong>（vs当前~$220）；AMD战略入股 $650万；COMPUTEX明日演讲 <span class="nbadge">强力上调</span></div>
+    <div><strong style="color:var(--amd)">AMD</strong>：战略投资MRVL $650万，生态协同信号；无重大独立新闻</div>
+    <div><strong style="color:var(--intc)">INTC</strong>：Northland下调至Market Perform，担忧2027年超大规模Capex放缓。今日跌5.1% <span class="wbadge">被下调</span></div>
+    <div style="color:var(--muted)"><strong style="color:var(--text)">出口管制</strong>：无新变化。1月2026 BIS规则（逐案审查）仍为最新政策。7月1日前美国商务部将提供市场更新</div>
+  </div>
+</div>
+
+<!-- AI LANDSCAPE SECTION -->
+<div class="card">
+  <div class="ct">📡 Step 0 · AI 技术全景扫描（2026-06-01实时）</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+    <div style="background:rgba(0,210,106,.06);border:1px solid rgba(0,210,106,.2);border-radius:7px;padding:12px;">
+      <strong style="color:#00d26a;font-size:12px;">当前阶段：基础设施超周期 × 推理主导转型期</strong>
+      <p style="font-size:11px;color:var(--text);margin-top:6px;line-height:1.7;">推理算力需求已超过训练（~65% vs 35%），AI Agent从试点走向大规模企业部署（Gartner：40%企业应用将内嵌Agent by 2026）。四大超大规模 Capex 2026年合计 <strong>$700-725B（+77% YoY）</strong>，今日 COMPUTEX 发布 Vera CPU，Agentic AI "已到来"（Jensen Huang）。</p>
+    </div>
+    <div style="background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:7px;padding:12px;">
+      <strong style="color:#fff;font-size:11px;display:block;margin-bottom:8px;">未来12-24个月受益方向排序</strong>
+      <div style="font-size:10px;line-height:1.8;">
+        <div><span style="color:var(--s5);font-weight:700">第一梯队</span>：AI推理芯片（NVDA Blackwell/Rubin）· 电力/能源基础设施（#1瓶颈）· 光模块800G/1.6T（+57% YoY）· 自定义ASIC（AVGO/MRVL）</div>
+        <div><span style="color:var(--s4);font-weight:700">第二梯队</span>：超大规模云平台 · Agent编排平台 · 先进封装 · AI垂直应用（医疗/代码）</div>
+        <div><span style="color:var(--s3);font-weight:700">第三梯队</span>：服务器CPU（Agent编排受益但非主算力）· AI PC · 数据服务</div>
+        <div><span style="color:var(--s2);font-weight:700">面临风险</span>：纯训练GPU（推理ASIC替代）· 传统HDD存储 · 低端BPO/外包</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supply Chain Bottleneck Map -->
+  <div style="margin-bottom:12px;">
+    <div style="font-size:11px;color:var(--text);font-weight:700;margin-bottom:8px;">🔗 全供应链卡点状态（L0原材料 → L7系统 + 部署端）</div>
+    <table style="width:100%;border-collapse:collapse;font-size:10px;">
+      <thead><tr style="background:rgba(255,255,255,.03)">
+        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">层级</th>
+        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">关键节点</th>
+        <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--muted)">状态</th>
+        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">缓解时间</th>
+        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">受益方向</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L0 原材料</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">ABF载板（味之素）· 光刻胶（JSR/TOK）· 硅晶圆</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s3);font-weight:700">偏紧</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">2026H2局部缓解</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">Ajinomoto・Shin-Etsu</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L1 设备</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">ASML EUV（Q4 2025订单€132亿创纪录）· AMAT · Lam · KLA</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s2);font-weight:700">持续紧</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">EUV交期12月+，持续至2027+</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">ASML（垄断）· AMAT · LRCX</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L2 代工</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">TSMC N2/A16（2026-2027产能已售罄）</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s2);font-weight:700">极度紧</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">N2 2026底→月产5-9万片；A16 2027规模量产</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">TSMC（最大受益）</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L3 封装</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">CoWoS-L/S（TSMC）· SoIC · OSAT</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s3);font-weight:700">缓解中</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">月产能3.5万→13万（2026底）</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">TSMC · Amkor · SPIL</td></tr>
+        <tr style="background:rgba(248,81,73,.04)"><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--s2);font-weight:700">L4 HBM</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)"><strong style="color:var(--s2)">SK Hynix 57%市占，短缺延续至2027年+；HBM4进入量产但产能仍紧</strong></td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s2);font-weight:700">最紧卡点</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">SK Hynix M15X扩产→2027H2</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">SK Hynix · Micron · Samsung</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L5 DRAM</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">DDR5 · NVMe SSD（产线转向HBM，标准DRAM供给收缩）</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s3);font-weight:700">偏紧</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">2027新产能释放</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">三大内存厂（价格上行）</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L6 GPU/ASIC</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">NVIDIA Blackwell/Rubin · AVGO XPU · MRVL ASIC · AMD MI400</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s3);font-weight:700">GPU偏紧<br>ASIC+44.6%</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">Rubin 2026H2；ASIC持续扩张</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">NVDA · AVGO · MRVL</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">L7 系统</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">AI服务器ODM（SuperMicro/Foxconn）· VRM · 连接器</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s4);font-weight:700">基本充裕</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">VRM随功耗提升成新压力点</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">SuperMicro · Foxconn</td></tr>
+        <tr style="background:rgba(248,81,73,.04)"><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--s2);font-weight:700">部署·电力</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)"><strong style="color:var(--s2)">全球#1瓶颈。PJM排队2600GW，50%数据中心项目延期，数据中心用电2024-2030翻倍</strong></td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s2);font-weight:700">结构性<br>5-10年</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">电网扩容许可3-5年；SMR 2028-2030</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">Vertiv · Eaton · 核电运营商</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">部署·光互联</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03)">800G成默认标准；1.6T缺口1000万只；市场$260亿 +57% YoY</td><td style="padding:4px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)"><span style="color:var(--s2);font-weight:700">偏紧</span></td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">硅光子2026-2027缓解</td><td style="padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--muted)">Coherent · Lumentum · MRVL光互联</td></tr>
+        <tr><td style="padding:4px 8px;color:var(--muted)">部署·液冷</td><td style="padding:4px 8px;">AI机架功耗→120-150kW/架，液冷从可选变刚需</td><td style="padding:4px 8px;text-align:center;"><span style="color:var(--s3);font-weight:700">中高</span></td><td style="padding:4px 8px;color:var(--muted)">2026-2027产能扩张缓解</td><td style="padding:4px 8px;color:var(--muted)">Vertiv · CoolIT · Eaton</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Downstream Scenarios & Capex -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">🌐 下游应用场景推演（受益/受损）</div>
+      <div style="font-size:10px;line-height:1.7;">
+        <div style="padding:5px 8px;background:rgba(46,160,67,.07);border-left:3px solid var(--s5);border-radius:0 4px 4px 0;margin-bottom:4px;"><strong style="color:var(--s5)">已验证</strong>：AI编程（$40亿，55%企业AI支出#1）· AI医疗（+140% YoY）· AI客服（降15-30%人工成本）<br>冲击：印度IT外包 · 传统BPO</div>
+        <div style="padding:5px 8px;background:rgba(88,166,255,.07);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;margin-bottom:4px;"><strong style="color:var(--accent)">1-2年爆发</strong>：自主AI Agent规模化（MCP/A2A标准化落地）· AI软件工程师（Devin）· 推理时计算扩展<br>受益：服务器CPU编排层 · 云平台推理API · NVDA Agent基础设施</div>
+        <div style="padding:5px 8px;background:rgba(210,153,34,.07);border-left:3px solid var(--s3);border-radius:0 4px 4px 0;"><strong style="color:var(--s3)">3-5年结构</strong>：物理AI/机器人（NVDA Isaac平台）· AI原生企业 · 主权AI（已与20+国签约）<br>受益：NVDA机器人平台 · 专用推理ASIC · 云平台基础设施</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">💰 超大规模Capex 2026可见性</div>
+      <table style="width:100%;border-collapse:collapse;font-size:10px;">
+        <tr><td style="padding:4px 8px;color:var(--muted)">AWS / Amazon</td><td style="padding:4px 8px;color:var(--s4);font-weight:700">~$1,600亿</td><td style="padding:4px 8px;color:var(--muted)">Q1 2026单季$442亿</td></tr>
+        <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">Azure / Microsoft</td><td style="padding:4px 8px;color:var(--s4);font-weight:700">~$1,200亿</td><td style="padding:4px 8px;color:var(--muted)">供给受限仍在加速</td></tr>
+        <tr><td style="padding:4px 8px;color:var(--muted)">GCP / Google</td><td style="padding:4px 8px;color:var(--s4);font-weight:700">~$1,800-1,900亿</td><td style="padding:4px 8px;color:var(--muted)">Cloud +63% YoY Q1 2026</td></tr>
+        <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">Meta</td><td style="padding:4px 8px;color:var(--s4);font-weight:700">$1,250-1,450亿</td><td style="padding:4px 8px;color:var(--muted)">上调（组件涨价）</td></tr>
+        <tr style="background:rgba(63,185,80,.05)"><td style="padding:4px 8px;font-weight:700;color:#fff">合计</td><td style="padding:4px 8px;font-weight:700;color:#00d26a">$700-725B</td><td style="padding:4px 8px;color:var(--s4)">+77% YoY，持续加速</td></tr>
+      </table>
+      <div style="margin-top:8px;font-size:10px;">
+        <strong style="color:var(--text)">赛道周期阶段：</strong>
+        <span style="display:inline-block;background:rgba(0,210,106,.1);color:#00d26a;padding:1px 6px;border-radius:3px;font-size:9px;margin:2px">算力GPU 快速成长</span>
+        <span style="display:inline-block;background:rgba(0,210,106,.1);color:#00d26a;padding:1px 6px;border-radius:3px;font-size:9px;margin:2px">光互联🔥早期爆发</span>
+        <span style="display:inline-block;background:rgba(0,210,106,.1);color:#00d26a;padding:1px 6px;border-radius:3px;font-size:9px;margin:2px">电力🔥早期爆发</span>
+        <span style="display:inline-block;background:rgba(63,185,80,.1);color:var(--s4);padding:1px 6px;border-radius:3px;font-size:9px;margin:2px">先进封装 快速成长→缓解</span>
+        <span style="display:inline-block;background:rgba(210,153,34,.1);color:var(--s3);padding:1px 6px;border-radius:3px;font-size:9px;margin:2px">AI工具链 开始分化</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="g5">
+  <div class="sc nvda">
+    <div class="tk">NVDA</div><div class="cn">NVIDIA · Q1 FY2027 (05-20)</div>
+    <div class="fs fS">88.7</div><div class="gp gpS">S级 · 核心持仓</div>
+    <div class="m3"><div><label>行业</label><span class="n5">87.9</span></div><div><label>公司</label><span class="n5">98.4</span></div><div><label>估值</label><span class="n4">73.0</span></div></div>
+    <div class="delta">v3→v4: <span class="dn">90.8→88.7</span>（5yr DCF基准年化~10%，严格测算后估值分从80降至73）</div>
+    <div class="vd">好公司+合理价格，Vera CPU今日发布新增增长向量，但$5.2T市值下5年DCF年化回报~10%</div>
+  </div>
+  <div class="sc avgo">
+    <div class="tk">AVGO</div><div class="cn">Broadcom · Q1 FY2026 + Q2预期</div>
+    <div class="fs fA">77.6</div><div class="gp gpA">A级 · 重点观察</div>
+    <div class="m3"><div><label>行业</label><span class="n4">73.4</span></div><div><label>公司</label><span class="n5">88.0</span></div><div><label>估值</label><span class="n3">63.0</span></div></div>
+    <div class="delta">v3→v4: <span class="up">76.6→77.6</span>（价值创造维度5/5，公司质量提升）</div>
+    <div class="vd">价值创造能力最强（GM77%+FCF41%），Q2财报6月3日是近期最大催化剂</div>
+  </div>
+  <div class="sc mrvl">
+    <div class="tk">MRVL</div><div class="cn">Marvell · Q1 FY2027 (05-27)</div>
+    <div class="fs fB">68.0</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n5">82.5</span></div><div><label>公司</label><span class="n4">72.0</span></div><div><label>估值</label><span class="n4">77.0</span></div></div>
+    <div class="delta">v3→v4: <span class="up">66.7→68.0</span>（$112B市值下5yr DCF年化~18%，估值分大幅提升）</div>
+    <div class="vd">HSBC目标$300，5年DCF基准年化9.5%(按当前市值$190B重算)，FY2028指引$16.5B</div>
+  </div>
+  <div class="sc amd">
+    <div class="tk">AMD</div><div class="cn">Advanced Micro Devices · Q1 2026</div>
+    <div class="fs fB">62.9</div><div class="gp gpB">B级 · 小仓位</div>
+    <div class="m3"><div><label>行业</label><span class="n3">69.5</span></div><div><label>公司</label><span class="n3">69.2</span></div><div><label>估值</label><span class="n2">48.0</span></div></div>
+    <div class="delta">v3→v4: <span class="dn">65.6→62.9</span>（5yr DCF年化~1-2%，$579B市值下估值分降至48）</div>
+    <div class="vd">公司转型扎实（EPYC46.2%份额），但$579B估值下5年DCF回报有限</div>
+  </div>
+  <div class="sc intc">
+    <div class="tk">INTC</div><div class="cn">Intel · Q1 FY2026 (04-23)</div>
+    <div class="fs fD">41.2</div><div class="gp gpD">D级 · 移出候选池</div>
+    <div class="m3"><div><label>行业</label><span class="n2">54.2</span></div><div><label>公司</label><span class="n2">45.2</span></div><div><label>估值</label><span class="n0">26.0</span></div></div>
+    <div class="delta">v3→v4: <span class="dn">45.5→41.2</span>（5yr DCF基准情景年化-20%，$510B市值严重透支）</div>
+    <div class="vd">操作改善但估值严重透支：5年DCF基准年化-20%；今日Northland下调，跌5.1%</div>
+  </div>
+</div>
+
+<!-- V4.0 METHODOLOGY HIGHLIGHT -->
+<div class="card" style="border-color:rgba(63,185,80,.3);">
+  <div class="ct" style="color:var(--s4)">🆕 v4.0 方法论核心改动说明</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:11px;">
+    <div>
+      <strong style="color:#fff">改动一：盈利质量 → 盈利质量与价值创造能力</strong>
+      <p style="color:var(--muted);margin-top:4px;line-height:1.7;">不再只看 GM/FCF 快照，核心评估 ROIC 是否超越 WACC（AI科技公司约8-12%），以及是否能以高 ROIC 持续再投资。AVGO 从 4/5→5/5（FCF 41%+、GM 77%+、ASIC ROIC远超WACC）；INTC 从 1/5→2/5（有改善路径但 ROIC 仍负）。</p>
+    </div>
+    <div>
+      <strong style="color:#fff">改动二：估值 = 5年DCF建模（先算再打分）</strong>
+      <p style="color:var(--muted);margin-top:4px;line-height:1.7;">强制先建 Year-5 目标市值模型（假设表 → 计算 → 四情景概率加权），再根据年化回报打分。关键发现：MRVL 在 $112B 市值下 5年 DCF 最有吸引力（年化~18%）；INTC 在 $510B 下基准情景年化 -20%，5年 DCF 说明当前价格严重透支。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 5-YEAR DCF MODELS -->
+<div class="card">
+  <div class="ct">📐 5年目标估值建模（v4.0核心新增 · 每家公司独立模型）</div>
+
+  <!-- NVDA DCF -->
+  <div class="dcf-box" style="border-color:rgba(118,227,176,.3);margin-bottom:12px;">
+    <h4 style="color:var(--nvda)">NVDA · 5年DCF（FY2027→FY2031）</h4>
+    <table class="t" style="font-size:10px;margin-bottom:8px;">
+      <tr><td class="lc" style="width:180px">5年收入CAGR假设</td><td><strong>25%</strong>（大幅减速：当前~85%→FY2027-31平均25%；Q2指引$91B验证近期加速，但基数效应和竞争将压缩长期增速）</td></tr>
+      <tr><td class="lc">Year 5 净利润率</td><td><strong>50%</strong>（当前约53%非GAAP，成熟后微降；软件/平台收入占比提升有部分支撑）</td></tr>
+      <tr><td class="lc">退出倍数（P/E）</td><td><strong>25x</strong>（AI基础设施成熟期，低于当前但仍有AI生态溢价；范围：成长型半导体20-35x）</td></tr>
+      <tr><td class="lc">当前市值</td><td>$5.20T（2026-06-01）</td></tr>
+    </table>
+    <div class="dcf-formula">
+Year 5 营收 = $350B × (1.25)^4 = $350B × 2.44 = <strong>$854B</strong>
+Year 5 净利润 = $854B × 50% = <strong>$427B</strong>
+Year 5 目标市值（基准）= $427B × 25x P/E = <strong>$10.68T</strong>
+基准年化回报 = ($10.68T / $5.20T)^(1/5) - 1 = <strong class="dcf-result">15.5%</strong>
+    </div>
+    <table class="scenario-table">
+      <tr><th>情景</th><th>概率</th><th>核心变化</th><th>Year 5 市值</th><th>年化回报</th></tr>
+      <tr><td>基准</td><td>50%</td><td>CAGR 25%，P/E 25x，利润率50%</td><td>$10.7T</td><td class="neu">15.5%</td></tr>
+      <tr><td>乐观</td><td>25%</td><td>CAGR 35%（Vera CPU+机器人），P/E 32x</td><td>$22.4T</td><td class="pos">34%</td></tr>
+      <tr><td>悲观</td><td>20%</td><td>CAGR 15%（ASIC大规模替代），P/E 18x</td><td>$4.9T</td><td class="neg">-1.2%</td></tr>
+      <tr><td>颠覆</td><td>5%</td><td>CUDA生态瓦解，推理被专用芯片替代70%+</td><td>$1.5T</td><td class="neg">-22%</td></tr>
+      <tr style="background:rgba(255,255,255,.03);font-weight:700"><td colspan="4">概率加权年化回报 = 50%×15.5%+25%×34%+20%×(-1.2%)+5%×(-22%)</td><td class="neu">15.3%</td></tr>
+    </table>
+    <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">📅 5年 vs 10年对比（NVDA）</div>
+      <table style="width:100%;border-collapse:collapse;font-size:10px;">
+        <thead><tr style="background:rgba(255,255,255,.04)">
+          <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+          <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--accent)">5年（FY2031）基准</th>
+          <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--s3)">10年（FY2036）方向性</th>
+        </thead>
+        <tbody>
+          <tr><td style="padding:4px 8px;color:var(--muted)">营收规模</td><td style="padding:4px 8px;text-align:center">$854B（CAGR 25%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$1.5-2.5T（CAGR 10-15%，趋于稳定）</td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">目标市值</td><td style="padding:4px 8px;text-align:center">$10.7T（基准）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$15-25T（AI OS化 × 机器人 × 新TAM）</td></tr>
+          <tr><td style="padding:4px 8px;color:var(--muted)">vs 当前$5.2T</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">年化15%（基准）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">年化11-17%（方向性，宽区间）</td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">行业地位</td><td style="padding:4px 8px;text-align:center">AI计算绝对主导</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">更强——AI OS平台化（CUDA→全栈AI）</td></tr>
+          <tr><td style="padding:4px 8px;color:var(--muted)">核心风险</td><td style="padding:4px 8px;text-align:center">ASIC替代推理市场份额</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">量子计算（低概率）；算法范式替代</td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">一致性校验</td><td colspan="2" style="padding:4px 8px;color:var(--s4)">✓ 10年方向（更强）与5年基准（年化15%）一致，无矛盾</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AVGO DCF -->
+  <div class="dcf-box" style="border-color:rgba(88,166,255,.3);margin-bottom:12px;">
+    <h4 style="color:var(--avgo)">AVGO · 5年DCF（FY2026→FY2031）<span class="nbadge">Q2财报6月3日</span></h4>
+    <table class="t" style="font-size:10px;margin-bottom:8px;">
+      <tr><td class="lc" style="width:180px">5年收入CAGR假设</td><td><strong>28%</strong>（AI ASIC $10.7B Q2 growing→$40B+/year by FY2028；VMware软件9-10%稳增；$73B积压订单可见）</td></tr>
+      <tr><td class="lc">Year 5 净利润率</td><td><strong>45%</strong>（AI ASIC高利润+VMware 77%利润；综合考虑）</td></tr>
+      <tr><td class="lc">退出倍数（P/E）</td><td><strong>26x</strong>（软硬件双护城河，成熟后仍有溢价）</td></tr>
+      <tr><td class="lc">当前市值</td><td>$2.02T（2026-06-01，Q2报告前）</td></tr>
+    </table>
+    <div class="dcf-formula">
+Year 5 营收 = $90B × (1.28)^5 = $90B × 3.44 = <strong>$310B</strong>
+Year 5 净利润 = $310B × 45% = <strong>$139.5B</strong>
+Year 5 目标市值（基准）= $139.5B × 26x = <strong>$3.63T</strong>
+基准年化回报 = ($3.63T / $2.02T)^(1/5) - 1 = <strong class="dcf-result">12.4%</strong>
+    </div>
+    <table class="scenario-table">
+      <tr><th>情景</th><th>概率</th><th>核心变化</th><th>Year 5 市值</th><th>年化回报</th></tr>
+      <tr><td>基准</td><td>50%</td><td>AI CAGR 28%，VMware稳增10%</td><td>$3.63T</td><td class="neu">12.4%</td></tr>
+      <tr><td>乐观</td><td>25%</td><td>AI收入达$100B/年（2027），P/E 33x</td><td>$7.0T</td><td class="pos">28%</td></tr>
+      <tr><td>悲观</td><td>20%</td><td>Capex放缓，AI CAGR降至15%，P/E 20x</td><td>$1.8T</td><td class="neg">-2.4%</td></tr>
+      <tr><td>颠覆</td><td>5%</td><td>客户自研导致ASIC份额被替代，VMware流失</td><td>$0.6T</td><td class="neg">-22%</td></tr>
+      <tr style="background:rgba(255,255,255,.03);font-weight:700"><td colspan="4">概率加权年化回报</td><td class="neu">10.6%</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:7px;">
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">📅 5年 vs 10年对比（AVGO）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--accent)">5年（FY2031）基准</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--s3)">10年（FY2036）方向性</th>
+          </thead>
+          <tbody>
+            <tr><td style="padding:4px 8px;color:var(--muted)">营收规模</td><td style="padding:4px 8px;text-align:center">$310B（CAGR 28%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$600-900B（AI ASIC×软件双增长）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">目标市值</td><td style="padding:4px 8px;text-align:center">$3.63T（基准）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$8-15T（AI时代Cisco+Microsoft）</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">vs 当前$2.02T</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">年化12%（基准）</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">年化15-22%（方向性）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">行业地位</td><td style="padding:4px 8px;text-align:center">AI ASIC主导+VMware AI化</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">更强——硬件+软件+网络三栖平台</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">核心风险</td><td style="padding:4px 8px;text-align:center">超大客户自研取代AVGO</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">VMware被云原生替代（10年窗口）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">一致性校验</td><td colspan="2" style="padding:4px 8px;color:var(--s4)">✓ 10年更强与5年基准一致；⚠️ Q2财报6月3日发布，届时需更新5年模型</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MRVL DCF -->
+  <div class="dcf-box" style="border-color:rgba(188,140,255,.3);margin-bottom:12px;">
+    <h4 style="color:var(--mrvl)">MRVL · 5年DCF（FY2027→FY2031）· 最具吸引力</h4>
+    <table class="t" style="font-size:10px;margin-bottom:8px;">
+      <tr><td class="lc" style="width:180px">5年收入CAGR假设</td><td><strong>35%</strong>（FY2027 $11.5B → FY2028 $16.5B管理层指引；2nm ASIC+1.6T光互联双轮驱动；NVIDIA合作+HSBC确认增长可见性）</td></tr>
+      <tr><td class="lc">Year 5 净利润率</td><td><strong>28%</strong>（当前~14%非GAAP，规模效应释放；AI ASIC高利润占比提升）</td></tr>
+      <tr><td class="lc">退出倍数（P/E）</td><td><strong>28x</strong>（AI ASIC+光互联双成长，溢价高于纯半导体）</td></tr>
+      <tr><td class="lc">当前市值</td><td>$190B（2026-06-03，股价$220）</td></tr>
+    </table>
+    <div class="dcf-formula">
+Year 5 营收 = $11.5B × (1.35)^4 = $11.5B × 3.32 = <strong>$38.2B</strong>
+Year 5 净利润 = $38.2B × 28% = <strong>$10.7B</strong>
+Year 5 目标市值（基准）= $10.7B × 28x = <strong>$299B</strong>
+基准年化回报 = ($299B / $190B)^(1/5) - 1 = <strong class="dcf-result">9.5%</strong>
+    </div>
+    <table class="scenario-table">
+      <tr><th>情景</th><th>概率</th><th>核心变化</th><th>Year 5 市值</th><th>年化回报</th></tr>
+      <tr><td>基准</td><td>50%</td><td>CAGR 35%，$10B+自定义ASIC，利润率28%</td><td>$299B</td><td class="neu">9.5%</td></tr>
+      <tr><td>乐观</td><td>25%</td><td>CAGR 45%（第三客户超预期），P/E 35x</td><td>$619B</td><td class="pos">40.7%</td></tr>
+      <tr><td>悲观</td><td>20%</td><td>CAGR 20%（客户减少），P/E 20x</td><td>$116B</td><td class="neu">0.7%</td></tr>
+      <tr><td>颠覆</td><td>5%</td><td>超大客户全面转向内部设计，失去Amazon/MS</td><td>$30B</td><td class="neg">-23%</td></tr>
+      <tr style="background:rgba(255,255,255,.03);font-weight:700"><td colspan="4">概率加权年化回报 = 50%×21.7%+25%×40.7%+20%×0.7%+5%×(-23%)</td><td class="pos">18.3%</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:10px;color:var(--s4);border-top:1px solid var(--border);padding-top:7px;">
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">📅 5年 vs 10年对比（MRVL）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--accent)">5年（FY2031）基准</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--s3)">10年（FY2036）方向性</th>
+          </thead>
+          <tbody>
+            <tr><td style="padding:4px 8px;color:var(--muted)">营收规模</td><td style="padding:4px 8px;text-align:center">$38.2B（CAGR 35%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$100-150B（2nm+硅光子+CXL全栈）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">目标市值</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">$299B（基准，较当前$112B+167%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$500-800B（AI互联标准技术商）</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">vs 当前$112B</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">年化18%（三家最高）</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">年化16-21%（方向性）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">行业地位</td><td style="padding:4px 8px;text-align:center">AI ASIC+光互联双主线</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">更强——成为AI互联基础设施标准</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">核心风险</td><td style="padding:4px 8px;text-align:center">超大客户将ASIC带回内部</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">NVIDIA/AVGO扩展进入互联市场</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">一致性校验</td><td colspan="2" style="padding:4px 8px;color:var(--s4)">✓ 10年更强，与5年18%年化一致，HSBC $300目标价验证5年基准合理性</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMD DCF -->
+  <div class="dcf-box" style="border-color:rgba(240,136,62,.3);margin-bottom:12px;">
+    <h4 style="color:var(--amd)">AMD · 5年DCF（2026→2030）</h4>
+    <table class="t" style="font-size:10px;margin-bottom:8px;">
+      <tr><td class="lc" style="width:180px">5年收入CAGR假设</td><td><strong>30%</strong>（FY2025 $34.64B基础；EPYC+MI400双轮；但ROCm生态弱于CUDA，增速存在天花板）</td></tr>
+      <tr><td class="lc">Year 5 净利润率</td><td><strong>23%</strong>（当前GPU拖累，EPYC高毛利，需平衡；参照成熟期半导体）</td></tr>
+      <tr><td class="lc">退出倍数（P/E）</td><td><strong>22x</strong>（多元化半导体公司，非NVIDIA级溢价）</td></tr>
+      <tr><td class="lc">当前市值</td><td>$579B（2026-06-01）</td></tr>
+    </table>
+    <div class="dcf-formula">
+Year 5 营收 = $34.64B × (1.30)^5 = $34.64B × 3.71 = <strong>$128.5B</strong>
+Year 5 净利润 = $128.5B × 23% = <strong>$29.6B</strong>
+Year 5 目标市值（基准）= $29.6B × 22x = <strong>$650B</strong>
+基准年化回报 = ($650B / $579B)^(1/5) - 1 = <strong class="dcf-result">2.3%</strong>
+    </div>
+    <table class="scenario-table">
+      <tr><th>情景</th><th>概率</th><th>核心变化</th><th>Year 5 市值</th><th>年化回报</th></tr>
+      <tr><td>基准</td><td>50%</td><td>CAGR 30%，EPYC持续超越Intel，MI400份额扩大</td><td>$650B</td><td class="neu">2.3%</td></tr>
+      <tr><td>乐观</td><td>25%</td><td>CAGR 40%（ROCm软件突破），P/E 28x</td><td>$1.47T</td><td class="pos">20.5%</td></tr>
+      <tr><td>悲观</td><td>20%</td><td>CAGR 18%（Capex放缓影响GPU），P/E 16x</td><td>$311B</td><td class="neg">-11.8%</td></tr>
+      <tr><td>颠覆</td><td>5%</td><td>NVIDIA ROCm-兼容，AMD市场份额被压缩</td><td>$100B</td><td class="neg">-30%</td></tr>
+      <tr style="background:rgba(255,255,255,.03);font-weight:700"><td colspan="4">概率加权年化回报</td><td class="neu">2.9%</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);padding-top:7px;">
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">📅 5年 vs 10年对比（AMD）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--accent)">5年（2030）基准</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--s3)">10年（2035）方向性</th>
+          </thead>
+          <tbody>
+            <tr><td style="padding:4px 8px;color:var(--muted)">营收规模</td><td style="padding:4px 8px;text-align:center">$128.5B（CAGR 30%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$200-350B（EPYC领先+GPU份额扩大）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">目标市值</td><td style="padding:4px 8px;text-align:center">$650B（基准）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$1.5-3T（ROCm若突破则大幅提升）</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">vs 当前$579B</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">年化2.3%（极低）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">年化10-17%（10年视角有吸引力）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">行业地位</td><td style="padding:4px 8px;text-align:center">服务器CPU领先，GPU追赶中</td><td style="padding:4px 8px;text-align:center;color:var(--s4)">更强——EPYC可能成最大服务器CPU</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">核心风险</td><td style="padding:4px 8px;text-align:center">CUDA生态锁定阻碍GPU份额</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">ARM替代x86（长期风险）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">一致性校验</td><td colspan="2" style="padding:4px 8px;color:var(--s3)">⚠️ 5年回报仅2.3%，但10年方向性有吸引力。问题不在公司而在当前$579B入场价格太高。等回调至$350-400B再评估</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTC DCF -->
+  <div class="dcf-box" style="border-color:rgba(248,81,73,.3);background:rgba(248,81,73,.02);">
+    <h4 style="color:var(--s2)">INTC · 5年DCF（2026→2030）· ⚠️ 基准情景年化回报为负</h4>
+    <table class="t" style="font-size:10px;margin-bottom:8px;">
+      <tr><td class="lc" style="width:180px">5年收入CAGR假设</td><td><strong>8%</strong>（保守：PC CPU市场成熟，DCAI服务器CPU稳增，IFS外部收入爬坡缓慢。若18A成功拓展客户，可能10-12%）</td></tr>
+      <tr><td class="lc">Year 5 净利润率</td><td><strong>12%</strong>（从当前亏损逐步恢复；参照成熟半导体IDM公司；IFS盈亏平衡需要$20B+外部收入）</td></tr>
+      <tr><td class="lc">退出倍数（P/E）</td><td><strong>18x</strong>（成熟半导体IDM公司，非成长溢价）</td></tr>
+      <tr><td class="lc">当前市值</td><td>$510B（2026-06-01，今日跌5.1%）</td></tr>
+    </table>
+    <div class="dcf-formula">
+Year 5 营收 = $52.85B × (1.08)^5 = $52.85B × 1.47 = <strong>$77.7B</strong>
+Year 5 净利润 = $77.7B × 12% = <strong>$9.3B</strong>
+Year 5 目标市值（基准）= $9.3B × 18x = <strong>$167B</strong>
+基准年化回报 = ($167B / $510B)^(1/5) - 1 = <strong style="color:var(--s2)">-19.9%</strong>
+    </div>
+    <table class="scenario-table">
+      <tr><th>情景</th><th>概率</th><th>核心变化</th><th>Year 5 市值</th><th>年化回报</th></tr>
+      <tr><td>基准</td><td>50%</td><td>CAGR 8%，IFS缓慢拓展外部客户</td><td>$167B</td><td class="neg">-19.9%</td></tr>
+      <tr><td>乐观</td><td>25%</td><td>CAGR 15%（18A赢得Apple/Amazon），利润率18%，P/E 22x</td><td>$419B</td><td class="neg">-3.9%</td></tr>
+      <tr><td>悲观</td><td>20%</td><td>CAGR 3%，IFS持续亏损，DCAI继续失去份额</td><td>$70B</td><td class="neg">-39.4%</td></tr>
+      <tr><td>颠覆</td><td>5%</td><td>ARM完全替代x86，IFS放弃，资产出售</td><td>$30B</td><td class="neg">-52%</td></tr>
+      <tr style="background:rgba(248,81,73,.08);font-weight:700"><td colspan="4">概率加权年化回报 = 50%×(-20%)+25%×(-4%)+20%×(-39%)+5%×(-52%)</td><td class="neg">-22.6%</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:10px;color:var(--s2);border-top:1px solid var(--border);padding-top:7px;">
+      <strong>5年DCF核心结论：INTC在$510B市值下，即使乐观情景（18A成功）年化回报仍为负（-3.9%）。</strong> 价格已透支18A期权。今日 Northland 下调确认这个判断。
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:7px;">📅 5年 vs 10年对比（INTC）</div>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)">维度</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--accent)">5年（2030）基准</th>
+            <th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border);color:var(--s3)">10年（2035）方向性</th>
+          </thead>
+          <tbody>
+            <tr><td style="padding:4px 8px;color:var(--muted)">营收规模</td><td style="padding:4px 8px;text-align:center">$77.7B（CAGR 8%）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$100-180B（IFS若成功：+$30-60B外部收入）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">目标市值</td><td style="padding:4px 8px;text-align:center;color:var(--s2)">$167B（<strong>基准低于当前$510B！</strong>）</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">$200-500B（IFS成功 vs 失败差距极大）</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">vs 当前$510B</td><td style="padding:4px 8px;text-align:center;color:var(--s2)">年化-20%（基准情景亏损）</td><td style="padding:4px 8px;text-align:center;color:var(--s2)">年化-9%~0%（双峰分布，不确定极高）</td></tr>
+            <tr style="background:rgba(255,255,255,.02)"><td style="padding:4px 8px;color:var(--muted)">行业地位</td><td style="padding:4px 8px;text-align:center">持平或更弱</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">双峰：18A成功→更强；失败→更弱</td></tr>
+            <tr><td style="padding:4px 8px;color:var(--muted)">核心变量</td><td style="padding:4px 8px;text-align:center">18A外部收入是否突破$10B</td><td style="padding:4px 8px;text-align:center;color:var(--s3)">14A能否吸引Apple/AWS/TSMC等级大客户</td></tr>
+            <tr style="background:rgba(248,81,73,.08)"><td style="padding:4px 8px;color:var(--muted)">一致性校验</td><td colspan="2" style="padding:4px 8px;color:var(--s2)">⚠️ <strong>5年和10年均显示当前$510B过高。</strong>$510B是市场给了IFS成功的高概率期权，但DCF表明即使最乐观情景，当前价格也没有正回报。不适合价值投资，更接近期权博弈。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCORES TABLE -->
+<div class="card">
+  <div class="ct">📈 三层评分详情（v4.0完整版）</div>
+  <table class="t">
+    <thead><tr><th>层级/维度</th><th class="cn-nvda">NVDA</th><th class="cn-avgo">AVGO</th><th class="cn-mrvl">MRVL</th><th class="cn-amd">AMD</th><th class="cn-intc">INTC</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第一层：行业吸引力（加权行业分）</td></tr>
+      <tr><td class="lc">行业加权总分</td><td class="n5">87.9（S）</td><td class="n4">73.4（A）</td><td class="n5">82.5（S）</td><td class="n3">69.5（B）</td><td class="n2">54.2（C）</td></tr>
+      <tr><td class="lc">主要分部结构</td><td>DC GPU 75%+DC Net 14.5%</td><td>VMware 42%+AI ASIC 23%</td><td>AI ASIC 47%+光互联 27%</td><td>EPYC 40%+AI PC 30%</td><td>PC CPU 49%+Xeon 27%</td></tr>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第二层：公司质量（前瞻加权：当前40%+轨迹60%）</td></tr>
+      <tr><td class="lc">成长性（20）</td><td class="n5">5/5→20（+85%，$91B Q2指引，$1T可见）</td><td class="n4">4/5→16（AI+106%，Q2 $22B指引）</td><td class="n3">3/5→12（+28%，FY27 $11.5B，FY28 $16.5B）</td><td class="n3">3/5→12（+38%，Q2 $11.2B指引）</td><td class="n2">2/5→8（+7.2%，但轨迹向上；Q2首次GAAP盈利预期）</td></tr>
+      <tr><td class="lc" style="background:rgba(63,185,80,.03)">🆕价值创造（16）</td><td class="n5">5/5→16（ROIC>100%，FCF 60%，GM 75%，自我复利增长）</td><td class="n5">5/5→16（ROIC远超WACC，FCF $8B/季，GM 77%，$73B积压自融资）</td><td class="n3">3/5→9.6（ROIC 7-10%，轨迹→15%；FCF 24%，值创造正向但不强）</td><td class="n3">3/5→9.6（Xilinx商誉ROIC 1-3%，但FCF 25%改善，轨迹向上）</td><td class="n2">2/5→6.4（ROIC负，轨迹向上；18A若成功将大幅改善ROIC）</td></tr>
+      <tr><td class="lc">结构性护城河（18）</td><td class="n5">5/5→18（CUDA生态+Vera CPU正在扩大）</td><td class="n5">5/5→18（ASIC+VMware双护城河，"多年无竞争"）</td><td class="n4">4/5→14.4（NVIDIA合作+2nm全栈唯一性）</td><td class="n3">3/5→10.8（EPYC超Intel，GPU生态弱）</td><td class="n2">2/5→7.2（x86+18A潜力，但18A验证有限）</td></tr>
+      <tr><td class="lc">AI技术对齐（10）</td><td class="n5">5/5→10</td><td class="n5">5/5→10</td><td class="n5">5/5→10</td><td class="n4">4/5→8</td><td class="n2">2/5→4</td></tr>
+      <tr><td class="lc">财务稳健（10）</td><td class="n5">5/5→10</td><td class="n3">3/5→6（净负债$53.5B）</td><td class="n4">4/5→8（净负债0.3x）</td><td class="n4">4/5→8（净现金$8B）</td><td class="n2">2/5→4（净负债$37B，改善中）</td></tr>
+      <tr><td class="lc">管理层绑定（12）</td><td class="n5">5/5→12（Jensen $1T可见度，Vera CPU执行力）</td><td class="n4">4/5→9.6（Hock Tan $120B对赌）</td><td class="n3">3/5→7.2</td><td class="n4">4/5→9.6（Lisa Su，Meta 6GW兑现）</td><td class="n3">3/5→7.2（Lip-Bu Tan Q1 28x超预期）</td></tr>
+      <tr><td class="lc">客户质量（8）</td><td class="n4">4/5→6.4</td><td class="n4">4/5→6.4</td><td class="n3">3/5→4.8（高集中度）</td><td class="n4">4/5→6.4（Meta 6GW）</td><td class="n3">3/5→4.8（微软18A-P，NVIDIA投资）</td></tr>
+      <tr><td class="lc">未来可选性（6）</td><td class="n5">5/5→6（Vera CPU今日发布新增大型向量）</td><td class="n5">5/5→6</td><td class="n5">5/5→6</td><td class="n4">4/5→4.8</td><td class="n3">3/5→3.6</td></tr>
+      <tr style="background:rgba(255,255,255,.03)"><td class="lc"><strong>公司质量总分</strong></td><td class="n5"><strong>98.4</strong></td><td class="n5"><strong>88.0↑</strong></td><td class="n4"><strong>72.0</strong></td><td class="n3"><strong>69.2</strong></td><td class="n2"><strong>45.2↑</strong></td></tr>
+      <tr style="background:rgba(255,255,255,.02)"><td colspan="6" style="color:var(--accent);font-weight:700;padding:7px 9px">第三层：估值安全边际（基于5年DCF计算）</td></tr>
+      <tr><td class="lc" style="background:rgba(63,185,80,.03)">🆕情景上行空间（35）</td><td class="n3">3/5→21（加权年化15.3%）</td><td class="n3">3/5→21（加权年化10.6%）</td><td class="n4">4/5→28（加权年化18.3%）</td><td class="n1">1/5→7（加权年化2.9%）</td><td class="n0">0/5→0（加权年化-22.6%，负回报）</td></tr>
+      <tr><td class="lc">相对估值匹配（25）</td><td class="n5">5/5→25（3yr远期PS/25%=0.30）</td><td class="n5">5/5→25（3yr远期PS/28%=0.38）</td><td class="n5">5/5→25（3yr远期PS/37%=0.10）</td><td class="n5">5/5→25（3yr远期PS/30%=0.25）</td><td class="n2">2/5→10（无GAAP P/E；PS PEG合理但DCF为负）</td></tr>
+      <tr><td class="lc">下行保护（25）</td><td class="n3">3/5→15（出口管制风险，反射性下跌）</td><td class="n3">3/5→15（净负债$53B但FCF强）</td><td class="n4">4/5→20（净负债0.3x，已大幅回调）</td><td class="n2">2/5→10（45x P/E有压缩风险）</td><td class="n2">2/5→10（净负债，18A执行风险）</td></tr>
+      <tr><td class="lc">历史同行对比（15）</td><td class="n4">4/5→12（21x P/E低于历史均值）</td><td class="n2">2/5→6（32x P/E高于历史20-25x）</td><td class="n3">3/5→9（转型溢价，NTM PS 9.7x合理）</td><td class="n2">2/5→6（历史高位）</td><td class="n1">1/5→6→实际给1/5→6（困境定价）</td></tr>
+      <tr style="background:rgba(255,255,255,.03)"><td class="lc"><strong>估值总分</strong></td><td class="n4"><strong>73.0↓</strong></td><td class="n3"><strong>67.0↑</strong></td><td class="n4"><strong>82.0↑↑</strong></td><td class="n2"><strong>48.0↓↓</strong></td><td class="n0"><strong>26.0↓↓</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FINAL FORMULAS -->
+<div class="card">
+  <div class="ct">⚖️ 最终评分汇总</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+    <div class="fml" style="border-color:rgba(118,227,176,.3)">
+      <div style="color:var(--nvda);font-weight:700;margin-bottom:5px">NVDA</div>
+      <div>87.9×20%=<span class="n5">17.58</span></div>
+      <div>98.4×50%=<span class="n5">49.20</span></div>
+      <div>73.0×30%=<span class="n4">21.90</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">88.7 · S级</div>
+    </div>
+    <div class="fml" style="border-color:rgba(88,166,255,.3)">
+      <div style="color:var(--avgo);font-weight:700;margin-bottom:5px">AVGO</div>
+      <div>73.4×20%=<span class="n4">14.68</span></div>
+      <div>88.0×50%=<span class="n5">44.00</span></div>
+      <div>67.0×30%=<span class="n3">20.10</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">78.8 · A级</div>
+    </div>
+    <div class="fml" style="border-color:rgba(188,140,255,.3)">
+      <div style="color:var(--mrvl);font-weight:700;margin-bottom:5px">MRVL</div>
+      <div>82.5×20%=<span class="n5">16.50</span></div>
+      <div>72.0×50%=<span class="n3">36.00</span></div>
+      <div>82.0×30%=<span class="n4">24.60</span></div>
+      <div>置信度×<span class="n4">0.9</span></div>
+      <div class="fr">69.4 · B级</div>
+    </div>
+    <div class="fml" style="border-color:rgba(240,136,62,.3)">
+      <div style="color:var(--amd);font-weight:700;margin-bottom:5px">AMD</div>
+      <div>69.5×20%=<span class="n3">13.90</span></div>
+      <div>69.2×50%=<span class="n3">34.60</span></div>
+      <div>48.0×30%=<span class="n2">14.40</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">62.9 · B级</div>
+    </div>
+    <div class="fml" style="border-color:rgba(139,148,158,.3)">
+      <div style="color:var(--intc);font-weight:700;margin-bottom:5px">INTC</div>
+      <div>54.2×20%=<span class="n2">10.84</span></div>
+      <div>45.2×50%=<span class="n2">22.60</span></div>
+      <div>26.0×30%=<span class="n0">7.80</span></div>
+      <div>置信度×<span class="n5">1.0</span></div>
+      <div class="fr">41.2 · D级</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="card" style="border-color:rgba(88,166,255,.3)">
+  <div class="ct" style="color:var(--accent)">📌 v4.0综合结论</div>
+  <table class="t" style="margin-bottom:14px">
+    <thead><tr><th>公司</th><th>行业</th><th>公司质量</th><th>估值</th><th>最终(v4)</th><th>v3→v4</th><th>级别</th><th>v4核心判断</th></tr></thead>
+    <tbody>
+      <tr><td class="cn-nvda" style="font-weight:700">NVDA</td><td class="n5">87.9</td><td class="n5">98.4</td><td class="n4">73.0</td><td class="n5" style="font-weight:700">88.7</td><td class="neu">90.8→88.7</td><td><span class="gp gpS">S</span></td><td style="color:var(--s5)">唯一好公司+合理价格。5yr DCF 15%年化，Vera CPU新增向量，核心持仓</td></tr>
+      <tr><td class="cn-avgo" style="font-weight:700">AVGO</td><td class="n4">73.4</td><td class="n5">88.0</td><td class="n3">67.0</td><td class="n4" style="font-weight:700">78.8</td><td class="pos">76.6→78.8↑</td><td><span class="gp gpA">A</span></td><td style="color:var(--s4)">价值创造最强（5/5），Q2财报6月3日是催化剂，A级上沿</td></tr>
+      <tr><td class="cn-mrvl" style="font-weight:700">MRVL</td><td class="n5">82.5</td><td class="n4">72.0</td><td class="n4">82.0</td><td class="n3" style="font-weight:700">69.4</td><td class="pos">66.7→69.4↑</td><td><span class="gp gpB">B</span></td><td style="color:var(--s3)">5yr DCF年化18%，三家中估值最佳，HSBC $300目标，B级顶部</td></tr>
+      <tr><td class="cn-amd" style="font-weight:700">AMD</td><td class="n3">69.5</td><td class="n3">69.2</td><td class="n2">48.0</td><td class="n3" style="font-weight:700">62.9</td><td class="neg">65.6→62.9↓</td><td><span class="gp gpB">B</span></td><td style="color:var(--s3)">好公司但$579B下5yr DCF仅2.9%年化，等回调再看</td></tr>
+      <tr><td class="cn-intc" style="font-weight:700">INTC</td><td class="n2">54.2</td><td class="n2">45.2</td><td class="n0">26.0</td><td class="n1" style="font-weight:700">41.2</td><td class="neg">45.5→41.2↓</td><td><span class="gp gpD">D</span></td><td style="color:var(--s1)">5yr DCF基准-20%，即使18A成功仍是负回报。$510B定价严重透支，今日下调确认</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:12px;background:rgba(88,166,255,.05);border:1px solid rgba(88,166,255,.2);border-radius:7px;font-size:11px;line-height:1.9">
+    <strong style="color:var(--accent)">v4.0最大启示：5年DCF重新排序了MRVL和INTC的投资吸引力</strong><br>
+    • <strong style="color:var(--mrvl)">MRVL</strong>从B级底部跃升至B级顶部：$112B市值 vs FY2028 $16.5B指引，5yr DCF年化18%，是五家中最有安全边际的。HSBC $300目标价验证了这个判断。<br>
+    • <strong style="color:var(--intc)">INTC</strong>从"D级有转机信号"回归D级：公司质量确实在改善（45.2分），但$510B市值已经完全透支了改善空间。5yr DCF基准情景年化-20%，乐观情景仍是-3.9%。今日Northland下调和5.1%跌幅是市场对这个逻辑的确认。<br>
+    • <strong style="color:var(--nvda)">NVDA</strong>仍是唯一S级：即使估值分从80降到73（5yr DCF更严格），但15%年化+Vera CPU新增向量+$1T订单可见度，依然是最优的风险收益比。
+  </div>
+</div>
+
+<div class="footer">AI算力专项投资评分 v4.0 &nbsp;|&nbsp; 2026-06-01 &nbsp;|&nbsp; 仅供研究参考<br>
+方法论：分部加权行业分 + 前瞻加权公司质量（当前40%+轨迹60%）+ 盈利质量→价值创造（ROIC×WACC）+ 5年DCF目标估值建模<br>
+NVDA Q1 FY27(05-20) · AVGO Q1 FY26(03-04，Q2将于06-03发布) · MRVL Q1 FY27(05-27) · AMD Q1 2026(05-06) · INTC Q1 FY26(04-23)</div>
+</div>
+</body>
+</html>
