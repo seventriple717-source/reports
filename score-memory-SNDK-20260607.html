@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNDK · 存储器专项打分 v4.1 · 20260607</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --accent: #58a6ff; --green: #3fb950; --yellow: #d29922;
+    --orange: #f0883e; --red: #f85149; --purple: #bc8cff;
+    --hbf: #bc8cff; --ent-nand: #f0883e; --con-nand: #8b949e;
+    --text: #e6edf3; --muted: #8b949e; --dim: #21262d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  /* COVER */
+  .cover { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--ent-nand), var(--hbf), var(--purple)); }
+  .cover-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .ticker-block .ticker { font-size: 52px; font-weight: 900; color: var(--ent-nand); letter-spacing: -2px; }
+  .ticker-block .company { font-size: 18px; color: var(--muted); margin-top: 4px; }
+  .ticker-block .track { font-size: 13px; background: rgba(240,136,62,0.15); color: var(--ent-nand); padding: 3px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; }
+  .score-block { text-align: right; }
+  .score-block .final-score { font-size: 80px; font-weight: 900; line-height: 1; color: var(--hbf); }
+  .score-block .grade { font-size: 28px; font-weight: 700; color: var(--ent-nand); margin-top: 4px; }
+  .score-block .confidence { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .cover-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .meta-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-item .value { font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .meta-item .value.up { color: var(--green); }
+  .meta-item .value.down { color: var(--red); }
+  .meta-item .value.warn { color: var(--yellow); }
+  .conclusion { margin-top: 20px; padding: 14px 18px; background: rgba(188,140,255,0.08); border-left: 3px solid var(--hbf); border-radius: 4px; font-size: 14px; line-height: 1.7; }
+  .cycle-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid var(--red); margin-left: 10px; vertical-align: middle; }
+
+  /* SECTION */
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+
+  /* ARCH */
+  .arch-layers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+  .arch-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .arch-row.active-ent { border-color: var(--ent-nand); background: rgba(240,136,62,0.07); }
+  .arch-row.active-con { border-color: #8b949e; background: rgba(139,148,158,0.07); }
+  .arch-row.active-hbf { border-color: var(--hbf); background: rgba(188,140,255,0.07); }
+  .arch-layer-label { font-size: 11px; color: var(--muted); width: 160px; flex-shrink: 0; }
+  .arch-track { font-size: 13px; font-weight: 600; flex: 1; }
+  .arch-indicator { font-size: 20px; width: 28px; }
+  .arch-status { font-size: 11px; color: var(--muted); text-align: right; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--dim); color: var(--muted); font-weight: 600; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 9px 10px; border-bottom: 1px solid rgba(48,54,61,0.6); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .tag-ent { background: rgba(240,136,62,0.15); color: var(--ent-nand); }
+  .tag-con { background: rgba(139,148,158,0.15); color: var(--muted); }
+  .tag-hbf { background: rgba(188,140,255,0.15); color: var(--hbf); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+
+  /* SCORE BARS */
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .score-label { width: 200px; flex-shrink: 0; font-size: 13px; }
+  .score-bar-wrap { flex: 1; background: var(--dim); border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-orange { background: var(--ent-nand); }
+  .bar-purple { background: var(--hbf); }
+  .bar-green { background: var(--green); }
+  .bar-yellow { background: var(--yellow); }
+  .bar-red { background: var(--red); }
+  .score-val { width: 50px; text-align: right; font-weight: 700; font-size: 13px; }
+  .score-note { font-size: 11px; color: var(--muted); margin-left: 4px; }
+
+  /* DIM GRID */
+  .dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .dim-card { background: var(--dim); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .dim-card .dim-name { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .dim-card .dim-score { font-size: 32px; font-weight: 900; margin: 4px 0; }
+  .dim-card .dim-max { font-size: 13px; color: var(--muted); }
+  .dim-card .dim-note { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .dim-card .dim-tag { display: inline-block; margin-top: 6px; font-size: 10px; padding: 2px 6px; border-radius: 10px; }
+  .score-3 { color: var(--yellow); } .score-2 { color: var(--red); } .score-4 { color: var(--green); } .score-5 { color: var(--hbf); } .score-1 { color: var(--red); }
+
+  /* VALUATION */
+  .val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .val-card { background: var(--dim); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .val-card .vc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .val-card .vc-value { font-size: 26px; font-weight: 900; margin: 4px 0; }
+  .val-card .vc-vs { font-size: 12px; }
+  .val-card .vc-verdict { font-size: 11px; margin-top: 6px; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+
+  /* SCENARIO */
+  .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .scenario-card { border-radius: 8px; padding: 16px; border: 1px solid; }
+  .sc-bull { border-color: var(--green); background: rgba(63,185,80,0.06); }
+  .sc-base { border-color: var(--yellow); background: rgba(210,153,34,0.06); }
+  .sc-bear { border-color: var(--red); background: rgba(248,81,73,0.06); }
+  .sc-hbf { border-color: var(--hbf); background: rgba(188,140,255,0.06); }
+  .sc-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sc-price { font-size: 28px; font-weight: 900; margin: 6px 0; }
+  .sc-updown { font-size: 13px; }
+  .sc-desc { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .sc-prob { font-size: 12px; font-weight: 700; margin-top: 4px; }
+
+  /* TRIGGER */
+  .trigger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .trigger-item { display: flex; align-items: flex-start; gap: 10px; background: var(--dim); border-radius: 8px; padding: 12px; border: 1px solid var(--border); }
+  .trigger-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .trigger-name { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .trigger-val { font-size: 14px; font-weight: 700; }
+  .trigger-note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* HBF MATRIX */
+  .hbf-matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .hbf-cell { border-radius: 8px; padding: 16px; border: 1px solid var(--border); background: var(--dim); }
+  .hbf-cell.highlight { border-color: var(--hbf); background: rgba(188,140,255,0.08); }
+  .hbf-cell-title { font-size: 13px; font-weight: 700; color: var(--hbf); margin-bottom: 8px; }
+  .hbf-cell-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .hbf-cell-price { font-size: 22px; font-weight: 900; color: var(--hbf); margin: 8px 0; }
+  .hbf-cell-prob { font-size: 12px; color: var(--yellow); }
+  .hbf-summary { background: rgba(188,140,255,0.08); border: 1px solid var(--hbf); border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+
+  /* SUMMARY */
+  .summary-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(48,54,61,0.6); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-label { font-size: 13px; color: var(--muted); }
+  .summary-val { font-size: 20px; font-weight: 900; }
+  .summary-detail { font-size: 12px; color: var(--muted); margin-top: 2px; text-align: right; }
+  .final-banner { background: linear-gradient(135deg, rgba(240,136,62,0.12), rgba(188,140,255,0.12)); border: 1px solid var(--hbf); border-radius: 10px; padding: 20px; text-align: center; margin-top: 16px; }
+  .final-banner .fb-score { font-size: 72px; font-weight: 900; color: var(--hbf); line-height: 1; }
+  .final-banner .fb-grade { font-size: 24px; color: var(--ent-nand); margin-top: 8px; font-weight: 700; }
+  .final-banner .fb-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* UPDATE COMPARE */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare-col { background: var(--dim); border-radius: 8px; padding: 16px; border: 1px solid var(--border); }
+  .compare-col.new { border-color: var(--green); }
+  .compare-col-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .compare-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+  .compare-item:last-child { border-bottom: none; }
+  .compare-item .ci-key { color: var(--muted); }
+  .compare-item .ci-val { font-weight: 700; }
+  .ci-val.up { color: var(--green); } .ci-val.down { color: var(--red); } .ci-val.changed { color: var(--yellow); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .disclaimer { font-size: 11px; color: var(--muted); opacity: 0.7; margin-top: 6px; }
+
+  /* PROGRESS RING */
+  .ring-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+  .ring-label { position: absolute; font-size: 13px; font-weight: 700; }
+
+  /* INFO ROW */
+  .info-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .info-chip { background: var(--dim); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; }
+  .info-chip .ic-label { color: var(--muted); font-size: 11px; }
+  .info-chip .ic-val { font-weight: 700; margin-top: 1px; }
+
+  .alert-box { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
+  .note-box { background: rgba(188,140,255,0.06); border: 1px solid rgba(188,140,255,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="ticker-block">
+      <div class="ticker">SNDK</div>
+      <div class="company">SanDisk Corporation · NASDAQ</div>
+      <div class="track">纯NAND存储 + HBF期权</div>
+    </div>
+    <div class="score-block">
+      <div class="final-score">37.1</div>
+      <div class="grade">观望 WATCH <span class="cycle-badge">⚡ 景气峰值</span></div>
+      <div class="confidence">置信度 0.85 · 上市&lt;2年+景气高峰</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <div class="meta-item"><div class="label">当前股价</div><div class="value">$1,530</div></div>
+    <div class="meta-item"><div class="label">分析师均值目标</div><div class="value warn">$1,659</div></div>
+    <div class="meta-item"><div class="label">较研报基准价涨幅</div><div class="value up">+115.6%</div></div>
+    <div class="meta-item"><div class="label">市值</div><div class="value">~$226B</div></div>
+    <div class="meta-item"><div class="label">净债务</div><div class="value warn">$8B</div></div>
+    <div class="meta-item"><div class="label">通算EV/EBITDA</div><div class="value down">254x</div></div>
+    <div class="meta-item"><div class="label">Q3FY26营收</div><div class="value up">$59.5B</div></div>
+    <div class="meta-item"><div class="label">Q3FY26毛利率</div><div class="value up">78.4%</div></div>
+    <div class="meta-item"><div class="label">Q4FY26指引</div><div class="value up">$77.5-82.5B</div></div>
+    <div class="meta-item"><div class="label">NBM长协</div><div class="value up">$420亿保底</div></div>
+    <div class="meta-item"><div class="label">周期位置</div><div class="value down">⚡ 景气高峰</div></div>
+    <div class="meta-item"><div class="label">更新日期</div><div class="value">20260607</div></div>
+  </div>
+  <div class="conclusion">
+    <strong>一句话结论：</strong>SNDK是全球唯一纯NAND上市标的，正享受AI数据中心驱动的历史最强NAND超级周期（Q3FY2026营收$59.5亿、毛利率78.4%），五份NBM长协锁定$420亿保底收入、HBF期权与SK Hynix联合推进是最重大的非线性变量；但商品属性决定峰值盈利不可持续，通算EV/EBITDA高达254x、通算毛利率仅18%，估值安全边际为零，当前价$1,530仅距分析师均值$1,659约+8.4%，不触发买入条件，维持<strong style="color:var(--yellow)">观望</strong>，关注HBF商业化进展与周期拐点信号。
+  </div>
+</div>
+
+<!-- ===== AI内存五层架构图 ===== -->
+<div class="section">
+  <div class="section-title">AI内存五层架构图 · SNDK定位</div>
+  <div class="arch-layers">
+    <div class="arch-row">
+      <div class="arch-layer-label">L1 片上SRAM</div>
+      <div class="arch-track" style="color:var(--muted)">GPU/CPU片上缓存（TSMC/Samsung晶圆内嵌）</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">SNDK无暴露</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-layer-label">L2 高带宽内存HBM</div>
+      <div class="arch-track" style="color:var(--muted)">SK Hynix / Samsung / Micron · GPU封装叠层</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">SNDK无直接暴露</div>
+    </div>
+    <div class="arch-row active-hbf">
+      <div class="arch-layer-label">L2.5 高带宽闪存HBF</div>
+      <div class="arch-track" style="color:var(--hbf)">SNDK + SK Hynix 联合推进 OCP HBF标准</div>
+      <div class="arch-indicator">★</div>
+      <div class="arch-status">Gen1 2026H2样品 · 2027商业化</div>
+    </div>
+    <div class="arch-row active-ent">
+      <div class="arch-layer-label">L3 企业级NAND SSD</div>
+      <div class="arch-track" style="color:var(--ent-nand)">数据中心NVMe SSD · AI推理存储 · QLC Stargate</div>
+      <div class="arch-indicator">&#9679;</div>
+      <div class="arch-status">~40%营收 · 数据中心$14.67亿/季</div>
+    </div>
+    <div class="arch-row active-con">
+      <div class="arch-layer-label">L4 消费/Edge NAND</div>
+      <div class="arch-track" style="color:var(--con-nand)">Edge SSD / 移动存储 / 消费NAND ($36.63亿边缘)</div>
+      <div class="arch-indicator">&#9679;</div>
+      <div class="arch-status">~55%营收 · 消费$8.2亿/季</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-layer-label">L5 HDD磁性存储</div>
+      <div class="arch-track" style="color:var(--muted)">近线HDD · AI冷热数据分层（WDC/STX）</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">已分拆给WDC</div>
+    </div>
+  </div>
+  <div class="note-box">
+    <strong>架构定位说明：</strong>SNDK 主力位于 L3 企业NAND + L4 消费NAND，并持有 L2.5 HBF 的极早期期权价值。HBF若成功商业化，将使SNDK从"NAND商品供应商"跃升至"AI内存栈解决方案提供商"，估值框架将从商品型（PE 8-15x）向平台型（PE 20x+）迁移。
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+    <div style="background:rgba(240,136,62,0.08);border:1px solid var(--ent-nand);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">企业NAND占比</div>
+      <div style="font-size:24px;font-weight:900;color:var(--ent-nand);">~40%</div>
+      <div style="font-size:11px;color:var(--muted);">赛道分 75 / 归一化 0.62</div>
+    </div>
+    <div style="background:rgba(139,148,158,0.08);border:1px solid var(--con-nand);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">消费NAND占比</div>
+      <div style="font-size:24px;font-weight:900;color:var(--con-nand);">~55%</div>
+      <div style="font-size:11px;color:var(--muted);">赛道分 52 / 归一化 0.55</div>
+    </div>
+    <div style="background:rgba(188,140,255,0.08);border:1px solid var(--hbf);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">HBF期权</div>
+      <div style="font-size:24px;font-weight:900;color:var(--hbf);">~5%</div>
+      <div style="font-size:11px;color:var(--muted);">赛道分 80 / 归一化 0.80</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 行业分加权计算 ===== -->
+<div class="section">
+  <div class="section-title">行业分加权计算 (权重 20%)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>赛道</th>
+        <th>营收占比</th>
+        <th>赛道原始分 (/100)</th>
+        <th>归一化系数</th>
+        <th>景气维度 dim6</th>
+        <th>加权贡献分</th>
+        <th>赛道分类</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>企业级NAND SSD (数据中心)</td>
+        <td class="num">40%</td>
+        <td class="num">75</td>
+        <td class="num">0.62</td>
+        <td class="num">2/5 (景气高峰)</td>
+        <td class="num"><strong>18.60</strong></td>
+        <td><span class="tag tag-ent">ENT-NAND</span></td>
+      </tr>
+      <tr>
+        <td>消费/Edge NAND</td>
+        <td class="num">55%</td>
+        <td class="num">52</td>
+        <td class="num">0.55</td>
+        <td class="num">2/5 (景气高峰)</td>
+        <td class="num"><strong>15.73</strong></td>
+        <td><span class="tag tag-con">CON-NAND</span></td>
+      </tr>
+      <tr>
+        <td>HBF期权 (Gen1 2027+)</td>
+        <td class="num">5%</td>
+        <td class="num">80</td>
+        <td class="num">0.80</td>
+        <td class="num">结构性</td>
+        <td class="num"><strong>3.20</strong></td>
+        <td><span class="tag tag-hbf">HBF期权</span></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr style="background:rgba(88,166,255,0.05);">
+        <td colspan="5"><strong>行业加权总分 = Σ(赛道分 × 占比 × 归一化)</strong></td>
+        <td class="num"><strong style="color:var(--yellow);font-size:16px;">37.5 / 100</strong></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="note-box" style="margin-top:14px;">
+    <strong>方法注记：</strong>行业分 = Σ(赛道原始分 × 营收占比 × 归一化系数)。归一化系数反映当前景气周期位置（1.0=完美，0.5=低谷）；dim6景气维度 2/5 表示当前处于景气高峰阶段，已充分定价、后续回调风险高。企业NAND赛道分75>消费NAND 52，因AI数据中心拉动的企业SSD具备更强定价权和更高技术护城河。HBF虽赛道分最高(80)但占比仅5%，属于"低概率高价值"的非线性期权。
+  </div>
+</div>
+
+<!-- ===== 质量分 ===== -->
+<div class="section">
+  <div class="section-title">质量分 8维度评估 (权重 50%)</div>
+  <div class="alert-box">
+    <strong>通算口径强制执行：</strong>财务类维度（dim1成长性、dim2盈利质量、dim5财务健康）使用FY2023-2025均值，而非景气高峰单季数据。当期表现（78.4%毛利率）不代表通算盈利能力（均值~18%）。
+  </div>
+  <div class="dim-grid">
+    <div class="dim-card">
+      <div class="dim-name">DIM1 · 成长性 [权重20]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">当期：Q3FY26 +251% YoY，Q4指引$77.5-82.5亿；通算：FY23-25 CAGR约10%（含周期底部）。NAND商品周期性决定高峰不可持续，通算增速中等。</div>
+      <div class="dim-tag tag-yellow tag">通算口径</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM2 · 通算盈利质量 [权重10]</div>
+      <div class="dim-score score-2">2<span class="dim-max">/5</span></div>
+      <div class="dim-note">通算毛利率~18%（FY2023-2025均值，含分拆一次性）；FY2025仍录亏损；ROIC负值；分拆后杠杆偏高。峰值78.4%不反映通算能力。</div>
+      <div class="dim-tag tag-red tag">通算口径 · 历史亏损</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM3 · 技术节点与市占 [权重18]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">BiCS8(218层)全球第一梯队，BiCS10(332层)2026量产；Kioxia JV续签2034年，Kitakami Fab2运营；全球NAND市占约15%，第三梯队（低于三星35%/SK Hynix 20%）。</div>
+      <div class="dim-tag tag-yellow tag">第一梯队技术 · 第三市占</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM4 · AI/HBF战略 [权重12]</div>
+      <div class="dim-score score-4">4<span class="dim-max">/5</span></div>
+      <div class="dim-note">HBF与SK Hynix联合OCP推进，Gen1 2026H2样品、2027商业化；QLC Stargate针对AI推理优化；NBM商业模式转型叙事。最重要非线性变量，市场尚未充分定价。</div>
+      <div class="dim-tag tag-hbf tag">HBF期权 · 高确信</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM5 · 财务健康度 [权重10]</div>
+      <div class="dim-score score-2">2<span class="dim-max">/5</span></div>
+      <div class="dim-note">净债务$8B，分拆后杠杆偏高；FCF刚转正（Q3FY26 Capex占营收4%克制）；$60亿回购与$8B净债务并存；债务覆盖率仍有压力。</div>
+      <div class="dim-tag tag-red tag">净债务$8B · 杠杆偏高</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM6 · 管理层执行力 [权重12]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">分拆后新团队，但Q3FY26超预期60%验证执行力；Q4指引继续上调；NBM商业模式叙事清晰；Kioxia JV续签顺利执行。上市时间&lt;2年，历史记录有限。</div>
+      <div class="dim-tag tag-yellow tag">新团队 · 超预期执行</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM7 · 客户质量与锁定 [权重12]</div>
+      <div class="dim-score score-4">4<span class="dim-max">/5</span></div>
+      <div class="dim-note">$420亿NBM长协保底（FY2027超三分之一bit出货锁定）；$4亿预付款已收；Kioxia JV续签2034年；五大超大规模云厂商。结构性合同可见度历史最高。</div>
+      <div class="dim-tag tag-green tag">$420亿长协 · 强锁定</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM8 · 可选性价值 [权重6]</div>
+      <div class="dim-score score-5">5<span class="dim-max">/5</span></div>
+      <div class="dim-note">HBF是SNDK最大期权，若商业化成功将开辟NAND→AI高性能内存的新市场（TAM 10倍+）；商业化2027+，高不确定性但价值极高；Susquehanna目标$3,250即隐含HBF定价。</div>
+      <div class="dim-tag tag-hbf tag">HBF最大期权 · 极高潜力</div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;padding:16px;background:var(--dim);border-radius:8px;">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">质量分加权计算</div>
+    <div class="score-row"><div class="score-label">DIM1 成长性 (3/5 × 权重20)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">12.0</div></div>
+    <div class="score-row"><div class="score-label">DIM2 通算盈利 (2/5 × 权重10)</div><div class="score-bar-wrap"><div class="score-bar bar-red" style="width:40%"></div></div><div class="score-val" style="color:var(--red)">4.0</div></div>
+    <div class="score-row"><div class="score-label">DIM3 技术节点 (3/5 × 权重18)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">10.8</div></div>
+    <div class="score-row"><div class="score-label">DIM4 AI/HBF战略 (4/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-green" style="width:80%"></div></div><div class="score-val" style="color:var(--green)">9.6</div></div>
+    <div class="score-row"><div class="score-label">DIM5 财务健康 (2/5 × 权重10)</div><div class="score-bar-wrap"><div class="score-bar bar-red" style="width:40%"></div></div><div class="score-val" style="color:var(--red)">4.0</div></div>
+    <div class="score-row"><div class="score-label">DIM6 管理层 (3/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">7.2</div></div>
+    <div class="score-row"><div class="score-label">DIM7 客户锁定 (4/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-green" style="width:80%"></div></div><div class="score-val" style="color:var(--green)">9.6</div></div>
+    <div class="score-row"><div class="score-label">DIM8 可选性 (5/5 × 权重6)</div><div class="score-bar-wrap"><div class="score-bar bar-purple" style="width:100%"></div></div><div class="score-val" style="color:var(--hbf)">6.0</div></div>
+    <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="color:var(--muted);font-size:13px;">质量分 = 63.2 / 100（加权合计 / 5）</span>
+      <span style="font-size:20px;font-weight:900;color:var(--yellow);">63.2 / 100</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 估值安全边际 ===== -->
+<div class="section">
+  <div class="section-title">估值安全边际分析 (权重 30%)</div>
+  <div class="alert-box">
+    <strong>通算EV/EBITDA极度高估：</strong>市值$226B + 净债务$8B = EV $234B；通算EBITDA（营收$70亿 × 归一化margin ~13.2%）约$9.2亿；通算EV/EBITDA = <strong style="color:var(--red)">254x</strong>（正常区间 7-12x）。所有情景均无安全边际，估值分基础分 v1 = 0。
+  </div>
+
+  <div class="val-grid">
+    <div class="val-card">
+      <div class="vc-label">当前股价</div>
+      <div class="vc-value" style="color:var(--text);">$1,530</div>
+      <div class="vc-vs" style="color:var(--muted);">上市<2年 · NASDAQ</div>
+      <div class="vc-verdict tag tag-yellow">⚡ 景气峰值</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">通算EV/EBITDA</div>
+      <div class="vc-value" style="color:var(--red);">254x</div>
+      <div class="vc-vs" style="color:var(--muted);">正常区间 7-12x</div>
+      <div class="vc-verdict tag tag-red">极度高估</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">分析师均值目标</div>
+      <div class="vc-value" style="color:var(--yellow);">$1,659</div>
+      <div class="vc-vs" style="color:var(--green);">+8.4% 上行</div>
+      <div class="vc-verdict tag tag-yellow">接近共识 · 有限空间</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">均值回归目标价</div>
+      <div class="vc-value" style="color:var(--red);">$473</div>
+      <div class="vc-vs" style="color:var(--red);">-69% 下行</div>
+      <div class="vc-verdict tag tag-red">通算PE 12x × $39.4</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">EV/EBITDA峰值目标</div>
+      <div class="vc-value" style="color:var(--yellow);">$866</div>
+      <div class="vc-vs" style="color:var(--red);">-43% 下行</div>
+      <div class="vc-verdict tag tag-yellow">峰值EBITDA驱动</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">Barclays最高目标</div>
+      <div class="vc-value" style="color:var(--green);">$2,300</div>
+      <div class="vc-vs" style="color:var(--green);">+50.3% 上行</div>
+      <div class="vc-verdict tag tag-green">牛市NBM转型</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--accent);">四情景分析</div>
+    <div class="scenario-grid">
+      <div class="scenario-card sc-hbf">
+        <div class="sc-label" style="color:var(--hbf);">HBF平台情景</div>
+        <div class="sc-price" style="color:var(--hbf);">$2,400</div>
+        <div class="sc-updown" style="color:var(--hbf);">+56.9%</div>
+        <div class="sc-prob" style="color:var(--hbf);">概率 15%</div>
+        <div class="sc-desc">HBF 2027商业化成功，NBM转型完成，市场给予PE 20x+，FY2027E EPS $120+</div>
+      </div>
+      <div class="scenario-card sc-bull">
+        <div class="sc-label" style="color:var(--green);">超级周期延续</div>
+        <div class="sc-price" style="color:var(--green);">$1,500</div>
+        <div class="sc-updown" style="color:var(--red);">-2.0%</div>
+        <div class="sc-prob" style="color:var(--green);">概率 35%</div>
+        <div class="sc-desc">FY2027E EPS ~$100，给予15x PE（NBM提升可预测性），接近当前价</div>
+      </div>
+      <div class="scenario-card sc-base">
+        <div class="sc-label" style="color:var(--yellow);">均值回归基础</div>
+        <div class="sc-price" style="color:var(--yellow);">$1,050</div>
+        <div class="sc-updown" style="color:var(--red);">-31.4%</div>
+        <div class="sc-prob" style="color:var(--yellow);">概率 30%</div>
+        <div class="sc-desc">FY2027E EPS回落至$70，12x PE，三星扩产压力初现，周期温和回落</div>
+      </div>
+      <div class="scenario-card sc-bear">
+        <div class="sc-label" style="color:var(--red);">周期崩塌</div>
+        <div class="sc-price" style="color:var(--red);">$560</div>
+        <div class="sc-updown" style="color:var(--red);">-63.4%</div>
+        <div class="sc-prob" style="color:var(--red);">概率 20%</div>
+        <div class="sc-desc">FY2027E EPS崩至$40-50，12x PE，参考MU 2018-19 -60%历史</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:10px;background:var(--dim);border-radius:6px;font-size:13px;">
+      <strong>概率加权期望值：</strong> $2,400×15% + $1,500×35% + $1,050×30% + $560×20% = <strong style="color:var(--yellow);">$1,297</strong>（较当前-15.2%）
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--accent);">买入触发器状态</div>
+  <div class="trigger-grid">
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器A: 质量分</div>
+        <div class="trigger-val" style="color:var(--red);">2/5 通算盈利 (需≥3/5)</div>
+        <div class="trigger-note">通算毛利率18%，ROIC为负，FY2025亏损 → 未触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器B: 估值</div>
+        <div class="trigger-val" style="color:var(--red);">EV/EBITDA 254x (需≤7.2x)</div>
+        <div class="trigger-note">通算EV/EBITDA极度高估，无安全边际 → 未触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#9989;</div>
+      <div>
+        <div class="trigger-name">触发器C: 分析师共识</div>
+        <div class="trigger-val" style="color:var(--green);">$1,659 > $1,530 (+8.4%)</div>
+        <div class="trigger-note">共识目标高于股价，有限上行空间 → 仅C触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器D: HBF商业化</div>
+        <div class="trigger-val" style="color:var(--yellow);">Gen1样品 H2 2026</div>
+        <div class="trigger-note">商业化2027+，样品阶段 → 尚未完全触发</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:10px 14px;background:rgba(248,81,73,0.08);border:1px solid rgba(248,81,73,0.3);border-radius:6px;font-size:13px;margin-top:6px;">
+    <strong>触发状态：</strong>触发器A❌ B❌ C✅ D部分 → <strong style="color:var(--red);">未达到买入条件（需A+B或A+C+D）</strong>，维持<strong style="color:var(--yellow);">观望</strong>评级。买入阈值：回调至$1,200-1,350区间（12-14x FWD PE）。
+  </div>
+</div>
+
+<!-- ===== HBF期权价值矩阵 ===== -->
+<div class="section">
+  <div class="section-title">SNDK专项：HBF期权价值矩阵</div>
+  <div class="hbf-summary">
+    <strong style="color:var(--hbf);">HBF (High Bandwidth Flash) 核心逻辑：</strong> 2026年2月，SanDisk与SK Hynix联合向OCP提交HBF规格标准。Gen1目标：读带宽1.6 TB/s、256Gb/die、16层堆叠、最高512GB容量。样品H2 2026交付，商用系统预计2027年初落地。若成功，NAND将首次进入GPU封装旁的高带宽内存层，TAM从当前SSD市场扩展10倍+，估值框架从商品型向平台型迁移。
+  </div>
+  <div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px;">
+    <div style="background:var(--dim);padding:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);text-align:center;">商业化进度<br>vs<br>NAND大周期</div>
+    <div style="background:rgba(63,185,80,0.06);padding:12px;text-align:center;border-bottom:1px solid var(--border);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">HBF商业化成功 (2027)</div>
+      <div style="font-size:11px;color:var(--muted);">OCP标准获采纳 · Gen1量产</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.06);padding:12px;text-align:center;border-bottom:1px solid var(--border);">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">HBF延期/失败</div>
+      <div style="font-size:11px;color:var(--muted);">HBM主导 · NAND留在SSD层</div>
+    </div>
+    <div style="background:rgba(210,153,34,0.06);padding:12px;text-align:center;">
+      <div style="font-size:12px;font-weight:700;color:var(--yellow);">NAND超级周期延续</div>
+      <div style="font-size:11px;color:var(--muted);">企业SSD需求持续爆发</div>
+    </div>
+    <div style="background:rgba(188,140,255,0.1);padding:14px;border-right:1px solid var(--border);">
+      <div style="font-size:20px;font-weight:900;color:var(--hbf);">$2,400</div>
+      <div style="font-size:11px;color:var(--green);">+56.9% vs $1,530</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">PE 20x × EPS $120+</div>
+      <div style="font-size:11px;color:var(--hbf);margin-top:4px;">概率 ~10%</div>
+    </div>
+    <div style="background:rgba(240,136,62,0.08);padding:14px;">
+      <div style="font-size:20px;font-weight:900;color:var(--ent-nand);">$1,500</div>
+      <div style="font-size:11px;color:var(--red);">-2.0% vs $1,530</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">PE 15x × EPS $100</div>
+      <div style="font-size:11px;color:var(--yellow);margin-top:4px;">概率 ~30%</div>
+    </div>
+    <div style="background:rgba(139,148,158,0.06);padding:12px;text-align:center;">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);">NAND周期回落</div>
+      <div style="font-size:11px;color:var(--muted);">三星/Micron扩产 · 价格下行</div>
+    </div>
+    <div style="background:rgba(188,140,255,0.06);padding:14px;border-right:1px solid var(--border);">
+      <div style="font-size:20px;font-weight:900;color:var(--hbf);">$1,800</div>
+      <div style="font-size:11px;color:var(--green);">+17.6% vs $1,530</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">HBF抵消周期压力 · 平台溢价</div>
+      <div style="font-size:11px;color:var(--hbf);margin-top:4px;">概率 ~5%</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.06);padding:14px;">
+      <div style="font-size:20px;font-weight:900;color:var(--red);">$560</div>
+      <div style="font-size:11px;color:var(--red);">-63.4% vs $1,530</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">周期崩塌 + HBF失败 · 最差情景</div>
+      <div style="font-size:11px;color:var(--red);margin-top:4px;">概率 ~20%</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:rgba(188,140,255,0.08);border:1px solid var(--hbf);border-radius:8px;padding:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--hbf);margin-bottom:8px;">HBF商业化成功的关键条件</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        1. OCP标准最终采纳HBF规格（2026Q4前）<br>
+        2. Gen1 256Gb/die读带宽达到1.6TB/s目标<br>
+        3. 至少一家超大规模云厂商采购承诺<br>
+        4. 成本/性能相对HBM具备竞争力<br>
+        5. SK Hynix维持技术合作（利益竞突风险）
+      </div>
+    </div>
+    <div style="background:rgba(248,81,73,0.08);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px;">HBF期权失败的风险因素</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        1. NAND延迟（~100ns vs DRAM ~10ns）物理限制<br>
+        2. HBM 8/9代持续扩容，AI厂商采购惯性<br>
+        3. SK Hynix同时拥有HBM+HBF，战略模糊<br>
+        4. SNDK/Kioxia NAND工艺与DRAM堆叠不兼容<br>
+        5. 认证周期过长，错过AI推理服务器部署窗口
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:10px 14px;background:var(--dim);border-radius:6px;font-size:12px;color:var(--muted);">
+    <strong style="color:var(--text);">HBF概率加权期权价值：</strong> $2,400×10% + $1,800×5% = $240 + $90 = <strong style="color:var(--hbf);">$330/股</strong>（约占当前股价的21.6%），扣除HBF失败情景。建议将HBF视为额外期权价值，而非基础估值的组成部分。
+  </div>
+</div>
+
+<!-- ===== 评分汇总 ===== -->
+<div class="section">
+  <div class="section-title">评分汇总 · 三层结构</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(240,136,62,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">行业分 (权重20%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--ent-nand);line-height:1.1;margin:6px 0;">37.5</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 7.50</div>
+    </div>
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(210,153,34,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">质量分 (权重50%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--yellow);line-height:1.1;margin:6px 0;">63.2</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 31.60</div>
+    </div>
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(248,81,73,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">估值分 (权重30%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--red);line-height:1.1;margin:6px 0;">15.0</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 4.50</div>
+    </div>
+  </div>
+  <table style="margin-bottom:16px;">
+    <thead>
+      <tr><th>层级</th><th>分项</th><th class="num">原始分 (/100)</th><th class="num">权重</th><th class="num">贡献分</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>行业分</td><td>赛道加权得分</td><td class="num">37.5</td><td class="num">20%</td><td class="num"><strong>7.50</strong></td><td>景气高峰dim6=2/5拖累</td></tr>
+      <tr><td>质量分</td><td>8维度加权</td><td class="num">63.2</td><td class="num">50%</td><td class="num"><strong>31.60</strong></td><td>通算盈利&财务弱，HBF战略强</td></tr>
+      <tr><td>估值分</td><td>通算EV/EBITDA+触发器</td><td class="num">15.0</td><td class="num">30%</td><td class="num"><strong>4.50</strong></td><td>EV/EBITDA 254x，v1=0</td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td colspan="4"><strong>基础综合分（置信度前）</strong></td><td class="num"><strong style="font-size:16px;">43.6</strong></td><td></td></tr>
+      <tr><td colspan="4"><strong>× 置信度系数 0.85</strong>（上市&lt;2年+景气高峰）</td><td class="num"><strong style="font-size:20px;color:var(--hbf);">37.1</strong></td><td><span class="tag tag-yellow">观望 WATCH</span></td></tr>
+    </tbody>
+  </table>
+  <div class="final-banner">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">SNDK · 存储器专项最终得分</div>
+    <div class="fb-score">37.1</div>
+    <div class="fb-grade">观望 WATCH · 景气峰值 ⚡</div>
+    <div class="fb-note">置信度 0.85 | 行业37.5 · 质量63.2 · 估值15.0 | 当前价$1,530 | 买入阈值$1,200-1,350</div>
+  </div>
+</div>
+
+<!-- ===== 研报更新对比 ===== -->
+<div class="section">
+  <div class="section-title">研报更新对比 · 20260603 vs 20260607</div>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-col-title">原研报 (20260603)</div>
+      <div class="compare-item"><span class="ci-key">股价</span><span class="ci-val">$709.71</span></div>
+      <div class="compare-item"><span class="ci-key">评级</span><span class="ci-val">持有 Hold</span></div>
+      <div class="compare-item"><span class="ci-key">目标价</span><span class="ci-val">$750</span></div>
+      <div class="compare-item"><span class="ci-key">营收基准</span><span class="ci-val">Q2 $30.3亿</span></div>
+      <div class="compare-item"><span class="ci-key">毛利率</span><span class="ci-val">50.9%</span></div>
+      <div class="compare-item"><span class="ci-key">FWD EPS</span><span class="ci-val">$39.39</span></div>
+      <div class="compare-item"><span class="ci-key">分析师均值</span><span class="ci-val">$1,609</span></div>
+      <div class="compare-item"><span class="ci-key">市值</span><span class="ci-val">~$105B</span></div>
+      <div class="compare-item"><span class="ci-key">HBF状态</span><span class="ci-val">未知</span></div>
+      <div class="compare-item"><span class="ci-key">NBM协议</span><span class="ci-val">无</span></div>
+    </div>
+    <div class="compare-col new">
+      <div class="compare-col-title">更新版 (20260607) <span class="tag tag-green">NEW</span></div>
+      <div class="compare-item"><span class="ci-key">股价</span><span class="ci-val up">$1,530 (+115.6%)</span></div>
+      <div class="compare-item"><span class="ci-key">评级</span><span class="ci-val changed">观望 Watch (维持)</span></div>
+      <div class="compare-item"><span class="ci-key">目标价（加权）</span><span class="ci-val up">$1,650 (更新)</span></div>
+      <div class="compare-item"><span class="ci-key">营收最新</span><span class="ci-val up">Q3 $59.5亿 (+97% QoQ)</span></div>
+      <div class="compare-item"><span class="ci-key">毛利率</span><span class="ci-val up">78.4% (+27.5ppts)</span></div>
+      <div class="compare-item"><span class="ci-key">Q4指引年化EPS</span><span class="ci-val up">~$124 (+215%)</span></div>
+      <div class="compare-item"><span class="ci-key">分析师均值</span><span class="ci-val up">$1,659 (+3%)</span></div>
+      <div class="compare-item"><span class="ci-key">市值</span><span class="ci-val up">~$226B (+115%)</span></div>
+      <div class="compare-item"><span class="ci-key">HBF状态</span><span class="ci-val up">联合SK Hynix · OCP推进中</span></div>
+      <div class="compare-item"><span class="ci-key">NBM协议</span><span class="ci-val up">$420亿最低保底 · 5份</span></div>
+    </div>
+  </div>
+  <div class="note-box" style="margin-top:14px;">
+    <strong>核心变化：</strong>Q3FY26超预期幅度为半导体史上罕见（EPS超60%），NBM长协$420亿是研报发布时完全未知的结构性变化，HBF期权正式公告。尽管基本面极强，估值安全边际仍为负——通算EV/EBITDA从研报时的~90x进一步膨胀至254x，提醒投资者：当期极强盈利已被当前股价充分（甚至超额）折现。
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div>存储器行业专项投资打分系统 v4.1 · 20260607更新版</div>
+  <div style="margin-top:4px;color:var(--muted);">SNDK · 当前价$1,530 · 行业分37.5 · 质量分63.2 · 估值分15.0 · 最终分<strong style="color:var(--hbf)">37.1</strong> · 评级<strong style="color:var(--yellow)">观望</strong></div>
+  <div class="disclaimer">本报告仅供投资研究参考，不构成投资建议。过去表现不代表未来结果。存储器行业具有高周期性，请充分评估风险。</div>
+  <div class="disclaimer">数据来源：SNDK Q3FY26 SEC 8-K(2026-05-01)、管理层电话会议、Morgan Stanley/Mizuho/Barclays研报、TrendForce、OCP HBF规格发布</div>
+</div>
+
+</div>
+</body>
+</html>
