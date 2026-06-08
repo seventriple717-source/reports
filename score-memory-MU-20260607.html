@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MU · 存储器专项打分 v4.1 · 20260607</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --accent: #58a6ff; --green: #3fb950; --yellow: #d29922;
+    --orange: #f0883e; --red: #f85149; --purple: #bc8cff;
+    --hbm: #76e3b0; --srv-dram: #58a6ff; --pc-dram: #d29922;
+    --ent-nand: #f0883e; --con-nand: #8b949e; --hdd: #e8b04b;
+    --text: #e6edf3; --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 28px 16px; }
+
+  /* COVER */
+  .cover { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #76e3b0, #58a6ff, #bc8cff); }
+  .cover-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .ticker-block .ticker { font-size: 52px; font-weight: 900; color: var(--hbm); letter-spacing: -2px; }
+  .ticker-block .company { font-size: 17px; color: var(--muted); margin-top: 4px; }
+  .ticker-block .track { font-size: 13px; background: rgba(118,227,176,0.12); color: var(--hbm); padding: 3px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; border: 1px solid rgba(118,227,176,0.3); }
+  .score-block { text-align: right; }
+  .score-block .final-score { font-size: 80px; font-weight: 900; line-height: 1; color: var(--accent); }
+  .score-block .grade { font-size: 26px; font-weight: 700; color: var(--yellow); margin-top: 4px; }
+  .score-block .rating { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .cycle-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(210,153,34,0.15); border: 1px solid rgba(210,153,34,0.4); color: var(--yellow); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 8px; }
+
+  .cover-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .meta-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-item .value { font-size: 17px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .meta-item .value.up { color: var(--green); }
+  .meta-item .value.down { color: var(--red); }
+  .meta-item .value.warn { color: var(--yellow); }
+  .conclusion { margin-top: 20px; padding: 14px 18px; background: rgba(88,166,255,0.07); border-left: 3px solid var(--accent); border-radius: 4px; font-size: 14px; color: var(--text); line-height: 1.7; }
+  .conclusion strong { color: var(--accent); }
+
+  /* SECTIONS */
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+
+  /* ARCH LAYERS */
+  .arch-layers { display: flex; flex-direction: column; gap: 6px; }
+  .arch-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border); transition: border-color 0.2s; }
+  .arch-row.active-hbm { border-color: var(--hbm); background: rgba(118,227,176,0.07); }
+  .arch-row.active-ddr5 { border-color: var(--srv-dram); background: rgba(88,166,255,0.07); }
+  .arch-row.active-nand { border-color: var(--ent-nand); background: rgba(240,136,62,0.07); }
+  .arch-row.active-pc { border-color: var(--pc-dram); background: rgba(210,153,34,0.07); }
+  .arch-tier { font-size: 11px; color: var(--muted); width: 52px; flex-shrink: 0; }
+  .arch-layer-label { font-size: 11px; color: var(--muted); width: 130px; flex-shrink: 0; }
+  .arch-track { font-size: 13px; font-weight: 600; flex: 1; }
+  .arch-badge { font-size: 11px; color: var(--muted); padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.05); margin-left: 8px; }
+  .arch-badge.mu { background: rgba(118,227,176,0.15); color: var(--hbm); border: 1px solid rgba(118,227,176,0.3); }
+  .arch-indicator { font-size: 18px; width: 28px; text-align: center; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: rgba(88,166,255,0.08); color: var(--accent); font-weight: 700; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.6); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { text-align: right; font-weight: 600; }
+  .tag-hbm { color: var(--hbm); font-weight: 700; }
+  .tag-ddr5 { color: var(--srv-dram); font-weight: 700; }
+  .tag-nand { color: var(--ent-nand); font-weight: 700; }
+  .tag-pc { color: var(--pc-dram); font-weight: 700; }
+
+  /* BARS */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .bar-label { width: 180px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+  .bar-val { width: 60px; text-align: right; font-size: 13px; font-weight: 700; }
+
+  /* SCORE SUMMARY */
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .score-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 18px; text-align: center; }
+  .score-card .sc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .score-card .sc-val { font-size: 40px; font-weight: 900; line-height: 1.1; margin: 6px 0; }
+  .score-card .sc-weight { font-size: 12px; color: var(--muted); }
+  .final-box { background: rgba(88,166,255,0.07); border: 1px solid rgba(88,166,255,0.3); border-radius: 10px; padding: 24px; text-align: center; margin-top: 4px; }
+  .final-box .fb-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .final-box .fb-score { font-size: 64px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .final-box .fb-grade { font-size: 22px; font-weight: 700; color: var(--yellow); margin-top: 4px; }
+  .final-box .fb-formula { font-size: 12px; color: var(--muted); margin-top: 10px; font-family: monospace; }
+
+  /* TRIGGER */
+  .trigger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .trigger-card { border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .trigger-card.pass { border-color: var(--green); background: rgba(63,185,80,0.06); }
+  .trigger-card.fail { border-color: var(--red); background: rgba(248,81,73,0.06); }
+  .trigger-card.marginal { border-color: var(--yellow); background: rgba(210,153,34,0.06); }
+  .trigger-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .trigger-icon { font-size: 18px; }
+  .trigger-name { font-size: 13px; font-weight: 700; }
+  .trigger-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .trigger-val { font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .trigger-val.pass { color: var(--green); }
+  .trigger-val.fail { color: var(--red); }
+  .trigger-val.marginal { color: var(--yellow); }
+
+  /* SCENARIO TABLE */
+  .scenario-row-bull td { color: var(--green); }
+  .scenario-row-base td { color: var(--accent); }
+  .scenario-row-bear td { color: var(--yellow); }
+  .scenario-row-crisis td { color: var(--red); }
+  .prob-badge { display: inline-block; background: rgba(255,255,255,0.07); padding: 2px 8px; border-radius: 12px; font-size: 11px; }
+
+  /* UPDATE COMPARE */
+  .update-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .update-col { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .update-col-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .update-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+  .update-row .key { color: var(--muted); }
+  .update-row .val { font-weight: 700; }
+  .arrow { color: var(--accent); margin: 0 6px; }
+
+  /* VALUATION EV */
+  .ev-calc { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; font-family: monospace; font-size: 13px; }
+  .ev-calc .ev-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .ev-line { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(48,54,61,0.4); }
+  .ev-line:last-child { border-bottom: none; font-weight: 700; color: var(--red); }
+  .ev-line.result { color: var(--red); font-weight: 700; border-top: 2px solid var(--border); padding-top: 8px; margin-top: 4px; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .footer strong { color: var(--accent); }
+
+  /* DIM DETAIL */
+  .dim-row { display: grid; grid-template-columns: 28px 150px 1fr 80px 60px; gap: 10px; align-items: start; padding: 10px 0; border-bottom: 1px solid rgba(48,54,61,0.5); }
+  .dim-row:last-child { border-bottom: none; }
+  .dim-num { font-size: 11px; color: var(--muted); }
+  .dim-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .dim-note { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .dim-score { text-align: right; font-size: 14px; font-weight: 700; }
+  .dim-contrib { text-align: right; font-size: 12px; color: var(--muted); }
+  .stars { color: var(--yellow); letter-spacing: -2px; }
+
+  @media (max-width: 700px) {
+    .score-grid { grid-template-columns: 1fr; }
+    .trigger-grid { grid-template-columns: 1fr; }
+    .update-grid { grid-template-columns: 1fr; }
+    .dim-row { grid-template-columns: 28px 1fr 50px; }
+    .dim-note, .dim-contrib { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════════════════ COVER ═══════════════════════════ -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="ticker-block">
+      <div class="ticker">MU</div>
+      <div class="company">Micron Technology, Inc. · NASDAQ</div>
+      <div class="track">HBM4 + DDR5 + 企业NAND · 存储器专项</div>
+      <div style="margin-top:10px;">
+        <span class="cycle-badge">⚡ HBM超级周期景气高峰</span>
+      </div>
+    </div>
+    <div class="score-block">
+      <div class="final-score">45.5</div>
+      <div class="grade">持有观望 / HOLD</div>
+      <div class="rating">置信度 1.00 · 存储器专项 v4.1</div>
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <div class="meta-item">
+      <div class="label">当前股价</div>
+      <div class="value">$857</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">原研报基准价</div>
+      <div class="value down">$1,064 <span style="font-size:13px;color:var(--red);">↓19.5%</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">EV/EBITDA目标价</div>
+      <div class="value up">$1,708</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">分析师共识均值</div>
+      <div class="value warn">~$1,100</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">市值 / EV</div>
+      <div class="value">~$970B / ~$960B</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">净现金</div>
+      <div class="value up">+$10B</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">通算EV/EBITDA</div>
+      <div class="value down" style="font-size:14px;">120x <span style="color:var(--red);font-size:11px;">极度高估</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">下次催化剂</div>
+      <div class="value warn" style="font-size:13px;">Q3财报 6/24</div>
+    </div>
+  </div>
+
+  <div class="conclusion">
+    <strong>一句话投资结论：</strong> MU技术面无可挑剔——HBM4量产+NVIDIA Vera Rubin认证+2026产能全部售罄——但通算EV/EBITDA达120x（历史中位6x），远超安全边际阈值；6月5日-13%为Broadcom情绪性误杀，基本面无变化，然当前价格已计入极度乐观情景，<strong>估值极高、底部触发器均未触及，建议持有观望等待6/24财报后再评估</strong>，若通算EBITDA实质性上修则重新审视。
+  </div>
+</div>
+
+<!-- ═══════════════════════════ AI内存五层架构 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">AI内存五层架构 · MU定位图</div>
+  <div class="arch-layers">
+    <div class="arch-row active-hbm">
+      <div class="arch-tier">Tier 0</div>
+      <div class="arch-layer-label">封装内HBM</div>
+      <div class="arch-track">
+        HBM4 / HBM3E · GPU封装内带宽存储
+        <span class="arch-badge mu">MU ✓ HBM4量产 · 36GB 12-High · &gt;2.8TB/s</span>
+      </div>
+      <div class="arch-indicator">⚡</div>
+      <div class="arch-status" style="color:var(--hbm);">营收占比~15%</div>
+    </div>
+    <div class="arch-row active-ddr5">
+      <div class="arch-tier">Tier 1</div>
+      <div class="arch-layer-label">服务器主存</div>
+      <div class="arch-track">
+        DDR5 / LPDDR5X · 服务器内存条
+        <span class="arch-badge mu">MU ✓ DDR5主力供应商</span>
+      </div>
+      <div class="arch-indicator">●</div>
+      <div class="arch-status" style="color:var(--srv-dram);">营收占比~30%</div>
+    </div>
+    <div class="arch-row active-nand">
+      <div class="arch-tier">Tier 2</div>
+      <div class="arch-layer-label">企业SSD / NVMe</div>
+      <div class="arch-track">
+        企业NAND · PCIe Gen6 SSD · 存储加速
+        <span class="arch-badge mu">MU ✓ PCIe Gen6 SSD量产</span>
+      </div>
+      <div class="arch-indicator">●</div>
+      <div class="arch-status" style="color:var(--ent-nand);">营收占比~19%</div>
+    </div>
+    <div class="arch-row active-pc">
+      <div class="arch-tier">Tier 3</div>
+      <div class="arch-layer-label">终端/移动DRAM</div>
+      <div class="arch-track">
+        LPDDR5X / PC DDR5 · 手机/PC内存
+        <span class="arch-badge mu">MU ✓ 手机/PC DRAM</span>
+      </div>
+      <div class="arch-indicator">●</div>
+      <div class="arch-status" style="color:var(--pc-dram);">营收占比~36%</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-tier">Tier 4</div>
+      <div class="arch-layer-label">HDD近线存储</div>
+      <div class="arch-track">
+        HAMR HDD · 近线存储 · 温数据
+        <span class="arch-badge">N/A · MU不涉及</span>
+      </div>
+      <div class="arch-indicator">—</div>
+      <div class="arch-status">-</div>
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:10px 14px;background:rgba(118,227,176,0.06);border-radius:6px;font-size:12px;color:var(--muted);">
+    MU战略价值：唯一美国本土大规模DRAM生产商 · CHIPS Act $61.5亿补贴 · NVIDIA/AMD HBM4认证 · 地缘政治护城河独特
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 行业分计算表 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">行业分计算表 · 分部加权（权重20%）</div>
+  <table>
+    <thead>
+      <tr>
+        <th>分部</th>
+        <th>赛道分</th>
+        <th>归一化系数</th>
+        <th class="num">营收占比</th>
+        <th class="num">加权得分</th>
+        <th>加权逻辑</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag-hbm">HBM（HBM3E/4）</span></td>
+        <td>90</td>
+        <td>0.75 <span style="color:var(--muted);font-size:11px;">（AI结构性+垄断溢价）</span></td>
+        <td class="num">15%</td>
+        <td class="num" style="color:var(--hbm);">10.13</td>
+        <td style="font-size:11px;color:var(--muted);">90×0.75×0.15</td>
+      </tr>
+      <tr>
+        <td><span class="tag-ddr5">服务器DDR5</span></td>
+        <td>82</td>
+        <td>0.60 <span style="color:var(--muted);font-size:11px;">（AI+传统混合）</span></td>
+        <td class="num">30%</td>
+        <td class="num" style="color:var(--srv-dram);">14.76</td>
+        <td style="font-size:11px;color:var(--muted);">82×0.60×0.30</td>
+      </tr>
+      <tr>
+        <td><span class="tag-nand">企业NAND</span></td>
+        <td>75</td>
+        <td>0.62 <span style="color:var(--muted);font-size:11px;">（SSD成长但竞争烈）</span></td>
+        <td class="num">19%</td>
+        <td class="num" style="color:var(--ent-nand);">8.84</td>
+        <td style="font-size:11px;color:var(--muted);">75×0.62×0.19</td>
+      </tr>
+      <tr>
+        <td><span class="tag-pc">手机/PC DRAM</span></td>
+        <td>60</td>
+        <td>0.55 <span style="color:var(--muted);font-size:11px;">（传统消费端周期性）</span></td>
+        <td class="num">36%</td>
+        <td class="num" style="color:var(--pc-dram);">11.88</td>
+        <td style="font-size:11px;color:var(--muted);">60×0.55×0.36</td>
+      </tr>
+      <tr style="background:rgba(88,166,255,0.05);">
+        <td colspan="3" style="font-weight:700;color:var(--accent);">行业分合计</td>
+        <td class="num" style="font-weight:700;">100%</td>
+        <td class="num" style="font-size:18px;font-weight:900;color:var(--accent);">45.6</td>
+        <td style="font-size:12px;color:var(--muted);">满分100分</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:12px;font-size:12px;color:var(--muted);padding:10px 14px;background:rgba(0,0,0,0.2);border-radius:6px;">
+    <strong style="color:var(--text);">行业分解读：</strong> HBM赛道分最高（90）但营收占比仅15%，最大贡献来自服务器DDR5（14.76）。手机/PC DRAM占营收36%但赛道分偏低（60），拖低整体行业分。未来若HBM营收占比提升至30%+，行业分将显著改善。
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 质量分 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">质量分详情 · 8维度评估（权重50%）</div>
+
+  <div style="margin-bottom:16px;font-size:12px;color:var(--muted);padding:8px 12px;background:rgba(210,153,34,0.06);border:1px solid rgba(210,153,34,0.2);border-radius:6px;">
+    ⚠️ <strong style="color:var(--yellow);">通算口径强制：</strong>财务类维度（dim1/2/5）均使用3-5年均值，不使用当期FY2026峰值（毛利率74%+），以反映穿越周期的真实盈利能力。
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;">
+
+    <!-- dim1 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">01 · 成长性</div>
+        <div style="font-size:11px;color:var(--muted);">权重20分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--yellow);margin-bottom:6px;">★★★★☆ · 4/5 → <span style="color:var(--green);">16.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">通算口径：CAGR ~15% | 当期FY2026: YoY+196%</div>
+        HBM4全产能售罄，FY2026超级周期驱动爆发式增长；通算CAGR约15%（含FY2023谷底-57%营收），属高成长但有明显周期波动。扣分因子：历史周期性峰谷差异悬殊（FY2023 EPS亏损）。
+      </div>
+    </div>
+
+    <!-- dim2 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">02 · 通算盈利能力</div>
+        <div style="font-size:11px;color:var(--muted);">权重10分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">★★★☆☆ · 3/5 → <span style="color:var(--green);">6.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">通算GM ~33% | 通算ROIC ~10-12% | 当期Q3 GM: 81%</div>
+        当期毛利率74%+创历史新高，但通算口径（含FY2023谷底亏损）毛利率约33%，ROIC约10-12%，反映存储器固有的强周期性。通算盈利中等，非特许经营级护城河。
+      </div>
+    </div>
+
+    <!-- dim3 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">03 · 市场份额/竞争地位</div>
+        <div style="font-size:11px;color:var(--muted);">权重18分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">★★★☆☆ · 3/5 → <span style="color:var(--green);">10.8分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">HBM份额: ~10-15% | SKH:57% | Samsung:22%</div>
+        HBM市占率排第三（SKH 57% > Samsung 22% > MU ~15%），差距显著；DDR5综合领先但非唯一一线。扣分因子：HBM技术追赶历史有滞后（2-3季度差距）。加分：CHIPS Act护城河独特，地缘政治加分。
+      </div>
+    </div>
+
+    <!-- dim4 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">04 · AI战略布局</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hbm);margin-bottom:6px;">★★★★☆ · 4/5 → <span style="color:var(--green);">9.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">NVIDIA Vera Rubin HBM4认证 · CHIPS Act唯一美本土</div>
+        HBM4 Vera Rubin认证确认，Jensen Huang亲口点名MU为三大HBM4供应商之一；CHIPS Act战略价值独特，国防/政府客户需求增量；CXL/PIM早期布局为下一代AI内存奠基。
+      </div>
+    </div>
+
+    <!-- dim5 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">05 · 财务健康度</div>
+        <div style="font-size:11px;color:var(--muted);">权重10分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hbm);margin-bottom:6px;">★★★★★ · 5/5 → <span style="color:var(--green);">10.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">净现金 +$10B · FCF强劲 · Capex>$250B/年</div>
+        净现金状态（净债务约-$10B），无财务风险；FCF在超级周期中极强；全年Capex>$250亿显示对未来需求高置信度，但同时意味着后续资本效率压力。
+      </div>
+    </div>
+
+    <!-- dim6 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">06 · 管理层&周期位置</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">★★★☆☆ · 3/5 → <span style="color:var(--green);">7.2分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">周期位置: HBM景气高峰，非底部 ❌底部触发</div>
+        管理层执行向上（连续4季超预期），CEO薪酬95%为股权激励；但历史上有技术追赶滞后案例（HBM3E落后SKH约2-3季）；当前处于景气高峰而非底部，存储器周期触发器未激活。
+      </div>
+    </div>
+
+    <!-- dim7 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">07 · 客户质量&锁定度</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hbm);margin-bottom:6px;">★★★★☆ · 4/5 → <span style="color:var(--green);">9.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">NVIDIA/AMD认证 · 2026全产能长协锁定</div>
+        NVIDIA/AMD双认证HBM4供应商；首份5年期客户长期协议签订；2026年全年产能100%已预售；超大规模客户覆盖。扣分：客户集中度较高（NVIDIA占HBM收入大头）。
+      </div>
+    </div>
+
+    <!-- dim8 -->
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">08 · 期权可选性</div>
+        <div style="font-size:11px;color:var(--muted);">权重6分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">★★★☆☆ · 3/5 → <span style="color:var(--green);">3.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">CXL内存扩展 · PIM近存计算 · SOCAMM2</div>
+        CXL/PIM早期布局，潜在内存处理器融合赛道；SOCAMM2新形态；但均处于早期，商业化时间表不明确。
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:16px;background:rgba(0,0,0,0.2);border-radius:8px;padding:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:13px;color:var(--muted);">质量分合计</span>
+      <span style="font-size:24px;font-weight:900;color:var(--accent);">72.8 / 100</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);">= 16.0 + 6.0 + 10.8 + 9.6 + 10.0 + 7.2 + 9.6 + 3.6 = <strong style="color:var(--accent);">72.8</strong></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--yellow);">注：当期FY2026毛利率74%+创历史新高，但通算口径约33%，质量分基于通算口径计算，避免周期峰值高估。</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 估值安全边际 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">估值安全边际 · 通算EV/EBITDA + 四情景分析（权重30%）</div>
+
+  <!-- EV/EBITDA 计算 -->
+  <div class="ev-calc">
+    <div class="ev-title">通算EV/EBITDA计算（强制通算口径）</div>
+    <div class="ev-line"><span>当前市值</span><span style="color:var(--text);">~$970B</span></div>
+    <div class="ev-line"><span>净债务（净现金）</span><span style="color:var(--green);">-$10B</span></div>
+    <div class="ev-line"><span>当前EV</span><span style="color:var(--text);">~$960B</span></div>
+    <div class="ev-line" style="border-top:1px dashed var(--border);margin-top:6px;padding-top:6px;"><span>归一化营收（Σ赛道归一化×占比）</span><span style="color:var(--text);">~$23B</span></div>
+    <div class="ev-line"><span style="font-size:11px;color:var(--muted);">HBM 0.75×45%×$37.4B + DDR5 0.60×30% + NAND 0.62×19% + PC 0.55×36%</span><span></span></div>
+    <div class="ev-line"><span>通算EBITDA margin（含FY2023谷底）</span><span style="color:var(--text);">~35%</span></div>
+    <div class="ev-line"><span>通算EBITDA</span><span style="color:var(--text);">~$8B</span></div>
+    <div class="ev-line result">
+      <span>通算EV/EBITDA = $960B ÷ $8B</span>
+      <span style="font-size:18px;">120x ❌ 极度高估（历史中位6x）</span>
+    </div>
+  </div>
+
+  <!-- 四情景 -->
+  <div style="margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">四情景概率加权回报（5年持有期，退出15x EV/EBITDA通算）</div>
+    <table>
+      <thead>
+        <tr>
+          <th>情景</th>
+          <th class="num">概率</th>
+          <th class="num">5yr通算EBITDA</th>
+          <th class="num">退出EV倍数</th>
+          <th class="num">退出EV</th>
+          <th class="num">年化回报</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="scenario-row-bull">
+          <td>乐观（HBM持续至2028）</td>
+          <td class="num"><span class="prob-badge">25%</span></td>
+          <td class="num">$15B</td>
+          <td class="num">15x</td>
+          <td class="num">$225B</td>
+          <td class="num" style="color:var(--red);">-25% p.a.</td>
+        </tr>
+        <tr class="scenario-row-base">
+          <td>基准（超级周期调整后）</td>
+          <td class="num"><span class="prob-badge">45%</span></td>
+          <td class="num">$12B</td>
+          <td class="num">12x</td>
+          <td class="num">$144B</td>
+          <td class="num" style="color:var(--red);">-32% p.a.</td>
+        </tr>
+        <tr class="scenario-row-bear">
+          <td>悲观（需求放缓）</td>
+          <td class="num"><span class="prob-badge">20%</span></td>
+          <td class="num">$6B</td>
+          <td class="num">8x</td>
+          <td class="num">$48B</td>
+          <td class="num" style="color:var(--red);">-50% p.a.</td>
+        </tr>
+        <tr class="scenario-row-crisis">
+          <td>颠覆（AI效率突破+供给过剩）</td>
+          <td class="num"><span class="prob-badge">10%</span></td>
+          <td class="num">$3B</td>
+          <td class="num">5x</td>
+          <td class="num">$15B</td>
+          <td class="num" style="color:var(--red);">-67% p.a.</td>
+        </tr>
+        <tr style="background:rgba(248,81,73,0.08);">
+          <td colspan="5" style="font-weight:700;color:var(--red);">概率加权年化回报</td>
+          <td class="num" style="font-size:18px;font-weight:900;color:var(--red);">~-35% p.a.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;">估值分 v1 = 0分 / 35分（概率加权年化回报为负）</div>
+  </div>
+
+  <!-- 触发器 -->
+  <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">底部买入触发器状态</div>
+  <div class="trigger-grid">
+    <div class="trigger-card fail">
+      <div class="trigger-header">
+        <span class="trigger-icon">❌</span>
+        <span class="trigger-name" style="color:var(--red);">触发器A · 周期位置</span>
+      </div>
+      <div class="trigger-desc">要求：dim6周期位置 ≥ 4/5（谷底附近）<br>HBM景气高峰，非底部，供给持续紧张至2027年</div>
+      <div class="trigger-val fail">当前：3/5 · 未触发</div>
+    </div>
+    <div class="trigger-card fail">
+      <div class="trigger-header">
+        <span class="trigger-icon">❌</span>
+        <span class="trigger-name" style="color:var(--red);">触发器B · EV/通算EBITDA</span>
+      </div>
+      <div class="trigger-desc">要求：EV/归一化EBITDA ≤ 7.2x（历史中位）<br>当前120x，远超安全阈值20倍</div>
+      <div class="trigger-val fail">当前：120x / 阈值7.2x · 未触发</div>
+    </div>
+    <div class="trigger-card fail">
+      <div class="trigger-header">
+        <span class="trigger-icon">❌</span>
+        <span class="trigger-name" style="color:var(--red);">触发器C · 共识偏差</span>
+      </div>
+      <div class="trigger-desc">要求：分析师共识均值 ＞ 当前股价（正向偏差）<br>共识均值$1,100 vs 当前$857（+28%上行），条件满足</div>
+      <div class="trigger-val" style="color:var(--yellow);">共识$1,100 ＞ $857 ✅ 但A/B未满足 → 综合❌</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:10px 14px;background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:6px;font-size:12px;color:var(--muted);">
+    ⚠️ 结论：三个底部买入触发器中仅C条件（共识偏差）满足，A（周期位置）和B（估值水位）均未触发，<strong style="color:var(--red);">综合判断：当前价格不在底部安全区间</strong>。估值分 = 0/100。
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 评分汇总 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">评分汇总 · 三层结构</div>
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="sc-label">行业分</div>
+      <div class="sc-val" style="color:var(--srv-dram);">45.6</div>
+      <div class="sc-weight">权重 × 20%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-top:4px;">→ 贡献 9.12</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">质量分</div>
+      <div class="sc-val" style="color:var(--hbm);">72.8</div>
+      <div class="sc-weight">权重 × 50%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent);margin-top:4px;">→ 贡献 36.40</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">估值分</div>
+      <div class="sc-val" style="color:var(--red);">0.0</div>
+      <div class="sc-weight">权重 × 30%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-top:4px;">→ 贡献 0.00</div>
+    </div>
+  </div>
+
+  <div class="final-box">
+    <div class="fb-label">基础分 = 9.12 + 36.40 + 0.00 = 45.52</div>
+    <div class="fb-score">45.5</div>
+    <div class="fb-grade">持有观望 / HOLD</div>
+    <div class="fb-formula">最终分 = 基础分 45.52 × 置信度 1.00 = 45.5</div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+      ● 行业45.6×20%=9.1 &nbsp;|&nbsp; ● 质量72.8×50%=36.4 &nbsp;|&nbsp; ● 估值0×30%=0.0
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">
+      评级区间：80+ 强烈买入 / 65-79 买入 / 50-64 轻仓关注 / 35-49 持有观望 / &lt;35 规避
+    </div>
+  </div>
+
+  <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="padding:12px;background:rgba(118,227,176,0.06);border:1px solid rgba(118,227,176,0.2);border-radius:8px;">
+      <div style="font-size:11px;color:var(--hbm);font-weight:700;margin-bottom:6px;">优势项目</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        ✓ 财务健康（5/5）净现金状态<br>
+        ✓ 成长性（4/5）HBM超级周期<br>
+        ✓ AI战略（4/5）NVIDIA认证<br>
+        ✓ 客户锁定（4/5）长协100%
+      </div>
+    </div>
+    <div style="padding:12px;background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:8px;">
+      <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">关键制约</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        ✗ 估值（0/100）通算120x EV/EBITDA<br>
+        ✗ HBM份额第三（SKH 57% 远领先）<br>
+        ✗ 通算GM约33%（强周期性）<br>
+        ✗ 底部触发器A/B均未激活
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ 研报更新对比 ═══════════════════════════ -->
+<div class="section">
+  <div class="section-title">研报更新对比 · 原研报 → 20260607当前</div>
+  <div class="update-grid">
+    <div class="update-col">
+      <div class="update-col-title">原研报（20260603发布）</div>
+      <div class="update-row"><span class="key">当时股价</span><span class="val" style="color:var(--text);">$1,064</span></div>
+      <div class="update-row"><span class="key">评级</span><span class="val" style="color:var(--green);">买入 (Buy)</span></div>
+      <div class="update-row"><span class="key">主要目标价</span><span class="val">$1,708 (EV/EBITDA)</span></div>
+      <div class="update-row"><span class="key">目标价区间</span><span class="val">$1,550–$1,800</span></div>
+      <div class="update-row"><span class="key">DCF基准</span><span class="val">$852</span></div>
+      <div class="update-row"><span class="key">分析师共识</span><span class="val">$739（当时）</span></div>
+      <div class="update-row"><span class="key">市值</span><span class="val">~$1.19T</span></div>
+      <div class="update-row"><span class="key">建仓策略</span><span class="val">当前价一批40%仓</span></div>
+    </div>
+    <div class="update-col">
+      <div class="update-col-title">20260607 当前状态（更新版）</div>
+      <div class="update-row"><span class="key">当前股价</span><span class="val down">$857 <span style="color:var(--red);">↓19.5%</span></span></div>
+      <div class="update-row"><span class="key">评级</span><span class="val warn">持有观望（估值极高）</span></div>
+      <div class="update-row"><span class="key">主要目标价</span><span class="val">$1,708（维持）</span></div>
+      <div class="update-row"><span class="key">目标价区间</span><span class="val warn">$1,400–$1,800（下限下调）</span></div>
+      <div class="update-row"><span class="key">DCF基准</span><span class="val warn">$852（当前价接近DCF底部）</span></div>
+      <div class="update-row"><span class="key">分析师共识</span><span class="val up">~$1,100（多家大幅上调）</span></div>
+      <div class="update-row"><span class="key">市值</span><span class="val down">~$970B</span></div>
+      <div class="update-row"><span class="key">关键催化剂</span><span class="val up">Q3财报 6/24 ⚡</span></div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;padding:12px 16px;background:rgba(210,153,34,0.06);border:1px solid rgba(210,153,34,0.2);border-radius:8px;font-size:12px;line-height:1.7;">
+    <strong style="color:var(--yellow);">6月5日暴跌-13%原因：</strong> Broadcom Q3 AI芯片指引$160B（预期$172B）miss 7.5%，引爆半导体板块链式抛售。MU因Beta=1.92被放大打击。<strong>基本面零变化</strong>：HBM4量产确认，2026产能100%售罄，Q3指引$33.5B/81%毛利率完整有效，属于典型情绪性误杀。<br>
+    <strong style="color:var(--accent);">分析师动向：</strong> UBS上调目标$1,625、Raymond James上调$1,100、Citi调至$840，Goldman仍保守$400。
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>存储器专项投资打分系统 v4.1</strong> &nbsp;|&nbsp; 20260607更新版 &nbsp;|&nbsp; 数据截止 2026-06-07<br>
+  <span style="color:rgba(139,148,158,0.6);">本报告仅供研究参考，不构成投资建议。通算口径强制使用3-5年均值，防止周期峰值误导。</span>
+</div>
+
+</div>
+</body>
+</html>
