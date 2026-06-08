@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI材料专项投资打分 · v4.1 · 2026-06-08</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --border: #2a2a2a;
+    --border2: #333;
+    --text: #e0e0e0;
+    --text2: #a0a0a0;
+    --text3: #666;
+    --green: #00c853;
+    --green2: #69f0ae;
+    --blue: #40c4ff;
+    --blue2: #80d8ff;
+    --yellow: #ffd740;
+    --orange: #ff9100;
+    --red: #ff5252;
+    --purple: #ea80fc;
+    --cyan: #18ffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 24px;
+  }
+  .header {
+    border-bottom: 1px solid var(--border2);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    color: var(--text2);
+    font-size: 12px;
+  }
+  .header-sub span { color: var(--yellow); margin: 0 8px; }
+
+  /* ── SECTOR MAP ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .ind-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+  .ind-card .cat { color: var(--blue2); font-weight: 700; margin-bottom: 3px; }
+  .ind-card .comp { color: var(--text2); font-size: 10px; }
+  .ind-card .moat { color: var(--green2); font-size: 10px; }
+  .ind-card .note { color: var(--text3); font-size: 10px; margin-top: 2px; }
+
+  /* ── RANKING TABLE ── */
+  .rank-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  .rank-table th {
+    background: var(--bg3);
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border2);
+  }
+  .rank-table th:first-child { text-align: left; }
+  .rank-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .rank-table td:first-child { text-align: left; }
+  .rank-table tr:hover td { background: var(--bg3); }
+
+  .ticker-cell { display: flex; align-items: center; gap: 10px; }
+  .ticker-sym { font-size: 15px; font-weight: 700; color: var(--cyan); }
+  .ticker-name { font-size: 11px; color: var(--text2); }
+
+  /* Grade badges */
+  .grade { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; min-width: 36px; text-align: center; }
+  .grade-S  { background: #00c853; color: #000; }
+  .grade-A  { background: #1565c0; color: #fff; }
+  .grade-AM { background: #1976d2; color: #fff; }
+  .grade-AP { background: #1e88e5; color: #fff; }
+  .grade-B  { background: #6a1b9a; color: #fff; }
+  .grade-BP { background: #8e24aa; color: #fff; }
+  .grade-C  { background: #4a4a00; color: #ffd740; }
+  .grade-CP { background: #5d4000; color: #ffd740; }
+  .grade-D  { background: #7f0000; color: #ff8a80; }
+
+  /* Score bar */
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; justify-content: center; }
+  .score-bar { width: 80px; height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+  .score-val { font-size: 13px; font-weight: 700; min-width: 28px; }
+
+  .score-ind  { background: linear-gradient(90deg, #0288d1, #40c4ff); }
+  .score-qual { background: linear-gradient(90deg, #00897b, #1de9b6); }
+  .score-val-gr { background: linear-gradient(90deg, #e65100, #ffcc02); }
+  .score-total { background: linear-gradient(90deg, #5c6bc0, #b39ddb); }
+
+  /* Upside */
+  .up-pos { color: var(--green); font-weight: 700; }
+  .up-neg { color: var(--red); font-weight: 700; }
+  .up-neu { color: var(--text2); }
+
+  /* Valuation status */
+  .val-status {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .vs-cheap   { background: rgba(0,200,83,0.15); color: var(--green); border: 1px solid rgba(0,200,83,0.3); }
+  .vs-fair    { background: rgba(255,215,64,0.1); color: var(--yellow); border: 1px solid rgba(255,215,64,0.3); }
+  .vs-full    { background: rgba(255,145,0,0.1); color: var(--orange); border: 1px solid rgba(255,145,0,0.3); }
+  .vs-overval { background: rgba(255,82,82,0.1); color: var(--red); border: 1px solid rgba(255,82,82,0.3); }
+  .vs-bust    { background: rgba(100,0,0,0.2); color: #ff8a80; border: 1px solid rgba(255,82,82,0.4); }
+  .vs-spec    { background: rgba(150,0,150,0.15); color: var(--purple); border: 1px solid rgba(200,0,200,0.3); }
+
+  .note-cell { font-size: 11px; color: var(--text2); max-width: 240px; line-height: 1.4; }
+
+  /* ── DETAIL CARDS ── */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .detail-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .dc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .dc-ticker { font-size: 18px; font-weight: 700; color: var(--cyan); }
+  .dc-company { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .dc-grade-wrap { text-align: right; }
+  .dc-total { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+  .dc-total-label { font-size: 10px; color: var(--text3); }
+  .dc-scores { display: flex; gap: 16px; margin-bottom: 12px; }
+  .dc-score-item { flex: 1; }
+  .dc-score-label { font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .dc-score-val { font-size: 16px; font-weight: 700; }
+  .dc-ind-color { color: var(--blue); }
+  .dc-qual-color { color: var(--green2); }
+  .dc-val-color { color: var(--yellow); }
+  .price-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: center; }
+  .price-item { font-size: 11px; }
+  .price-label { color: var(--text3); }
+  .price-val { color: var(--text); font-weight: 600; }
+  .method-tag { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 2px 6px; border-radius: 3px; }
+  .dc-note { font-size: 11px; color: var(--text2); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 8px; }
+  .veto-badge { background: rgba(127,0,0,0.3); border: 1px solid rgba(255,82,82,0.4); color: #ff8a80; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .conf-badge { font-size: 10px; color: var(--text3); }
+  .checkpoint-mini { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; margin-top: 8px; font-size: 10px; color: var(--text2); line-height: 1.6; }
+  .checkpoint-mini b { color: var(--yellow); }
+
+  /* ── SUMMARY STATS ── */
+  .summary-row { display: flex; gap: 12px; margin-bottom: 20px; }
+  .stat-box {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .stat-label { font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .stat-val { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .stat-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text3); line-height: 1.8; }
+
+  /* rank number */
+  .rank-num { font-size: 16px; font-weight: 700; color: var(--text3); width: 28px; }
+  .rank-1 { color: #ffd740; }
+  .rank-2 { color: #b0bec5; }
+  .rank-3 { color: #ce8b3a; }
+
+  .tag-ai { background: rgba(0,150,255,0.12); color: #40c4ff; border: 1px solid rgba(0,150,255,0.2); padding: 1px 5px; border-radius: 3px; font-size: 9px; font-weight: 700; }
+  .tag-def { background: rgba(0,200,83,0.1); color: #69f0ae; border: 1px solid rgba(0,200,83,0.2); padding: 1px 5px; border-radius: 3px; font-size: 9px; font-weight: 700; }
+  .tag-risk { background: rgba(255,82,82,0.1); color: #ff5252; border: 1px solid rgba(255,82,82,0.2); padding: 1px 5px; border-radius: 3px; font-size: 9px; font-weight: 700; }
+  .tag-val { background: rgba(255,215,64,0.1); color: #ffd740; border: 1px solid rgba(255,215,64,0.2); padding: 1px 5px; border-radius: 3px; font-size: 9px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">AI 材料专项投资打分系统 · v4.1</div>
+  <div class="header-sub">
+    评分日期：2026-06-08
+    <span>|</span>
+    覆盖标的：TTMI · ROG · LIN · ENTG · Q · APD · PLAB · AXTI · CC · WOLF
+    <span>|</span>
+    框架：行业分20% + 质量分50% + 估值分30%
+    <span>|</span>
+    数据来源：公司研报 + 实时搜索
+  </div>
+</div>
+
+<!-- SUMMARY STATS -->
+<div class="summary-row">
+  <div class="stat-box">
+    <div class="stat-label">标的数量</div>
+    <div class="stat-val" style="color:var(--cyan)">10</div>
+    <div class="stat-sub">AI材料全品类</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">A级及以上</div>
+    <div class="stat-val" style="color:var(--green)">4</div>
+    <div class="stat-sub">ENTG · TTMI · PLAB · LIN</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">最高分</div>
+    <div class="stat-val" style="color:var(--yellow)">77</div>
+    <div class="stat-sub">ENTG — 半导体材料最纯正</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">最大上行空间</div>
+    <div class="stat-val" style="color:var(--green)">+32%</div>
+    <div class="stat-sub">PLAB — 逆向底部机会</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">硬性否决</div>
+    <div class="stat-val" style="color:var(--red)">1</div>
+    <div class="stat-sub">WOLF — 破产重组置信度0.3</div>
+  </div>
+</div>
+
+<!-- INDUSTRY MAP -->
+<div class="section-title">AI材料行业地图 · 护城河与定价权矩阵</div>
+<div class="industry-grid">
+  <div class="ind-card">
+    <div class="cat">半导体超纯化学品 / CMP浆料</div>
+    <div class="comp">ENTG · Q（Qnity）</div>
+    <div class="moat">护城河：专有配方 · 12-24M认证周期 · 3200+专利</div>
+    <div class="note">中国替代差距 5年+ · AI相关性极高 · GM 40-50%</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">光掩模（Photomask）</div>
+    <div class="comp">PLAB · HOYA</div>
+    <div class="moat">护城河：美国本土唯一高端商业供应商 · EUV专有工艺</div>
+    <div class="note">中国替代差距 3-5年 · AI先进节点高相关 · GM 30-40%</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">工业气体（超纯电子级）</div>
+    <div class="comp">LIN · APD · Air Liquide</div>
+    <div class="moat">护城河：物理壁垒 · take-or-pay 15-20年 · 规模+认证</div>
+    <div class="note">中国已部分替代标准气 · 超纯电子气体差距2-4年 · GM 25-35%</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">高频PCB材料 / AI服务器PCB</div>
+    <div class="comp">ROG · TTMI</div>
+    <div class="moat">ROG：高频雷达基板专有配方 · TTMI：A&D+AI双引擎规模</div>
+    <div class="note">中国差距 1-3年 · AI服务器直接受益 · GM ROG 32%/ TTMI 21%</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">氟化学品 / 特种功能材料</div>
+    <div class="comp">CC（Chemours）</div>
+    <div class="moat">Opteon HFO双寡头监管护城河 · Teflon PFA半导体氟材料</div>
+    <div class="note">TiO2商品化·PFAS历史负债严重拖累 · 困境反转型机会</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">SiC碳化硅衬底</div>
+    <div class="comp">WOLF（已重组）</div>
+    <div class="moat">8英寸领先同行2年 · 300mm SiC突破 · 35年Know-How</div>
+    <div class="note">中国TanKeBlue+SICC已超34%市占 · Fab利用率仅20% · 破产重组后</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">InP磷化铟衬底</div>
+    <div class="comp">AXTI（AXT） · Sumitomo</div>
+    <div class="moat">全球三大垄断供应商之一（35%市占） · 6英寸VGF量产</div>
+    <div class="note">供给缺口超70% · 100%中国产能出口许可风险致命 · P/S 60x严重透支</div>
+  </div>
+  <div class="ind-card">
+    <div class="cat">当前关键瓶颈识别</div>
+    <div class="comp" style="color:var(--red)">最紧缺：InP衬底 · EUV光掩模</div>
+    <div class="moat" style="color:var(--yellow)">受益最大：ENTG · Q · PLAB</div>
+    <div class="note">中国已突破：标准PCB · 工业级SiC衬底 · 通用工业气体<br>尚未突破：EUV光掩模 · HBM CMP浆料 · 超纯电子特气</div>
+  </div>
+</div>
+
+<!-- RANKING TABLE -->
+<div class="section-title">综合排行榜</div>
+<table class="rank-table">
+  <thead>
+    <tr>
+      <th style="width:30px">#</th>
+      <th style="text-align:left; width:180px">公司</th>
+      <th>评级</th>
+      <th>综合分</th>
+      <th>行业分</th>
+      <th>质量分</th>
+      <th>估值分</th>
+      <th>当前股价</th>
+      <th>目标价</th>
+      <th>上行空间</th>
+      <th>估值状态</th>
+      <th>核心判断</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="rank-num rank-1">1</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">ENTG</div>
+            <div class="ticker-name">Entegris, Inc.</div>
+            <div style="margin-top:3px;"><span class="tag-ai">AI材料核心</span> <span class="tag-def">宽护城河</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-A">A</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:77%"></div></div>
+          <span class="score-val" style="color:var(--purple)">77</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:88%"></div></div>
+          <span class="score-val" style="color:var(--blue)">88</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:82%"></div></div>
+          <span class="score-val" style="color:var(--green2)">82</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:52%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">52</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$125.41</b></td>
+      <td style="color:var(--green2)"><b>$155</b></td>
+      <td><span class="up-pos">+23.6%</span></td>
+      <td><span class="val-status vs-cheap">低估</span></td>
+      <td class="note-cell">3200+专利构建软垄断，FCF拐点确认，2nm GAA量产加速兑现，去杠杆路径清晰</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-2">2</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">TTMI</div>
+            <div class="ticker-name">TTM Technologies</div>
+            <div style="margin-top:3px;"><span class="tag-ai">AI服务器PCB</span> <span class="tag-def">国防双轮</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-A">A</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:76%"></div></div>
+          <span class="score-val" style="color:var(--purple)">76</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:78%"></div></div>
+          <span class="score-val" style="color:var(--blue)">78</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:80%"></div></div>
+          <span class="score-val" style="color:var(--green2)">80</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:62%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">62</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$172.69</b></td>
+      <td style="color:var(--green2)"><b>$205</b></td>
+      <td><span class="up-pos">+18.7%</span></td>
+      <td><span class="val-status vs-fair">合理</span></td>
+      <td class="note-cell">Q1+30% YoY创历史，全年$4B指引+积压$1.6B能见度极强，AI+国防占80%</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-3">3</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">PLAB</div>
+            <div class="ticker-name">Photronics, Inc.</div>
+            <div style="margin-top:3px;"><span class="tag-val">逆向低估</span> <span class="tag-def">零债务净现金</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-AM">A-</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:75%"></div></div>
+          <span class="score-val" style="color:var(--purple)">75</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:78%"></div></div>
+          <span class="score-val" style="color:var(--blue)">78</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:78%"></div></div>
+          <span class="score-val" style="color:var(--green2)">78</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:65%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">65</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$30.36</b></td>
+      <td style="color:var(--green2)"><b>$40</b></td>
+      <td><span class="up-pos">+31.8%</span></td>
+      <td><span class="val-status vs-cheap">深度低估</span></td>
+      <td class="note-cell">从$54暴跌至$30的逆向机会，EV/EBITDA 5.5x历史最低，零债务+$637M净现金，Allen TX工厂FY2027兑现</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">4</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">LIN</div>
+            <div class="ticker-name">Linde plc</div>
+            <div style="margin-top:3px;"><span class="tag-def">工业气体龙头</span> <span class="tag-def">高质量防御</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-AM">A-</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:74%"></div></div>
+          <span class="score-val" style="color:var(--purple)">74</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:80%"></div></div>
+          <span class="score-val" style="color:var(--blue)">80</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:85%"></div></div>
+          <span class="score-val" style="color:var(--green2)">85</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:42%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">42</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$507.57</b></td>
+      <td style="color:var(--green2)"><b>$545</b></td>
+      <td><span class="up-pos">+7.4%</span></td>
+      <td><span class="val-status vs-full">充分定价</span></td>
+      <td class="note-cell">59%电子气体全球市占率，100亿美元take-or-pay管道，质量最佳但仅提供7-9%总回报</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">5</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">ROG</div>
+            <div class="ticker-name">Rogers Corporation</div>
+            <div style="margin-top:3px;"><span class="tag-ai">汽车+AI高频</span> <span class="tag-def">零债务</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-BP">B+</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:67%"></div></div>
+          <span class="score-val" style="color:var(--purple)">67</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:72%"></div></div>
+          <span class="score-val" style="color:var(--blue)">72</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:68%"></div></div>
+          <span class="score-val" style="color:var(--green2)">68</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:55%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">55</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$147.00</b></td>
+      <td style="color:var(--green2)"><b>$165</b></td>
+      <td><span class="up-pos">+12.2%</span></td>
+      <td><span class="val-status vs-full">已充分定价</span></td>
+      <td class="note-cell">周期底部复苏确认+永久CEO就任，从$98.58涨至$147后安全边际大幅收窄，仍有12%空间但性价比降低</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">6</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">APD</div>
+            <div class="ticker-name">Air Products &amp; Chemicals</div>
+            <div style="margin-top:3px;"><span class="tag-ai">亚洲半导体气体</span> <span class="tag-risk">绿氢CapEx拖累</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-BP">B+</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:67%"></div></div>
+          <span class="score-val" style="color:var(--purple)">67</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:74%"></div></div>
+          <span class="score-val" style="color:var(--blue)">74</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:72%"></div></div>
+          <span class="score-val" style="color:var(--green2)">72</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:48%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">48</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$282.35</b></td>
+      <td style="color:var(--green2)"><b>$320</b></td>
+      <td><span class="up-pos">+13.3%</span></td>
+      <td><span class="val-status vs-fair">合理偏低</span></td>
+      <td class="note-cell">Linde折价19%+新CEO效率路径+CapEx拐点确认，但绿氢项目风险和FCF仍负制约估值扩张</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">7</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">Q</div>
+            <div class="ticker-name">Qnity Electronics</div>
+            <div style="margin-top:3px;"><span class="tag-ai">HBM CMP核心</span> <span class="tag-risk">中国33%风险</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-BP">B+</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:68%"></div></div>
+          <span class="score-val" style="color:var(--purple)">68</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:85%"></div></div>
+          <span class="score-val" style="color:var(--blue)">85</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:76%"></div></div>
+          <span class="score-val" style="color:var(--green2)">76</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:35%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">35</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$142.05</b></td>
+      <td style="color:var(--yellow)"><b>$150</b></td>
+      <td><span class="up-neu">+5.6%</span></td>
+      <td><span class="val-status vs-overval">GAAP高估</span></td>
+      <td class="note-cell">CMP浆料是HBM4先进封装必要材料，行业质地极优，但GAAP PE 40x透支且中国33%营收出口管制是核心悬剑</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">8</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">CC</div>
+            <div class="ticker-name">The Chemours Company</div>
+            <div style="margin-top:3px;"><span class="tag-val">困境反转</span> <span class="tag-risk">高杠杆PFAS</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-CP">C+</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:50%"></div></div>
+          <span class="score-val" style="color:var(--purple)">50</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:52%"></div></div>
+          <span class="score-val" style="color:var(--blue)">52</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:48%"></div></div>
+          <span class="score-val" style="color:var(--green2)">48</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:55%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">55</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$20.50</b></td>
+      <td style="color:var(--yellow)"><b>$26</b></td>
+      <td><span class="up-pos">+26.8%</span></td>
+      <td><span class="val-status vs-fair">困境折价</span></td>
+      <td class="note-cell">Opteon HFO双寡头监管护城河真实，EBITDA修复路径+TiO2剥离期权，但高杠杆+PFAS诉讼使其具高风险属性</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">9</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">AXTI</div>
+            <div class="ticker-name">AXT, Inc.</div>
+            <div style="margin-top:3px;"><span class="tag-ai">InP衬底</span> <span class="tag-risk">P/S 60x泡沫</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-CP">C+</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:49%"></div></div>
+          <span class="score-val" style="color:var(--purple)">49</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:72%"></div></div>
+          <span class="score-val" style="color:var(--blue)">72</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:52%"></div></div>
+          <span class="score-val" style="color:var(--green2)">52</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:18%"></div></div>
+          <span class="score-val" style="color:var(--red)">18</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$103.16</b></td>
+      <td style="color:var(--red)"><b>$65</b></td>
+      <td><span class="up-neg">-37.0%</span></td>
+      <td><span class="val-status vs-spec">严重高估</span></td>
+      <td class="note-cell">InP真实需求超级周期，但P/S 60x已透支2028年乐观情景，100%中国产能出口许可证是尾部毁灭风险，不建议新建仓</td>
+    </tr>
+    <tr>
+      <td><span class="rank-num">10</span></td>
+      <td>
+        <div class="ticker-cell">
+          <div>
+            <div class="ticker-sym">WOLF</div>
+            <div class="ticker-name">Wolfspeed, Inc.</div>
+            <div style="margin-top:3px;"><span class="tag-risk">已破产重组</span> <span class="tag-risk">Fab利用率20%</span></div>
+          </div>
+        </div>
+      </td>
+      <td><span class="grade grade-C">C</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-total" style="width:43%"></div></div>
+          <span class="score-val" style="color:var(--red)">43</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-ind" style="width:62%"></div></div>
+          <span class="score-val" style="color:var(--blue)">62</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-qual" style="width:35%"></div></div>
+          <span class="score-val" style="color:var(--green2)">35</span>
+        </div>
+      </td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-fill score-val-gr" style="width:40%"></div></div>
+          <span class="score-val" style="color:var(--yellow)">40</span>
+        </div>
+      </td>
+      <td style="color:var(--text)"><b>$55.06</b></td>
+      <td style="color:var(--yellow)"><b>$55</b></td>
+      <td><span class="up-neg">-0.1%</span></td>
+      <td><span class="val-status vs-bust">⚠ 破产重组</span></td>
+      <td class="note-cell">SiC技术先驱已完成重组，AI数据中心新增量是真实叙事，但Fab爬坡20%距盈亏平衡50%还很远，置信度0.3</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- DETAIL CARDS -->
+<div class="section-title">估值检查点 · 各公司详细分析</div>
+<div class="detail-grid">
+
+  <!-- ENTG -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">ENTG <span style="font-size:13px;color:var(--text2)">· Entegris</span></div>
+        <div class="dc-company">半导体超纯化学品 · CMP浆料 · 先进节点不可替代</div>
+        <div style="margin-top:6px;"><span class="tag-ai">AI材料核心</span> <span class="tag-def">宽护城河</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-A" style="font-size:16px;padding:4px 12px">A</span>
+        <div class="dc-total" style="margin-top:6px">77</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">88</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">82</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">52</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$125.41</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--green)">$155</span></div>
+      <div class="price-item"><span class="price-val up-pos">+23.6%</span></div>
+      <div class="method-tag">EV/EBITDA法</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$19.1B（来源：搜索2026-06-07），净债务$3.34B<br>
+      <b>STEP C</b>：营收$3.17B × (1+12%)^5 = $5.58B → 净利率16% → 净利$0.893B × 24x → 市值$21.4B<br>
+      <b>基准年化</b>：(21.4/19.1)^0.2-1 ≈ 2.3% → 加权4情景 ≈ <b style="color:var(--green)">13%</b><br>
+      <b>安全边际</b>：较52周高点折价21%，EV/EBITDA 21x历史均值低端
+    </div>
+    <div class="dc-note">半导体材料行业最纯正AI受益标的，N2/N3 GAA制程每代材料消耗+20-30%，3200+专利+12-24个月POR认证壁垒构建软垄断。FCF从-$103M改善至$396M拐点已确认，2026年底净杠杆目标3x（当前4.8x）路径清晰。中国出口管制敞口10-15%是主要风险，新CEO执行力需1-2季度验证。</div>
+  </div>
+
+  <!-- TTMI -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">TTMI <span style="font-size:13px;color:var(--text2)">· TTM Technologies</span></div>
+        <div class="dc-company">AI服务器PCB · 航空航天国防 · AI基础设施核心供应商</div>
+        <div style="margin-top:6px;"><span class="tag-ai">AI+国防双轮</span> <span class="tag-def">全年$4B指引</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-A" style="font-size:16px;padding:4px 12px">A</span>
+        <div class="dc-total" style="margin-top:6px">76</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">78</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">80</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">62</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$172.69</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--green)">$205</span></div>
+      <div class="price-item"><span class="price-val up-pos">+18.7%</span></div>
+      <div class="method-tag">EV/EBITDA重建</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>UPDATE 20260608</b>：股价从$91.54飙升至$172.69（+88.7%）<br>
+      <b>FY2026E营收</b>：$4.0B（管理层指引，原预测$3.26B大幅上调）<br>
+      <b>目标价重建</b>：EV/EBITDA 30-33x × $700M → <b style="color:var(--green)">$185-215，取$205</b><br>
+      <b>Book-to-bill</b>：1.41x，积压订单$1.6B，下半年能见度极强
+    </div>
+    <div class="dc-note">Q1 2026营收$846M创历史，+30% YoY，AI+国防占80%收入。全年$4B指引意味着两年内营收几乎翻倍，Needham/B.Riley目标价均上调至$208。当前$172相对$205目标仍有约19%，但较3月建仓位安全边际已大幅收窄，建议持有而非追入。</div>
+  </div>
+
+  <!-- PLAB -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">PLAB <span style="font-size:13px;color:var(--text2)">· Photronics</span></div>
+        <div class="dc-company">光掩模 · 美国本土唯一高端商业供应商 · 逆向机会</div>
+        <div style="margin-top:6px;"><span class="tag-val">深度低估</span> <span class="tag-def">零债务$637M净现金</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-AM" style="font-size:16px;padding:4px 12px">A-</span>
+        <div class="dc-total" style="margin-top:6px">75</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">78</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">78</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">65</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$30.36</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--green)">$40</span></div>
+      <div class="price-item"><span class="price-val up-pos">+31.8%</span></div>
+      <div class="method-tag">PE法14.4x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$1.79B（搜索2026-06-08），净现金$450M（净债务-$450M）<br>
+      <b>STEP C</b>：营收$0.859B × (1+8%)^5 = $1.26B → 净利率18% → 净利$0.227B × 14x → $3.18B<br>
+      <b>基准年化</b>：(3.18/1.79)^0.2-1 ≈ 12.2% → 加权4情景 ≈ <b style="color:var(--green)">18%</b><br>
+      <b>安全边际</b>：EV/EBITDA 5.5x历史最低，净现金占市值37%
+    </div>
+    <div class="dc-note">Q2 FY2026业绩暴雷（EPS miss -23.6%）引发从$54暴跌至$30的情绪性错误定价。Q2延迟系IC设计发布临时性因素，管理层已确认5月活动恢复。Allen TX工厂FY2027开始贡献收入，产能跨越式提升。当前EV/EBITDA 5.5x是历史最低，创造了难得的逆向机会。</div>
+  </div>
+
+  <!-- LIN -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">LIN <span style="font-size:13px;color:var(--text2)">· Linde plc</span></div>
+        <div class="dc-company">工业气体全球龙头 · 59%电子气体市占 · 高质量防御</div>
+        <div style="margin-top:6px;"><span class="tag-def">100亿take-or-pay管道</span> <span class="tag-def">33年股息增长</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-AM" style="font-size:16px;padding:4px 12px">A-</span>
+        <div class="dc-total" style="margin-top:6px">74</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">80</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">85</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">42</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$507.57</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--yellow)">$545</span></div>
+      <div class="price-item"><span class="price-val up-pos">+7.4%</span></div>
+      <div class="method-tag">调整PE 29x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$234.8B（搜索2026-06-03），净债务$21.9B<br>
+      <b>Q1 2026</b>：电子气体+10% YoY，调整EPS $4.33（+10% YoY，超预期）<br>
+      <b>基准年化</b>：5年CAGR 7% → 加权回报 ≈ <b>4%</b>（估值充分，安全边际有限）<br>
+      <b>质量最优</b>：FCF转化率150%，营业利润率30%，ROE 18%
+    </div>
+    <div class="dc-note">质量分85分是本次覆盖公司中最高，四重护城河无可复制。但当前估值已合理，仅提供7-9%总回报（含1.3%股息），适合长期持有而非博弈估值扩张。Q1电子气体业务10%增长印证AI驱动的结构性需求，100亿管道2026下半年开始转化。</div>
+  </div>
+
+  <!-- ROG -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">ROG <span style="font-size:13px;color:var(--text2)">· Rogers Corporation</span></div>
+        <div class="dc-company">高频材料 · ADAS雷达基板 · EV电池材料 · 工业周期复苏</div>
+        <div style="margin-top:6px;"><span class="tag-ai">汽车+AI高频</span> <span class="tag-def">净现金$197M</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-BP" style="font-size:16px;padding:4px 12px">B+</span>
+        <div class="dc-total" style="margin-top:6px">67</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">72</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">68</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">55</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$147.00</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--yellow)">$165</span></div>
+      <div class="price-item"><span class="price-val up-pos">+12.2%</span></div>
+      <div class="method-tag">Non-GAAP PE 35x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>UPDATE 20260608</b>：股价从$98.58涨至$147（+49%），已超越原目标$125<br>
+      <b>Q1 2026</b>：营收$201M +9% YoY，分析师目标价更新至$165<br>
+      <b>永久CEO就任</b>：2026-05-19 Ali El-Haj正式任命，$500万股权激励绑定<br>
+      <b>加权年化</b>：≈ <b>4%</b>（基准5年回报约12%，但5年目标市值已接近当前）
+    </div>
+    <div class="dc-note">工业周期底部复苏已确认（连续3季度超预期），永久CEO就任消除不确定性。但股价从$98.58在2.5个月内涨至$147，估值已从30x扩张至隐含35x FWD PE，安全边际大幅收窄。当前更适合持有而非建仓，等待Q2财报（2026年7月）验证EBITDA利润率+600bp是否落地。</div>
+  </div>
+
+  <!-- APD -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">APD <span style="font-size:13px;color:var(--text2)">· Air Products &amp; Chemicals</span></div>
+        <div class="dc-company">工业气体 · 亚洲半导体气体加速 · Linde折价标的</div>
+        <div style="margin-top:6px;"><span class="tag-ai">Samsung半导体气体3x</span> <span class="tag-risk">绿氢CapEx拖累</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-BP" style="font-size:16px;padding:4px 12px">B+</span>
+        <div class="dc-total" style="margin-top:6px">67</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">74</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">72</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">48</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$282.35</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--green)">$320</span></div>
+      <div class="price-item"><span class="price-val up-pos">+13.3%</span></div>
+      <div class="method-tag">EV/EBITDA 18.36x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$62.9B（研报2026-06-08），净债务$3.47B<br>
+      <b>Q2 2026</b>：EPS $3.20超预期，营业利润率23.7%（+19% YoY）<br>
+      <b>新CEO</b>：Eduardo Menezes来自Linde，运营效率收敛路径清晰<br>
+      <b>CapEx拐点</b>：从$70亿压缩至$40亿（-43%），FY2027 FCF将转正
+    </div>
+    <div class="dc-note">相对Linde的折价（APD PE 21.5x vs LIN 25.8x）提供安全边际。韩国Samsung项目扩容至3倍是亚洲半导体气体收入的强劲增长引擎。核心风险：NEOM氢能项目延迟（若2026底再次推迟，估值-15-20%）和FCF在FY2027前仍为负。新CEO运营效率提升空间约2.8个百分点（对标Linde 26.3% vs APD 23.5%）。</div>
+  </div>
+
+  <!-- Q -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">Q <span style="font-size:13px;color:var(--text2)">· Qnity Electronics</span></div>
+        <div class="dc-company">CMP浆料 · HBM先进封装 · 台积电N2量产核心受益</div>
+        <div style="margin-top:6px;"><span class="tag-ai">HBM4 CMP不可替代</span> <span class="tag-risk">中国33%出口管制风险</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-BP" style="font-size:16px;padding:4px 12px">B+</span>
+        <div class="dc-total" style="margin-top:6px">68</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">85</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">76</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">35</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$142.05</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--yellow)">$150</span></div>
+      <div class="price-item"><span class="price-val up-neu">+5.6%</span></div>
+      <div class="method-tag">EV/EBITDA 22.8x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$32.4B（搜索2026-06-06），净债务$3.21B<br>
+      <b>Q1 2026</b>：营收$13.15亿 +17.6%，FCF margin 20.8%<br>
+      <b>GAAP口径矛盾</b>：GAAP PE 40x透支，但EV/EBITDA 22.8x合理<br>
+      <b>中国风险</b>：中国营收33%（$15.7亿），出口管制触发潜在冲击$3-5亿
+    </div>
+    <div class="dc-note">行业分85分是本次覆盖最高，HBM CMP浆料是台积电N2/A16量产不可替代材料，台湾营收+38%已在财务数据兑现。NVIDIA战略合作是独立上市后第一个重大战略信号。但GAAP Forward PE约40-46x高度透支，且中国33%营收是出口管制悬剑，建议等待$125-$130回调再建仓。</div>
+  </div>
+
+  <!-- CC -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">CC <span style="font-size:13px;color:var(--text2)">· The Chemours Company</span></div>
+        <div class="dc-company">氟化学品 · Opteon HFO · Teflon PFA · 困境反转型</div>
+        <div style="margin-top:6px;"><span class="tag-val">困境反转</span> <span class="tag-risk">PFAS诉讼+高杠杆</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-CP" style="font-size:16px;padding:4px 12px">C+</span>
+        <div class="dc-total" style="margin-top:6px">50</div>
+        <div class="dc-total-label">综合分 / 100</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">52</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">48</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">55</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$20.50</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--yellow)">$26</span></div>
+      <div class="price-item"><span class="price-val up-pos">+26.8%</span></div>
+      <div class="method-tag">DCF情景法</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$3.08B（搜索2026-06-07），净债务$3.47B<br>
+      <b>Q1 2026</b>：Opteon营收$3.13亿（+12% YoY），TSS EBITDA率33%历史最高<br>
+      <b>情景加权</b>：牛20%:$42 + 基准55%:$26 + 熊25%:$12 = <b style="color:var(--yellow)">$26.3</b><br>
+      <b>关键前提</b>：FY2026 EBITDA指引$8-9亿兑现 + TiO2剥离落地
+    </div>
+    <div class="dc-note">困境反转型机会，Opteon HFO监管护城河（AIM法案+双寡头）是真实且不可复制的价值。EBITDA修复路径：2025约$6.2亿→2026指引$8-9亿（+40%），TiO2剥离期权约$8/股隐性价值。风险：净债务/EBITDA 4.5-5x偏高，PFAS诉讼超出拨备范围是尾部风险。适合高风险偏好投资者小仓位参与。</div>
+  </div>
+
+  <!-- AXTI -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">AXTI <span style="font-size:13px;color:var(--text2)">· AXT, Inc.</span></div>
+        <div class="dc-company">InP磷化铟衬底 · AI光互连 · 供给缺口>70%</div>
+        <div style="margin-top:6px;"><span class="tag-ai">InP真实超级周期</span> <span class="tag-risk">P/S 60x+中国许可证风险</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-CP" style="font-size:16px;padding:4px 12px">C+</span>
+        <div class="dc-total" style="margin-top:6px">49</div>
+        <div class="dc-total-label">综合分 / 100（置信度0.8）</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">72</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val dc-qual-color">52</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val" style="color:var(--red)">18</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$103.16</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--red)">$65</span></div>
+      <div class="price-item"><span class="price-val up-neg">-37.0%</span></div>
+      <div class="method-tag">P/S法 5x</div>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$5.83B（搜索2026-06-01），净现金$62M<br>
+      <b>当前P/S</b>：$5.83B ÷ TTM营收$0.096B = <b style="color:var(--red)">60x（严重透支）</b><br>
+      <b>基本面模型</b>：P/S 5x = $10.80，DCF基准 = $14.60（与当前$103.16相差约8倍）<br>
+      <b>加权年化回报</b>：约 <b style="color:var(--red)">-15%</b>（4情景加权）
+    </div>
+    <div class="dc-note">InP衬底的真实需求超级周期无疑（供给缺口70%，AXT预测2026年订单翻倍），但P/S 60x已将2026-2028年最乐观情景全部定价。100%产能在中国且须逐批获出口许可证是尾部风险（镓/锗管制先例在前）。股价+5100%一年涨幅、市值$58亿远超基本面支撑的$10-15亿，不建议当前价格新建仓位。</div>
+  </div>
+
+  <!-- WOLF -->
+  <div class="detail-card">
+    <div class="dc-header">
+      <div>
+        <div class="dc-ticker">WOLF <span style="font-size:13px;color:var(--text2)">· Wolfspeed, Inc.</span></div>
+        <div class="dc-company">SiC碳化硅衬底/器件 · 8英寸全球领先 · 破产重组后</div>
+        <div style="margin-top:6px;"><span class="tag-risk">硬性否决：破产重组（置信度0.3）</span></div>
+      </div>
+      <div class="dc-grade-wrap">
+        <span class="grade grade-C" style="font-size:16px;padding:4px 12px">C</span>
+        <div class="dc-total" style="margin-top:6px">43</div>
+        <div class="dc-total-label">综合分（含0.3置信度）</div>
+      </div>
+    </div>
+    <div class="dc-scores">
+      <div class="dc-score-item">
+        <div class="dc-score-label">行业分</div>
+        <div class="dc-score-val dc-ind-color">62</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">质量分</div>
+        <div class="dc-score-val" style="color:var(--red)">35</div>
+      </div>
+      <div class="dc-score-item">
+        <div class="dc-score-label">估值分</div>
+        <div class="dc-score-val dc-val-color">40</div>
+      </div>
+    </div>
+    <div class="price-row">
+      <div class="price-item"><span class="price-label">当前价：</span><span class="price-val">$55.06</span></div>
+      <div class="price-item"><span class="price-label">目标价：</span><span class="price-val" style="color:var(--text2)">$55</span></div>
+      <div class="price-item"><span class="price-val up-neg">-0.1%</span></div>
+      <div class="method-tag">P/S法 3.85x</div>
+      <span class="veto-badge">硬性否决·置信度0.3</span>
+    </div>
+    <div class="checkpoint-mini">
+      <b>STEP A</b>：市值$2.66B（研报2026-06-08），净债务$12.6B（含重组前债务）<br>
+      <b>Fab利用率</b>：Mohawk Valley 约20-25%，盈亏平衡需50-60%<br>
+      <b>Non-GAAP毛利率</b>：-21%（持续为负），FCF消耗约-$1.5亿/季<br>
+      <b>情景</b>：牛市25%:$90 / 基准45%:$55 / 熊市30%:$22 → 加权$52
+    </div>
+    <div class="dc-note">2025年9月完成Chapter 11重组，债务削减70%，AI数据中心收入连续季度增长30%是真实的新增量叙事。但Mohawk Valley Fab利用率仅20-25%，距盈亏平衡50%以上需要大量时间，Non-GAAP毛利率持续-21%，12亿现金仅够2年。置信度0.3。需要明确的Fab爬坡加速信号方可重新评估。</div>
+  </div>
+
+</div>
+
+<!-- CONCLUSION BOX -->
+<div class="section-title">投资结论汇总 · TOP3推荐 + 关键风险警示</div>
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;">
+  <div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:10px;letter-spacing:0.05em">TOP 3 建仓标的</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg3);border-radius:4px;">
+          <span style="font-size:16px;font-weight:700;color:var(--cyan);min-width:50px">ENTG</span>
+          <span style="flex:1;color:var(--text);font-size:11px">综合分77 / 目标价$155（+24%） — AI材料最纯正标的，估值处于历史低位（52周高点-21%），FCF拐点确认，2nm量产兑现</span>
+          <span class="val-status vs-cheap">买入</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg3);border-radius:4px;">
+          <span style="font-size:16px;font-weight:700;color:var(--cyan);min-width:50px">PLAB</span>
+          <span style="flex:1;color:var(--text);font-size:11px">综合分75 / 目标价$40（+32%） — Q2暴雷造成的情绪性错误定价，EV/EBITDA 5.5x历史最低，零债务+净现金$637M，Allen TX FY2027催化剂明确</span>
+          <span class="val-status vs-cheap">逆向买入</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg3);border-radius:4px;">
+          <span style="font-size:16px;font-weight:700;color:var(--cyan);min-width:50px">TTMI</span>
+          <span style="flex:1;color:var(--text);font-size:11px">综合分76 / 目标价$205（+19%） — Q1+30%创历史，$4B全年指引，1.41x book-to-bill，从$172持有至$205区间</span>
+          <span class="val-status vs-fair">持有/逢低增持</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:10px;letter-spacing:0.05em">材料瓶颈识别 · 中国替代进度</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;">
+        <div><span style="color:var(--red);font-weight:700">最紧缺瓶颈：</span>InP磷化铟衬底（供给缺口>70%）· EUV光掩模（PLAB美国唯一）· HBM CMP浆料（ENTG/Q垄断）</div>
+        <div style="margin-top:4px"><span style="color:var(--green);font-weight:700">中国已突破：</span>标准AI服务器PCB（含AI板）· 工业级SiC衬底（TanKeBlue 34%+）· 通用工业气体 · 大部分PCB材料</div>
+        <div style="margin-top:4px"><span style="color:var(--orange);font-weight:700">中国尚未突破：</span>EUV光掩模 · HBM4 CMP超纯浆料 · 超纯电子特种气体 · InP高纯衬底（Sumitomo/AXT主导）</div>
+        <div style="margin-top:4px"><span style="color:var(--blue2);font-weight:700">出口管制已影响：</span>AXTI（InP出口逐批许可）· ENTG/Q（中国营收10-33%敞口）· PLAB（中国27%，FPD需求）</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="background:rgba(127,0,0,0.1);border:1px solid rgba(255,82,82,0.3);border-radius:8px;padding:16px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:10px;letter-spacing:0.05em">⚠ 危机公司警示</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;">
+        <div style="color:#ff8a80;font-weight:700">WOLF — 已完成破产重组（置信度0.3）</div>
+        <div>2025-09 Chapter 11重组，Fab利用率仅20%，Non-GAAP毛利率-21%，12亿现金仅覆盖约2年。目标价$55与当前$55.06几乎持平，无安全边际。</div>
+        <div style="margin-top:8px;color:#ffd740;font-weight:700">AXTI — 严重估值泡沫（P/S 60x）</div>
+        <div>真实需求存在，但P/S 60x已透支2028年最乐观情景。100%中国产能出口许可证风险尾部毁灭性。基本面目标$65，当前$103.16，下行37%。</div>
+      </div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;letter-spacing:0.05em">评分分布</div>
+      <div style="font-size:11px;line-height:2.0;">
+        <div><span style="color:var(--blue);font-weight:700">A 级（75+）：</span>ENTG(77) · TTMI(76) · PLAB(75) · LIN(74)</div>
+        <div><span style="color:var(--purple);font-weight:700">B 级（60-74）：</span>Q(68) · ROG(67) · APD(67)</div>
+        <div><span style="color:var(--yellow);font-weight:700">C 级（40-59）：</span>CC(50) · AXTI(49) · WOLF(43)</div>
+      </div>
+      <div style="margin-top:10px;font-size:10px;color:var(--text3);">
+        平均分：63.5 · 中位数：67.5<br>
+        最高行业分：Q(85) · 最高质量分：LIN(85)<br>
+        最高估值分：PLAB(65) · 最低估值分：AXTI(18)
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div>数据来源：SEC Edgar FY2026财报（ENTG/TTMI/PLAB/LIN/APD/Q/ROG/CC/AXTI/WOLF），各公司 investment_conclusion.md + update_20260608.md，实时市场搜索（2026-06-07至2026-06-08）</div>
+  <div>股价来源：TTMI $172.69（update_20260608）· ROG $147（搜索2026-06-01）· LIN $507.57（搜索2026-06-03）· ENTG $125.41（搜索2026-06-07）· Q $142.05（搜索2026-06-06）· APD $282.35（搜索2026-06-06）· PLAB $30.36（搜索2026-06-08）· AXTI $103.16（搜索2026-06-01）· CC $20.50（搜索2026-06-07）· WOLF $55.06（搜索2026-06-05）</div>
+  <div style="margin-top:6px;color:#444">本报告基于公开信息，使用 investment-score-materials v1.0 框架生成，仅供内部研究参考，不构成投资建议。</div>
+</div>
+
+</body>
+</html>
