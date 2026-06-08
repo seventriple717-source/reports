@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存储器专项投资打分 v4.1 | 20260607更新版 | 基准对比 20260605</title>
+<style>
+:root {
+  --bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;
+  --muted:#8b949e;--accent:#58a6ff;--green:#3fb950;--yellow:#d29922;
+  --orange:#f0883e;--red:#f85149;--purple:#bc8cff;
+  --hbm:#76e3b0;--hbf:#bc8cff;--sdram:#58a6ff;--pcdram:#d29922;
+  --enand:#f0883e;--cnand:#8b949e;--hdd:#e8b04b;--sw:#3fb950;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.6;}
+.container{max-width:1440px;margin:0 auto;padding:24px;}
+
+.header{background:linear-gradient(135deg,#0d1117 0%,#161b22 50%,#0d1117 100%);border:1px solid var(--border);border-radius:12px;padding:32px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--hbm),var(--accent),var(--purple),var(--orange),var(--hdd));}
+.header h1{font-size:26px;font-weight:700;color:var(--hbm);letter-spacing:2px;margin-bottom:8px;}
+.header .sub{color:var(--muted);font-size:13px;margin-bottom:10px;}
+.badge{display:inline-block;background:rgba(118,227,176,0.12);border:1px solid var(--hbm);color:var(--hbm);padding:3px 12px;border-radius:20px;font-size:11px;margin:2px;}
+.badge-blue{background:rgba(88,166,255,0.12);border-color:var(--accent);color:var(--accent);}
+.badge-orange{background:rgba(240,136,62,0.12);border-color:var(--orange);color:var(--orange);}
+
+.section-title{font-size:15px;font-weight:700;color:var(--accent);border-left:3px solid var(--accent);padding-left:12px;margin:28px 0 14px;letter-spacing:1px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px;}
+.card-title{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:rgba(88,166,255,0.1);color:var(--accent);padding:8px 10px;text-align:left;font-weight:600;border-bottom:1px solid var(--border);}
+td{padding:7px 10px;border-bottom:1px solid rgba(48,54,61,0.4);}
+tr:hover td{background:rgba(255,255,255,0.025);}
+.tc{text-align:center;}.tr{text-align:right;}
+
+.grade{display:inline-block;padding:3px 14px;border-radius:20px;font-weight:700;font-size:15px;}
+.grade-S{background:rgba(118,227,176,0.2);color:var(--hbm);border:1px solid var(--hbm);}
+.grade-A{background:rgba(88,166,255,0.2);color:var(--accent);border:1px solid var(--accent);}
+.grade-B{background:rgba(210,153,34,0.2);color:var(--yellow);border:1px solid var(--yellow);}
+.grade-C{background:rgba(248,81,73,0.15);color:var(--orange);border:1px solid var(--orange);}
+.grade-D{background:rgba(139,148,158,0.2);color:var(--muted);border:1px solid var(--muted);}
+
+.up{color:var(--hbm);}
+.dn{color:var(--red);}
+.neu{color:var(--muted);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+
+.co-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;}
+.co-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.co-name{font-size:18px;font-weight:700;}
+.co-ticker{color:var(--muted);font-size:12px;}
+.score-big{font-size:42px;font-weight:700;line-height:1;}
+.score-big.S{color:var(--hbm);}
+.score-big.A{color:var(--accent);}
+.score-big.B{color:var(--yellow);}
+.score-big.C{color:var(--orange);}
+
+.dim-bar{margin:5px 0;}
+.dim-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:2px;}
+.bar-bg{background:rgba(48,54,61,0.8);border-radius:3px;height:5px;}
+.bar-fill{height:5px;border-radius:3px;}
+
+.val-box{background:rgba(88,166,255,0.04);border:1px solid rgba(88,166,255,0.18);border-radius:8px;padding:12px;margin-top:10px;}
+.val-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;}
+.val-label{color:var(--muted);}
+
+.delta-chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;}
+.delta-up{background:rgba(63,185,80,0.15);color:var(--green);}
+.delta-dn{background:rgba(248,81,73,0.15);color:var(--red);}
+.delta-neu{background:rgba(139,148,158,0.15);color:var(--muted);}
+
+.dim6-dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle;}
+
+.tag-hbm{background:rgba(118,227,176,0.15);color:var(--hbm);padding:2px 8px;border-radius:4px;font-size:11px;}
+.tag-hdd{background:rgba(232,176,75,0.15);color:var(--hdd);padding:2px 8px;border-radius:4px;font-size:11px;}
+.tag-nand{background:rgba(240,136,62,0.15);color:var(--orange);padding:2px 8px;border-radius:4px;font-size:11px;}
+
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:28px 0 16px;border-top:1px solid var(--border);margin-top:32px;}
+
+.alert-box{background:rgba(248,81,73,0.07);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:14px;margin-bottom:14px;}
+.alert-title{color:var(--red);font-weight:700;font-size:12px;margin-bottom:6px;}
+.alert-text{color:var(--muted);font-size:12px;}
+
+.info-box{background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.25);border-radius:8px;padding:14px;margin-bottom:14px;}
+.info-title{color:var(--accent);font-weight:700;font-size:12px;margin-bottom:6px;}
+
+.scenario-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+.sc-cell{background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:6px;padding:10px;}
+.sc-label{font-size:10px;color:var(--muted);margin-bottom:4px;}
+.sc-val{font-size:16px;font-weight:700;}
+.sc-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+
+.summary-num{font-size:28px;font-weight:700;text-align:center;}
+.summary-label{font-size:10px;color:var(--muted);text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <h1>存储器专项投资打分系统 v4.1</h1>
+  <div class="sub">20260607 更新版 &nbsp;|&nbsp; 四家公司全面重打分 &nbsp;|&nbsp; 与 v41-ALL (20260605) 基准对比</div>
+  <div style="margin-top:10px;">
+    <span class="badge">MU · Micron</span>
+    <span class="badge badge-blue">STX · Seagate</span>
+    <span class="badge badge-orange">WDC · Western Digital</span>
+    <span class="badge" style="background:rgba(188,140,255,0.12);border-color:var(--purple);color:var(--purple);">SNDK · SanDisk</span>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:var(--muted);">
+    行业重扫描日期：2026-06-07 &nbsp;|&nbsp; 基准日期：2026-06-05 &nbsp;|&nbsp; 框架：v4.1-supercycle-earnings-capture
+  </div>
+</div>
+
+<!-- ═══ STEP 1：行业地图更新 ═══ -->
+<div class="section-title">01 &nbsp;行业重扫描 — dim6 判断更新</div>
+
+<div class="grid3">
+  <div class="card">
+    <div class="card-title"><span class="tag-hbm">HBM 高带宽内存</span></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="font-size:32px;font-weight:700;color:var(--hbm);">5<span style="font-size:16px;color:var(--muted);">/5</span></div>
+      <div>
+        <div style="font-size:13px;color:var(--hbm);">🏗 结构性稀缺（升级）</div>
+        <div style="font-size:11px;color:var(--muted);">前次：4/5 → 本次：5/5 &nbsp;<span class="delta-chip delta-up">+1</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.8;">
+      · SK Hynix 53% / Samsung 35% / Micron 11% 市场份额<br>
+      · HBM4 已进入量产（Vera Rubin，Jensen Huang 6月确认）<br>
+      · Micron 2026年产能100%售罄，SK Hynix同样售罄<br>
+      · 供应短缺预测延续至2027年+，Goldman Sachs确认至少H1 2027紧缺<br>
+      · HBM 占 DRAM 晶圆产能已达23%，快速扩产受物理约束
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="tag-nand">NAND 闪存</span></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="font-size:32px;font-weight:700;color:var(--orange);">4<span style="font-size:16px;color:var(--muted);">/5</span></div>
+      <div>
+        <div style="font-size:13px;color:var(--orange);">📈 景气上行（大幅升级）</div>
+        <div style="font-size:11px;color:var(--muted);">前次：2/5 → 本次：4/5 &nbsp;<span class="delta-chip delta-up">+2</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.8;">
+      · Q1 2026 DRAM 合约价 +90-95% QoQ，NAND +33-38% QoQ<br>
+      · Q2 2026 DRAM 预测再+63% QoQ，NAND +70-75%<br>
+      · 全行业库存仅 3-4 周（历史最低），供需严重失衡<br>
+      · NAND 供给增速 17% YoY（低于历史均值20-30%）<br>
+      · SNDK Q3 FY2026 毛利率达 78.4%（历史性峰值）<br>
+      · NBM 长期合同开始替代商品属性，结构性改善信号
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="tag-hdd">HDD Nearline（AI结构性）</span></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="font-size:32px;font-weight:700;color:var(--hdd);">5<span style="font-size:16px;color:var(--muted);">/5</span></div>
+      <div>
+        <div style="font-size:13px;color:var(--hdd);">🏗 结构性稀缺（升级）</div>
+        <div style="font-size:11px;color:var(--muted);">前次：3/5 → 本次：5/5 &nbsp;<span class="delta-chip delta-up">+2</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.8;">
+      · WDC + Seagate 2026年全年近线产能100%售罄给 AI 数据中心<br>
+      · 硬盘价格上涨50%（WinBuzzer报道），AI数据中心锁定供应<br>
+      · WDC 单季出货199EB（+37% YoY），Nearline占90%+ exabytes<br>
+      · Seagate 产能预订至2027年底，CEO宣布结构性增长而非补货<br>
+      · 近线HDD 现占行业 exabyte 出货约90%，不可逆转的转型
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <div class="info-title">dim6 更新对各公司评分影响</div>
+  <div style="font-size:12px;color:var(--muted);">
+    HBM 5/5（↑1）→ 利好 <strong style="color:var(--text);">MU</strong> 行业分（+2-3pt）&nbsp;|&nbsp;
+    NAND 4/5（↑2）→ 利好 <strong style="color:var(--text);">SNDK</strong> 行业分（+7-8pt）&nbsp;|&nbsp;
+    HDD 5/5（↑2）→ 利好 <strong style="color:var(--text);">STX / WDC</strong> 行业分（+4-5pt each）
+  </div>
+</div>
+
+<!-- ═══ 汇总对比表 ═══ -->
+<div class="section-title">02 &nbsp;四家公司评分对比 — 20260605 vs 20260607</div>
+
+<div class="card">
+<div class="card-title">综合评分对比（v4.1框架，与基准20260605完全一致）</div>
+<table>
+<thead>
+<tr>
+  <th>公司</th>
+  <th>基准分<br><span style="font-weight:400;color:var(--muted)">20260605</span></th>
+  <th>更新分<br><span style="font-weight:400;color:var(--muted)">20260607</span></th>
+  <th class="tc">delta</th>
+  <th class="tc">评级变化</th>
+  <th>基准股价</th>
+  <th>当前股价</th>
+  <th class="tc">股价变动</th>
+  <th>置信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong style="color:var(--hbm);">MU</strong><br><span style="font-size:10px;color:var(--muted);">Micron Technology</span></td>
+  <td><strong>78</strong> &nbsp;<span class="grade grade-A">A</span></td>
+  <td><strong>63</strong> &nbsp;<span class="grade grade-B">B</span></td>
+  <td class="tc"><span class="delta-chip delta-dn">-15</span></td>
+  <td class="tc"><span style="color:var(--accent);">A</span> → <span style="color:var(--yellow);">B</span></td>
+  <td>$1,064</td>
+  <td>$857</td>
+  <td class="tc"><span class="dn">-19.5%</span></td>
+  <td class="tc">1.00</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--hdd);">STX</strong><br><span style="font-size:10px;color:var(--muted);">Seagate Technology</span></td>
+  <td><strong>74</strong> &nbsp;<span class="grade grade-A">A</span></td>
+  <td><strong>58</strong> &nbsp;<span class="grade grade-C">C</span></td>
+  <td class="tc"><span class="delta-chip delta-dn">-16</span></td>
+  <td class="tc"><span style="color:var(--accent);">A</span> → <span style="color:var(--orange);">C</span></td>
+  <td>$411</td>
+  <td>$833</td>
+  <td class="tc"><span class="up">+102.6%</span></td>
+  <td class="tc">1.00</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--hdd);">WDC</strong><br><span style="font-size:10px;color:var(--muted);">Western Digital</span></td>
+  <td><strong>70</strong> &nbsp;<span class="grade grade-A">A</span></td>
+  <td><strong>51</strong> &nbsp;<span class="grade grade-C">C</span></td>
+  <td class="tc"><span class="delta-chip delta-dn">-19</span></td>
+  <td class="tc"><span style="color:var(--accent);">A</span> → <span style="color:var(--orange);">C</span></td>
+  <td>$293</td>
+  <td>$535</td>
+  <td class="tc"><span class="up">+82.5%</span></td>
+  <td class="tc">0.90</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--purple);">SNDK</strong><br><span style="font-size:10px;color:var(--muted);">SanDisk Corporation</span></td>
+  <td><strong>65</strong> &nbsp;<span class="grade grade-B">B</span></td>
+  <td><strong>50</strong> &nbsp;<span class="grade grade-C">C</span></td>
+  <td class="tc"><span class="delta-chip delta-dn">-15</span></td>
+  <td class="tc"><span style="color:var(--yellow);">B</span> → <span style="color:var(--orange);">C</span></td>
+  <td>$709</td>
+  <td>$1,530</td>
+  <td class="tc"><span class="up">+115.5%</span></td>
+  <td class="tc">0.85</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="alert-box">
+  <div class="alert-title">核心结论：全面估值压缩——股价大涨吞噬安全边际</div>
+  <div class="alert-text">
+    四家公司评分全部下调，主因非基本面恶化，而是<strong style="color:var(--text);">股价大幅上涨后通算EV/EBITDA估值倍数膨胀至历史极端区间</strong>。
+    STX从$411→$833(+103%)、WDC从$293→$535(+83%)、SNDK从$709→$1,530(+116%)，
+    三者当前EV均在峰值EBITDA的30-35x区间，远超10-15x的合理退出倍数。
+    MU因股价下跌(-19.5%)下调幅度相对最小，且基本面最为强劲（HBM4量产确认）。
+    <strong style="color:var(--red);">估值分均大幅压缩：MU 70→21，STX 68→5，WDC 62→0，SNDK 62→13。</strong>
+  </div>
+</div>
+
+<!-- ═══ MU 详情 ═══ -->
+<div class="section-title">03-A &nbsp;MU — Micron Technology &nbsp;详细评分</div>
+
+<div class="co-card">
+<div class="co-header">
+  <div>
+    <div class="co-name" style="color:var(--hbm);">Micron Technology &nbsp;<span style="font-size:13px;color:var(--muted);">NASDAQ: MU</span></div>
+    <div class="co-ticker">HBM + Server DRAM + Enterprise NAND &nbsp;|&nbsp; 置信度 1.00</div>
+    <div style="margin-top:6px;"><span class="tag-hbm">HBM核心</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="score-big B">63</div>
+    <div><span class="grade grade-B">B</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">基准 78(A) &nbsp;<span class="delta-chip delta-dn">-15</span></div>
+  </div>
+</div>
+
+<div class="grid3">
+  <!-- 行业分 -->
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">行业吸引力 (20%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--hbm);">79</div>
+    <div style="font-size:10px;color:var(--muted);">基准 85 &nbsp;<span class="delta-chip delta-dn">-6</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：79×20% = <strong style="color:var(--text);">15.8pt</strong></div>
+  </div>
+  <!-- 质量分 -->
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">公司质量 (50%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--accent);">82</div>
+    <div style="font-size:10px;color:var(--muted);">基准 76 &nbsp;<span class="delta-chip delta-up">+6</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：82×50% = <strong style="color:var(--text);">41.0pt</strong></div>
+  </div>
+  <!-- 估值分 -->
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">估值安全边际 (30%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--red);">21</div>
+    <div style="font-size:10px;color:var(--muted);">基准 70 &nbsp;<span class="delta-chip delta-dn">-49</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：21×30% = <strong style="color:var(--text);">6.3pt</strong></div>
+  </div>
+</div>
+
+<!-- 行业分拆 -->
+<div class="card" style="margin-top:12px;">
+<div class="card-title">行业分计算（分部赛道 × 营收占比）</div>
+<table>
+<thead><tr><th>赛道</th><th>赛道分</th><th>营收占比</th><th>贡献分</th><th>dim6状态</th><th>归一化系数</th></tr></thead>
+<tbody>
+<tr><td><span style="color:var(--hbm);">●</span> HBM 高带宽内存</td><td>90</td><td>30%</td><td>27.0</td><td><span class="tag-hbm">5/5 结构性稀缺</span></td><td>×0.75</td></tr>
+<tr><td><span style="color:var(--sdram);">●</span> 服务器 DDR5/DRAM</td><td>82</td><td>35%</td><td>28.7</td><td><span class="badge badge-blue" style="font-size:10px;">景气上行</span></td><td>×0.60</td></tr>
+<tr><td><span style="color:var(--enand);">●</span> 企业级 NVMe SSD</td><td>76</td><td>15%</td><td>11.4</td><td><span class="badge badge-blue" style="font-size:10px;">景气上行</span></td><td>×0.62</td></tr>
+<tr><td><span style="color:var(--pcdram);">●</span> PC/移动 DRAM</td><td>60</td><td>15%</td><td>9.0</td><td><span class="delta-neu" style="font-size:10px;">中性</span></td><td>×0.55</td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 其他</td><td>65</td><td>5%</td><td>3.25</td><td>—</td><td>×0.55</td></tr>
+<tr style="background:rgba(88,166,255,0.05);"><td colspan="2"><strong>行业合计</strong></td><td><strong>100%</strong></td><td><strong style="color:var(--hbm);">79.35 → 79</strong></td><td colspan="2"><span style="font-size:10px;color:var(--muted);">归一化营收基础：HBM$22.5B+Server$21B+ENAND$9.3B+PC$8.25B = $61B；norm EBITDA@45% = $27.5B</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 质量维度 -->
+<div class="card" style="margin-top:12px;">
+<div class="card-title">质量维度（8维）— delta来自update_20260606.md</div>
+<table>
+<thead><tr><th>#</th><th>维度</th><th>权重</th><th>基准分/5</th><th>更新分/5</th><th>delta</th><th>变化依据</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>成长性</td><td>20</td><td>4.0</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>HBM4 Vera Rubin量产确认；Q3指引$33.5B/81%GM；2026产能100%售罄</td></tr>
+<tr><td>2</td><td>盈利质量/通算ROIC</td><td>10</td><td>4.0</td><td>4.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>通算GM ~42%，ROIC ~12-14%；周期底部均值回归假设不变</td></tr>
+<tr><td>3</td><td>市占率+技术节点</td><td>18</td><td>3.5</td><td>3.5</td><td><span class="delta-chip delta-neu">±0</span></td><td>HBM市占~10%（SKH 53%/Sam 35%），但HBM4认证为三大供应商之一</td></tr>
+<tr><td>4</td><td>AI/HBF战略</td><td>12</td><td>4.0</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>HBM4 36GB 12-High量产，2.8TB/s带宽；PCIe Gen6 SSD+SOCAMM2 AI多元化</td></tr>
+<tr><td>5</td><td>财务稳健性</td><td>10</td><td>4.0</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>FY2026 Q1净现金转正，总债务降至$585M，净现金覆盖优秀</td></tr>
+<tr><td>6</td><td>管理层执行力</td><td>12</td><td>4.0</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>Q2 FY2026 EPS超预期+38.8%；UBS目标价上调至$1,625；多家机构上调</td></tr>
+<tr><td>7</td><td>客户与商模</td><td>12</td><td>4.0</td><td>4.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>NVIDIA/AMD/超大规模云认证供应商；但份额仅5-10% Vera Rubin</td></tr>
+<tr><td>8</td><td>未来可选性</td><td>6</td><td>4.0</td><td>4.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>PIM/CXL路线图，HBM4E规划，PCIe Gen6 SSD</td></tr>
+<tr style="background:rgba(88,166,255,0.05);"><td colspan="2"><strong>质量合计</strong></td><td>100</td><td><strong>76</strong></td><td><strong style="color:var(--hbm);">82</strong></td><td><span class="delta-chip delta-up">+6</span></td><td>计算：(5×20+4×10+3.5×18+4.5×12+4.5×10+4.5×12+4×12+4×6)÷5×%</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- 估值四情景 -->
+<div class="val-box">
+<div class="val-title">估值四情景 — 超级周期盈利捕获法（当前价格 $857）</div>
+<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
+  当前EV：$969B &nbsp;|&nbsp; 当前EV/峰值EBITDA：10.0x（已处于bear退出倍数区间）&nbsp;|&nbsp; 归一化EV/EBITDA：35x（历史中位6x的5.8倍）
+</div>
+<div class="scenario-grid">
+  <div class="sc-cell" style="border-color:var(--hbm);">
+    <div class="sc-label">乐观 25%</div>
+    <div class="sc-val" style="color:var(--hbm);">+22.5%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">5yr+超级周期，FY2028E EBITDA $120B，退出15x→$1,596/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--accent);">
+    <div class="sc-label">基准 45%</div>
+    <div class="sc-val" style="color:var(--yellow);">+2.0%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">3yr周期，2028退出12x $80B EBITDA→$960B EV→$850/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--orange);">
+    <div class="sc-label">悲观 20%</div>
+    <div class="sc-val" style="color:var(--orange);">-55%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">2027供给过剩，EBITDA跌至$25B，8x→$174/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--red);">
+    <div class="sc-label">颠覆 10%</div>
+    <div class="sc-val" style="color:var(--red);">-71%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">AI效率突破+HBM需求崩塌，$15B EBITDA×6x→$78/股</div>
+  </div>
+</div>
+<div style="margin-top:10px;font-size:12px;">
+  <span style="color:var(--muted);">概率加权年化回报：</span>
+  <strong style="color:var(--yellow);">25%×22.5% + 45%×2% + 20%×(-55%) + 10%×(-71%) = -11.6%</strong>
+  &nbsp;<span style="font-size:11px;color:var(--muted);">→ dim1: 0/5（负回报）</span>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--muted);">
+  注：尽管概率加权为负，MU在$857仍有重要支撑：①已跌破EV/EBITDA熊市目标($1,027)；②DCF基准$852在当前价附近；③6月24日Q3财报为关键催化剂，若再超预期可能触发快速估值修复。
+</div>
+</div>
+</div>
+
+<!-- ═══ STX 详情 ═══ -->
+<div class="section-title">03-B &nbsp;STX — Seagate Technology &nbsp;详细评分</div>
+
+<div class="co-card">
+<div class="co-header">
+  <div>
+    <div class="co-name" style="color:var(--hdd);">Seagate Technology &nbsp;<span style="font-size:13px;color:var(--muted);">NASDAQ: STX</span></div>
+    <div class="co-ticker">HDD Nearline AI（近线硬盘，HAMR领先）&nbsp;|&nbsp; 置信度 1.00</div>
+    <div style="margin-top:6px;"><span class="tag-hdd">HDD结构性</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="score-big C">58</div>
+    <div><span class="grade grade-C">C</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">基准 74(A) &nbsp;<span class="delta-chip delta-dn">-16</span></div>
+  </div>
+</div>
+
+<div class="grid3">
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">行业吸引力 (20%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--hbm);">75</div>
+    <div style="font-size:10px;color:var(--muted);">基准 78 &nbsp;<span class="delta-chip delta-dn">-3</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：75×20% = <strong style="color:var(--text);">15.0pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">公司质量 (50%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--accent);">82</div>
+    <div style="font-size:10px;color:var(--muted);">基准 76 &nbsp;<span class="delta-chip delta-up">+6</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：82×50% = <strong style="color:var(--text);">41.0pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">估值安全边际 (30%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--red);">5</div>
+    <div style="font-size:10px;color:var(--muted);">基准 68 &nbsp;<span class="delta-chip delta-dn">-63</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：5×30% = <strong style="color:var(--text);">1.5pt</strong></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">行业分计算（分部赛道 × 营收占比）</div>
+<table>
+<thead><tr><th>赛道</th><th>赛道分</th><th>营收占比</th><th>贡献分</th><th>dim6状态</th></tr></thead>
+<tbody>
+<tr><td><span style="color:var(--hdd);">●</span> HDD Nearline AI</td><td>80</td><td>80%</td><td>64.0</td><td><span class="tag-hdd">5/5 结构性稀缺（升级）</span></td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 客户端/桌面 HDD</td><td>52</td><td>15%</td><td>7.8</td><td><span class="delta-neu" style="font-size:10px;">周期中性</span></td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 其他</td><td>55</td><td>5%</td><td>2.75</td><td>—</td></tr>
+<tr style="background:rgba(88,166,255,0.05);"><td colspan="2"><strong>行业合计</strong></td><td><strong>100%</strong></td><td><strong style="color:var(--hdd);">74.55 → 75</strong></td><td>归一化系数：Nearline×0.82（通算EBITDA适中）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">质量维度（8维）— delta来自update_20260606.md</div>
+<table>
+<thead><tr><th>#</th><th>维度</th><th>权重</th><th>基准/5</th><th>更新/5</th><th>delta</th><th>主要变化</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>成长性</td><td>20</td><td>4.0</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>Q3 EPS $4.10 vs $3.50（+17%超预期）；Q4指引EPS $5.00（+26% vs consensus）；YoY +44%</td></tr>
+<tr><td>2</td><td>盈利质量/通算ROIC</td><td>10</td><td>3.5</td><td>3.5</td><td><span class="delta-chip delta-neu">±0</span></td><td>通算GM ~30%（FY2023-FY2026均值），ROIC ~10-12%，周期成熟型</td></tr>
+<tr><td>3</td><td>市占率+技术节点</td><td>18</td><td>4.0</td><td>4.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>HAMR Mozaic 4+ (44TB) 量产出货至顶级超大规模；WDC HAMR追赶中但仍落后</td></tr>
+<tr><td>4</td><td>AI/HBF战略</td><td>12</td><td>3.5</td><td><strong style="color:var(--hbm);">4.0</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>Agentic AI新催化剂（CEO明确提及额外nearline需求）；HAMR路线图100TB</td></tr>
+<tr><td>5</td><td>财务稳健性</td><td>10</td><td>3.0</td><td><strong style="color:var(--hbm);">3.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>Q3单季FCF $953M创历史纪录，Q3偿债$641M；净债务快速下降</td></tr>
+<tr><td>6</td><td>管理层执行力</td><td>12</td><td>4.0</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>Q3超预期+17%（EPS），Q4指引超市场+26%；"结构性增长，非补货"强硬表态</td></tr>
+<tr><td>7</td><td>客户与商模</td><td>12</td><td>4.0</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>产能预订至2027年底；不新建工厂→供给纪律→定价权</td></tr>
+<tr><td>8</td><td>未来可选性</td><td>6</td><td>3.0</td><td>3.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>HAMR 100TB路线图；但HDD是相对成熟技术，无HBF/CXL等颠覆性期权</td></tr>
+<tr style="background:rgba(232,176,75,0.05);"><td colspan="2"><strong>质量合计</strong></td><td>100</td><td><strong>76</strong></td><td><strong style="color:var(--hbm);">82</strong></td><td><span class="delta-chip delta-up">+6</span></td><td>计算：(5×20+3.5×10+4×18+4×12+3.5×10+5×12+4.5×12+3×6)÷5×%</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="val-box">
+<div class="val-title">估值四情景 — 超级周期盈利捕获法（当前价格 $833）</div>
+<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
+  当前EV：$192.5B &nbsp;|&nbsp; FY2026E峰值EBITDA：$6.0B &nbsp;|&nbsp; 峰值EV/EBITDA：<strong style="color:var(--red);">32x</strong>（退出目标10x）&nbsp;|&nbsp; 通算EV/EBITDA：<strong style="color:var(--red);">96x</strong>
+</div>
+<div class="scenario-grid">
+  <div class="sc-cell" style="border-color:var(--hbm);">
+    <div class="sc-label">乐观 25%</div>
+    <div class="sc-val" style="color:var(--orange);">-20%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">5yr超级周期，FY2028 EBITDA $8B，退出12x EV=$96B→$407/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--accent);">
+    <div class="sc-label">基准 45%</div>
+    <div class="sc-val" style="color:var(--red);">-40%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">3yr周期，2028 EBITDA $4B，退出10x→$40B EV→$159/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--orange);">
+    <div class="sc-label">悲观 20%</div>
+    <div class="sc-val" style="color:var(--red);">-60%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">供给扩张+周期结束2027，EBITDA $2.5B，8x→$70/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--red);">
+    <div class="sc-label">颠覆 10%</div>
+    <div class="sc-val" style="color:var(--red);">-85%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">SSD快速替代nearline HDD，EBITDA $1B，6x→$9/股</div>
+  </div>
+</div>
+<div style="margin-top:10px;font-size:12px;">
+  <span style="color:var(--muted);">概率加权年化回报：</span>
+  <strong style="color:var(--red);">25%×(-20%) + 45%×(-40%) + 20%×(-60%) + 10%×(-85%) = -43.5%</strong>
+  &nbsp;<span style="font-size:11px;color:var(--muted);">→ dim1: 0/5</span>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--muted);">
+  核心风险：从$411涨至$833(+103%)后，EV已达$192.5B，是通算EBITDA($2B)的96倍。即使以峰值EBITDA计算也高达32x，远超退出倍数目标(10x)。基本面仍然优秀，但股价已充分甚至过度定价未来。
+</div>
+</div>
+</div>
+
+<!-- ═══ WDC 详情 ═══ -->
+<div class="section-title">03-C &nbsp;WDC — Western Digital &nbsp;详细评分</div>
+
+<div class="co-card">
+<div class="co-header">
+  <div>
+    <div class="co-name" style="color:var(--hdd);">Western Digital Corporation &nbsp;<span style="font-size:13px;color:var(--muted);">NASDAQ: WDC</span></div>
+    <div class="co-ticker">纯HDD公司（2023分拆后）&nbsp;|&nbsp; 置信度 0.90（分拆不足2年）</div>
+    <div style="margin-top:6px;"><span class="tag-hdd">HDD结构性</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="score-big C">51</div>
+    <div><span class="grade grade-C">C</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">基准 70(A) &nbsp;<span class="delta-chip delta-dn">-19</span></div>
+  </div>
+</div>
+
+<div class="grid3">
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">行业吸引力 (20%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--hbm);">77</div>
+    <div style="font-size:10px;color:var(--muted);">基准 74 &nbsp;<span class="delta-chip delta-up">+3</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：77×20% = <strong style="color:var(--text);">15.4pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">公司质量 (50%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--accent);">82</div>
+    <div style="font-size:10px;color:var(--muted);">基准 72 &nbsp;<span class="delta-chip delta-up">+10</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：82×50% = <strong style="color:var(--text);">41.0pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">估值安全边际 (30%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--red);">0</div>
+    <div style="font-size:10px;color:var(--muted);">基准 62 &nbsp;<span class="delta-chip delta-dn">-62</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：0×30% = <strong style="color:var(--text);">0pt</strong></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">行业分计算（分部赛道 × 营收占比）</div>
+<table>
+<thead><tr><th>赛道</th><th>赛道分</th><th>营收占比</th><th>贡献分</th><th>dim6状态</th></tr></thead>
+<tbody>
+<tr><td><span style="color:var(--hdd);">●</span> HDD Nearline AI（云端）</td><td>80</td><td>89%</td><td>71.2</td><td><span class="tag-hdd">5/5 结构性稀缺（升级）</span></td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 客户端HDD</td><td>52</td><td>6%</td><td>3.12</td><td><span class="delta-neu" style="font-size:10px;">周期中性</span></td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 其他</td><td>55</td><td>5%</td><td>2.75</td><td>—</td></tr>
+<tr style="background:rgba(88,166,255,0.05);"><td colspan="2"><strong>行业合计</strong></td><td><strong>100%</strong></td><td><strong style="color:var(--hdd);">77.07 → 77</strong></td><td>89%云端集中度为行业最高；dim6升级HDD 3→5使WDC行业分受益最大</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">质量维度（8维）— delta来自update_20260606.md</div>
+<table>
+<thead><tr><th>#</th><th>维度</th><th>权重</th><th>基准/5</th><th>更新/5</th><th>delta</th><th>主要变化</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>成长性</td><td>20</td><td>4.0</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>Q3 EPS $2.72 vs $2.30（+18%），Q4指引$3.25（+19% QoQ），FY2026E $12.83B(+35%)</td></tr>
+<tr><td>2</td><td>盈利质量/通算ROIC</td><td>10</td><td>3.5</td><td>3.5</td><td><span class="delta-chip delta-neu">±0</span></td><td>通算GM ~30%；当前50%+是周期高点，ROIC改善但仍有杠杆风险</td></tr>
+<tr><td>3</td><td>市占率+技术节点</td><td>18</td><td>3.5</td><td><strong style="color:var(--hbm);">4.0</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>HAMR 44TB认证"比计划提前"，两大超大规模已正式认证；199EB单季出货</td></tr>
+<tr><td>4</td><td>AI/HBF战略</td><td>12</td><td>3.5</td><td>3.5</td><td><span class="delta-chip delta-neu">±0</span></td><td>纯HDD AI存储，2028-2029需求可见性；但无NAND/HBM等多元化</td></tr>
+<tr><td>5</td><td>财务稳健性</td><td>10</td><td>3.0</td><td><strong style="color:var(--hbm);">3.5</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>Q3 FCF $978M，股息上调20%，$4B回购；净债务$4.82B仍需关注</td></tr>
+<tr><td>6</td><td>管理层执行力</td><td>12</td><td>3.5</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.5</span></td><td>Q3三项指标全超指引上限；Q4指引大幅超预期；HAMR提前；股息+回购双提升</td></tr>
+<tr><td>7</td><td>客户与商模</td><td>12</td><td>3.5</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>FY2026产能全售罄，FY2027早期订单落地；89%云端收入→极高聚焦度</td></tr>
+<tr><td>8</td><td>未来可选性</td><td>6</td><td>3.0</td><td>3.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>HAMR 100TB 2030路线图；UltraSMR技术；无HBF等颠覆性期权</td></tr>
+<tr style="background:rgba(232,176,75,0.05);"><td colspan="2"><strong>质量合计</strong></td><td>100</td><td><strong>72</strong></td><td><strong style="color:var(--hbm);">82</strong></td><td><span class="delta-chip delta-up">+10</span></td><td>最大提升来自dim6管理层执行（+1.5）和dim7客户商模（+1.0）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="val-box">
+<div class="val-title">估值四情景 — 超级周期盈利捕获法（当前价格 $535）</div>
+<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
+  当前EV：$189B &nbsp;|&nbsp; FY2026E峰值EBITDA：$5.5B &nbsp;|&nbsp; 峰值EV/EBITDA：<strong style="color:var(--red);">34x</strong>（退出目标10x）&nbsp;|&nbsp; 通算EV/EBITDA：<strong style="color:var(--red);">95x</strong> &nbsp;|&nbsp; 共识均值$500低于当前股价$535
+</div>
+<div class="scenario-grid">
+  <div class="sc-cell" style="border-color:var(--hbm);">
+    <div class="sc-label">乐观 25%</div>
+    <div class="sc-val" style="color:var(--orange);">-22%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">HAMR ASP溢价，FY2028 EBITDA $7B，12x→$84B EV→$229/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--accent);">
+    <div class="sc-label">基准 45%</div>
+    <div class="sc-val" style="color:var(--red);">-40%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">3yr周期后正常化，EBITDA $4B，10x→$40B EV→$102/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--orange);">
+    <div class="sc-label">悲观 20%</div>
+    <div class="sc-val" style="color:var(--red);">-60%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">周期2027结束，EBITDA $2B，8x→$16B EV→$32/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--red);">
+    <div class="sc-label">颠覆 10%</div>
+    <div class="sc-val" style="color:var(--red);">-90%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">SSD加速替代HDD，EBITDA $1B，5x→$5B EV→$1/股</div>
+  </div>
+</div>
+<div style="margin-top:10px;font-size:12px;">
+  <span style="color:var(--muted);">概率加权年化回报：</span>
+  <strong style="color:var(--red);">25%×(-22%) + 45%×(-40%) + 20%×(-60%) + 10%×(-90%) = -44.5%</strong>
+  &nbsp;<span style="font-size:11px;color:var(--muted);">→ dim1: 0/5；共识$500 < 当前$535 → dim2 0/5；全面负面</span>
+</div>
+</div>
+</div>
+
+<!-- ═══ SNDK 详情 ═══ -->
+<div class="section-title">03-D &nbsp;SNDK — SanDisk Corporation &nbsp;详细评分</div>
+
+<div class="co-card">
+<div class="co-header">
+  <div>
+    <div class="co-name" style="color:var(--purple);">SanDisk Corporation &nbsp;<span style="font-size:13px;color:var(--muted);">NASDAQ: SNDK</span></div>
+    <div class="co-ticker">NAND闪存超级周期 + HBF战略期权 &nbsp;|&nbsp; 置信度 0.85（分拆不足2年 + 景气高峰）</div>
+    <div style="margin-top:6px;"><span class="tag-nand">NAND超级周期</span></div>
+  </div>
+  <div style="text-align:right;">
+    <div class="score-big C">50</div>
+    <div><span class="grade grade-C">C</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">基准 65(B) &nbsp;<span class="delta-chip delta-dn">-15</span></div>
+  </div>
+</div>
+
+<div class="grid3">
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">行业吸引力 (20%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--yellow);">63</div>
+    <div style="font-size:10px;color:var(--muted);">基准 55 &nbsp;<span class="delta-chip delta-up">+8</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：63×20% = <strong style="color:var(--text);">12.6pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">公司质量 (50%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--accent);">85</div>
+    <div style="font-size:10px;color:var(--muted);">基准 70 &nbsp;<span class="delta-chip delta-up">+15</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：85×50% = <strong style="color:var(--text);">42.5pt</strong></div>
+  </div>
+  <div style="background:rgba(22,27,34,0.9);border:1px solid var(--border);border-radius:8px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">估值安全边际 (30%)</div>
+    <div style="font-size:28px;font-weight:700;color:var(--red);">13</div>
+    <div style="font-size:10px;color:var(--muted);">基准 62 &nbsp;<span class="delta-chip delta-dn">-49</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">贡献：13×30% = <strong style="color:var(--text);">3.9pt</strong></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">行业分计算（分部赛道 × 营收占比）</div>
+<table>
+<thead><tr><th>赛道</th><th>赛道分</th><th>营收占比</th><th>贡献分</th><th>dim6状态</th></tr></thead>
+<tbody>
+<tr><td><span style="color:var(--enand);">●</span> 数据中心 NVMe SSD (AI推理)</td><td>76</td><td>25%</td><td>19.0</td><td><span class="tag-nand">4/5 景气上行（升级）</span></td></tr>
+<tr><td><span style="color:var(--pcdram);">●</span> Edge/客户端SSD</td><td>60</td><td>62%</td><td>37.2</td><td><span class="badge badge-blue" style="font-size:10px;">4/5 景气上行</span></td></tr>
+<tr><td><span style="color:var(--muted);">●</span> 消费者NAND</td><td>50</td><td>13%</td><td>6.5</td><td><span class="delta-neu" style="font-size:10px;">中性，YMTC竞争</span></td></tr>
+<tr style="background:rgba(88,166,255,0.05);"><td colspan="2"><strong>行业合计</strong></td><td><strong>100%</strong></td><td><strong style="color:var(--orange);">62.7 → 63</strong></td><td>NAND dim6从2→4使行业分提升+8pts；HBF期权尚无营收贡献（0%）</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:12px;">
+<div class="card-title">质量维度（8维）— delta来自update_20260606.md（最大幅度升级）</div>
+<table>
+<thead><tr><th>#</th><th>维度</th><th>权重</th><th>基准/5</th><th>更新/5</th><th>delta</th><th>主要变化</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>成长性</td><td>20</td><td>3.5</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.5</span></td><td>Q3营收$5.95B超指引上限+24%；EPS $23.41超预期+60%（半导体史上罕见级别）</td></tr>
+<tr><td>2</td><td>盈利质量/通算ROIC</td><td>10</td><td>3.0</td><td>3.0</td><td><span class="delta-chip delta-neu">±0</span></td><td>通算GM难以评估（NAND历史上曾大亏损）；NBM合同改善可预期性但尚未实证</td></tr>
+<tr><td>3</td><td>市占率+技术节点</td><td>18</td><td>3.5</td><td>3.5</td><td><span class="delta-chip delta-neu">±0</span></td><td>SNDK/Kioxia JV ~25% NAND份额；QLC Stargate AI推理产品；对等三星/SKH</td></tr>
+<tr><td>4</td><td>AI/HBF战略</td><td>12</td><td>3.0</td><td><strong style="color:var(--hbm);">4.0</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>HBF Gen1（SK Hynix合作）样品H2 2026，OCP标准化；QLC AI推理优化产品即将量产</td></tr>
+<tr><td>5</td><td>财务稳健性</td><td>10</td><td>3.0</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+2.0</span></td><td>净现金$3.7B；$60亿股票回购授权（市值~10%）；资本支出仅4%营收，极为克制</td></tr>
+<tr><td>6</td><td>管理层执行力</td><td>12</td><td>3.5</td><td><strong style="color:var(--hbm);">5.0</strong></td><td><span class="delta-chip delta-up">+1.5</span></td><td>Q3超预期程度创历史纪录；NBM五份长期合同；语气从"乐观"升级为"极度自信+商模转型"</td></tr>
+<tr><td>7</td><td>客户与商模</td><td>12</td><td>3.5</td><td><strong style="color:var(--hbm);">4.0</strong></td><td><span class="delta-chip delta-up">+0.5</span></td><td>五大超大规模云NBM合同，$420亿最低担保收入；FY2027 33%+比特出货量锁定</td></tr>
+<tr><td>8</td><td>未来可选性</td><td>6</td><td>3.5</td><td><strong style="color:var(--hbm);">4.5</strong></td><td><span class="delta-chip delta-up">+1.0</span></td><td>HBF若成功商用将开辟NAND→AI高性能内存的全新TAM（10倍扩张潜力）</td></tr>
+<tr style="background:rgba(188,140,255,0.05);"><td colspan="2"><strong>质量合计</strong></td><td>100</td><td><strong>70</strong></td><td><strong style="color:var(--hbm);">85</strong></td><td><span class="delta-chip delta-up">+15</span></td><td>四家公司中质量提升最大；NBM合同+HBF期权+财务健康度是核心驱动</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="val-box">
+<div class="val-title">估值四情景 — 超级周期盈利捕获法（当前价格 $1,530）</div>
+<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
+  当前EV：$238B &nbsp;|&nbsp; FY2026E峰值EBITDA：$17.8B（年化）&nbsp;|&nbsp; 峰值EV/EBITDA：<strong style="color:var(--yellow);">13.4x</strong>（接近12x退出倍数，相对HDD二者更合理）&nbsp;|&nbsp; 通算EV/EBITDA：<strong style="color:var(--red);">~34-95x</strong>（视通算EBITDA范围$2.5-7B）
+</div>
+<div class="scenario-grid">
+  <div class="sc-cell" style="border-color:var(--hbm);">
+    <div class="sc-label">乐观 25%</div>
+    <div class="sc-val" style="color:var(--hbm);">+18%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">NBM成功+HBF商用，FY2027 EBITDA $22B，18x→$396B EV→$2,529/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--accent);">
+    <div class="sc-label">基准 45%</div>
+    <div class="sc-val" style="color:var(--orange);">-3%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">NAND超级周期3yr，FY2027 EBITDA $18B，12x→$216B EV→$1,390/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--orange);">
+    <div class="sc-label">悲观 20%</div>
+    <div class="sc-val" style="color:var(--red);">-55%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">NAND供给过剩2027，三星/MU扩产，EBITDA回落$3B，8x→$174/股</div>
+  </div>
+  <div class="sc-cell" style="border-color:var(--red);">
+    <div class="sc-label">颠覆 10%</div>
+    <div class="sc-val" style="color:var(--red);">-72%</div>
+    <div class="sc-sub">年化 · 3yr</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">中国YMTC突破+CXL/PIM颠覆，EBITDA $1.5B，6x→$81/股</div>
+  </div>
+</div>
+<div style="margin-top:10px;font-size:12px;">
+  <span style="color:var(--muted);">概率加权年化回报：</span>
+  <strong style="color:var(--red);">25%×18% + 45%×(-3%) + 20%×(-55%) + 10%×(-72%) = -15.1%</strong>
+  &nbsp;<span style="font-size:11px;color:var(--muted);">→ dim1: 0/5</span>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--muted);">
+  特别注意：SNDK峰值EV/EBITDA仅13.4x，比STX/WDC的32-34x合理得多。主要风险来自通算均值回归（NAND历史周期性极强）。NBM合同若能系统性改变通算EBITDA底部，估值将显著重估。触发器检查：dim6≥4 ✓ / EV/norm EBITDA 34x > 7.2x ✗ → 底部触发器未触发。
+</div>
+</div>
+</div>
+
+<!-- ═══ Delta 归因分析 ═══ -->
+<div class="section-title">04 &nbsp;Delta 归因 — 价格 vs 基本面</div>
+
+<div class="card">
+<div class="card-title">三层Delta拆解（行业delta + 质量delta + 估值delta + 置信度影响）</div>
+<table>
+<thead>
+<tr>
+  <th>公司</th>
+  <th>总delta</th>
+  <th>行业delta</th>
+  <th>质量delta</th>
+  <th>估值delta</th>
+  <th>置信度影响</th>
+  <th>主要归因（重要性排序）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong style="color:var(--hbm);">MU</strong></td>
+  <td><span class="delta-chip delta-dn">-15</span></td>
+  <td><span class="delta-chip delta-dn">-6</span><br><span style="font-size:10px;color:var(--muted);">85→79</span></td>
+  <td><span class="delta-chip delta-up">+6</span><br><span style="font-size:10px;color:var(--muted);">76→82</span></td>
+  <td><span class="delta-chip delta-dn">-49</span><br><span style="font-size:10px;color:var(--muted);">70→21</span></td>
+  <td>1.0→1.0（无变化）</td>
+  <td>①<strong>估值压缩主导</strong>：$1,064→$857(-19.5%)，EV仍969B，norm EV/EBITDA 35x。②质量改善（HBM4量产确认+净现金）部分抵消。③行业分小幅下调（HBM赛道分不变，但产品组合略调整）。</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--hdd);">STX</strong></td>
+  <td><span class="delta-chip delta-dn">-16</span></td>
+  <td><span class="delta-chip delta-dn">-3</span><br><span style="font-size:10px;color:var(--muted);">78→75</span></td>
+  <td><span class="delta-chip delta-up">+6</span><br><span style="font-size:10px;color:var(--muted);">76→82</span></td>
+  <td><span class="delta-chip delta-dn">-63</span><br><span style="font-size:10px;color:var(--muted);">68→5</span></td>
+  <td>1.0→1.0（无变化）</td>
+  <td>①<strong>股价暴涨+103%摧毁估值安全边际</strong>：$411→$833，EV从~$97B→$192B，peak EV/EBITDA从~11x→32x。②质量大幅提升（Q3超预期+Q4大幅上调指引）无法对冲估值恶化。③行业分小幅下调（赛道重新校准）。</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--hdd);">WDC</strong></td>
+  <td><span class="delta-chip delta-dn">-19</span></td>
+  <td><span class="delta-chip delta-up">+3</span><br><span style="font-size:10px;color:var(--muted);">74→77</span></td>
+  <td><span class="delta-chip delta-up">+10</span><br><span style="font-size:10px;color:var(--muted);">72→82</span></td>
+  <td><span class="delta-chip delta-dn">-62</span><br><span style="font-size:10px;color:var(--muted);">62→0</span></td>
+  <td>1.0→0.9(-3pt)</td>
+  <td>①<strong>股价+83%叠加分拆折扣</strong>：$293→$535，EV从~$106B→$189B；peak EV/EBITDA从~16x→34x，共识均值$500已低于股价。②质量提升最大（管理层执行力+1.5，客户商模+1.0）完全被估值消耗。③置信度0.90额外扣分-3pt。</td>
+</tr>
+<tr>
+  <td><strong style="color:var(--purple);">SNDK</strong></td>
+  <td><span class="delta-chip delta-dn">-15</span></td>
+  <td><span class="delta-chip delta-up">+8</span><br><span style="font-size:10px;color:var(--muted);">55→63</span></td>
+  <td><span class="delta-chip delta-up">+15</span><br><span style="font-size:10px;color:var(--muted);">70→85</span></td>
+  <td><span class="delta-chip delta-dn">-49</span><br><span style="font-size:10px;color:var(--muted);">62→13</span></td>
+  <td>0.85→0.85（无变化）</td>
+  <td>①<strong>NAND dim6大幅升级(2→4)+Q3史诗级超预期</strong>：质量+行业合计+23pts改善。②但股价+115.5%将EV推至$238B，远超通算价值。③NBM合同若成立可能改变通算EBITDA底部→潜在升级触发点。置信度0.85对绝对分影响最大(-8.8pt)。</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══ 触发器状态 ═══ -->
+<div class="section-title">05 &nbsp;底部触发器状态检查</div>
+
+<div class="grid4">
+  <div class="card">
+    <div class="card-title">MU 触发器</div>
+    <div style="font-size:11px;">
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ A</span> dim6(HBM) = 5/5 ≥ 4</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ B</span> norm EV/EBITDA = 35x（目标≤7.2x）</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ C</span> 共识均值$1,100+ >> 股价$857（+28%）</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.1);border-radius:4px;padding:6px;font-size:11px;color:var(--red);margin-top:8px;">未触发（B条件不满足）</div>
+  </div>
+  <div class="card">
+    <div class="card-title">STX 触发器</div>
+    <div style="font-size:11px;">
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ A</span> dim6(HDD) = 5/5 ≥ 4</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ B</span> norm EV/EBITDA = 96x（目标≤7.2x）</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ C</span> 共识$863 vs 股价$833（+3.6%，勉强满足）</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.1);border-radius:4px;padding:6px;font-size:11px;color:var(--red);margin-top:8px;">未触发（B条件严重不满足）</div>
+  </div>
+  <div class="card">
+    <div class="card-title">WDC 触发器</div>
+    <div style="font-size:11px;">
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ A</span> dim6(HDD) = 5/5 ≥ 4</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ B</span> norm EV/EBITDA = 95x（目标≤7.2x）</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ C</span> 共识$500 < 股价$535（负偏差）</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.1);border-radius:4px;padding:6px;font-size:11px;color:var(--red);margin-top:8px;">未触发（B+C均不满足）</div>
+  </div>
+  <div class="card">
+    <div class="card-title">SNDK 触发器</div>
+    <div style="font-size:11px;">
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ A</span> dim6(NAND) = 4/5 ≥ 4</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--red);">✗ B</span> peak EV/EBITDA = 13.4x（仍>7.2x）</div>
+      <div style="margin-bottom:6px;"><span style="color:var(--hbm);">✓ C</span> 共识$1,659 vs 股价$1,530（+8.4%）</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.1);border-radius:4px;padding:6px;font-size:11px;color:var(--red);margin-top:8px;">未触发（B条件不满足，但最接近临界）</div>
+  </div>
+</div>
+
+<!-- ═══ 总结摘要 ═══ -->
+<div class="section-title">06 &nbsp;投资框架总结</div>
+
+<div class="grid2">
+  <div class="card">
+    <div class="card-title">评级变化摘要</div>
+    <table>
+    <thead><tr><th>公司</th><th>20260605</th><th>20260607</th><th>变化</th><th>核心结论</th></tr></thead>
+    <tbody>
+    <tr><td><strong style="color:var(--hbm);">MU</strong></td><td>78 A</td><td>63 B</td><td><span class="dn">A→B</span></td><td>情绪性超卖，基本面最强，财报6/24是关键</td></tr>
+    <tr><td><strong style="color:var(--hdd);">STX</strong></td><td>74 A</td><td>58 C</td><td><span class="dn">A→C</span></td><td>优质公司但股价远超安全边际，等待回调</td></tr>
+    <tr><td><strong style="color:var(--hdd);">WDC</strong></td><td>70 A</td><td>51 C</td><td><span class="dn">A→C</span></td><td>基本面改善最大但估值最贵，分拆折扣额外拖累</td></tr>
+    <tr><td><strong style="color:var(--purple);">SNDK</strong></td><td>65 B</td><td>50 C</td><td><span class="dn">B→C</span></td><td>质量飞跃但周期高峰+分拆折扣，NBM是关键变数</td></tr>
+    </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">相对偏好排序（v4.1框架，20260607）</div>
+    <div style="padding:10px 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:28px;height:28px;background:rgba(118,227,176,0.2);border:1px solid var(--hbm);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--hbm);">1</div>
+        <div><strong style="color:var(--hbm);">MU</strong> — 分数最高(63B)，唯一基本面+估值双向有支撑的标的。股价已跌破EV/EBITDA熊市目标，6月24日财报催化剂明确。</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:28px;height:28px;background:rgba(240,136,62,0.15);border:1px solid var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--orange);">2</div>
+        <div><strong style="color:var(--purple);">SNDK</strong> — 质量最高(85)，峰值EV/EBITDA仅13.4x（最合理），NBM商模转型若成立将大幅重估。回调至$1,200-$1,350才是好买点。</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:28px;height:28px;background:rgba(139,148,158,0.15);border:1px solid var(--muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted);">3</div>
+        <div><strong style="color:var(--hdd);">STX</strong> — 执行力优秀，HAMR领先，但96x通算EV/EBITDA无安全边际。$600以下才有价值吸引力。</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;background:rgba(139,148,158,0.15);border:1px solid var(--muted);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted);">4</div>
+        <div><strong style="color:var(--hdd);">WDC</strong> — 基本面改善明显但估值最贵（95x通算，共识均值$500已低于股价$535），分拆折扣额外拖累。$350-400回调前观望。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  存储器投资跟踪 v4.1 &nbsp;|&nbsp; <strong>20260607 更新</strong> &nbsp;|&nbsp; 基准：20260605 &nbsp;|&nbsp;
+  框架：v4.1-supercycle-earnings-capture &nbsp;|&nbsp; 行业扫描来源：TrendForce / IDC / TomHardware / SEC Filings &nbsp;|&nbsp;
+  <br style="margin:4px;">
+  本报告为投资研究参考，不构成投资建议。所有情景分析基于公开信息，存储器行业具有强周期性，实际结果可能与预测有重大偏差。
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
