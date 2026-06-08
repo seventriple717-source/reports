@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>云服务/AI基础设施 投资评分排行榜 · 2026-06-08</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text2: #8b949e;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --purple: #a371f7;
+    --orange: #ffa657;
+    --cyan: #76e3ea;
+    --dim: #6e7681;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 24px;
+  }
+  .header {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    background: var(--bg2);
+  }
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .header-meta {
+    color: var(--dim);
+    font-size: 11px;
+  }
+  .header-meta span { margin-right: 24px; }
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 24px 0 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  /* AI Capex概况 */
+  .capex-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .capex-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .capex-card .label { color: var(--text2); font-size: 11px; margin-bottom: 4px; }
+  .capex-card .value { font-size: 16px; font-weight: 700; color: var(--green); }
+  .capex-card .sub { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  /* 行业分层 */
+  .layer-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .layer-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .l1 { color: #1f6feb; border-color: #1f6feb; background: rgba(31,111,235,0.12); }
+  .l2 { color: #a371f7; border-color: #a371f7; background: rgba(163,113,247,0.12); }
+  .l3 { color: #d29922; border-color: #d29922; background: rgba(210,153,34,0.12); }
+  .l4 { color: #6e7681; border-color: #6e7681; background: rgba(110,118,129,0.12); }
+
+  /* 主排行榜 */
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+  }
+  .leaderboard th {
+    background: var(--bg3);
+    color: var(--text2);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .leaderboard td {
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .leaderboard tr:hover td { background: var(--bg3); }
+  .leaderboard tr:last-child td { border-bottom: none; }
+
+  .rank-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dim);
+    min-width: 32px;
+    display: inline-block;
+    text-align: center;
+  }
+  .rank-num.gold { color: #ffd700; }
+  .rank-num.silver { color: #c0c0c0; }
+  .rank-num.bronze { color: #cd7f32; }
+
+  .ticker {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    display: block;
+  }
+  .company-name {
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .grade-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 36px;
+    text-align: center;
+  }
+  .grade-S  { background: rgba(63,185,80,0.25); color: #3fb950; border: 1px solid #3fb950; }
+  .grade-A-plus { background: rgba(63,185,80,0.18); color: #56d364; border: 1px solid #56d364; }
+  .grade-A  { background: rgba(88,166,255,0.18); color: #58a6ff; border: 1px solid #58a6ff; }
+  .grade-B-plus { background: rgba(163,113,247,0.18); color: #a371f7; border: 1px solid #a371f7; }
+  .grade-B  { background: rgba(210,153,34,0.18); color: #d29922; border: 1px solid #d29922; }
+  .grade-C-plus { background: rgba(248,81,73,0.12); color: #ffa657; border: 1px solid #ffa657; }
+  .grade-C  { background: rgba(248,81,73,0.1); color: #f85149; border: 1px solid #f85149; }
+  .grade-D  { background: rgba(110,118,129,0.15); color: #6e7681; border: 1px solid #6e7681; }
+
+  .score-total {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .score-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .score-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    flex: 1;
+    min-width: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .sub-scores {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .sub-score {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    white-space: nowrap;
+  }
+  .sub-score .label { color: var(--dim); }
+
+  .price-block { text-align: right; }
+  .price-current { font-size: 14px; font-weight: 700; color: var(--text); }
+  .price-target { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  .upside-up { color: var(--green); font-weight: 700; }
+  .upside-down { color: var(--red); font-weight: 700; }
+  .upside-neutral { color: var(--yellow); font-weight: 700; }
+
+  .valuation-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .val-undervalue { background: rgba(63,185,80,0.2); color: #3fb950; }
+  .val-fair { background: rgba(210,153,34,0.2); color: #d29922; }
+  .val-overvalue { background: rgba(248,81,73,0.2); color: #f85149; }
+
+  .note-text {
+    font-size: 11px;
+    color: var(--text2);
+    max-width: 280px;
+    line-height: 1.5;
+  }
+
+  .layer-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-top: 3px;
+  }
+
+  /* 估值状态矩阵 */
+  .val-matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .val-matrix-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .val-matrix-card .vm-title {
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .vm-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .vm-item:last-child { border-bottom: none; }
+  .vm-ticker { color: var(--blue); font-weight: 700; }
+  .vm-upside { font-weight: 700; }
+
+  /* AI Capex可见性 */
+  .capex-vis-table { width: 100%; margin-bottom: 24px; }
+  .capex-vis-table td, .capex-vis-table th {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .capex-vis-table th { background: var(--bg3); color: var(--text2); font-size: 11px; text-transform: uppercase; }
+
+  /* 矿工转型可信度 */
+  .miner-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .miner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .miner-ticker { font-size: 16px; font-weight: 700; color: var(--blue); }
+  .miner-progress {
+    height: 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+  .miner-progress-fill { height: 100%; border-radius: 4px; }
+  .miner-stat {
+    display: inline-block;
+    margin-right: 16px;
+    font-size: 11px;
+  }
+  .miner-stat .lbl { color: var(--dim); }
+  .miner-stat .val { color: var(--text); font-weight: 600; }
+
+  .confidence-ring {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .conf-high { background: rgba(63,185,80,0.2); color: #3fb950; }
+  .conf-mid { background: rgba(210,153,34,0.2); color: #d29922; }
+  .conf-low { background: rgba(248,81,73,0.15); color: #f85149; }
+
+  .footer {
+    margin-top: 32px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg2);
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 1200px) {
+    .capex-bar { grid-template-columns: repeat(2, 1fr); }
+    .val-matrix { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-title">☁ 云服务 / AI基础设施 投资评分排行榜 · Cloud Scoring v4.1</div>
+  <div class="header-meta">
+    <span>📅 评分日期：2026-06-08</span>
+    <span>🏢 覆盖公司：13家</span>
+    <span>📊 框架：行业20% · 质量50% · 估值30%</span>
+    <span>⚡ 分层：L1超大规模云 / L2企业软件 / L3 AI原生云 / L4数字资产矿工</span>
+  </div>
+</div>
+
+<!-- ===== AI CAPEX 全景 ===== -->
+<div class="section-title">⚡ 2026年超大规模云 AI Capex 可见性</div>
+<div class="capex-bar">
+  <div class="capex-card">
+    <div class="label">全行业合计 Capex</div>
+    <div class="value">$650-700B</div>
+    <div class="sub">同比 +77%，史上最大基础设施周期</div>
+  </div>
+  <div class="capex-card">
+    <div class="label">云市场 Q1 2026 总支出</div>
+    <div class="value">$129B</div>
+    <div class="sub">单季度，YoY +35%，AWS 30% / Azure 25% / GCP 13%</div>
+  </div>
+  <div class="capex-card">
+    <div class="label">AI相关Capex占比</div>
+    <div class="value">~75%</div>
+    <div class="sub">约$450-525B专项AI基础设施，趋势：仍在加速</div>
+  </div>
+  <div class="capex-card">
+    <div class="label">当前最紧瓶颈</div>
+    <div class="value" style="color: var(--yellow);">电力/选址</div>
+    <div class="sub">GPU供应改善中，电力并网等待5-7年是主要卡点</div>
+  </div>
+</div>
+
+<table class="capex-vis-table">
+  <tr>
+    <th>公司</th>
+    <th>2026年Capex指引</th>
+    <th>AI年化营收 / 关键指标</th>
+    <th>Capex可见性判断</th>
+  </tr>
+  <tr>
+    <td><span style="color:var(--blue);font-weight:700">MSFT</span></td>
+    <td><span style="color:var(--green)">$1,900亿</span>（上调自$1,500亿）</td>
+    <td>AI年化营收 $370亿 +123%，RPO $3,150亿</td>
+    <td><span class="valuation-tag val-undervalue">极强可见性</span></td>
+  </tr>
+  <tr>
+    <td><span style="color:var(--blue);font-weight:700">GOOG/AMZN</span></td>
+    <td>GOOG: $180-190亿；AMZN: ~$200亿</td>
+    <td>GOOG AI run rate超预期，AWS AI $200亿年化</td>
+    <td><span class="valuation-tag val-undervalue">强可见性</span></td>
+  </tr>
+  <tr>
+    <td><span style="color:var(--blue);font-weight:700">ORCL</span></td>
+    <td>资本强度57%（FY2026历史新高）</td>
+    <td>RPO $5,530亿 +325%，OCI增速 +84%</td>
+    <td><span class="valuation-tag val-fair">中高可见性</span></td>
+  </tr>
+  <tr>
+    <td><span style="color:var(--blue);font-weight:700">CRWV/NBIS</span></td>
+    <td>Backlog $994亿（CRWV），$500亿（NBIS）</td>
+    <td>CRWV营收指引 $120-130亿，NBIS $30-34亿</td>
+    <td><span class="valuation-tag val-fair">高能见度但执行风险</span></td>
+  </tr>
+</table>
+
+<!-- ===== 分层标识 ===== -->
+<div class="layer-badges">
+  <span class="layer-badge l1">L1 · 超大规模云 — 最强护城河（最高S级）</span>
+  <span class="layer-badge l2">L2 · 企业软件+云转型（最高A级）</span>
+  <span class="layer-badge l3">L3 · AI原生云基础设施（最高C级）</span>
+  <span class="layer-badge l4">L4 · 数字资产矿工（最高D级；部分转型可达C级）</span>
+</div>
+
+<!-- ===== 主排行榜 ===== -->
+<div class="section-title">🏆 投资评分排行榜（综合加权 = 行业×20% + 质量×50% + 估值×30%）</div>
+
+<table class="leaderboard">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>公司</th>
+      <th>评级</th>
+      <th>综合评分</th>
+      <th>三维拆分</th>
+      <th>当前价 / 目标价</th>
+      <th>估值状态</th>
+      <th>置信度</th>
+      <th>核心判断</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- #1 MSFT -->
+    <tr>
+      <td><span class="rank-num gold">1</span></td>
+      <td>
+        <span class="ticker">MSFT</span>
+        <span class="company-name">Microsoft Corporation</span>
+        <span class="layer-tag l1">L1 · 超大规模云</span>
+      </td>
+      <td><span class="grade-badge grade-A-plus">A+</span></td>
+      <td>
+        <span class="score-total">82</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:82%;background:var(--green)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">82/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>90</span>
+          <span class="sub-score"><span class="label">质量 </span>90</span>
+          <span class="sub-score"><span class="label">估值 </span>58</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$452.00</div>
+        <div class="price-target">目标 $531 (PE法)</div>
+        <div class="upside-up">↑ +17.6%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-high">置信 1.0×</span></td>
+      <td class="note-text">Azure AI年化$370亿+123%，全球最强AI商业化路径，Capex$1900亿为主要风险变量</td>
+    </tr>
+
+    <!-- #2 GOOG -->
+    <tr>
+      <td><span class="rank-num silver">2</span></td>
+      <td>
+        <span class="ticker">GOOG</span>
+        <span class="company-name">Alphabet Inc.</span>
+        <span class="layer-tag l1">L1 · 超大规模云</span>
+      </td>
+      <td><span class="grade-badge grade-A">A</span></td>
+      <td>
+        <span class="score-total">79</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:79%;background:var(--blue)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">79/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>88</span>
+          <span class="sub-score"><span class="label">质量 </span>86</span>
+          <span class="sub-score"><span class="label">估值 </span>52</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$363.00</div>
+        <div class="price-target">目标 $385 (PE法)</div>
+        <div class="upside-up">↑ +6.1%</div>
+      </td>
+      <td><span class="valuation-tag val-fair">合理</span></td>
+      <td><span class="confidence-ring conf-high">置信 1.0×</span></td>
+      <td class="note-text">GCP Q1+63%创历史高点，估值部分反映加速预期，安全边际收窄但AI营收复利逻辑无损</td>
+    </tr>
+
+    <!-- #3 AMZN -->
+    <tr>
+      <td><span class="rank-num bronze">3</span></td>
+      <td>
+        <span class="ticker">AMZN</span>
+        <span class="company-name">Amazon.com Inc.</span>
+        <span class="layer-tag l1">L1 · 超大规模云</span>
+      </td>
+      <td><span class="grade-badge grade-A">A</span></td>
+      <td>
+        <span class="score-total">77</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:77%;background:var(--blue)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">77/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>87</span>
+          <span class="sub-score"><span class="label">质量 </span>84</span>
+          <span class="sub-score"><span class="label">估值 </span>50</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$252.00</div>
+        <div class="price-target">目标 $295 (PE法)</div>
+        <div class="upside-up">↑ +17.1%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-high">置信 1.0×</span></td>
+      <td class="note-text">AWS重新加速至+28%（15季度新高），广告利润池快速扩张，FCF受高Capex短期压制，估值合理偏低</td>
+    </tr>
+
+    <!-- #4 ORCL -->
+    <tr>
+      <td><span class="rank-num">4</span></td>
+      <td>
+        <span class="ticker">ORCL</span>
+        <span class="company-name">Oracle Corporation</span>
+        <span class="layer-tag l2" style="color:var(--purple);border-color:var(--purple);background:rgba(163,113,247,0.1)">L2 · 企业软件+云</span>
+      </td>
+      <td><span class="grade-badge grade-B-plus">B+</span></td>
+      <td>
+        <span class="score-total">67</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:67%;background:var(--purple)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">67/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>72</span>
+          <span class="sub-score"><span class="label">质量 </span>74</span>
+          <span class="sub-score"><span class="label">估值 </span>42</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$209.98</div>
+        <div class="price-target">目标 $164 (PE历史法)</div>
+        <div class="upside-down">↓ -22.0%</div>
+      </td>
+      <td><span class="valuation-tag val-overvalue">高估</span></td>
+      <td><span class="confidence-ring conf-high">置信 1.0×</span></td>
+      <td class="note-text">OCI加速+84%+RPO$5530亿超强，但模型PE法基于历史EPS显示-22%高估，FQ4财报（6月10日）是关键催化剂</td>
+    </tr>
+
+    <!-- #5 CRWV -->
+    <tr>
+      <td><span class="rank-num">5</span></td>
+      <td>
+        <span class="ticker">CRWV</span>
+        <span class="company-name">CoreWeave Inc.</span>
+        <span class="layer-tag l3" style="color:var(--yellow);border-color:var(--yellow);background:rgba(210,153,34,0.1)">L3 · AI原生云</span>
+      </td>
+      <td><span class="grade-badge grade-B">B</span></td>
+      <td>
+        <span class="score-total">62</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:62%;background:var(--yellow)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">62/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>72</span>
+          <span class="sub-score"><span class="label">质量 </span>65</span>
+          <span class="sub-score"><span class="label">估值 </span>44</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$108.00</div>
+        <div class="price-target">目标 $192 (P/S法)</div>
+        <div class="upside-up">↑ +77.3%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-mid">置信 0.85×</span></td>
+      <td class="note-text">增速最强AI云原生（backlog $994亿），模型目标$192有77%空间，但$249.5亿净债务和微软67%客户集中度是致命风险</td>
+    </tr>
+
+    <!-- #6 NBIS -->
+    <tr>
+      <td><span class="rank-num">6</span></td>
+      <td>
+        <span class="ticker">NBIS</span>
+        <span class="company-name">Nebius Group N.V.</span>
+        <span class="layer-tag l3" style="color:var(--yellow);border-color:var(--yellow);background:rgba(210,153,34,0.1)">L3 · AI原生云</span>
+      </td>
+      <td><span class="grade-badge grade-B">B</span></td>
+      <td>
+        <span class="score-total">59</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:59%;background:var(--yellow)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">59/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>68</span>
+          <span class="sub-score"><span class="label">质量 </span>63</span>
+          <span class="sub-score"><span class="label">估值 </span>38</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$221.37</div>
+        <div class="price-target">目标 $211 (PE法)</div>
+        <div class="upside-down">↓ -4.8%</div>
+      </td>
+      <td><span class="valuation-tag val-overvalue">轻微高估</span></td>
+      <td><span class="confidence-ring conf-mid">置信 0.85×</span></td>
+      <td class="note-text">欧洲唯一规模AI云，Q1增速+684%全球最高，但模型目标低于当前价，微软+Meta双客户集中度+持续稀释限制评级</td>
+    </tr>
+
+    <!-- #7 IREN -->
+    <tr>
+      <td><span class="rank-num">7</span></td>
+      <td>
+        <span class="ticker">IREN</span>
+        <span class="company-name">IREN Limited</span>
+        <span class="layer-tag l4">L4（AI转型领先）</span>
+      </td>
+      <td><span class="grade-badge grade-C-plus">C+</span></td>
+      <td>
+        <span class="score-total">55</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:55%;background:var(--orange)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">55/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>58</span>
+          <span class="sub-score"><span class="label">质量 </span>60</span>
+          <span class="sub-score"><span class="label">估值 </span>40</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$67.73</div>
+        <div class="price-target">目标 $82.5（分析师中位）</div>
+        <div class="upside-up">↑ +21.8%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">L4中AI转型最可信：微软$97亿+NVIDIA$34亿双合同，零债务最强财务，分析师目标$82.5（Cantor $99）</td>
+    </tr>
+
+    <!-- #8 WULF -->
+    <tr>
+      <td><span class="rank-num">8</span></td>
+      <td>
+        <span class="ticker">WULF</span>
+        <span class="company-name">TeraWulf Inc.</span>
+        <span class="layer-tag l4">L4（AI转型积极）</span>
+      </td>
+      <td><span class="grade-badge grade-C-plus">C+</span></td>
+      <td>
+        <span class="score-total">52</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:52%;background:var(--orange)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">52/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>55</span>
+          <span class="sub-score"><span class="label">质量 </span>55</span>
+          <span class="sub-score"><span class="label">估值 </span>42</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$24.00</div>
+        <div class="price-target">目标 $31.65 (P/S法)</div>
+        <div class="upside-up">↑ +32.0%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">核电成本$3.5分最低+$12.8B合同积压L4领先，但Q1 EBITDA接近零，HPC规模化仍在路上，Morgan Stanley目标$66.5</td>
+    </tr>
+
+    <!-- #9 CIFR -->
+    <tr>
+      <td><span class="rank-num">9</span></td>
+      <td>
+        <span class="ticker">CIFR</span>
+        <span class="company-name">Cipher Digital Inc.</span>
+        <span class="layer-tag l4">L4（AI转型进行中）</span>
+      </td>
+      <td><span class="grade-badge grade-C-plus">C+</span></td>
+      <td>
+        <span class="score-total">51</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:51%;background:var(--orange)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">51/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>54</span>
+          <span class="sub-score"><span class="label">质量 </span>52</span>
+          <span class="sub-score"><span class="label">估值 </span>44</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$22.44</div>
+        <div class="price-target">目标 $33.86 (P/S法)</div>
+        <div class="upside-up">↑ +50.9%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">$11.4B合约升级+FY2026指引$8.7亿，AWS合约8月启动计费，Morgan Stanley目标$48.5，但$3.73B债务是关键风险</td>
+    </tr>
+
+    <!-- #10 BTDR -->
+    <tr>
+      <td><span class="rank-num">10</span></td>
+      <td>
+        <span class="ticker">BTDR</span>
+        <span class="company-name">Bitdeer Technologies Group</span>
+        <span class="layer-tag l4">L4（芯片自研差异化）</span>
+      </td>
+      <td><span class="grade-badge grade-C-plus">C+</span></td>
+      <td>
+        <span class="score-total">50</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:var(--orange)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">50/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>52</span>
+          <span class="sub-score"><span class="label">质量 </span>54</span>
+          <span class="sub-score"><span class="label">估值 </span>38</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$19.35</div>
+        <div class="price-target">目标 $22.11 (PE法)</div>
+        <div class="upside-up">↑ +14.3%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">全球唯一自研矿机+AI Cloud垂直整合，SEALMINER效率领先37%，治理折价+净债务$8.52亿限制评级</td>
+    </tr>
+
+    <!-- #11 APLD -->
+    <tr>
+      <td><span class="rank-num">11</span></td>
+      <td>
+        <span class="ticker">APLD</span>
+        <span class="company-name">Applied Digital Corporation</span>
+        <span class="layer-tag l4">L4（AI转型积极）</span>
+      </td>
+      <td><span class="grade-badge grade-C">C</span></td>
+      <td>
+        <span class="score-total">49</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:49%;background:var(--red)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">49/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>52</span>
+          <span class="sub-score"><span class="label">质量 </span>52</span>
+          <span class="sub-score"><span class="label">估值 </span>38</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$39.62</div>
+        <div class="price-target">目标 $56.73 (P/S法)</div>
+        <div class="upside-up">↑ +43.2%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">Q3盈利能力持续改善（调整后净利首转正），$16B合同可见性强，但CoreWeave单一客户风险高</td>
+    </tr>
+
+    <!-- #12 CORZ -->
+    <tr>
+      <td><span class="rank-num">12</span></td>
+      <td>
+        <span class="ticker">CORZ</span>
+        <span class="company-name">Core Scientific Inc.</span>
+        <span class="layer-tag l4">L4（AI转型）</span>
+      </td>
+      <td><span class="grade-badge grade-C">C</span></td>
+      <td>
+        <span class="score-total">48</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:48%;background:var(--red)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">48/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>52</span>
+          <span class="sub-score"><span class="label">质量 </span>50</span>
+          <span class="sub-score"><span class="label">估值 </span>36</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$25.85</div>
+        <div class="price-target">目标 $21.27 (P/S法)</div>
+        <div class="upside-down">↓ -17.7%</div>
+      </td>
+      <td><span class="valuation-tag val-overvalue">高估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">$102亿合同超市值但概率加权目标$22低于当前$26，CoreWeave 95%客户集中度+$53亿总债务构成双重风险</td>
+    </tr>
+
+    <!-- #13 HIVE -->
+    <tr>
+      <td><span class="rank-num">13</span></td>
+      <td>
+        <span class="ticker">HIVE</span>
+        <span class="company-name">HIVE Digital Technologies</span>
+        <span class="layer-tag l4">L4（AI转型初期）</span>
+      </td>
+      <td><span class="grade-badge grade-C">C</span></td>
+      <td>
+        <span class="score-total">46</span>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:46%;background:var(--red)"></div></div>
+          <span style="font-size:10px;color:var(--dim)">46/100</span>
+        </div>
+      </td>
+      <td>
+        <div class="sub-scores">
+          <span class="sub-score"><span class="label">行业 </span>48</span>
+          <span class="sub-score"><span class="label">质量 </span>48</span>
+          <span class="sub-score"><span class="label">估值 </span>40</span>
+        </div>
+      </td>
+      <td class="price-block">
+        <div class="price-current">$3.76</div>
+        <div class="price-target">目标 $7.29 (P/S法)</div>
+        <div class="upside-up">↑ +93.9%</div>
+      </td>
+      <td><span class="valuation-tag val-undervalue">低估</span></td>
+      <td><span class="confidence-ring conf-low">置信 0.7×</span></td>
+      <td class="note-text">几乎零债务+100%可再生能源ESG护城河，模型目标有94%空间，但AI ARR仅$3500万，规模化是关键不确定性</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- ===== 估值状态矩阵 ===== -->
+<div class="section-title">📊 估值状态矩阵（基于 valuation_result.json 真实模型目标价）</div>
+<div class="val-matrix">
+  <div class="val-matrix-card">
+    <div class="vm-title" style="color:var(--green)">低估区域（买入机会）</div>
+    <div class="vm-item"><span class="vm-ticker">MSFT</span><span class="vm-upside upside-up">↑ +17.6% · PE法 $531</span></div>
+    <div class="vm-item"><span class="vm-ticker">AMZN</span><span class="vm-upside upside-up">↑ +17.1% · PE法 $295</span></div>
+    <div class="vm-item"><span class="vm-ticker">CRWV</span><span class="vm-upside upside-up">↑ +77.3% · P/S法 $192</span></div>
+    <div class="vm-item"><span class="vm-ticker">IREN</span><span class="vm-upside upside-up">↑ +21.8% · 分析师 $82.5</span></div>
+    <div class="vm-item"><span class="vm-ticker">WULF</span><span class="vm-upside upside-up">↑ +32.0% · P/S法 $31.65</span></div>
+    <div class="vm-item"><span class="vm-ticker">CIFR</span><span class="vm-upside upside-up">↑ +50.9% · P/S法 $33.86</span></div>
+    <div class="vm-item"><span class="vm-ticker">HIVE</span><span class="vm-upside upside-up">↑ +93.9% · P/S法 $7.29</span></div>
+    <div class="vm-item"><span class="vm-ticker">APLD</span><span class="vm-upside upside-up">↑ +43.2% · P/S法 $56.73</span></div>
+    <div class="vm-item"><span class="vm-ticker">BTDR</span><span class="vm-upside upside-up">↑ +14.3% · PE法 $22.11</span></div>
+  </div>
+  <div class="val-matrix-card">
+    <div class="vm-title" style="color:var(--yellow)">合理/接近公允估值</div>
+    <div class="vm-item"><span class="vm-ticker">GOOG</span><span class="vm-upside upside-up">↑ +6.1% · PE法 $385</span></div>
+    <div class="vm-item" style="font-size:10px;color:var(--dim);padding:8px 0">GCP加速+63%驱动EPS上修空间，估值较研报时期收窄，但AI逻辑完整</div>
+  </div>
+  <div class="val-matrix-card">
+    <div class="vm-title" style="color:var(--red)">高估/定价过充（谨慎）</div>
+    <div class="vm-item"><span class="vm-ticker">ORCL</span><span class="vm-upside upside-down">↓ -22.0% · PE历史法 $164</span></div>
+    <div class="vm-item"><span class="vm-ticker">NBIS</span><span class="vm-upside upside-down">↓ -4.8% · PE法 $211</span></div>
+    <div class="vm-item"><span class="vm-ticker">CORZ</span><span class="vm-upside upside-down">↓ -17.7% · P/S法 $21.27</span></div>
+    <div class="vm-item" style="font-size:10px;color:var(--dim);padding:8px 0">注：ORCL模型基于历史EPS，前瞻OCI+84%增速支持更高估值；CORZ有概率加权风险折价</div>
+  </div>
+</div>
+
+<!-- ===== BTC矿工AI转型可信度 ===== -->
+<div class="section-title">⛏ BTC矿工 AI转型可信度评级（L4层专项评估）</div>
+
+<div class="miner-card">
+  <div class="miner-header">
+    <div>
+      <span class="miner-ticker">IREN</span>
+      <span style="color:var(--text2);font-size:11px;margin-left:8px">L4 AI转型可信度 #1</span>
+    </div>
+    <span class="valuation-tag val-undervalue">最高可信度</span>
+  </div>
+  <div class="miner-stat"><span class="lbl">AI合同规模：</span><span class="val">微软$97亿 + NVIDIA$34亿 = $131亿（双合同）</span></div>
+  <div class="miner-stat"><span class="lbl">AI ARR目标：</span><span class="val">$44亿</span></div>
+  <div class="miner-stat"><span class="lbl">AI收入占比（Q3 FY26）：</span><span class="val">~23%（AI云$3360万/总营收$1.448亿）</span></div>
+  <div class="miner-stat"><span class="lbl">财务健康：</span><span class="val">总债务$0（转型前），现金$26亿</span></div>
+  <div class="miner-progress">
+    <div class="miner-progress-fill" style="width:70%;background:var(--green)"></div>
+  </div>
+  <div style="font-size:10px;color:var(--dim)">转型进度估算 70% · 最大AI合同规模 · 零债务 · NVIDIA战略绑定</div>
+</div>
+
+<div class="miner-card">
+  <div class="miner-header">
+    <div>
+      <span class="miner-ticker">WULF</span>
+      <span style="color:var(--text2);font-size:11px;margin-left:8px">L4 AI转型可信度 #2</span>
+    </div>
+    <span class="valuation-tag val-fair">较高可信度</span>
+  </div>
+  <div class="miner-stat"><span class="lbl">AI合同规模：</span><span class="val">$12.8B合同积压（Fluidstack $6.7B + Core42等）</span></div>
+  <div class="miner-stat"><span class="lbl">HPC收入占比（Q1 2026）：</span><span class="val">HPC ~62%（$21M/$34M）</span></div>
+  <div class="miner-stat"><span class="lbl">成本护城河：</span><span class="val">核电$3.5分/kWh，95%零碳，全行业最优</span></div>
+  <div class="miner-stat"><span class="lbl">财务健康：</span><span class="val">总债务$31亿，高杠杆风险</span></div>
+  <div class="miner-progress">
+    <div class="miner-progress-fill" style="width:55%;background:var(--yellow)"></div>
+  </div>
+  <div style="font-size:10px;color:var(--dim)">转型进度估算 55% · Q1 HPC执行低于预期 · CB-5楼栋H2 2026是关键节点</div>
+</div>
+
+<div class="miner-card">
+  <div class="miner-header">
+    <div>
+      <span class="miner-ticker">CIFR</span>
+      <span style="color:var(--text2);font-size:11px;margin-left:8px">（已更名Cipher Digital）AI转型可信度 #3</span>
+    </div>
+    <span class="valuation-tag val-fair">中等可信度</span>
+  </div>
+  <div class="miner-stat"><span class="lbl">AI合同规模：</span><span class="val">$11.4B（AWS $5.5B + Google支持Fluidstack $5.9B，升级自$9.3B）</span></div>
+  <div class="miner-stat"><span class="lbl">AI收入启动时间：</span><span class="val">AWS计费2026年8月，FY2026指引$8.7亿</span></div>
+  <div class="miner-stat"><span class="lbl">先发优势：</span><span class="val">ERCOT电力许可3.4GW，竞争对手需2-4年追赶</span></div>
+  <div class="miner-progress">
+    <div class="miner-progress-fill" style="width:40%;background:var(--orange)"></div>
+  </div>
+  <div style="font-size:10px;color:var(--dim)">转型进度估算 40% · HPC收入尚未大规模启动 · $3.73B债务高压</div>
+</div>
+
+<div class="miner-card">
+  <div class="miner-header">
+    <div>
+      <span class="miner-ticker">CORZ</span>
+      <span style="color:var(--text2);font-size:11px;margin-left:8px">AI转型可信度 #4</span>
+    </div>
+    <span class="valuation-tag val-fair">中等可信度</span>
+  </div>
+  <div class="miner-stat"><span class="lbl">AI合同规模：</span><span class="val">$102亿（12年，CoreWeave 95%+单一客户）</span></div>
+  <div class="miner-stat"><span class="lbl">AI收入占比（Q4 2025）：</span><span class="val">HPC ~39%</span></div>
+  <div class="miner-stat"><span class="lbl">电力资产：</span><span class="val">1.1GW立即可租+4.5GW管线，最强稀缺资产</span></div>
+  <div class="miner-stat"><span class="lbl">致命风险：</span><span class="val">总债务$53亿 + CoreWeave 95%集中度</span></div>
+  <div class="miner-progress">
+    <div class="miner-progress-fill" style="width:39%;background:var(--orange)"></div>
+  </div>
+  <div style="font-size:10px;color:var(--dim)">转型进度估算 39% · 电力资产最强但客户集中风险极高</div>
+</div>
+
+<div class="miner-card">
+  <div class="miner-header">
+    <div>
+      <span class="miner-ticker">APLD / HIVE / BTDR</span>
+      <span style="color:var(--text2);font-size:11px;margin-left:8px">AI转型可信度 #5-7</span>
+    </div>
+    <span class="valuation-tag val-overvalue">初期/进行中</span>
+  </div>
+  <div class="miner-stat"><span class="lbl">APLD：</span><span class="val">$16B合同（CoreWeave单一依赖），调整后盈利首转正</span></div>
+  <div class="miner-stat"><span class="lbl">BTDR：</span><span class="val">唯一自研矿机+AI Cloud，AI ARR $6900万，Tydal数据中心建设中</span></div>
+  <div class="miner-stat"><span class="lbl">HIVE：</span><span class="val">AI ARR $3500万，100%可再生，零债务，AI规模化最慢</span></div>
+  <div class="miner-progress">
+    <div class="miner-progress-fill" style="width:20%;background:var(--red)"></div>
+  </div>
+  <div style="font-size:10px;color:var(--dim)">AI收入占比均低于20%，仍处于矿业转型叙事主导阶段</div>
+</div>
+
+<!-- ===== 关键结论 ===== -->
+<div class="section-title">🎯 关键投资结论摘要</div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:18px;font-size:12px;line-height:2;margin-bottom:24px">
+  <div><span style="color:var(--green);font-weight:700">TOP PICK（评级最高）：MSFT（82分，A+）</span> — Azure AI年化$370亿+123%，Copilot商业化全球领先，当前$452较模型目标$531仍有17.6%空间，企业生态锁定最强。</div>
+  <div><span style="color:var(--blue);font-weight:700">高质量买入：GOOG（79分，A） · AMZN（77分，A）</span> — L1超大规模云三巨头俱备，GOOG Cloud+63%创历史，AMZN AWS+28%重加速；均具备5年以上复利路径。</div>
+  <div><span style="color:var(--purple);font-weight:700">云转型机会：ORCL（67分，B+）</span> — OCI+84%+RPO$5530亿极强，但当前价$210透支转型溢价（PE法显示-22%），FQ4财报（6月10日）是关键催化剂。</div>
+  <div><span style="color:var(--yellow);font-weight:700">高风险/高成长：CRWV（62分，B）· NBIS（59分，B）</span> — AI原生云增速最快，但CRWV$249.5亿净债务+微软67%集中度，NBIS持续稀释+当前价轻微高估，需严格控制仓位。</div>
+  <div><span style="color:var(--orange);font-weight:700">L4转型关注：IREN（55分，C+）#1位</span> — 微软+NVIDIA双合同验证，零债务，分析师目标$82.5（Cantor $99），是L4层最具投资价值的转型标的。</div>
+  <div><span style="color:var(--dim)">投机级别（C/C+，重度风险）：</span>WULF/CIFR/BTDR/APLD — 合同积压规模可观但执行风险高；CORZ/HIVE — 估值偏高或AI规模化最慢，需等待更多执行验证。</div>
+</div>
+
+<!-- ===== 数据来源 ===== -->
+<div class="footer">
+  <div style="color:var(--text2);margin-bottom:6px;font-weight:700">📋 数据来源说明</div>
+  <div>• 当前股价：WebSearch实时搜索（2026-06-07/08），来源包括Yahoo Finance, Robinhood, StockAnalysis, CNN Markets, CNBC</div>
+  <div>• 模型目标价：读取各公司 <code>valuation_result.json</code>（真实模型输出，禁止LLM推算）</div>
+  <div>• 研究基础：读取各公司 <code>investment_conclusion.md</code> + <code>update_20260608.md</code></div>
+  <div>• 行业数据：AWS/Azure/GCP Q1 2026财报数据，hyperscaler Capex $650-700B年度指引</div>
+  <div>• BTC矿工AI转型数据：S&P Global, Bitcoin.com, CoinDesk, NHASH (2026年Q1-Q2)</div>
+  <div style="margin-top:8px;color:var(--dim)">评分日期：2026-06-08 ｜ 框架：云服务专项投资打分系统 v1.0 ｜ L4公司置信度系数：0.7x ｜ L3公司置信度系数：0.85x ｜ L1/L2公司置信度系数：1.0x</div>
+</div>
+
+</body>
+</html>
