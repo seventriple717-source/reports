@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI算力专项投资打分 v4.1 | 20260608</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #1c2128;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #2ea043;
+    --green2: #3fb950;
+    --yellow: #d29922;
+    --orange: #f85149;
+    --red: #da3633;
+    --darkred: #6e040e;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #c9d1d9;
+    --s-color: #ffd700;
+    --a-color: #58a6ff;
+    --b-color: #d29922;
+    --c-color: #f85149;
+    --d-color: #6e040e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── 封面 ── */
+  .cover {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1a1f28 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 0 40px;
+    text-align: center;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(88,166,255,0.12);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .cover h1 span { color: var(--accent); }
+  .cover-sub {
+    color: var(--text2);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* ── 排行榜 ── */
+  .ranking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 0 20px;
+  }
+  .rank-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .rank-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .rank-no {
+    position: absolute; top: 10px; left: 12px;
+    font-size: 11px; color: var(--text2); font-weight: 600;
+  }
+  .rank-symbol { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .rank-name { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
+  .rank-score {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .grade-S { color: #ffd700; }
+  .grade-A { color: var(--accent); }
+  .grade-B { color: var(--yellow); }
+  .grade-C { color: var(--orange); }
+  .grade-D { color: var(--red); }
+  .rank-grade {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .grade-bg-S { background: rgba(255,215,0,0.15); color: #ffd700; }
+  .grade-bg-A { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .grade-bg-B { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .grade-bg-C { background: rgba(248,81,73,0.15); color: var(--orange); }
+  .grade-bg-D { background: rgba(218,54,51,0.15); color: var(--red); }
+  .rank-bars { display: flex; gap: 4px; justify-content: center; align-items: flex-end; height: 28px; }
+  .rank-bar {
+    width: 18px;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+  }
+  .bar-label { font-size: 8px; color: var(--text2); text-align: center; margin-top: 2px; }
+  .rank-upside {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .upside-pos { color: var(--green2); }
+  .upside-neg { color: var(--orange); }
+
+  /* ── Sections ── */
+  .section { margin-top: 40px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .dot {
+    width: 4px; height: 20px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ── Industry Card ── */
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 800px) { .industry-grid { grid-template-columns: 1fr; } }
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .info-card h3 {
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .kv-list { list-style: none; }
+  .kv-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    font-size: 13px;
+  }
+  .kv-list li:last-child { border-bottom: none; }
+  .kv-key { color: var(--text2); }
+  .kv-val { color: var(--text3); font-weight: 500; text-align: right; max-width: 60%; }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .tag-green { background: rgba(46,160,67,0.2); color: var(--green2); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-orange { background: rgba(248,81,73,0.15); color: var(--orange); }
+  .tag-red { background: rgba(218,54,51,0.15); color: var(--red); }
+
+  /* ── Valuation Table ── */
+  .table-wrapper { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--card2);
+    color: var(--accent);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid rgba(48,54,61,0.4);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: rgba(88,166,255,0.04); }
+  tbody td {
+    padding: 10px 12px;
+    color: var(--text3);
+    vertical-align: middle;
+  }
+  .td-symbol { font-weight: 700; color: var(--text); font-size: 14px; }
+  .price-cell { font-family: 'SF Mono', monospace; }
+  .above-target { color: var(--orange); }
+  .below-target { color: var(--green2); }
+  .far-above { color: var(--red); font-weight: 600; }
+  .pct-cell { font-family: 'SF Mono', monospace; font-size: 12px; }
+
+  /* ── Company Detail Cards ── */
+  .company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 500px) { .company-grid { grid-template-columns: 1fr; } }
+  .company-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .company-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .company-card.grade-S::before { background: linear-gradient(90deg, #ffd700, #ffaa00); }
+  .company-card.grade-A::before { background: linear-gradient(90deg, var(--accent), #79c0ff); }
+  .company-card.grade-B::before { background: linear-gradient(90deg, var(--yellow), #e3b341); }
+  .company-card.grade-C::before { background: linear-gradient(90deg, var(--orange), #f07069); }
+  .company-card.grade-D::before { background: linear-gradient(90deg, var(--red), var(--darkred)); }
+  .company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .company-ticker { font-size: 22px; font-weight: 800; color: var(--text); }
+  .company-fullname { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .company-category { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .company-score-block { text-align: right; }
+  .company-score-num { font-size: 36px; font-weight: 800; line-height: 1; }
+  .company-grade-tag {
+    display: inline-block;
+    font-size: 12px; font-weight: 700;
+    padding: 2px 10px; border-radius: 4px;
+    margin-top: 4px;
+  }
+  .score-bars {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .score-bar-item { flex: 1; }
+  .score-bar-label { font-size: 10px; color: var(--text2); margin-bottom: 3px; text-align: center; }
+  .score-bar-track {
+    height: 6px;
+    background: rgba(48,54,61,0.8);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .bar-industry { background: linear-gradient(90deg, #58a6ff, #79c0ff); }
+  .bar-quality { background: linear-gradient(90deg, #2ea043, #3fb950); }
+  .bar-valuation { background: linear-gradient(90deg, #d29922, #e3b341); }
+  .score-bar-val { font-size: 11px; color: var(--text2); text-align: center; margin-top: 2px; }
+  .price-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+    padding: 10px;
+    background: var(--card2);
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .price-item { flex: 1; min-width: 80px; }
+  .price-item-label { color: var(--text2); font-size: 10px; }
+  .price-item-val { color: var(--text3); font-weight: 600; font-family: 'SF Mono', monospace; }
+  .upside-tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 10px;
+    font-family: 'SF Mono', monospace;
+  }
+  .upside-pos-tag { background: rgba(46,160,67,0.2); color: var(--green2); }
+  .upside-neg-tag { background: rgba(248,81,73,0.15); color: var(--orange); }
+  .upside-far-neg-tag { background: rgba(218,54,51,0.2); color: var(--red); }
+  .note-box {
+    background: rgba(88,166,255,0.05);
+    border-left: 3px solid rgba(88,166,255,0.4);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-top: 12px;
+  }
+
+  /* ── Category Sections ── */
+  .cat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .cat-gpu { background: rgba(255,215,0,0.12); color: #ffd700; }
+  .cat-asic { background: rgba(88,166,255,0.12); color: var(--accent); }
+  .cat-foundry { background: rgba(121,192,255,0.12); color: #79c0ff; }
+  .cat-ip { background: rgba(163,113,247,0.12); color: #a371f7; }
+  .cat-other { background: rgba(139,148,158,0.12); color: var(--text2); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 60px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text2);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .footer span { color: var(--accent); }
+
+  /* ── Score pill ── */
+  .dim-score {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    line-height: 28px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .dim-5 { background: #2ea043; color: #fff; }
+  .dim-4 { background: #3fb950; color: #fff; }
+  .dim-3 { background: #d29922; color: #fff; }
+  .dim-2 { background: #f85149; color: #fff; }
+  .dim-1 { background: #da3633; color: #fff; }
+  .dim-0 { background: #6e040e; color: #fff; }
+
+  .alert-box {
+    background: rgba(248,81,73,0.08);
+    border: 1px solid rgba(248,81,73,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #f07069;
+  }
+  .highlight-box {
+    background: rgba(46,160,67,0.06);
+    border: 1px solid rgba(46,160,67,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--green2);
+  }
+
+  /* phase tags */
+  .phase-badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+  }
+  .phase-boom { background: rgba(255,215,0,0.15); color: #ffd700; }
+  .phase-grow { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .phase-split { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .phase-mature { background: rgba(139,148,158,0.15); color: var(--text2); }
+</style>
+</head>
+<body>
+
+<!-- ===== 封面 ===== -->
+<div class="cover">
+  <div class="cover-badge">AI 算力专项投资打分 · v4.1</div>
+  <h1>AI 算力赛道 <span>11 家公司</span> 综合评分</h1>
+  <div class="cover-sub">数据截至 2026-06-08 · 基于研究结论 + 行业重扫描 + v4.1框架打分</div>
+
+  <div class="ranking-grid">
+
+    <!-- NVDA -->
+    <div class="rank-card">
+      <div class="rank-no">#1</div>
+      <div class="rank-symbol">NVDA</div>
+      <div class="rank-name">NVIDIA Corporation</div>
+      <div class="rank-score grade-S">82.1</div>
+      <div class="rank-grade grade-bg-S">S 级</div>
+      <div class="rank-upside upside-pos">↑ +21.0% vs PE目标$247</div>
+    </div>
+
+    <!-- AVGO -->
+    <div class="rank-card">
+      <div class="rank-no">#2</div>
+      <div class="rank-symbol">AVGO</div>
+      <div class="rank-name">Broadcom Inc.</div>
+      <div class="rank-score grade-S">80.5</div>
+      <div class="rank-grade grade-bg-S">S 级</div>
+      <div class="rank-upside upside-pos">↑ +18.4% vs EV目标$458</div>
+    </div>
+
+    <!-- TSM -->
+    <div class="rank-card">
+      <div class="rank-no">#3</div>
+      <div class="rank-symbol">TSM</div>
+      <div class="rank-name">台积电</div>
+      <div class="rank-score grade-A">78.2</div>
+      <div class="rank-grade grade-bg-A">A 级</div>
+      <div class="rank-upside upside-pos">↑ +6.3% vs PE目标$441</div>
+    </div>
+
+    <!-- MRVL -->
+    <div class="rank-card">
+      <div class="rank-no">#4</div>
+      <div class="rank-symbol">MRVL</div>
+      <div class="rank-name">Marvell Technology</div>
+      <div class="rank-score grade-A">74.8</div>
+      <div class="rank-grade grade-bg-A">A 级</div>
+      <div class="rank-upside upside-neg">↓ -29.5% vs EV目标$185</div>
+    </div>
+
+    <!-- AMD -->
+    <div class="rank-card">
+      <div class="rank-no">#5</div>
+      <div class="rank-symbol">AMD</div>
+      <div class="rank-name">Advanced Micro Devices</div>
+      <div class="rank-score grade-A">72.5</div>
+      <div class="rank-grade grade-bg-A">A 级</div>
+      <div class="rank-upside upside-neg">↓ -48.2% vs EV目标$218</div>
+    </div>
+
+    <!-- ARM -->
+    <div class="rank-card">
+      <div class="rank-no">#6</div>
+      <div class="rank-symbol">ARM</div>
+      <div class="rank-name">Arm Holdings</div>
+      <div class="rank-score grade-B">64.3</div>
+      <div class="rank-grade grade-bg-B">B 级</div>
+      <div class="rank-upside upside-neg">↓ -64.2% vs P/S目标$141</div>
+    </div>
+
+    <!-- QCOM -->
+    <div class="rank-card">
+      <div class="rank-no">#7</div>
+      <div class="rank-symbol">QCOM</div>
+      <div class="rank-name">Qualcomm</div>
+      <div class="rank-score grade-B">65.8</div>
+      <div class="rank-grade grade-bg-B">B 级</div>
+      <div class="rank-upside upside-pos">↑ +2.8% vs PE目标$218</div>
+    </div>
+
+    <!-- LSCC -->
+    <div class="rank-card">
+      <div class="rank-no">#8</div>
+      <div class="rank-symbol">LSCC</div>
+      <div class="rank-name">Lattice Semiconductor</div>
+      <div class="rank-score grade-B">63.4</div>
+      <div class="rank-grade grade-bg-B">B 级</div>
+      <div class="rank-upside upside-neg">↓ -54.9% vs DCF目标$68</div>
+    </div>
+
+    <!-- INTC -->
+    <div class="rank-card">
+      <div class="rank-no">#9</div>
+      <div class="rank-symbol">INTC</div>
+      <div class="rank-name">Intel Corporation</div>
+      <div class="rank-score grade-C">56.8</div>
+      <div class="rank-grade grade-bg-C">C 级</div>
+      <div class="rank-upside upside-neg">↓ -78.1% vs DCF目标$27</div>
+    </div>
+
+    <!-- CBRS -->
+    <div class="rank-card">
+      <div class="rank-no">#10</div>
+      <div class="rank-symbol">CBRS</div>
+      <div class="rank-name">Cerebras Systems</div>
+      <div class="rank-score grade-C">54.6</div>
+      <div class="rank-grade grade-bg-C">C 级</div>
+      <div class="rank-upside upside-neg">↓ -65.2% vs PE目标$70</div>
+    </div>
+
+    <!-- UMC -->
+    <div class="rank-card">
+      <div class="rank-no">#11</div>
+      <div class="rank-symbol">UMC</div>
+      <div class="rank-name">联华电子</div>
+      <div class="rank-score grade-D">42.1</div>
+      <div class="rank-grade grade-bg-D">D 级</div>
+      <div class="rank-upside upside-neg">↓ -50.3% vs PE目标$9.79</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== 行业背景 ===== -->
+<div class="section">
+  <div class="section-title"><div class="dot"></div>AI 算力行业全景 · 2026年最新格局</div>
+  <div class="industry-grid">
+
+    <div class="info-card">
+      <h3>超大规模客户 Capex 可见性</h3>
+      <ul class="kv-list">
+        <li><span class="kv-key">Amazon（AWS）</span><span class="kv-val">$200B（YoY +60%）</span></li>
+        <li><span class="kv-key">Google（Alphabet）</span><span class="kv-val">$175-190B（YoY +90%+）</span></li>
+        <li><span class="kv-key">Microsoft</span><span class="kv-val">$80B FY2026</span></li>
+        <li><span class="kv-key">Meta</span><span class="kv-val">$125-145B（上调）</span></li>
+        <li><span class="kv-key">四大合计</span><span class="kv-val tag tag-green">$700-725B（YoY +77%）</span></li>
+        <li><span class="kv-key">AI基础设施占比</span><span class="kv-val">约75%（~$540B）</span></li>
+        <li><span class="kv-key">综合判断</span><span class="kv-val tag tag-green">Capex仍在加速 ✓</span></li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>GPU vs 定制ASIC 竞争格局</h3>
+      <ul class="kv-list">
+        <li><span class="kv-key">NVIDIA AI加速器份额</span><span class="kv-val">~80%（训练主导）</span></li>
+        <li><span class="kv-key">定制ASIC出货增速</span><span class="kv-val tag tag-blue">+44.6%（vs GPU +16.1%）</span></li>
+        <li><span class="kv-key">ASIC在推理场景TCO优势</span><span class="kv-val">约65%</span></li>
+        <li><span class="kv-key">AVGO + MRVL ASIC设计份额</span><span class="kv-val">~95%</span></li>
+        <li><span class="kv-key">AVGO AI芯片积压订单</span><span class="kv-val">$73B</span></li>
+        <li><span class="kv-key">AVGO FY2027目标</span><span class="kv-val tag tag-green">$100B AI芯片收入</span></li>
+        <li><span class="kv-key">市场格局判断</span><span class="kv-val">双轨并行（GPU训练+ASIC推理）</span></li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>TSMC 供应链状态（卡点扫描）</h3>
+      <ul class="kv-list">
+        <li><span class="kv-key">TSMC 3nm 利用率</span><span class="kv-val tag tag-orange">100%，需求3x供给</span></li>
+        <li><span class="kv-key">N2 量产进度</span><span class="kv-val tag tag-green">已量产，主客户全锁产能</span></li>
+        <li><span class="kv-key">CoWoS 月产能</span><span class="kv-val">35K→130K片（+271%到年底）</span></li>
+        <li><span class="kv-key">CoWoS 2026供给状态</span><span class="kv-val tag tag-orange">已基本售罄</span></li>
+        <li><span class="kv-key">最大封装尺寸</span><span class="kv-val">5.5 reticle，良率>98%</span></li>
+        <li><span class="kv-key">A16（HPC优化）</span><span class="kv-val">量产时间：2026 H2</span></li>
+        <li><span class="kv-key">瓶颈预计缓解</span><span class="kv-val">2027年后CoWoS趋于充裕</span></li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>AI 产业当前发展阶段判断</h3>
+      <ul class="kv-list">
+        <li><span class="kv-key">当前主要阶段</span><span class="kv-val tag tag-green">推理与应用爆发期</span></li>
+        <li><span class="kv-key">推理需求占比</span><span class="kv-val">推理占比已超训练（2/3）</span></li>
+        <li><span class="kv-key">AI市场2026E</span><span class="kv-val">$200B+（AI加速器）</span></li>
+        <li><span class="kv-key">AI代理（Agent）</span><span class="kv-val">企业部署加速，CPU/ASIC新需求</span></li>
+        <li><span class="kv-key">第一梯队受益</span><span class="kv-val">GPU/ASIC、先进代工、先进封装</span></li>
+        <li><span class="kv-key">第二梯队受益</span><span class="kv-val">IP授权(ARM)、AI服务器配件</span></li>
+        <li><span class="kv-key">面临风险</span><span class="kv-val">成熟代工（中国竞争）、传统CPU</span></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 估值状态总览表 ===== -->
+<div class="section">
+  <div class="section-title"><div class="dot"></div>估值状态总览 · 当前价 vs 模型目标 vs 分析师目标</div>
+
+  <div class="alert-box">
+    ⚠ 重要说明：模型目标价均来自 valuation_result.json 的 primary_target（基于研究建立时的当前价格计算）。当前价基于 update_20260608.md 最新数据。上行/下行空间反映自模型基准以来的变化，负值代表股价已超越模型目标价。
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>代码</th>
+          <th>公司</th>
+          <th>分类</th>
+          <th>当前价($)</th>
+          <th>模型目标($)</th>
+          <th>估值方法</th>
+          <th>上行空间</th>
+          <th>分析师目标($)</th>
+          <th>vs分析师</th>
+          <th>评级</th>
+          <th>总分</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-symbol">NVDA</td>
+          <td>NVIDIA</td>
+          <td><span class="tag tag-yellow">GPU巨头</span></td>
+          <td class="price-cell below-target">$204</td>
+          <td class="price-cell">$246.8</td>
+          <td>PE法</td>
+          <td class="pct-cell upside-pos">+21.0%</td>
+          <td class="price-cell">$298.1</td>
+          <td class="pct-cell upside-pos">+46.1%</td>
+          <td><span class="rank-grade grade-bg-S">S</span></td>
+          <td><strong style="color:#ffd700">82.1</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">AVGO</td>
+          <td>Broadcom</td>
+          <td><span class="tag tag-blue">定制ASIC</span></td>
+          <td class="price-cell below-target">$387</td>
+          <td class="price-cell">$458.2</td>
+          <td>EV/EBITDA</td>
+          <td class="pct-cell upside-pos">+18.4%</td>
+          <td class="price-cell">$472.0</td>
+          <td class="pct-cell upside-pos">+21.9%</td>
+          <td><span class="rank-grade grade-bg-S">S</span></td>
+          <td><strong style="color:#ffd700">80.5</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">TSM</td>
+          <td>台积电</td>
+          <td><span class="tag tag-green">代工</span></td>
+          <td class="price-cell below-target">$415</td>
+          <td class="price-cell">$441.1</td>
+          <td>PE法</td>
+          <td class="pct-cell upside-pos">+6.3%</td>
+          <td class="price-cell">$467.8</td>
+          <td class="pct-cell upside-pos">+12.7%</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">78.2</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">MRVL</td>
+          <td>Marvell</td>
+          <td><span class="tag tag-blue">定制ASIC</span></td>
+          <td class="price-cell above-target">$263</td>
+          <td class="price-cell">$185.4</td>
+          <td>EV/EBITDA</td>
+          <td class="pct-cell upside-neg">-29.5%</td>
+          <td class="price-cell">$222.6</td>
+          <td class="pct-cell upside-neg">-15.4%</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">74.8</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">AMD</td>
+          <td>Advanced Micro Devices</td>
+          <td><span class="tag tag-yellow">GPU巨头</span></td>
+          <td class="price-cell far-above">$421</td>
+          <td class="price-cell">$217.9</td>
+          <td>EV/EBITDA</td>
+          <td class="pct-cell far-above">-48.2%</td>
+          <td class="price-cell">$289.6</td>
+          <td class="pct-cell upside-neg">-31.2%</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">72.5</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">QCOM</td>
+          <td>Qualcomm</td>
+          <td><span class="tag tag-orange">其他</span></td>
+          <td class="price-cell below-target">$212</td>
+          <td class="price-cell">$217.9</td>
+          <td>PE法</td>
+          <td class="pct-cell upside-pos">+2.8%</td>
+          <td class="price-cell">$177.8</td>
+          <td class="pct-cell upside-neg">-16.1%</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">65.8</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">ARM</td>
+          <td>Arm Holdings</td>
+          <td><span class="tag tag-green">IP授权</span></td>
+          <td class="price-cell far-above">$393</td>
+          <td class="price-cell">$140.8</td>
+          <td>P/S法</td>
+          <td class="pct-cell far-above">-64.2%</td>
+          <td class="price-cell">$241.2</td>
+          <td class="pct-cell upside-neg">-38.6%</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">64.3</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">LSCC</td>
+          <td>Lattice Semiconductor</td>
+          <td><span class="tag tag-orange">其他</span></td>
+          <td class="price-cell far-above">$150</td>
+          <td class="price-cell">$67.6</td>
+          <td>DCF法</td>
+          <td class="pct-cell far-above">-54.9%</td>
+          <td class="price-cell">$146.9</td>
+          <td class="pct-cell upside-neg">-2.1%</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">63.4</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">INTC</td>
+          <td>Intel</td>
+          <td><span class="tag tag-orange">其他</span></td>
+          <td class="price-cell far-above">$125</td>
+          <td class="price-cell">$27.4</td>
+          <td>DCF法</td>
+          <td class="pct-cell far-above">-78.1%</td>
+          <td class="price-cell">$87.8</td>
+          <td class="pct-cell upside-neg">-29.8%</td>
+          <td><span class="rank-grade grade-bg-C">C</span></td>
+          <td><strong style="color:var(--orange)">56.8</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">CBRS</td>
+          <td>Cerebras Systems</td>
+          <td><span class="tag tag-yellow">AI推理</span></td>
+          <td class="price-cell far-above">$200</td>
+          <td class="price-cell">$69.7</td>
+          <td>P/S法</td>
+          <td class="pct-cell far-above">-65.2%</td>
+          <td class="price-cell">$260.0</td>
+          <td class="pct-cell upside-pos">+30.0%</td>
+          <td><span class="rank-grade grade-bg-C">C</span></td>
+          <td><strong style="color:var(--orange)">54.6</strong></td>
+        </tr>
+        <tr>
+          <td class="td-symbol">UMC</td>
+          <td>联华电子</td>
+          <td><span class="tag tag-orange">代工</span></td>
+          <td class="price-cell far-above">$19.7</td>
+          <td class="price-cell">$9.79</td>
+          <td>PE法</td>
+          <td class="pct-cell far-above">-50.3%</td>
+          <td class="price-cell">$10.4</td>
+          <td class="pct-cell upside-neg">-47.2%</td>
+          <td><span class="rank-grade grade-bg-D">D</span></td>
+          <td><strong style="color:var(--red)">42.1</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 分类展示：GPU巨头 ===== -->
+<div class="section">
+  <div class="section-title"><div class="dot"></div>公司详细判断</div>
+
+  <!-- GPU巨头 -->
+  <div class="cat-label cat-gpu">▲ GPU 巨头 / 高算力主平台</div>
+  <div class="company-grid">
+
+    <!-- NVDA -->
+    <div class="company-card grade-S">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">NVDA</div>
+          <div class="company-fullname">NVIDIA Corporation</div>
+          <div class="company-category">GPU/ASIC算力 · 直接算力型 · 早期爆发阶段 <span class="phase-badge phase-boom">早期爆发</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-S">82.1</div>
+          <div class="company-grade-tag grade-bg-S">S 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:91%"></div></div>
+          <div class="score-bar-val">91 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:88%"></div></div>
+          <div class="score-bar-val">88 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:62%"></div></div>
+          <div class="score-bar-val">62 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$204</div></div>
+        <div class="price-item"><div class="price-item-label">PE模型目标</div><div class="price-item-val">$246.8</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$298.1</div></div>
+        <div class="price-item"><div class="price-item-label">上行空间</div><div class="price-item-val"><span class="upside-tag upside-pos-tag">+21.0%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Q1 FY2027营收$81.6B超预期（+85% YoY），Q2指引$91B再次超出市场预期，Vera Rubin已提前进入量产。中国市场营收虽被彻底剥离（Q2指引明确排除），但非中国需求加速体现超强韧性。CUDA软件生态350万+开发者是不可复制的护城河。$800亿回购+股息大幅提升，FCF充裕信号明确。当前$204处于PE目标$247与DCF中枢$192之间，是理想建仓区间。
+      </div>
+    </div>
+
+    <!-- AMD -->
+    <div class="company-card grade-A">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">AMD</div>
+          <div class="company-fullname">Advanced Micro Devices</div>
+          <div class="company-category">GPU/ASIC+CPU · 多业务分拆 <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-A">72.5</div>
+          <div class="company-grade-tag grade-bg-A">A 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:82%"></div></div>
+          <div class="score-bar-val">82 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:82%"></div></div>
+          <div class="score-bar-val">82 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:45%"></div></div>
+          <div class="score-bar-val">45 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$421</div></div>
+        <div class="price-item"><div class="price-item-label">EV目标</div><div class="price-item-val">$217.9</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$289.6</div></div>
+        <div class="price-item"><div class="price-item-label">透支程度</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-48.2%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Q1数据中心$5.8B（+57% YoY）大幅超预期，Meta $600亿+OpenAI战略合同提供多年期需求能见度，MI450 Helios 2026 H2出货是最关键催化剂。基本面完全兑现并超越原研报预期。然而$421已超EV/EBITDA模型目标$218约93%，安全边际几乎为零。原建仓投资者建议分批减仓锁利；新投资者需审慎等待回调。
+      </div>
+    </div>
+
+    <!-- CBRS -->
+    <div class="company-card grade-C">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">CBRS</div>
+          <div class="company-fullname">Cerebras Systems（近期IPO）</div>
+          <div class="company-category">AI推理加速芯片 · Pre-profit <span class="phase-badge phase-boom">早期爆发</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-C">54.6</div>
+          <div class="company-grade-tag grade-bg-C">C 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:74%"></div></div>
+          <div class="score-bar-val">74 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:58%"></div></div>
+          <div class="score-bar-val">58 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:28%"></div></div>
+          <div class="score-bar-val">28 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$200</div></div>
+        <div class="price-item"><div class="price-item-label">PE目标</div><div class="price-item-val">$69.7</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$260.0</div></div>
+        <div class="price-item"><div class="price-item-label">PE法透支</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-65.2%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>IPO后从$311回落至约$200，OpenAI $200亿10年合同+$246亿RPO提供强收入可见性，WSE-3推理速度快20x。但MBZUAI集中度仍达62%，Q3 contra-revenue会计冲击将导致首个季报营收骤降触发回调至$165-190，届时是最佳买入窗口。PE目标$69.7 vs 当前$200的差距反映pre-profit公司的高期权溢价，用分析师目标$260作为买入锚更合理，等待$180-210。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 定制ASIC -->
+  <div class="cat-label cat-asic" style="margin-top:24px">▲ 定制 ASIC / AI 专用芯片设计</div>
+  <div class="company-grid">
+
+    <!-- AVGO -->
+    <div class="company-card grade-S">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">AVGO</div>
+          <div class="company-fullname">Broadcom Inc.</div>
+          <div class="company-category">定制ASIC+基础设施软件 · 直接算力型 <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-S">80.5</div>
+          <div class="company-grade-tag grade-bg-S">S 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:88%"></div></div>
+          <div class="score-bar-val">88 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:85%"></div></div>
+          <div class="score-bar-val">85 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:63%"></div></div>
+          <div class="score-bar-val">63 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$387</div></div>
+        <div class="price-item"><div class="price-item-label">EV目标</div><div class="price-item-val">$458.2</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$472.0</div></div>
+        <div class="price-item"><div class="price-item-label">上行空间</div><div class="price-item-val"><span class="upside-tag upside-pos-tag">+18.4%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Q2 FY2026 AI芯片$10.8B（+143% YoY），全年指引从$40B大幅上调至$56B，Q3 AI指引$16B（YoY +200%+）。VMware软件Q3指引YoY+31%，双轮驱动叙事重建。从历史高$495回调22%至$387，已回到EV/EBITDA主方法目标价$458的合理进场区间，是11家公司中同时具备高基本面质量+合理估值安全边际的最优标的之一。定制ASIC市场约70%份额护城河极深。
+      </div>
+    </div>
+
+    <!-- MRVL -->
+    <div class="company-card grade-A">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">MRVL</div>
+          <div class="company-fullname">Marvell Technology</div>
+          <div class="company-category">定制XPU/ASIC+AI网络 · 直接算力型 <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-A">74.8</div>
+          <div class="company-grade-tag grade-bg-A">A 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:86%"></div></div>
+          <div class="score-bar-val">86 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:80%"></div></div>
+          <div class="score-bar-val">80 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:52%"></div></div>
+          <div class="score-bar-val">52 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$263</div></div>
+        <div class="price-item"><div class="price-item-label">EV目标</div><div class="price-item-val">$185.4</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$222.6*</div></div>
+        <div class="price-item"><div class="price-item-label">vs模型目标</div><div class="price-item-val"><span class="upside-tag upside-neg-tag">-29.5%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>FY2027全年指引$11.5B确认，FY2028目标$16.5B首次正式确认，管理层表述"AI预订量异常大规模增长"。NVIDIA $20亿战略投资+NVLink Fusion合作将定制XPU市场扩展至NVIDIA生态。S&P500纳入提供被动资金支撑。然而$263已超EV/EBITDA目标$185约42%，原分析师目标$222.6也低于当前股价。需基于FY2028 EBITDA重新定价（约$295-315），这解释了高于模型的股价。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 代工 -->
+  <div class="cat-label cat-foundry" style="margin-top:24px">▲ 晶圆代工</div>
+  <div class="company-grid">
+
+    <!-- TSM -->
+    <div class="company-card grade-A">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">TSM</div>
+          <div class="company-fullname">台积电（TSMC）</div>
+          <div class="company-category">先进代工+先进封装 · 瓶颈解决型 <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-A">78.2</div>
+          <div class="company-grade-tag grade-bg-A">A 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:87%"></div></div>
+          <div class="score-bar-val">87 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:84%"></div></div>
+          <div class="score-bar-val">84 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:57%"></div></div>
+          <div class="score-bar-val">57 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$415</div></div>
+        <div class="price-item"><div class="price-item-label">PE目标</div><div class="price-item-val">$441.1</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$467.8</div></div>
+        <div class="price-item"><div class="price-item-label">上行空间</div><div class="price-item-val"><span class="upside-tag upside-pos-tag">+6.3%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Q1 2026毛利率66.2%历史新高（超指引上限1.2ppt），净利润YoY+58.3%，N2量产所有主要客户（NVDA/AMD/Apple/Google）全部锁产能，CoWoS月产能扩张至130K片（+271%），CoWoS产能2026年全年售罄。唯一不可替代的AI芯片制造+先进封装平台，全球晶圆代工70.4%市占率。台海地缘风险是永久存在的尾部折价因素，建议单股仓位5-8%上限。
+      </div>
+    </div>
+
+    <!-- UMC -->
+    <div class="company-card grade-D">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">UMC</div>
+          <div class="company-fullname">联华电子</div>
+          <div class="company-category">成熟制程代工（28-90nm） · 间接受益型 <span class="phase-badge phase-mature">成熟整合</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-D">42.1</div>
+          <div class="company-grade-tag grade-bg-D">D 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:52%"></div></div>
+          <div class="score-bar-val">52 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:55%"></div></div>
+          <div class="score-bar-val">55 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:11%"></div></div>
+          <div class="score-bar-val">11 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$19.7</div></div>
+        <div class="price-item"><div class="price-item-label">PE目标</div><div class="price-item-val">$9.79</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$10.4</div></div>
+        <div class="price-item"><div class="price-item-label">透支程度</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-50.3%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>成熟节点需求温和复苏，Q2产能利用率升至低80%，22nm营收占比持续提升（14%→目标20%+），FCF大幅改善，股东回购授权213亿新台币。然而当前$19.7较PE目标$9.79溢价101%、较所有估值情景均严重透支。中国SMIC/华虹补贴性扩产带来系统性价格压力是核心结构风险。硅光子布局是中长期隐含期权。合理建仓区间$10-12。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- IP授权 -->
+  <div class="cat-label cat-ip" style="margin-top:24px">▲ IP 授权</div>
+  <div class="company-grid">
+
+    <!-- ARM -->
+    <div class="company-card grade-B">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">ARM</div>
+          <div class="company-fullname">Arm Holdings plc</div>
+          <div class="company-category">CPU IP授权 · 间接受益型（版税飞轮） <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-B">64.3</div>
+          <div class="company-grade-tag grade-bg-B">B 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:83%"></div></div>
+          <div class="score-bar-val">83 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:79%"></div></div>
+          <div class="score-bar-val">79 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:21%"></div></div>
+          <div class="score-bar-val">21 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$393</div></div>
+        <div class="price-item"><div class="price-item-label">P/S目标</div><div class="price-item-val">$140.8</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$241.2</div></div>
+        <div class="price-item"><div class="price-item-label">泡沫程度</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-64.2%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>FY2026全年$4.92B（+23% YoY）确认，数据中心版税Q4 YoY翻倍，AGI CPU平台Oracle/ByteDance加入，累计需求超$200亿。基本面极强无疑。但从$132飙升至$393（+197%），P/S已达85-90x TTM，接近历史峰值泡沫区。FY2027指引+20%（约$5.9B）略低于$6B的加仓阈值，SoftBank 86.7%持仓减持悬顶。分析师均值仅$241，与当前$393偏离38%。极高基本面+极高估值的组合，不建议追高，等待$115-125的买入区间。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 其他 -->
+  <div class="cat-label cat-other" style="margin-top:24px">▲ 其他（端侧AI / AI PC / 转型期 / FPGA）</div>
+  <div class="company-grid">
+
+    <!-- QCOM -->
+    <div class="company-card grade-B">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">QCOM</div>
+          <div class="company-fullname">Qualcomm</div>
+          <div class="company-category">手机SoC+汽车+数据中心新业务 · 多业务 <span class="phase-badge phase-split">开始分化</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-B">65.8</div>
+          <div class="company-grade-tag grade-bg-B">B 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:68%"></div></div>
+          <div class="score-bar-val">68 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:74%"></div></div>
+          <div class="score-bar-val">74 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:48%"></div></div>
+          <div class="score-bar-val">48 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$212</div></div>
+        <div class="price-item"><div class="price-item-label">PE目标</div><div class="price-item-val">$217.9</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$177.8</div></div>
+        <div class="price-item"><div class="price-item-label">上行空间</div><div class="price-item-val"><span class="upside-tag upside-pos-tag">+2.8%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>汽车$1.3B创纪录（+38%），Snapdragon Digital Chassis嵌入度超预期，FY2028目标$9B+路径清晰。Dragonfly AI200/AI250正式发布+Humain/ByteDance订单落地，"数据中心期权"从叙事变现实。Apple 2027完全退出（损失$5.7-5.9B/年）路径确认，Q3指引$9.6B偏软。PE目标$217.9基本与当前持平，6月24日投资者日是近期核心催化剂，若Dragonfly规格超预期可上调至$265-280。
+      </div>
+    </div>
+
+    <!-- LSCC -->
+    <div class="company-card grade-B">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">LSCC</div>
+          <div class="company-fullname">Lattice Semiconductor</div>
+          <div class="company-category">AI服务器安全芯片+FPGA · 间接受益型 <span class="phase-badge phase-grow">快速成长</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-B">63.4</div>
+          <div class="company-grade-tag grade-bg-B">B 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:72%"></div></div>
+          <div class="score-bar-val">72 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:70%"></div></div>
+          <div class="score-bar-val">70 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:38%"></div></div>
+          <div class="score-bar-val">38 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$150</div></div>
+        <div class="price-item"><div class="price-item-label">DCF目标</div><div class="price-item-val">$67.6</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$146.9</div></div>
+        <div class="price-item"><div class="price-item-label">透支程度</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-54.9%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Q1营收$170.9M超预期（+42% YoY），AI服务器BMC/RoT（Sentry平台）需求爆发，计算与通信营收占比达62%，Q2指引$185M（+50% YoY）强劲。AMI $1.65B收购Q3交割将TAM从$6B扩至$12B。然而当前$150较DCF基准$67.6溢价122%，连DCF牛市$134.2也已低于当前价，仅分析师目标$146.9基本持平。高估值下AMI整合执行风险需要严格监控，理想建仓区间$125-135。
+      </div>
+    </div>
+
+    <!-- INTC -->
+    <div class="company-card grade-C">
+      <div class="company-header">
+        <div>
+          <div class="company-ticker">INTC</div>
+          <div class="company-fullname">Intel Corporation</div>
+          <div class="company-category">DCAI CPU+代工IFS · 应用使能型（转型期） <span class="phase-badge phase-split">开始分化</span></div>
+        </div>
+        <div class="company-score-block">
+          <div class="company-score-num grade-C">56.8</div>
+          <div class="company-grade-tag grade-bg-C">C 级</div>
+        </div>
+      </div>
+      <div class="score-bars">
+        <div class="score-bar-item">
+          <div class="score-bar-label">行业</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-industry" style="width:65%"></div></div>
+          <div class="score-bar-val">65 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">质量</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-quality" style="width:62%"></div></div>
+          <div class="score-bar-val">62 / 100</div>
+        </div>
+        <div class="score-bar-item">
+          <div class="score-bar-label">估值</div>
+          <div class="score-bar-track"><div class="score-bar-fill bar-valuation" style="width:36%"></div></div>
+          <div class="score-bar-val">36 / 100</div>
+        </div>
+      </div>
+      <div class="price-row">
+        <div class="price-item"><div class="price-item-label">当前价</div><div class="price-item-val">$125</div></div>
+        <div class="price-item"><div class="price-item-label">DCF目标</div><div class="price-item-val">$27.4</div></div>
+        <div class="price-item"><div class="price-item-label">分析师目标</div><div class="price-item-val">$87.8</div></div>
+        <div class="price-item"><div class="price-item-label">期权透支</div><div class="price-item-val"><span class="upside-tag upside-far-neg-tag">-78.1%</span></div></div>
+      </div>
+      <div class="note-box">
+        <strong>核心判断：</strong>Lip-Bu Tan turnaround初步验证（Q1非GAAP EPS $0.29大幅超预期），18A良率65-75%进入商业可行门槛，苹果代工协议+NVIDIA $50亿入股，代工积压突破$150亿，Q2将GAAP首次盈利。然而DCF基准$27 vs 当前$125，外部代工仅$174M/季，18A产品毛利率低于平均。市场定价的是三个期权（18A商业化/DCAI持续复苏/战略资产溢价），任何一个松动都将触发大幅回调。不建议当前区间新建仓，等待回调至$90-100。
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===== 投资操作建议汇总 ===== -->
+<div class="section">
+  <div class="section-title"><div class="dot"></div>当前操作建议汇总</div>
+
+  <div class="highlight-box">
+    S/A 级且估值仍有安全边际（当前价低于或接近模型目标价）：NVDA（+21%）、AVGO（+18.4%）、TSM（+6.3%） — 可建仓或持有
+  </div>
+  <div class="alert-box">
+    A 级但估值严重透支（股价大幅超越模型目标）：AMD（-48%）、MRVL（-30%）— 基本面强，但已持仓者考虑部分锁利，新投资者等待回调
+  </div>
+  <div class="alert-box">
+    B 级（高估值 + 中等基本面）：ARM（-64%泡沫）、LSCC（-55%）— 等待估值回归，不追高
+  </div>
+  <div class="alert-box">
+    C/D 级（透支或基本面弱）：INTC（turnaround期权过度定价）、CBRS（IPO蜜月期，等待Q3回调买入）、UMC（严重透支，移出候选池）
+  </div>
+
+  <div class="table-wrapper" style="margin-top:16px">
+    <table>
+      <thead>
+        <tr>
+          <th>代码</th>
+          <th>评级</th>
+          <th>总分</th>
+          <th>当前操作建议</th>
+          <th>理想建仓/加仓价位</th>
+          <th>近期核心催化剂</th>
+          <th>最大风险</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-symbol">NVDA</td>
+          <td><span class="rank-grade grade-bg-S">S</span></td>
+          <td><strong style="color:#ffd700">82.1</strong></td>
+          <td>买入（核心持仓）</td>
+          <td>$180-210（当前合理）</td>
+          <td>Q3指引（8月）是否维持$90B+</td>
+          <td>中国市场永久损失年化$20-30B</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">AVGO</td>
+          <td><span class="rank-grade grade-bg-S">S</span></td>
+          <td><strong style="color:#ffd700">80.5</strong></td>
+          <td>买入（从$495高点回调后）</td>
+          <td>$360-400（当前合理）</td>
+          <td>Q3财报（9月）AI$16B兑现</td>
+          <td>超大客户削减XPU订单</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">TSM</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">78.2</strong></td>
+          <td>买入/持有（地缘折价下）</td>
+          <td>$390-420（当前接近目标）</td>
+          <td>N2节点Q3营收占比、CoWoS出货</td>
+          <td>台海地缘政治（尾部风险）</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">MRVL</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">74.8</strong></td>
+          <td>持有（已持仓），新仓等回调</td>
+          <td>$230-250（FY2028重定价后）</td>
+          <td>Q2 FY2027（8月）$2.7B指引兑现</td>
+          <td>AWS客户集中度，估值扩张逆转</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">AMD</td>
+          <td><span class="rank-grade grade-bg-A">A</span></td>
+          <td><strong style="color:var(--accent)">72.5</strong></td>
+          <td>已持仓分批减仓，新仓等待</td>
+          <td>$300-340（回调后重新评估）</td>
+          <td>MI450 Helios出货（2026 Q3）</td>
+          <td>NVDA产能释放+极高估值回调</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">QCOM</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">65.8</strong></td>
+          <td>持有观察，等投资者日</td>
+          <td>$190-200（Apple退出已部分定价）</td>
+          <td>6月24日投资者日Dragonfly规格</td>
+          <td>Apple FY2027完全退出 $5.7B缺口</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">ARM</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">64.3</strong></td>
+          <td>观察（不追高），等回调</td>
+          <td>$115-125（P/S 24-26x）</td>
+          <td>FY2027Q1财报增速是否达20%+</td>
+          <td>P/S 85x极端估值+SoftBank减持</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">LSCC</td>
+          <td><span class="rank-grade grade-bg-B">B</span></td>
+          <td><strong style="color:var(--yellow)">63.4</strong></td>
+          <td>持有，等AMI交割后评估</td>
+          <td>$125-135（安全边际区间）</td>
+          <td>AMI Q3交割 + Q2财报（8月）</td>
+          <td>AMI整合风险+高估值宏观回调</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">INTC</td>
+          <td><span class="rank-grade grade-bg-C">C</span></td>
+          <td><strong style="color:var(--orange)">56.8</strong></td>
+          <td>观察（期权定价，不追高）</td>
+          <td>$90-100（等待回调）</td>
+          <td>苹果18A量产确认、Q2 GAAP盈利</td>
+          <td>18A外部代工商业化失败（$174M/季）</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">CBRS</td>
+          <td><span class="rank-grade grade-bg-C">C</span></td>
+          <td><strong style="color:var(--orange)">54.6</strong></td>
+          <td>观察（等Q3 contra-revenue回调）</td>
+          <td>$180-210（Q3季报后买入窗口）</td>
+          <td>AWS Bedrock渠道上线（中期）</td>
+          <td>MBZUAI 62%集中度+contra-revenue</td>
+        </tr>
+        <tr>
+          <td class="td-symbol">UMC</td>
+          <td><span class="rank-grade grade-bg-D">D</span></td>
+          <td><strong style="color:var(--red)">42.1</strong></td>
+          <td>不操作（移出候选池）</td>
+          <td>$10-12（模型合理区间）</td>
+          <td>中国竞争格局改善（暂无信号）</td>
+          <td>SMIC/华虹低价扩产+台海风险+溢价101%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== 数据来源 ===== -->
+<div class="section">
+  <div class="section-title"><div class="dot"></div>数据来源与时效声明</div>
+  <div class="info-card">
+    <h3>行业扫描数据来源（2026年6月）</h3>
+    <ul class="kv-list">
+      <li><span class="kv-key">超大规模Capex数据</span><span class="kv-val">Tom's Hardware / Yahoo Finance / CNBC (2026-02-06, 2026-05)</span></li>
+      <li><span class="kv-key">ASIC vs GPU市场份额</span><span class="kv-val">TechTimes (2026-05-26) / Oplexa / Introl Blog</span></li>
+      <li><span class="kv-key">TSMC CoWoS/N2数据</span><span class="kv-val">CNBC (2026-04-08) / SemiEngineering Tech Symposium 2026 / Fusion WWW</span></li>
+      <li><span class="kv-key">NVIDIA市场份额</span><span class="kv-val">Silicon Analysts / Motley Fool (2026-01-25) / Alpha Spread</span></li>
+      <li><span class="kv-key">各公司财务数据</span><span class="kv-val">各公司季报 (2026 Q1/Q2) + update_20260608.md + valuation_result.json</span></li>
+      <li><span class="kv-key">当前股价参考</span><span class="kv-val">Yahoo Finance / StockAnalysis (2026-06-07/08)</span></li>
+      <li><span class="kv-key">本报告基准日期</span><span class="kv-val">2026-06-08</span></li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ===== Footer ===== -->
+<div class="footer">
+  <span>AI算力专项打分 v4.1</span> &nbsp;|&nbsp; 20260608 &nbsp;|&nbsp; 基准已记录 &nbsp;|&nbsp; 11家公司完整评估
+  <br>
+  <span style="color:var(--text2); font-size:11px; margin-top:4px; display:block">
+    数据来源：公司财报 + 行业研报 + 实时搜索。本报告仅供参考，不构成投资建议。投资有风险，入市须谨慎。
+  </span>
+</div>
+
+</body>
+</html>
