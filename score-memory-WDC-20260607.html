@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WDC · 存储器专项打分 v4.1 · 20260607</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --accent: #58a6ff; --green: #3fb950; --yellow: #d29922;
+    --orange: #f0883e; --red: #f85149; --purple: #bc8cff;
+    --hdd: #e8b04b; --hdd2: #f0883e; --hbf: #bc8cff;
+    --text: #e6edf3; --muted: #8b949e; --dim: #21262d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  /* COVER */
+  .cover { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--hdd), var(--green), var(--accent)); }
+  .cover-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .ticker-block .ticker { font-size: 52px; font-weight: 900; color: var(--hdd); letter-spacing: -2px; }
+  .ticker-block .company { font-size: 18px; color: var(--muted); margin-top: 4px; }
+  .ticker-block .track { font-size: 13px; background: rgba(232,176,75,0.15); color: var(--hdd); padding: 3px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; }
+  .score-block { text-align: right; }
+  .score-block .final-score { font-size: 80px; font-weight: 900; line-height: 1; color: var(--green); }
+  .score-block .grade { font-size: 28px; font-weight: 700; color: var(--hdd); margin-top: 4px; }
+  .score-block .confidence { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .cover-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .meta-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-item .value { font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .meta-item .value.up { color: var(--green); }
+  .meta-item .value.down { color: var(--red); }
+  .meta-item .value.warn { color: var(--yellow); }
+  .conclusion { margin-top: 20px; padding: 14px 18px; background: rgba(232,176,75,0.08); border-left: 3px solid var(--hdd); border-radius: 4px; font-size: 14px; line-height: 1.7; }
+  .cycle-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid var(--green); margin-left: 10px; vertical-align: middle; }
+
+  /* SECTION */
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+
+  /* ARCH */
+  .arch-layers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+  .arch-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .arch-row.active-nearline { border-color: var(--hdd); background: rgba(232,176,75,0.07); }
+  .arch-row.active-trad { border-color: #8b949e; background: rgba(139,148,158,0.07); }
+  .arch-layer-label { font-size: 11px; color: var(--muted); width: 160px; flex-shrink: 0; }
+  .arch-track { font-size: 13px; font-weight: 600; flex: 1; }
+  .arch-indicator { font-size: 20px; width: 28px; }
+  .arch-status { font-size: 11px; color: var(--muted); text-align: right; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--dim); color: var(--muted); font-weight: 600; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 9px 10px; border-bottom: 1px solid rgba(48,54,61,0.6); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .tag-hdd { background: rgba(232,176,75,0.15); color: var(--hdd); }
+  .tag-trad { background: rgba(139,148,158,0.15); color: var(--muted); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+
+  /* SCORE BARS */
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .score-label { width: 200px; flex-shrink: 0; font-size: 13px; }
+  .score-bar-wrap { flex: 1; background: var(--dim); border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; }
+  .bar-hdd { background: var(--hdd); }
+  .bar-green { background: var(--green); }
+  .bar-yellow { background: var(--yellow); }
+  .bar-red { background: var(--red); }
+  .score-val { width: 50px; text-align: right; font-weight: 700; font-size: 13px; }
+
+  /* DIM GRID */
+  .dim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .dim-card { background: var(--dim); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .dim-card .dim-name { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .dim-card .dim-score { font-size: 32px; font-weight: 900; margin: 4px 0; }
+  .dim-card .dim-max { font-size: 13px; color: var(--muted); }
+  .dim-card .dim-note { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .dim-card .dim-tag { display: inline-block; margin-top: 6px; font-size: 10px; padding: 2px 6px; border-radius: 10px; }
+  .score-3 { color: var(--yellow); } .score-2 { color: var(--red); } .score-4 { color: var(--green); } .score-5 { color: var(--hbf); } .score-1 { color: var(--red); }
+
+  /* VALUATION */
+  .val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .val-card { background: var(--dim); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .val-card .vc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .val-card .vc-value { font-size: 26px; font-weight: 900; margin: 4px 0; }
+  .val-card .vc-vs { font-size: 12px; }
+  .val-card .vc-verdict { font-size: 11px; margin-top: 6px; padding: 3px 8px; border-radius: 10px; display: inline-block; }
+
+  /* SCENARIO */
+  .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .scenario-card { border-radius: 8px; padding: 16px; border: 1px solid; }
+  .sc-bull { border-color: var(--green); background: rgba(63,185,80,0.06); }
+  .sc-base { border-color: var(--yellow); background: rgba(210,153,34,0.06); }
+  .sc-bear { border-color: var(--red); background: rgba(248,81,73,0.06); }
+  .sc-hamr { border-color: var(--hdd); background: rgba(232,176,75,0.06); }
+  .sc-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sc-price { font-size: 28px; font-weight: 900; margin: 6px 0; }
+  .sc-updown { font-size: 13px; }
+  .sc-desc { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .sc-prob { font-size: 12px; font-weight: 700; margin-top: 4px; }
+
+  /* TRIGGER */
+  .trigger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .trigger-item { display: flex; align-items: flex-start; gap: 10px; background: var(--dim); border-radius: 8px; padding: 12px; border: 1px solid var(--border); }
+  .trigger-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .trigger-name { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .trigger-val { font-size: 14px; font-weight: 700; }
+  .trigger-note { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* HAMR ROADMAP */
+  .hamr-timeline { position: relative; padding-left: 24px; margin-bottom: 14px; }
+  .hamr-timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--green), var(--hdd), var(--muted)); }
+  .hamr-item { position: relative; margin-bottom: 14px; }
+  .hamr-item::before { content: ''; position: absolute; left: -20px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--hdd); border: 2px solid var(--bg); }
+  .hamr-item.done::before { background: var(--green); }
+  .hamr-item.future::before { background: var(--muted); }
+  .hamr-year { font-size: 11px; color: var(--muted); }
+  .hamr-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .hamr-desc { font-size: 12px; color: var(--muted); }
+
+  /* SUMMARY */
+  .final-banner { background: linear-gradient(135deg, rgba(232,176,75,0.12), rgba(63,185,80,0.12)); border: 1px solid var(--hdd); border-radius: 10px; padding: 20px; text-align: center; margin-top: 16px; }
+  .final-banner .fb-score { font-size: 72px; font-weight: 900; color: var(--green); line-height: 1; }
+  .final-banner .fb-grade { font-size: 24px; color: var(--hdd); margin-top: 8px; font-weight: 700; }
+  .final-banner .fb-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* UPDATE COMPARE */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .compare-col { background: var(--dim); border-radius: 8px; padding: 16px; border: 1px solid var(--border); }
+  .compare-col.new { border-color: var(--green); }
+  .compare-col-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .compare-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(48,54,61,0.4); font-size: 13px; }
+  .compare-item:last-child { border-bottom: none; }
+  .compare-item .ci-key { color: var(--muted); }
+  .compare-item .ci-val { font-weight: 700; }
+  .ci-val.up { color: var(--green); } .ci-val.down { color: var(--red); } .ci-val.changed { color: var(--yellow); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .disclaimer { font-size: 11px; color: var(--muted); opacity: 0.7; margin-top: 6px; }
+
+  .alert-box { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
+  .note-box { background: rgba(232,176,75,0.06); border: 1px solid rgba(232,176,75,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+  .success-box { background: rgba(63,185,80,0.06); border: 1px solid rgba(63,185,80,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="ticker-block">
+      <div class="ticker">WDC</div>
+      <div class="company">Western Digital Corporation · NASDAQ</div>
+      <div class="track">纯HDD nearline · AI数据中心</div>
+    </div>
+    <div class="score-block">
+      <div class="final-score">44.7</div>
+      <div class="grade">谨慎观望 CAUTIOUS <span class="cycle-badge">AI超级周期中段</span></div>
+      <div class="confidence">置信度 0.90 · 分拆&lt;2年但HDD业务清晰</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <div class="meta-item"><div class="label">当前股价</div><div class="value">$535</div></div>
+    <div class="meta-item"><div class="label">分析师均值目标</div><div class="value warn">~$443-503</div></div>
+    <div class="meta-item"><div class="label">花旗最高目标</div><div class="value up">$685</div></div>
+    <div class="meta-item"><div class="label">较研报基准涨幅</div><div class="value up">+82.5%</div></div>
+    <div class="meta-item"><div class="label">市值</div><div class="value">~$184B</div></div>
+    <div class="meta-item"><div class="label">净债务</div><div class="value warn">$2.7B</div></div>
+    <div class="meta-item"><div class="label">通算EV/EBITDA</div><div class="value down">83x</div></div>
+    <div class="meta-item"><div class="label">Q3FY26营收</div><div class="value up">$3.34B</div></div>
+    <div class="meta-item"><div class="label">Q3FY26毛利率</div><div class="value up">50.2%</div></div>
+    <div class="meta-item"><div class="label">Q4FY26指引</div><div class="value up">$3.65B</div></div>
+    <div class="meta-item"><div class="label">$4B股票回购</div><div class="value up">执行中</div></div>
+    <div class="meta-item"><div class="label">更新日期</div><div class="value">20260607</div></div>
+  </div>
+  <div class="conclusion">
+    <strong>一句话结论：</strong>WDC是全球最大纯HDD制造商，AI数据中心拉动nearline HDD超级周期处于中段（Q3FY26营收$3.34B +45.5% YoY，毛利率50.2%历史新高），HAMR 44TB已两家超大规模CSP认证领先预期，FCF年化$5B支撑$4B回购；但分析师均值$443-503<span>已低于当前股价$535（-3.2%）</span>，通算EV/EBITDA高达83x（正常7-12x），触发器A、B、C均未触发，维持<strong style="color:var(--yellow)">谨慎观望</strong>——等待股价回调至$400-450（EV/EBITDA ~22x FY2027E）提供更优入场时机。
+  </div>
+</div>
+
+<!-- ===== AI内存五层架构图 ===== -->
+<div class="section">
+  <div class="section-title">AI内存五层架构图 · WDC定位</div>
+  <div class="arch-layers">
+    <div class="arch-row">
+      <div class="arch-layer-label">L1 片上SRAM</div>
+      <div class="arch-track" style="color:var(--muted)">GPU/CPU片上缓存（TSMC/Samsung晶圆内嵌）</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">WDC无暴露</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-layer-label">L2 高带宽内存HBM</div>
+      <div class="arch-track" style="color:var(--muted)">SK Hynix / Samsung / Micron · GPU封装叠层</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">WDC无暴露</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-layer-label">L2.5 高带宽闪存HBF</div>
+      <div class="arch-track" style="color:var(--muted)">SNDK + SK Hynix（WDC分拆的NAND业务）</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">已分拆给SNDK</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-layer-label">L3 企业级NAND SSD</div>
+      <div class="arch-track" style="color:var(--muted)">数据中心NVMe SSD（已分拆给SNDK）</div>
+      <div class="arch-indicator">-</div>
+      <div class="arch-status">已分拆给SNDK</div>
+    </div>
+    <div class="arch-row active-nearline">
+      <div class="arch-layer-label">L4 nearline HDD</div>
+      <div class="arch-track" style="color:var(--hdd)">AI数据中心大容量磁盘 · 训练数据湖 · 冷热分层</div>
+      <div class="arch-indicator">&#9679;</div>
+      <div class="arch-status">~89%营收 · 云端$3.0B/季</div>
+    </div>
+    <div class="arch-row active-trad">
+      <div class="arch-layer-label">L5 传统HDD</div>
+      <div class="arch-track" style="color:var(--muted)">PC/企业传统HDD · 成熟市场缩量</div>
+      <div class="arch-indicator">&#9679;</div>
+      <div class="arch-status">~11%营收</div>
+    </div>
+  </div>
+  <div class="note-box">
+    <strong>架构定位说明：</strong>WDC 2025年2月完成NAND分拆后，成为全球最大<strong>纯HDD</strong>制造商，战略聚焦L4 nearline HDD层。AI训练/推理的底层数据湖依赖大容量nearline HDD存储（每EB的存储成本HDD远低于SSD），WDC与STX双寡头（合计>85%份额）享有极强定价权。HAMR技术路线图（44TB→60TB→100TB）构建明确的容量升级路径，驱动ASP持续提升。
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div style="background:rgba(232,176,75,0.08);border:1px solid var(--hdd);border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">Nearline AI HDD占比</div>
+      <div style="font-size:24px;font-weight:900;color:var(--hdd);">~89%</div>
+      <div style="font-size:11px;color:var(--muted);">赛道分 80 / 归一化 0.82 / dim6=3/5</div>
+    </div>
+    <div style="background:rgba(139,148,158,0.08);border:1px solid #8b949e;border-radius:8px;padding:12px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">传统HDD占比</div>
+      <div style="font-size:24px;font-weight:900;color:var(--muted);">~11%</div>
+      <div style="font-size:11px;color:var(--muted);">赛道分 56 / 归一化 0.75 / 成熟市场</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 行业分加权计算 ===== -->
+<div class="section">
+  <div class="section-title">行业分加权计算 (权重 20%)</div>
+  <table>
+    <thead>
+      <tr>
+        <th>赛道</th>
+        <th>营收占比</th>
+        <th>赛道原始分 (/100)</th>
+        <th>归一化系数</th>
+        <th>景气维度 dim6</th>
+        <th>加权贡献分</th>
+        <th>赛道分类</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Nearline HDD (AI数据中心)</td>
+        <td class="num">89%</td>
+        <td class="num">80</td>
+        <td class="num">0.82</td>
+        <td class="num">3/5 (上行中段)</td>
+        <td class="num"><strong>58.50</strong></td>
+        <td><span class="tag tag-hdd">AI-NEARLINE</span></td>
+      </tr>
+      <tr>
+        <td>传统HDD (PC/企业)</td>
+        <td class="num">11%</td>
+        <td class="num">56</td>
+        <td class="num">0.75</td>
+        <td class="num">2.5/5 (成熟)</td>
+        <td class="num"><strong>4.62</strong></td>
+        <td><span class="tag tag-trad">TRAD-HDD</span></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr style="background:rgba(88,166,255,0.05);">
+        <td colspan="5"><strong>行业加权总分 = Σ(赛道分 × 占比 × 归一化)</strong></td>
+        <td class="num"><strong style="color:var(--hdd);font-size:16px;">63.1 / 100</strong></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="note-box" style="margin-top:14px;">
+    <strong>方法注记：</strong>WDC行业分63.1显著高于SNDK(37.5)，原因在于：①nearline HDD赛道景气维度dim6=3/5（周期上行中段，非高峰），后续空间更大；②双寡头格局（WDC+STX）使行业归一化系数0.82更高；③AI数据中心对HDD的结构性需求（成本敏感型存储）使赛道分达80。传统HDD占比仅11%且逐步缩量，对整体评分影响有限。
+  </div>
+</div>
+
+<!-- ===== 质量分 ===== -->
+<div class="section">
+  <div class="section-title">质量分 8维度评估 (权重 50%)</div>
+  <div class="alert-box">
+    <strong>通算口径强制执行：</strong>财务类维度使用FY2021-2025均值（含HDD周期底部）。当期毛利率50.2%显著高于通算均值~29%，但通算口径仍优于SNDK（18%），体现HDD业务相对NAND的稳定性。
+  </div>
+  <div class="dim-grid">
+    <div class="dim-card">
+      <div class="dim-name">DIM1 · 成长性 [权重20]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">当期：FY2026全年约$12.83B（YoY+35%）；通算：FY21-25 CAGR约7%（含2022-23下行周期）。纯HDD聚焦，AI周期中段，成长路径比NAND更稳定但绝对增速偏低。</div>
+      <div class="dim-tag tag-yellow tag">通算口径</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM2 · 通算盈利质量 [权重10]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">通算毛利率~29%（FY21-25均值），ROIC约6-8%（历史均值）；当期50.2%毛利率创历史新高；FCF margin稳健提升。优于SNDK的通算18%但仍属中等。</div>
+      <div class="dim-tag tag-yellow tag">通算口径 · 中等</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM3 · 技术 (HAMR路线) [权重18]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">HAMR 44TB已两家超大规模CSP认证，进度超预期；但落后STX约12-18个月（STX已量产）；OptiNAND/UltraSMR专有技术。2027H1量产路径确认但仍存不确定性。</div>
+      <div class="dim-tag tag-yellow tag">HAMR认证中 · 落后STX</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM4 · AI战略 [权重12]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">nearline AI数据中心受益（云端占89%，YoY+48%）；轻资产模式（Capex/Rev仅4.3%）创造强FCF；分拆完成后AI存储纯净暴露。无HBF等颠覆性期权，策略清晰但缺乏超额催化剂。</div>
+      <div class="dim-tag tag-yellow tag">AI受益清晰 · 缺非线性</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM5 · 财务健康度 [权重10]</div>
+      <div class="dim-score score-4">4<span class="dim-max">/5</span></div>
+      <div class="dim-note">净债务$2.7B（从峰值$9.18B快速去杠杆）；FCF年化~$5B，覆盖净债务185%；$4B股票回购计划执行中；季度股息上调20%至$0.15；S&P评级已升至BB+。</div>
+      <div class="dim-tag tag-green tag">净债务低 · FCF强劲</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM6 · 管理层执行力 [权重12]</div>
+      <div class="dim-score score-4">4<span class="dim-max">/5</span></div>
+      <div class="dim-note">分拆执行完美（2025年2月按时完成）；Q3FY26三项指标全超指引上限；Q4指引继续上调；HAMR认证比原计划提前；管理层长期目标（毛利率>50%）已实现。</div>
+      <div class="dim-tag tag-green tag">执行超预期 · 目标达成</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM7 · 客户质量与锁定 [权重12]</div>
+      <div class="dim-score score-4">4<span class="dim-max">/5</span></div>
+      <div class="dim-note">超大规模云客户（Microsoft/Meta/Amazon/Google）占89%；LTA锁单至2027-2028年；FY2026全年产能已售罄，FY2027早期订单落地；双寡头格局提供极高进入壁垒。</div>
+      <div class="dim-tag tag-green tag">超大规模锁定 · 双寡头</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-name">DIM8 · 可选性价值 [权重6]</div>
+      <div class="dim-score score-3">3<span class="dim-max">/5</span></div>
+      <div class="dim-note">HDD高容量化期权（60TB/100TB路线图）；HAMR量产ASP溢价20-30%；冷存储AI数据湖新市场。相比SNDK的HBF期权，WDC的期权更确定但TAM扩张幅度更小。</div>
+      <div class="dim-tag tag-yellow tag">容量升级期权</div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;padding:16px;background:var(--dim);border-radius:8px;">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">质量分加权计算</div>
+    <div class="score-row"><div class="score-label">DIM1 成长性 (3/5 × 权重20)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">12.0</div></div>
+    <div class="score-row"><div class="score-label">DIM2 通算盈利 (3/5 × 权重10)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">6.0</div></div>
+    <div class="score-row"><div class="score-label">DIM3 HAMR技术 (3/5 × 权重18)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">10.8</div></div>
+    <div class="score-row"><div class="score-label">DIM4 AI战略 (3/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">7.2</div></div>
+    <div class="score-row"><div class="score-label">DIM5 财务健康 (4/5 × 权重10)</div><div class="score-bar-wrap"><div class="score-bar bar-green" style="width:80%"></div></div><div class="score-val" style="color:var(--green)">8.0</div></div>
+    <div class="score-row"><div class="score-label">DIM6 管理层 (4/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-green" style="width:80%"></div></div><div class="score-val" style="color:var(--green)">9.6</div></div>
+    <div class="score-row"><div class="score-label">DIM7 客户锁定 (4/5 × 权重12)</div><div class="score-bar-wrap"><div class="score-bar bar-green" style="width:80%"></div></div><div class="score-val" style="color:var(--green)">9.6</div></div>
+    <div class="score-row"><div class="score-label">DIM8 可选性 (3/5 × 权重6)</div><div class="score-bar-wrap"><div class="score-bar bar-yellow" style="width:60%"></div></div><div class="score-val" style="color:var(--yellow)">3.6</div></div>
+    <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="color:var(--muted);font-size:13px;">质量分 = 66.8 / 100（加权合计 / 5）</span>
+      <span style="font-size:20px;font-weight:900;color:var(--yellow);">66.8 / 100</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 估值安全边际 ===== -->
+<div class="section">
+  <div class="section-title">估值安全边际分析 (权重 30%)</div>
+  <div class="alert-box">
+    <strong>通算EV/EBITDA严重高估：</strong>市值$184B + 净债务$2.7B = EV $186.7B；通算EBITDA（通算营收$10B×0.82×0.26 + $1.1B×0.75×0.18）约$2.25B；通算EV/EBITDA = <strong style="color:var(--red)">83x</strong>（正常区间 7-12x）。所有情景均无安全边际，估值分基础分 v1 = 0。
+  </div>
+
+  <div class="val-grid">
+    <div class="val-card">
+      <div class="vc-label">当前股价</div>
+      <div class="vc-value" style="color:var(--text);">$535</div>
+      <div class="vc-vs" style="color:var(--muted);">分拆后纯HDD · NASDAQ</div>
+      <div class="vc-verdict tag tag-yellow">AI周期中段</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">通算EV/EBITDA</div>
+      <div class="vc-value" style="color:var(--red);">83x</div>
+      <div class="vc-vs" style="color:var(--muted);">正常区间 7-12x</div>
+      <div class="vc-verdict tag tag-red">严重高估</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">分析师均值目标</div>
+      <div class="vc-value" style="color:var(--red);">$443-503</div>
+      <div class="vc-vs" style="color:var(--red);">-3.2% ~ -17%</div>
+      <div class="vc-verdict tag tag-red">低于当前股价</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">DCF目标价</div>
+      <div class="vc-value" style="color:var(--red);">$215</div>
+      <div class="vc-vs" style="color:var(--red);">-59.8% 下行</div>
+      <div class="vc-verdict tag tag-red">保守基础估值</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">EV/EBITDA目标价</div>
+      <div class="vc-value" style="color:var(--yellow);">$365</div>
+      <div class="vc-vs" style="color:var(--red);">-31.8% 下行</div>
+      <div class="vc-verdict tag tag-yellow">22x FY26E EBITDA</div>
+    </div>
+    <div class="val-card">
+      <div class="vc-label">花旗最高目标</div>
+      <div class="vc-value" style="color:var(--green);">$685</div>
+      <div class="vc-vs" style="color:var(--green);">+28.0% 上行</div>
+      <div class="vc-verdict tag tag-green">35x+ 溢价框架</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--accent);">四情景分析</div>
+    <div class="scenario-grid">
+      <div class="scenario-card sc-hamr">
+        <div class="sc-label" style="color:var(--hdd);">HAMR量产加速</div>
+        <div class="sc-price" style="color:var(--hdd);">$685</div>
+        <div class="sc-updown" style="color:var(--green);">+28.0%</div>
+        <div class="sc-prob" style="color:var(--hdd);">概率 20%</div>
+        <div class="sc-desc">HAMR 2027H1量产，ASP溢价+30%，FY2027E EBITDA $7B+，花旗目标价框架</div>
+      </div>
+      <div class="scenario-card sc-bull">
+        <div class="sc-label" style="color:var(--green);">AI周期延续</div>
+        <div class="sc-price" style="color:var(--green);">$575</div>
+        <div class="sc-updown" style="color:var(--green);">+7.5%</div>
+        <div class="sc-prob" style="color:var(--green);">概率 35%</div>
+        <div class="sc-desc">FY2027E营收$14.75B，EBITDA ~$5.5B，EV/EBITDA 30x，接近当前价</div>
+      </div>
+      <div class="scenario-card sc-base">
+        <div class="sc-label" style="color:var(--yellow);">均值回归</div>
+        <div class="sc-price" style="color:var(--yellow);">$400</div>
+        <div class="sc-updown" style="color:var(--red);">-25.2%</div>
+        <div class="sc-prob" style="color:var(--yellow);">概率 30%</div>
+        <div class="sc-desc">超大规模客户Capex缩减，HAMR延期，毛利率压缩至40%，EV/EBITDA 22x</div>
+      </div>
+      <div class="scenario-card sc-bear">
+        <div class="sc-label" style="color:var(--red);">HDD周期下行</div>
+        <div class="sc-price" style="color:var(--red);">$200</div>
+        <div class="sc-updown" style="color:var(--red);">-62.6%</div>
+        <div class="sc-prob" style="color:var(--red);">概率 15%</div>
+        <div class="sc-desc">参考2022-23下行周期，云端Capex急刹，毛利率崩至25%，Beta 2.16x放大下跌</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:10px;background:var(--dim);border-radius:6px;font-size:13px;">
+      <strong>概率加权期望值：</strong> $685×20% + $575×35% + $400×30% + $200×15% = <strong style="color:var(--yellow);">$494</strong>（较当前-7.7%）
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--accent);">买入触发器状态</div>
+  <div class="trigger-grid">
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器A: 质量分</div>
+        <div class="trigger-val" style="color:var(--red);">2/5 通算盈利 (需≥3/5)</div>
+        <div class="trigger-note">通算盈利评分2/5（通算毛利率29%低于触发阈值）→ 未触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器B: 估值</div>
+        <div class="trigger-val" style="color:var(--red);">EV/EBITDA 83x (需≤7.2x)</div>
+        <div class="trigger-note">通算EV/EBITDA 83x，远超正常阈值 → 未触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#10060;</div>
+      <div>
+        <div class="trigger-name">触发器C: 分析师共识</div>
+        <div class="trigger-val" style="color:var(--red);">$443-503 &lt; $535 (-3.2%)</div>
+        <div class="trigger-note">分析师均值低于当前股价，共识已落后 → 未触发</div>
+      </div>
+    </div>
+    <div class="trigger-item">
+      <div class="trigger-icon">&#9888;&#65039;</div>
+      <div>
+        <div class="trigger-name">触发器D: HAMR量产</div>
+        <div class="trigger-val" style="color:var(--yellow);">认证通过 · 量产2027H1</div>
+        <div class="trigger-note">认证领先预期，但量产仍需6-12个月 → 部分触发</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:10px 14px;background:rgba(248,81,73,0.08);border:1px solid rgba(248,81,73,0.3);border-radius:6px;font-size:13px;margin-top:6px;">
+    <strong>触发状态：</strong>触发器A❌ B❌ C❌ D部分 → <strong style="color:var(--red);">全部未达到买入条件</strong>，维持<strong style="color:var(--yellow)">谨慎观望</strong>。买入阈值：回调至$400-450（EV/EBITDA ~22x FY2027E EBITDA $5.5B）提供合理入场。
+  </div>
+</div>
+
+<!-- ===== HAMR技术路线图 ===== -->
+<div class="section">
+  <div class="section-title">WDC专项：HAMR技术路线图与容量升级期权</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--hdd);margin-bottom:12px;">HAMR技术路线图</div>
+      <div class="hamr-timeline">
+        <div class="hamr-item done">
+          <div class="hamr-year">2024-2025</div>
+          <div class="hamr-title" style="color:var(--green);">20-32TB ePMR 量产</div>
+          <div class="hamr-desc">传统PMR技术，全球出货主力，WDC/STX双寡头</div>
+        </div>
+        <div class="hamr-item done">
+          <div class="hamr-year">2026 Q2-Q3</div>
+          <div class="hamr-title" style="color:var(--green);">40TB ePMR + 44TB HAMR 认证</div>
+          <div class="hamr-desc">44TB HAMR已在两家超大规模CSP完成认证，比原计划提前，STX已量产领先12-18个月</div>
+        </div>
+        <div class="hamr-item">
+          <div class="hamr-year">2027 H1</div>
+          <div class="hamr-title" style="color:var(--hdd);">44TB HAMR 量产出货</div>
+          <div class="hamr-desc">ASP溢价+20-30%，驱动FY2027毛利率进一步扩张至55%+</div>
+        </div>
+        <div class="hamr-item future">
+          <div class="hamr-year">2028-2029</div>
+          <div class="hamr-title" style="color:var(--muted);">60TB+ HAMR</div>
+          <div class="hamr-desc">密度持续提升，冷热分层AI存储TAM扩大</div>
+        </div>
+        <div class="hamr-item future">
+          <div class="hamr-year">2029-2030</div>
+          <div class="hamr-title" style="color:var(--muted);">100TB HAMR</div>
+          <div class="hamr-desc">管理层长期目标，每盘片容量突破，AI大模型训练数据湖关键</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--hdd);margin-bottom:12px;">HAMR量产 vs STX竞争格局</div>
+      <table>
+        <thead>
+          <tr><th>维度</th><th>WDC</th><th>STX</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>当前最大容量</td><td>32TB ePMR</td><td>36TB HAMR</td></tr>
+          <tr><td>44TB状态</td><td style="color:var(--yellow)">认证中</td><td style="color:var(--green)">量产中</td></tr>
+          <tr><td>量产时间</td><td style="color:var(--yellow)">2027H1</td><td style="color:var(--green)">2026H1</td></tr>
+          <tr><td>落后幅度</td><td colspan="2" style="color:var(--red);">约12-18个月</td></tr>
+          <tr><td>Capex/Rev</td><td style="color:var(--green)">4.3%</td><td>~6%</td></tr>
+          <tr><td>nearline份额</td><td>~48%</td><td>~50%</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;padding:10px;background:rgba(232,176,75,0.08);border:1px solid var(--hdd);border-radius:6px;font-size:12px;color:var(--muted);">
+        <strong style="color:var(--hdd);">容量升级期权价值：</strong>HAMR量产后ASP溢价约$8-12/盘，FY2027E出货量~260EB，若50%转为HAMR，增量营收约$5-8亿，EBITDA贡献$2-3亿，边际估值提升约$7-10/股。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 评分汇总 ===== -->
+<div class="section">
+  <div class="section-title">评分汇总 · 三层结构</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(232,176,75,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">行业分 (权重20%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--hdd);line-height:1.1;margin:6px 0;">63.1</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 12.62</div>
+    </div>
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(210,153,34,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">质量分 (权重50%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--yellow);line-height:1.1;margin:6px 0;">66.8</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 33.40</div>
+    </div>
+    <div style="background:var(--dim);border-radius:8px;padding:16px;border:1px solid rgba(248,81,73,0.3);">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;">估值分 (权重30%)</div>
+      <div style="font-size:40px;font-weight:900;color:var(--red);line-height:1.1;margin:6px 0;">12.0</div>
+      <div style="font-size:12px;color:var(--muted);">/<span style="font-size:16px;">100</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;">贡献分: 3.60</div>
+    </div>
+  </div>
+  <table style="margin-bottom:16px;">
+    <thead>
+      <tr><th>层级</th><th>分项</th><th class="num">原始分 (/100)</th><th class="num">权重</th><th class="num">贡献分</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>行业分</td><td>赛道加权得分</td><td class="num">63.1</td><td class="num">20%</td><td class="num"><strong>12.62</strong></td><td>AI nearline强势，dim6=3/5中段</td></tr>
+      <tr><td>质量分</td><td>8维度加权</td><td class="num">66.8</td><td class="num">50%</td><td class="num"><strong>33.40</strong></td><td>管理层/客户/财务强，HAMR落后STX</td></tr>
+      <tr><td>估值分</td><td>通算EV/EBITDA+触发器</td><td class="num">12.0</td><td class="num">30%</td><td class="num"><strong>3.60</strong></td><td>EV/EBITDA 83x，触发器A/B/C均未触发</td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td colspan="4"><strong>基础综合分（置信度前）</strong></td><td class="num"><strong style="font-size:16px;">49.6</strong></td><td></td></tr>
+      <tr><td colspan="4"><strong>× 置信度系数 0.90</strong>（分拆&lt;2年但HDD业务清晰）</td><td class="num"><strong style="font-size:20px;color:var(--green);">44.7</strong></td><td><span class="tag tag-yellow">谨慎观望</span></td></tr>
+    </tbody>
+  </table>
+  <div class="final-banner">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">WDC · 存储器专项最终得分</div>
+    <div class="fb-score">44.7</div>
+    <div class="fb-grade">谨慎观望 CAUTIOUS · AI周期中段</div>
+    <div class="fb-note">置信度 0.90 | 行业63.1 · 质量66.8 · 估值12.0 | 当前价$535 | 买入阈值$400-450</div>
+  </div>
+</div>
+
+<!-- ===== 研报更新对比 ===== -->
+<div class="section">
+  <div class="section-title">研报更新对比 · 20260603 vs 20260607</div>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-col-title">原研报 (20260603)</div>
+      <div class="compare-item"><span class="ci-key">股价</span><span class="ci-val">$293.10</span></div>
+      <div class="compare-item"><span class="ci-key">评级</span><span class="ci-val">买入 Buy</span></div>
+      <div class="compare-item"><span class="ci-key">目标价</span><span class="ci-val">$450</span></div>
+      <div class="compare-item"><span class="ci-key">营收基准</span><span class="ci-val">Q2 $3.02B</span></div>
+      <div class="compare-item"><span class="ci-key">毛利率</span><span class="ci-val">45.8%</span></div>
+      <div class="compare-item"><span class="ci-key">FY2026E营收</span><span class="ci-val">$12.83B</span></div>
+      <div class="compare-item"><span class="ci-key">分析师均值</span><span class="ci-val">$518</span></div>
+      <div class="compare-item"><span class="ci-key">净债务</span><span class="ci-val">$4.82B</span></div>
+      <div class="compare-item"><span class="ci-key">HAMR状态</span><span class="ci-val">开发中</span></div>
+      <div class="compare-item"><span class="ci-key">股息</span><span class="ci-val">$0.125/季</span></div>
+    </div>
+    <div class="compare-col new">
+      <div class="compare-col-title">更新版 (20260607) <span class="tag tag-green">NEW</span></div>
+      <div class="compare-item"><span class="ci-key">股价</span><span class="ci-val up">$535 (+82.5%)</span></div>
+      <div class="compare-item"><span class="ci-key">评级</span><span class="ci-val changed">谨慎观望 (下调)</span></div>
+      <div class="compare-item"><span class="ci-key">目标价</span><span class="ci-val up">$600-650 (上修)</span></div>
+      <div class="compare-item"><span class="ci-key">营收最新</span><span class="ci-val up">Q3 $3.34B (+10.6% QoQ)</span></div>
+      <div class="compare-item"><span class="ci-key">毛利率</span><span class="ci-val up">50.2% (+440bps QoQ)</span></div>
+      <div class="compare-item"><span class="ci-key">Q4指引</span><span class="ci-val up">$3.65B (大幅超预期)</span></div>
+      <div class="compare-item"><span class="ci-key">分析师均值</span><span class="ci-val down">$443-503 (落后股价)</span></div>
+      <div class="compare-item"><span class="ci-key">净债务</span><span class="ci-val up">$2.7B (去杠杆中)</span></div>
+      <div class="compare-item"><span class="ci-key">HAMR状态</span><span class="ci-val up">两家CSP认证通过</span></div>
+      <div class="compare-item"><span class="ci-key">股息</span><span class="ci-val up">$0.15/季 (+20%上调)</span></div>
+    </div>
+  </div>
+  <div class="note-box" style="margin-top:14px;">
+    <strong>评级下调逻辑：</strong>原研报发布时股价$293，分析师均值$518提供+77%上行空间，是强力买入信号。当前股价$535已超越当时分析师均值，目标价须全面上修至$600-650，但升幅后分析师均值$443-503已低于当前股价，触发器C反转为负面。基本面持续改善（HAMR认证领先、FCF创新高），但估值已超前基本面，谨慎观望并等待回调是更优策略。
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div>存储器行业专项投资打分系统 v4.1 · 20260607更新版</div>
+  <div style="margin-top:4px;color:var(--muted);">WDC · 当前价$535 · 行业分63.1 · 质量分66.8 · 估值分12.0 · 最终分<strong style="color:var(--green)">44.7</strong> · 评级<strong style="color:var(--yellow)">谨慎观望</strong></div>
+  <div class="disclaimer">本报告仅供投资研究参考，不构成投资建议。过去表现不代表未来结果。存储器行业具有高周期性，请充分评估风险。</div>
+  <div class="disclaimer">数据来源：WDC Q3FY26 SEC 8-K(2026-04-30)、管理层电话会议、花旗/富国银行/MarketBeat分析师报告、Tom's Hardware HAMR报道、原研报(2026-06-03)</div>
+</div>
+
+</div>
+</body>
+</html>
