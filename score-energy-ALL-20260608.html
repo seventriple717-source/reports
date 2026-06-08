@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI能源基础设施专项投资打分 v4.1 | 20260608</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #21262d;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --green2: #2ea043;
+    --yellow: #d29922;
+    --orange: #f0883e;
+    --red: #f85149;
+    --red2: #da3633;
+    --darkred: #6e040e;
+    --purple: #bc8cff;
+    --teal: #76e3b0;
+    --gold: #e8b04b;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #6e7681;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'SF Mono', 'Consolas', monospace; font-size: 13px; line-height: 1.6; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  /* COVER */
+  .cover { background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%); border: 1px solid var(--border); border-radius: 12px; padding: 40px; margin-bottom: 32px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--accent), var(--purple)); }
+  .cover-title { font-size: 28px; font-weight: 700; color: var(--accent); letter-spacing: 2px; margin-bottom: 8px; }
+  .cover-sub { font-size: 15px; color: var(--text2); margin-bottom: 24px; }
+  .cover-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .cover-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+  .cover-meta-value { font-size: 16px; color: var(--text); font-weight: 600; }
+
+  /* SECTION */
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: '▸'; color: var(--orange); }
+
+  /* RANKING TABLE */
+  .rank-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .rank-table th { background: var(--card2); color: var(--text2); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .rank-table td { padding: 10px 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
+  .rank-table tr:hover td { background: rgba(88,166,255,0.04); }
+  .rank-table tr:last-child td { border-bottom: none; }
+
+  /* GRADE BADGES */
+  .grade { display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+  .grade-S { background: rgba(46,160,67,0.25); color: #2ea043; border: 1px solid #2ea043; }
+  .grade-A { background: rgba(63,185,80,0.2); color: var(--green); border: 1px solid var(--green); }
+  .grade-B { background: rgba(210,153,34,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+  .grade-C { background: rgba(240,136,62,0.2); color: var(--orange); border: 1px solid var(--orange); }
+  .grade-D { background: rgba(248,81,73,0.2); color: var(--red); border: 1px solid var(--red); }
+
+  /* SCORE BARS */
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-bar { height: 6px; border-radius: 3px; flex: 1; background: var(--border); overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; }
+  .score-num { min-width: 32px; text-align: right; font-weight: 600; font-size: 13px; }
+
+  /* CATEGORY COLORS */
+  .cat-nuclear { color: var(--teal); }
+  .cat-infra { color: var(--accent); }
+  .cat-energy { color: var(--yellow); }
+  .cat-newtech { color: var(--purple); }
+  .cat-fuel { color: var(--gold); }
+
+  /* STATUS BADGES */
+  .status-warn { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid var(--red2); border-radius: 4px; padding: 1px 6px; font-size: 11px; white-space: nowrap; }
+  .status-ok { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid var(--green2); border-radius: 4px; padding: 1px 6px; font-size: 11px; }
+  .status-spec { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid var(--purple); border-radius: 4px; padding: 1px 6px; font-size: 11px; }
+  .status-neutral { background: rgba(139,148,158,0.15); color: var(--text2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 11px; }
+
+  /* GROUP CARDS */
+  .group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+  .company-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; transition: border-color 0.2s; }
+  .company-card:hover { border-color: var(--accent); }
+  .company-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .company-ticker { font-size: 20px; font-weight: 700; }
+  .company-name { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .company-score-big { font-size: 32px; font-weight: 800; }
+  .company-dims { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .dim-item { background: var(--card2); border-radius: 6px; padding: 6px 8px; }
+  .dim-label { font-size: 10px; color: var(--text3); text-transform: uppercase; }
+  .dim-value { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .company-note { font-size: 11px; color: var(--text2); line-height: 1.5; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; }
+  .price-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 8px 0; font-size: 12px; }
+  .price-current { color: var(--text); font-weight: 600; }
+  .price-target { color: var(--accent); }
+  .upside-pos { color: var(--green); font-weight: 600; }
+  .upside-neg { color: var(--red); font-weight: 600; }
+  .upside-zero { color: var(--text2); }
+
+  /* VALUATION TABLE */
+  .val-table { width: 100%; border-collapse: collapse; }
+  .val-table th { background: var(--card2); color: var(--text2); font-size: 11px; text-transform: uppercase; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .val-table td { padding: 8px 10px; border-bottom: 1px solid #1c2128; font-size: 12px; }
+  .val-table tr:hover td { background: rgba(88,166,255,0.03); }
+
+  /* SCAN BOX */
+  .scan-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .scan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
+  .scan-item { background: var(--card2); border-radius: 8px; padding: 12px; }
+  .scan-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .scan-value { font-size: 13px; color: var(--text); }
+  .scan-highlight { color: var(--accent); font-weight: 600; }
+
+  /* SEPARATOR */
+  .sep { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* SUPPLY CHAIN TABLE */
+  .supply-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .supply-table th { background: var(--card2); padding: 8px 12px; text-align: left; font-size: 11px; color: var(--text2); border-bottom: 1px solid var(--border); text-transform: uppercase; }
+  .supply-table td { padding: 8px 12px; border-bottom: 1px solid #1c2128; font-size: 12px; }
+  .tight { color: var(--red); font-weight: 600; }
+  .ok { color: var(--green); }
+  .building { color: var(--yellow); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 32px; color: var(--text3); font-size: 12px; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer-brand { color: var(--accent); font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+
+  /* DIM SCORE COLORS */
+  .d5 { color: #2ea043; }
+  .d4 { color: #3fb950; }
+  .d3 { color: #d29922; }
+  .d2 { color: #f85149; }
+  .d1 { color: #da3633; }
+  .d0 { color: #6e040e; }
+
+  /* RANK NUMBER */
+  .rank-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-weight: 700; font-size: 12px; }
+  .rank-1 { background: rgba(255,215,0,0.3); color: #ffd700; border: 1px solid #ffd700; }
+  .rank-2 { background: rgba(192,192,192,0.3); color: #c0c0c0; border: 1px solid #c0c0c0; }
+  .rank-3 { background: rgba(205,127,50,0.3); color: #cd7f32; border: 1px solid #cd7f32; }
+  .rank-n { background: var(--card2); color: var(--text2); border: 1px solid var(--border); }
+
+  /* PROGRESS RING */
+  .progress-ring { display: inline-block; position: relative; }
+
+  /* TIMELINE */
+  .timeline { list-style: none; padding-left: 20px; border-left: 2px solid var(--border); }
+  .timeline li { position: relative; padding: 8px 0 8px 20px; }
+  .timeline li::before { content: '◆'; position: absolute; left: -25px; color: var(--accent); font-size: 10px; }
+  .timeline-date { font-size: 11px; color: var(--text3); }
+  .timeline-text { font-size: 13px; color: var(--text); }
+
+  /* ALERT BOX */
+  .alert-warn { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: var(--red); }
+  .alert-spec { background: rgba(188,140,255,0.08); border: 1px solid rgba(188,140,255,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: var(--purple); }
+  .alert-ok { background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: var(--green); }
+
+  /* HIGHLIGHT NUMBERS */
+  .hl { color: var(--accent); font-weight: 700; }
+  .hl-g { color: var(--green); font-weight: 700; }
+  .hl-r { color: var(--red); font-weight: 700; }
+  .hl-y { color: var(--yellow); font-weight: 700; }
+  .hl-p { color: var(--purple); font-weight: 700; }
+
+  /* TABS SIMULATION */
+  .phase-label { display: inline-block; background: var(--card2); border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 4px 14px; font-size: 12px; font-weight: 600; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .group-grid { grid-template-columns: 1fr; }
+    .cover-meta { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-title">⚡ AI能源基础设施专项投资评级报告</div>
+  <div class="cover-sub">v4.1 框架 · 16家核心标的全景打分 · 下次对比基准已记录</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">报告日期</span>
+      <span class="cover-meta-value">2026-06-08</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">覆盖公司</span>
+      <span class="cover-meta-value">16家</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">S/A/B/C/D</span>
+      <span class="cover-meta-value">0 / 3 / 3 / 4 / 6</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">超目标价公司</span>
+      <span class="cover-meta-value">8家（50%）</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">行业阶段</span>
+      <span class="cover-meta-value">快速增长期 ↑</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">基准锁定</span>
+      <span class="cover-meta-value" style="color:var(--green);">✓ 已记录</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1: AI能源需求全景扫描 -->
+<div class="section">
+  <div class="section-title">第零步：AI能源需求全景扫描（2026-06）</div>
+  <div class="scan-box">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <span class="phase-label">📊 当前阶段：快速增长期（供给跟上但仍紧张，PPA争夺激烈）</span>
+    </div>
+    <div class="scan-grid">
+      <div class="scan-item">
+        <div class="scan-label">AI数据中心全球用电需求（2026年）</div>
+        <div class="scan-value"><span class="scan-highlight">1,100 TWh</span>（IEA预测），较2024年接近翻倍；单座大型AI训练设施需<span class="scan-highlight">100-1,000 MW</span>独立电力</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">超大规模科技公司核电签约（截至2026年5月）</div>
+        <div class="scan-value">合计已签约 <span class="scan-highlight">9.8 GW</span> 核电容量；Microsoft/Amazon/Meta/Google全部已签；Meta单家6.6 GW（TerraPower/Vistra/Oklo）</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">核电PPA价格</div>
+        <div class="scan-value">重启核电LCOE <span class="scan-highlight">$70-95/MWh</span>；SMR LCOE $48-85/MWh（含税收抵免）；可再生PPA：风电$79.4/MWh、太阳能$64.5/MWh</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">美国电力基础设施超级投资周期</div>
+        <div class="scan-value">2026-2030年美国公用事业Capex预测 <span class="scan-highlight">$1.295万亿</span>（S&P Global）；DOE $1.9B SPARK输电升级专项资金</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">变压器供应链紧张状态</div>
+        <div class="scan-value">标准电力变压器交期 <span class="scan-highlight">128周（约2.5年）</span>；GSU交期144周（约3年）；价格较疫情前上涨95%；Wood Mac预测2025年短缺30%</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">SMR商业化时间线</div>
+        <div class="scan-value">NuScale唯一获NRC设计认证；Oklo Aurora-INL <span class="scan-highlight">2026年7月临界测试目标</span>；首批商业收入预计2030年后；2026年后SMR开始进入电力供应结构</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">FERC互联改革进展</div>
+        <div class="scan-value">Order 2023已出台"先到先服务"集群研究；队列中待接入电力 <span class="scan-highlight">近2 TW（1.6倍现有电网容量）</span>；大型负荷（数据中心）快速互联专项规则推进中</div>
+      </div>
+      <div class="scan-item">
+        <div class="scan-label">美国电网国防优先级</div>
+        <div class="scan-value">Trump政府正式将 <span class="scan-highlight">电网基础设施列为国家防御优先级</span>；变电站/开关柜列入国防生产法案战略物资清单，直接利好ETN/POWL/HUBB</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <h3 style="font-size:13px; color:var(--text2); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">电力供应侧全景分析</h3>
+    <table class="supply-table">
+      <tr><th>发电类型</th><th>当前供给状态</th><th>AI数据中心适配性</th><th>2-5年展望</th></tr>
+      <tr><td>核电（现有运营）</td><td><span class="tight">极度紧张</span></td><td>24/7基荷，最受青睐</td><td>PPA溢价持续扩大，CEG/VST主要受益</td></tr>
+      <tr><td>核电（SMR新建）</td><td><span class="building">未商业化</span></td><td>长期战略选项</td><td>2030年前难以大规模贡献，投机期权</td></tr>
+      <tr><td>天然气联合循环（CCGT）</td><td><span class="building">建设加速中</span></td><td>快速响应，数据中心备选</td><td>2026-2028年新增容量显著，价格竞争加剧</td></tr>
+      <tr><td>太阳能+储能</td><td><span class="ok">区域充裕</span></td><td>日间供电，间歇性问题</td><td>IRA补贴受政策不确定性，2026年"美丽大法案"提前退出部分抵免</td></tr>
+      <tr><td>风电+储能</td><td><span class="ok">区域充裕</span></td><td>区域性，间歇性问题</td><td>海上风电受关税和许可延迟；陆上风电稳定</td></tr>
+      <tr><td>燃料电池（SOFC）</td><td><span class="building">快速扩展中</span></td><td>直供数据中心，去中间化</td><td>Bloom Energy引领，2026年营收有望$3.4-3.8B</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SECTION 2: 排行榜 -->
+<div class="section">
+  <div class="section-title">封面排行榜（按最终综合分排序）</div>
+  <table class="rank-table">
+    <tr>
+      <th>排名</th>
+      <th>代码</th>
+      <th>公司</th>
+      <th>分类</th>
+      <th>评级</th>
+      <th>综合分</th>
+      <th>行业(20%)</th>
+      <th>质量(50%)</th>
+      <th>估值(30%)</th>
+      <th>置信度</th>
+      <th>当前价</th>
+      <th>模型目标</th>
+      <th>上行空间</th>
+      <th>估值状态</th>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-1">1</span></td>
+      <td style="font-weight:700; color:var(--teal);">CEG</td>
+      <td>Constellation Energy</td>
+      <td><span class="cat-nuclear">核电/稳定电力</span></td>
+      <td><span class="grade grade-A">A</span></td>
+      <td><b style="font-size:16px;">76</b></td>
+      <td><span class="d5">92</span></td><td><span class="d5">94</span></td><td><span class="d4">65</span></td>
+      <td>0.90</td><td>$282</td><td>$292</td>
+      <td><span class="upside-pos">+3.6%</span></td>
+      <td><span class="status-ok">合理</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-2">2</span></td>
+      <td style="font-weight:700; color:var(--accent);">VST</td>
+      <td>Vistra Corp</td>
+      <td><span class="cat-nuclear">核电/稳定电力</span></td>
+      <td><span class="grade grade-A">A</span></td>
+      <td><b style="font-size:16px;">71</b></td>
+      <td><span class="d4">81</span></td><td><span class="d4">80</span></td><td><span class="d4">75</span></td>
+      <td>0.90</td><td>$146</td><td>$217</td>
+      <td><span class="upside-pos">+48.3%</span></td>
+      <td><span class="status-ok">大幅折价</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-3">3</span></td>
+      <td style="font-weight:700; color:var(--accent);">EME</td>
+      <td>EMCOR Group</td>
+      <td><span class="cat-infra">AI基建/EPC施工</span></td>
+      <td><span class="grade grade-A">A</span></td>
+      <td><b style="font-size:16px;">70</b></td>
+      <td><span class="d5">93</span></td><td><span class="d5">88</span></td><td><span class="d4">65</span></td>
+      <td>0.85</td><td>$725</td><td>$818</td>
+      <td><span class="upside-pos">+12.9%</span></td>
+      <td><span class="status-ok">折价</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">4</span></td>
+      <td style="font-weight:700; color:var(--yellow);">FSLR</td>
+      <td>First Solar</td>
+      <td><span class="cat-energy">新能源/制造</span></td>
+      <td><span class="grade grade-B">B</span></td>
+      <td><b style="font-size:16px;">66</b></td>
+      <td><span class="d3">70</span></td><td><span class="d4">80</span></td><td><span class="d4">80</span></td>
+      <td>0.85</td><td>$193</td><td>$258</td>
+      <td><span class="upside-pos">+33.6%</span></td>
+      <td><span class="status-ok">折价</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">5</span></td>
+      <td style="font-weight:700; color:var(--yellow);">HUBB</td>
+      <td>Hubbell Inc</td>
+      <td><span class="cat-infra">AI基建/电力设备</span></td>
+      <td><span class="grade grade-B">B</span></td>
+      <td><b style="font-size:16px;">64</b></td>
+      <td><span class="d4">76</span></td><td><span class="d4">76</span></td><td><span class="d3">58</span></td>
+      <td>0.90</td><td>$476</td><td>$486</td>
+      <td><span class="upside-pos">+2.2%</span></td>
+      <td><span class="status-neutral">合理</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">6</span></td>
+      <td style="font-weight:700; color:var(--yellow);">ETN</td>
+      <td>Eaton Corp</td>
+      <td><span class="cat-infra">AI基建/电力设备</span></td>
+      <td><span class="grade grade-B">B</span></td>
+      <td><b style="font-size:16px;">62</b></td>
+      <td><span class="d5">88</span></td><td><span class="d5">82</span></td><td><span class="d2">33</span></td>
+      <td>0.90</td><td>$359</td><td>$318</td>
+      <td><span class="upside-neg">-11.3%</span></td>
+      <td><span class="status-warn">⚠️已超目标</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">7</span></td>
+      <td style="font-weight:700; color:var(--orange);">MPWR</td>
+      <td>Monolithic Power</td>
+      <td><span class="cat-infra">AI基建/电源管理IC</span></td>
+      <td><span class="grade grade-C">C</span></td>
+      <td><b style="font-size:16px;">58</b></td>
+      <td><span class="d5">93</span></td><td><span class="d5">94</span></td><td><span class="d1">10</span></td>
+      <td>0.85</td><td>$1,069</td><td>$881</td>
+      <td><span class="upside-neg">-17.6%</span></td>
+      <td><span class="status-warn">⚠️已超目标</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">8</span></td>
+      <td style="font-weight:700; color:var(--orange);">POWL</td>
+      <td>Powell Industries</td>
+      <td><span class="cat-infra">AI基建/电力设备</span></td>
+      <td><span class="grade grade-C">C</span></td>
+      <td><b style="font-size:16px;">54</b></td>
+      <td><span class="d5">95</span></td><td><span class="d5">88</span></td><td><span class="d1">15</span></td>
+      <td>0.80</td><td>$516</td><td>$476</td>
+      <td><span class="upside-neg">-7.7%</span></td>
+      <td><span class="status-warn">⚠️已超目标†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">9</span></td>
+      <td style="font-weight:700; color:var(--orange);">VRT</td>
+      <td>Vertiv Holdings</td>
+      <td><span class="cat-infra">AI基建/液冷</span></td>
+      <td><span class="grade grade-C">C</span></td>
+      <td><b style="font-size:16px;">53</b></td>
+      <td><span class="d5">93</span></td><td><span class="d5">90</span></td><td><span class="d1">10</span></td>
+      <td>0.80</td><td>$266</td><td>$203</td>
+      <td><span class="upside-neg">-23.8%</span></td>
+      <td><span class="status-warn">⚠️已超目标</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">10</span></td>
+      <td style="font-weight:700; color:var(--orange);">PWR</td>
+      <td>Quanta Services</td>
+      <td><span class="cat-infra">AI基建/EPC施工</span></td>
+      <td><span class="grade grade-C">C</span></td>
+      <td><b style="font-size:16px;">59</b></td>
+      <td><span class="d5">93</span></td><td><span class="d5">88</span></td><td><span class="d2">38</span></td>
+      <td>0.80</td><td>$563</td><td>$505</td>
+      <td><span class="upside-neg">-10.3%</span></td>
+      <td><span class="status-warn">⚠️已超目标†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">11</span></td>
+      <td style="font-weight:700; color:var(--red);">AMSC</td>
+      <td>American Superconductor</td>
+      <td><span class="cat-infra">AI基建/电网设备</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">43</b></td>
+      <td><span class="d3">61</span></td><td><span class="d3">66</span></td><td><span class="d2">38</span></td>
+      <td>0.75</td><td>$29</td><td>$27</td>
+      <td><span class="upside-neg">-6.9%</span></td>
+      <td><span class="status-warn">⚠️已超目标†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">12</span></td>
+      <td style="font-weight:700; color:var(--red);">MYRG</td>
+      <td>MYR Group</td>
+      <td><span class="cat-infra">AI基建/EPC施工</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">45</b></td>
+      <td><span class="d4">78</span></td><td><span class="d3">74</span></td><td><span class="d1">10</span></td>
+      <td>0.80</td><td>$260</td><td>$201</td>
+      <td><span class="upside-neg">-22.8%</span></td>
+      <td><span class="status-warn">⚠️已超目标†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">13</span></td>
+      <td style="font-weight:700; color:var(--red);">BE</td>
+      <td>Bloom Energy</td>
+      <td><span class="cat-fuel">新型燃料电池</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">49</b></td>
+      <td><span class="d3">73</span></td><td><span class="d4">77</span></td><td><span class="d3">55</span></td>
+      <td>0.70</td><td>$159</td><td>$199</td>
+      <td><span class="upside-pos">+25.1%</span></td>
+      <td><span class="status-neutral">折价（模型）†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">14</span></td>
+      <td style="font-weight:700; color:var(--red);">PLPC</td>
+      <td>Preformed Line Products</td>
+      <td><span class="cat-infra">AI基建/电网配件</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">38</b></td>
+      <td><span class="d3">64</span></td><td><span class="d3">60</span></td><td><span class="d1">15</span></td>
+      <td>0.80</td><td>$263</td><td>$213</td>
+      <td><span class="upside-neg">-18.9%</span></td>
+      <td><span class="status-warn">⚠️已超目标†</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">15</span></td>
+      <td style="font-weight:700; color:var(--purple);">OKLO</td>
+      <td>Oklo Inc</td>
+      <td><span class="cat-newtech">下一代核电/SMR</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">32</b></td>
+      <td><span class="d3">68</span></td><td><span class="d3">54</span></td><td><span class="d2">44</span></td>
+      <td>0.60</td><td>$54</td><td>$0*</td>
+      <td><span class="upside-pos">+80%†</span></td>
+      <td><span class="status-spec">pre-revenue投机</span></td>
+    </tr>
+    <tr>
+      <td><span class="rank-num rank-n">16</span></td>
+      <td style="font-weight:700; color:var(--purple);">SMR</td>
+      <td>NuScale Power</td>
+      <td><span class="cat-newtech">下一代核电/SMR</span></td>
+      <td><span class="grade grade-D">D</span></td>
+      <td><b style="font-size:16px;">29</b></td>
+      <td><span class="d3">60</span></td><td><span class="d3">52</span></td><td><span class="d2">46</span></td>
+      <td>0.55</td><td>$11.4</td><td>$24</td>
+      <td><span class="upside-pos">+111.2%</span></td>
+      <td><span class="status-spec">pre-revenue投机</span></td>
+    </tr>
+  </table>
+  <div style="font-size:11px; color:var(--text3); margin-top:8px;">†：update数据显示实际股价与题目给定价格存在差异，请参阅各公司详情。OKLO/SMR目标价基于PS法，pre-revenue公司无传统估值目标。</div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SECTION 3: 分类分组展示 -->
+<div class="section">
+  <div class="section-title">分类分组详细展示</div>
+
+  <!-- GROUP 1: 核电/稳定电力 -->
+  <h3 style="color:var(--teal); margin:16px 0 12px; font-size:14px; display:flex; align-items:center; gap:8px;">
+    <span style="background:rgba(118,227,176,0.15); border:1px solid var(--teal); padding:2px 10px; border-radius:20px;">☢️ 核电/稳定电力（CEG · VST）</span>
+  </h3>
+  <div class="group-grid">
+    <!-- CEG -->
+    <div class="company-card" style="border-left: 3px solid var(--teal);">
+      <div class="company-card-header">
+        <div>
+          <div class="company-ticker" style="color:var(--teal);">CEG</div>
+          <div class="company-name">Constellation Energy · 核电运营+Calpine天然气</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="company-score-big" style="color:var(--green);">76</div>
+          <span class="grade grade-A">A 级</span>
+        </div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$282.00</span>
+        <span class="price-target">PE目标：$292.24</span>
+        <span class="price-target" style="color:var(--accent);">分析师：$394.10</span>
+        <span class="upside-pos">+3.6% / +39.7%</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">92</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">94</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d4">65</div></div>
+      </div>
+      <div class="company-note">
+        <b>核心逻辑：</b>全美最大核电运营商（约21 GW核电容量），Calpine并购后增至60 GW总装机，FY2026E Adj.EPS $11.37（+21% YoY）。Microsoft TMI核电20年835 MW PPA开创AI核电溢价定价先例。IRA核电PTC每年约$2-3B税收优惠。<br>
+        <b>更新：</b>Q1 2026 EPS $2.74超预期+28%；2026-2027年FCF指引$84亿，2028-2029年$115-130亿，长期现金流能见度极强。股价已从研报时$282回调至~$254，加仓区间$250-265已成立。分析师目标已更新至$367，18家Buy。
+      </div>
+    </div>
+    <!-- VST -->
+    <div class="company-card" style="border-left: 3px solid var(--teal);">
+      <div class="company-card-header">
+        <div>
+          <div class="company-ticker" style="color:var(--teal);">VST</div>
+          <div class="company-name">Vistra Corp · IPP+Energy Harbor核电</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="company-score-big" style="color:var(--green);">71</div>
+          <span class="grade grade-A">A 级</span>
+        </div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$146.00</span>
+        <span class="price-target">EV目标：$216.52</span>
+        <span class="price-target" style="color:var(--accent);">分析师：$234.26</span>
+        <span class="upside-pos">+48.3% / +60.5%</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d4">81</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d4">80</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d4">75</div></div>
+      </div>
+      <div class="company-note">
+        <b>核心逻辑：</b>ERCOT市场~25%份额（41 GW装机），德州AI数据中心扩张最激进。Q1 2026 Adj.EBITDA ~$15亿（历史季度记录），核电100%可用率。FY2026指引$68-76亿（中值$72亿），Cogentrix $47亿并购+Meta PPA均<b>未计入指引</b>，实质上行期权丰富。<br>
+        <b>风险：</b>净债务$180亿，高杠杆在利率上行环境下有压力；ERCOT市场电价波动风险。当前价$148对应9-10x EV/EBITDA，处于历史低位区间，安全边际充分。
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 2: AI基建链 -->
+  <h3 style="color:var(--accent); margin:24px 0 12px; font-size:14px; display:flex; align-items:center; gap:8px;">
+    <span style="background:rgba(88,166,255,0.15); border:1px solid var(--accent); padding:2px 10px; border-radius:20px;">⚡ AI基础设施链（VRT · ETN · MPWR · HUBB · PWR · EME · MYRG · PLPC · POWL · AMSC）</span>
+  </h3>
+  <div class="group-grid">
+    <!-- EME -->
+    <div class="company-card" style="border-left: 3px solid var(--accent);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--accent);">EME</div><div class="company-name">EMCOR Group · 电气+机械EPC施工</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--green);">70</div><span class="grade grade-A">A 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$725</span>
+        <span class="price-target">PE目标：$818</span>
+        <span class="upside-pos">+12.9%</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">93</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">88</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d4">65</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>零债务，技术中立执行使能，RPO $156.2亿(+33%)，全年指引上调至$185-192.5亿，Q1 2026营业利润率8.7%。连续16季超预期。<b>上行催化：</b>英国业务剥离，峰值施工窗口2026-2027年。</div>
+    </div>
+    <!-- HUBB -->
+    <div class="company-card" style="border-left: 3px solid var(--yellow);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--yellow);">HUBB</div><div class="company-name">Hubbell Inc · 电气产品+电网解决方案</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--yellow);">64</div><span class="grade grade-B">B 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$476</span>
+        <span class="price-target">PE目标：$486</span>
+        <span class="upside-pos">+2.2%</span>
+        <span class="price-target">分析师共识：$537（+12.6%）</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d4">76</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d4">76</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d3">58</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Electrical Solutions Q1+12%确认拐点，全年指引上调至8-11%；NSI $19亿收购扩规模。<b>注意：</b>铜/硅钢片大宗商品成本暴露（预检三降分），需监控成本传导能力。估值基本公允，适合已持有投资者。</div>
+    </div>
+    <!-- ETN -->
+    <div class="company-card" style="border-left: 3px solid var(--red2);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--orange);">ETN</div><div class="company-name">Eaton Corp · 电气+液压+航空</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--yellow);">62</div><span class="grade grade-B">B 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 股价已超模型目标 -11.3%，估值分相应下调</div>
+      <div class="price-row">
+        <span class="price-current">当前：$359</span>
+        <span class="price-target">PE目标：$318</span>
+        <span class="upside-neg">-11.3%</span>
+        <span class="price-target">分析师：$410（update实际价$393，分析师或将上调）</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">88</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">82</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d2">33</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Q1 2026数据中心订单+240% YoY，有机增速指引上调至9-11%。<b>Mobility分拆（Q1 2027）</b>是最大估值重评催化剂（分部利润率提升60-80bps）。业务无可挑剔，估值需等待回调至$320-340区间建仓。</div>
+    </div>
+    <!-- VRT -->
+    <div class="company-card" style="border-left: 3px solid var(--red);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--orange);">VRT</div><div class="company-name">Vertiv Holdings · 液冷+UPS+数据中心电力</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--orange);">53</div><span class="grade grade-C">C 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 股价已超模型目标 -23.8%；update显示52周高点$376.23，当前约$301</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">93</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">90</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d1">10</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>AI液冷最纯正受益，$15B backlog，分析师目标上调至$376.80。<b>操作建议：</b>等待回调至$200-220区间（Forward PE降至30-35x）时建仓，当前Forward PE 44x已充分定价。质量极优，但只是价格问题。</div>
+    </div>
+    <!-- PWR -->
+    <div class="company-card" style="border-left: 3px solid var(--red2);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--orange);">PWR</div><div class="company-name">Quanta Services · 电力施工EPC</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--orange);">59</div><span class="grade grade-C">C 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 题目价$563已超模型目标-10.3%；update显示实际价$695，分析师共识已上调至$790.53</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">93</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">88</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d2">38</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>$48.5B历史最高backlog（+45.3%），Q1 2026营收+26.3%，技术中立执行使能不可替代。<b>注：</b>若以实际价格$695计算，超出更多；但分析师共识$790仍可能是跟踪买入机会。</div>
+    </div>
+    <!-- MPWR -->
+    <div class="company-card" style="border-left: 3px solid var(--red);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--orange);">MPWR</div><div class="company-name">Monolithic Power · AI数据中心电源IC</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--orange);">58</div><span class="grade grade-C">C 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 股价已超模型目标-17.6%；update显示实际价$1,460（历史高点$1,714）</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">93</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">94</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d1">10</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Enterprise Data增速从50%→85% YoY（重大正向修订），通信33%环比增长第二曲线。Fabless FCF margin 23.9%。<b>操作：</b>等待回调至$1,300-1,350区间（Forward PE ~57-60x）。</div>
+    </div>
+    <!-- POWL -->
+    <div class="company-card" style="border-left: 3px solid var(--red2);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--orange);">POWL</div><div class="company-name">Powell Industries · 高压开关柜制造</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--orange);">54</div><span class="grade grade-C">C 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 题目价$516已超原目标；update显示实际价~$270.35（-47.6%）！若以实际价格估值将大幅改善</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d5">95</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d5">88</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d1">15</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>$4亿+历史最大DC单笔订单，Backlog $18亿+33%，国防战略物资认定。<b>重要：</b>若以实际价格$270计算，Forward PE仅15.9x，估值将达A级水平。建议核实当前实际价格后重新评估。</div>
+    </div>
+    <!-- MYRG -->
+    <div class="company-card" style="border-left: 3px solid var(--red);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--red);">MYRG</div><div class="company-name">MYR Group · T&D+C&I电气施工</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">45</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 已超模型目标-22.8%；update显示实际价~$468（+80%），超出所有估值方法目标</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d4">78</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d3">74</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d1">10</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Q1营业利润率6.5%（vs去年4.1%）是重大正面突破，积压$28.4亿历史记录。<b>估值：</b>若以实际价$468，Forward PE约36x，大幅高于模型24x假设，安全边际转负，移出主动买入池。</div>
+    </div>
+    <!-- AMSC -->
+    <div class="company-card" style="border-left: 3px solid var(--red);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--red);">AMSC</div><div class="company-name">American Superconductor · 超导电网+风电</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">43</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 已超模型目标-6.9%；update显示实际价~$42，分析师共识$52</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">61</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d3">66</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d2">38</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>FY2025营收$299M+34%，积压$280M+40%。<b>注意：</b>含$112M一次性DTA税务释放（Q3 FY2026），核心经营利润需扣除一次性项目；AI直接暴露度中等，主要为风电+电网业务。</div>
+    </div>
+    <!-- PLPC -->
+    <div class="company-card" style="border-left: 3px solid var(--red);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--red);">PLPC</div><div class="company-name">Preformed Line Products · 输电线夹金具</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">38</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="alert-warn" style="margin:8px 0; padding:6px 10px; font-size:11px;">⚠️ 已超模型目标-18.9%；update显示实际价~$388（+47%）</div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">64</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d3">60</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d1">15</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>PLP-USA能源业务Q1+26%，电网现代化直接受益。<b>风险：</b>净利率仅5%，铜/钢材成本暴露高，分析师目标$275低于当前$388，估值已大幅超出合理区间。</div>
+    </div>
+  </div>
+
+  <!-- GROUP 3: 新能源 -->
+  <h3 style="color:var(--yellow); margin:24px 0 12px; font-size:14px; display:flex; align-items:center; gap:8px;">
+    <span style="background:rgba(210,153,34,0.15); border:1px solid var(--yellow); padding:2px 10px; border-radius:20px;">☀️ 新能源/燃料电池（FSLR · BE）</span>
+  </h3>
+  <div class="group-grid">
+    <!-- FSLR -->
+    <div class="company-card" style="border-left: 3px solid var(--yellow);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--yellow);">FSLR</div><div class="company-name">First Solar · 美国本土CdTe薄膜太阳能</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--yellow);">66</div><span class="grade grade-B">B 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">题目价：$193</span>
+        <span class="price-target">EV目标：$258</span>
+        <span class="upside-pos">+33.6%</span>
+        <div style="color:var(--text3);font-size:11px;">（注：update显示实际已涨至$275-311，已超原目标）</div>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">70</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d4">80</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d4">80</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Q1 2026营收+24%，EPS $3.22超预期+12.2%；Backlog 47.9 GW；美国产能利用率96%，SC新工厂投产中。IRA 45X补贴边际风险改善（One Big Beautiful Bill）。<b>风险：</b>IRA政策废除风险仍是最大不确定性。</div>
+    </div>
+    <!-- BE -->
+    <div class="company-card" style="border-left: 3px solid var(--gold);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--gold);">BE</div><div class="company-name">Bloom Energy · SOFC固体氧化物燃料电池</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">49</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">题目价：$159</span>
+        <span class="price-target">PS目标：$199</span>
+        <span class="upside-pos">+25.1%</span>
+        <div style="color:var(--text3);font-size:11px;">（注：update显示实际已涨至$251，已超PS目标$199）</div>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">73</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d4">77</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d3">55</div></div>
+      </div>
+      <div class="company-note"><b>核心：</b>Q1 2026营收$751M(+130%)彻底打破季节性预期；FY2026指引上调至$3.4-3.8B；Nebius $26亿大单，产品backlog $6B(+140%)；Non-GAAP毛利率指引34%。<b>风险：</b>GAAP仍亏损，PS法估值不确定性，置信度0.7。</div>
+    </div>
+  </div>
+
+  <!-- GROUP 4: 下一代核电 -->
+  <h3 style="color:var(--purple); margin:24px 0 12px; font-size:14px; display:flex; align-items:center; gap:8px;">
+    <span style="background:rgba(188,140,255,0.15); border:1px solid var(--purple); padding:2px 10px; border-radius:20px;">🔬 下一代核电/SMR（OKLO · SMR）— 高度投机性，依赖里程碑兑现</span>
+  </h3>
+  <div class="alert-spec">投机性标的声明：OKLO和NuScale（SMR）均为pre-revenue公司，传统估值方法（PE/EV/EBITDA）不适用。评分采用里程碑进度法，置信度分别为0.60和0.55。仅适合对核电技术路线有深度判断的高风险偏好投资者，仓位建议不超过总仓位3%。</div>
+  <div class="group-grid">
+    <!-- OKLO -->
+    <div class="company-card" style="border-left: 3px solid var(--purple);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--purple);">OKLO</div><div class="company-name">Oklo Inc · Aurora快中子微型反应堆</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">32</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$54.00</span>
+        <span class="price-target">模型目标：N/A（pre-rev）</span>
+        <span class="price-target">分析师共识：$88.89（23家Buy）</span>
+        <span class="upside-pos">vs分析师：+64.6%</span>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">68</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d3">54</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d2">44</div></div>
+      </div>
+      <div class="company-note">
+        <b>里程碑追踪：</b><br>
+        ✅ 2025年9月：Aurora-INL项目奠基<br>
+        ✅ 2026年5月：NRC PDC主设计标准获批（加速审查15天 vs 通常30-60天）<br>
+        🎯 2026年7月：Aurora-INL临界测试目标（<b>最大催化剂</b>）<br>
+        📋 客户管线：Switch 12 GW + Meta 1.2 GW = 约18 GW总管线<br>
+        💰 现金充裕；Q1亏损$33M（符合预期）
+      </div>
+    </div>
+    <!-- SMR (NuScale) -->
+    <div class="company-card" style="border-left: 3px solid var(--purple);">
+      <div class="company-card-header">
+        <div><div class="company-ticker" style="color:var(--purple);">SMR</div><div class="company-name">NuScale Power · 全球唯一NRC认证SMR</div></div>
+        <div style="text-align:right;"><div class="company-score-big" style="color:var(--red);">29</div><span class="grade grade-D">D 级</span></div>
+      </div>
+      <div class="price-row">
+        <span class="price-current">当前：$11.40</span>
+        <span class="price-target">PS目标：$24.08</span>
+        <span class="upside-pos">+111.2%</span>
+        <div style="color:var(--red);font-size:11px;">（Goldman $9目标↓；Canaccord $25维持；极度分化）</div>
+      </div>
+      <div class="company-dims">
+        <div class="dim-item"><div class="dim-label">行业分</div><div class="dim-value d3">60</div></div>
+        <div class="dim-item"><div class="dim-label">质量分</div><div class="dim-value d3">52</div></div>
+        <div class="dim-item"><div class="dim-label">估值分</div><div class="dim-value d2">46</div></div>
+      </div>
+      <div class="company-note">
+        <b>里程碑追踪：</b><br>
+        ✅ 唯一NRC设计认证SMR（2025年5月SDA获批）<br>
+        ✅ 现金储备$1.3B（约2.5-3年跑道）<br>
+        📋 TVA/ENTRA1 6 GW非约束性协议（最大商业意向）<br>
+        🎯 罗马尼亚RoPower 2026年中期go/no-go决策<br>
+        ⚠️ 高现金消耗$460M/年；商业合同迟迟未落地是核心质疑
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SECTION 4: 估值状态汇总表 -->
+<div class="section">
+  <div class="section-title">估值状态汇总表（当前价 vs 模型目标 vs 分析师目标）</div>
+  <table class="val-table">
+    <tr>
+      <th>代码</th>
+      <th>当前价（题目）</th>
+      <th>模型推荐目标</th>
+      <th>估值方法</th>
+      <th>DCF目标</th>
+      <th>分析师目标</th>
+      <th>vs模型</th>
+      <th>vs分析师</th>
+      <th>状态</th>
+    </tr>
+    <tr><td><b style="color:var(--teal);">CEG</b></td><td>$282.00</td><td>$292.24</td><td>PE法 30x</td><td>$85.14（历史OCF失真）</td><td>$394.10</td><td><span class="upside-pos">+3.6%</span></td><td><span class="upside-pos">+39.7%</span></td><td><span class="status-ok">合理</span></td></tr>
+    <tr><td><b style="color:var(--teal);">VST</b></td><td>$146.00</td><td>$216.52</td><td>EV/EBITDA 16.24x</td><td>$95.33</td><td>$234.26</td><td><span class="upside-pos">+48.3%</span></td><td><span class="upside-pos">+60.5%</span></td><td><span class="status-ok">大幅折价</span></td></tr>
+    <tr><td><b style="color:var(--accent);">EME</b></td><td>$725.00</td><td>$818.35</td><td>PE法 27x</td><td>$637.97</td><td>$869.29</td><td><span class="upside-pos">+12.9%</span></td><td><span class="upside-pos">+19.9%</span></td><td><span class="status-ok">折价</span></td></tr>
+    <tr><td><b style="color:var(--yellow);">FSLR</b></td><td>$193.00</td><td>$257.59</td><td>EV/EBITDA 10.5x</td><td>$214.90</td><td>$255.87</td><td><span class="upside-pos">+33.6%</span></td><td><span class="upside-pos">+32.6%</span></td><td><span class="status-ok">折价</span></td></tr>
+    <tr><td><b>HUBB</b></td><td>$476.00</td><td>$486.17</td><td>PE法 27x</td><td>$405.77</td><td>$536.69</td><td><span class="upside-pos">+2.2%</span></td><td><span class="upside-pos">+12.7%</span></td><td><span class="status-neutral">合理</span></td></tr>
+    <tr><td><b style="color:var(--orange);">ETN</b></td><td>$359.00</td><td>$318.35</td><td>PE法 28x</td><td>$284.91</td><td>$409.76</td><td><span class="upside-neg">-11.3%</span></td><td><span class="upside-pos">+14.1%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--orange);">VRT</b></td><td>$266.00</td><td>$203.15</td><td>PE法 44x</td><td>$177.92</td><td>$267.83</td><td><span class="upside-neg">-23.8%</span></td><td><span class="upside-pos">+0.7%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--orange);">PWR</b></td><td>$563.00</td><td>$505.15</td><td>EV/EBITDA 26.6x</td><td>$426.36</td><td>$579.74</td><td><span class="upside-neg">-10.3%</span></td><td><span class="upside-pos">+3.0%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--orange);">POWL</b></td><td>$516.00</td><td>$476.43</td><td>PE法 28x</td><td>$421.04</td><td>$517.67</td><td><span class="upside-neg">-7.7%</span></td><td><span class="upside-pos">+0.3%</span></td><td><span class="status-warn">⚠️超目标†</span></td></tr>
+    <tr><td><b style="color:var(--orange);">MPWR</b></td><td>$1,069.00</td><td>$880.52</td><td>PE法 55x</td><td>$419.84</td><td>$1,328.29</td><td><span class="upside-neg">-17.6%</span></td><td><span class="upside-pos">+24.3%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--red);">MYRG</b></td><td>$260.00</td><td>$200.60</td><td>PE法 24x</td><td>$194.58</td><td>$301.33</td><td><span class="upside-neg">-22.8%</span></td><td><span class="upside-pos">+15.9%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--red);">PLPC</b></td><td>$263.00</td><td>$213.33</td><td>PE法 28x</td><td>$175.53</td><td>$275.00</td><td><span class="upside-neg">-18.9%</span></td><td><span class="upside-pos">+4.6%</span></td><td><span class="status-warn">⚠️超目标</span></td></tr>
+    <tr><td><b style="color:var(--red);">AMSC</b></td><td>$29.00</td><td>$27.00</td><td>PS法</td><td>N/A</td><td>$52.00</td><td><span class="upside-neg">-6.9%</span></td><td><span class="upside-pos">+79.3%</span></td><td><span class="status-warn">⚠️超目标†</span></td></tr>
+    <tr><td><b style="color:var(--gold);">BE</b></td><td>$159.00</td><td>$199.48</td><td>PS法 17.5x</td><td>$42.33</td><td>$144.08</td><td><span class="upside-pos">+25.4%</span></td><td><span class="upside-neg">-9.4%</span></td><td><span class="status-neutral">折价（PS法）</span></td></tr>
+    <tr><td><b style="color:var(--purple);">OKLO</b></td><td>$54.00</td><td>N/A(pre-rev)</td><td>PS法（极不稳定）</td><td>$4.54（现金净现值）</td><td>$97.27</td><td>N/A</td><td><span class="upside-pos">+80.1%</span></td><td><span class="status-spec">pre-rev投机</span></td></tr>
+    <tr><td><b style="color:var(--purple);">SMR</b></td><td>$11.40</td><td>$24.08</td><td>PS法 65x远期</td><td>$0（无法计算）</td><td>$20.73</td><td><span class="upside-pos">+111.2%</span></td><td><span class="upside-pos">+81.8%</span></td><td><span class="status-spec">pre-rev投机</span></td></tr>
+  </table>
+  <div style="font-size:11px; color:var(--text3); margin-top:8px;">† 表示题目给定价格与update实际价格存在差异，打分已基于题目数据，但实际投资决策应以实时价格为准。DCF目标价不含Calpine/Energy Harbor等并购后调整。</div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SECTION 5: 关键投资判断 -->
+<div class="section">
+  <div class="section-title">各公司核心投资判断（2-3行精要）</div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap:12px;">
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--teal);">CEG</span><span class="grade grade-A">A · 76分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">全美最大核电运营商+Calpine天然气双轮驱动，Microsoft TMI核电PPA定价范式。FCF首次历史转正，2026-2027 FCF指引$84亿。Q1 2026 EPS $2.74超预期+28%。分析师共识$367，较当前$282溢价30%。<b style="color:var(--green);">估值合理，可持有/逢回调加仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--teal);">VST</span><span class="grade grade-A">A · 71分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">ERCOT霸主+Energy Harbor核电，Q1 2026创历史季度EBITDA记录。Cogentrix $47亿并购+Meta PPA均未计入指引，隐含上行期权最多的标的。当前$146对应9-10x EV/EBITDA历史低位。<b style="color:var(--green);">最佳买入机会，+48.3%上行空间。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--accent);">EME</span><span class="grade grade-A">A · 70分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">AI数据中心峰值施工期2026-2027年最纯正受益者，零债务（行业极罕见），RPO $156.2亿(+33%)，连续16季超预期。技术中立无赌注风险。<b style="color:var(--green);">估值合理，+12.9%上行，推荐主动建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--yellow);">FSLR</span><span class="grade grade-B">B · 66分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">美国本土制造壁垒+IRA 45X补贴，FCF margin 22.7%，净现金$2.3B；Q1 EPS $3.22+65%。估值明显折价+33.6%。<b style="color:var(--yellow);">核心风险：IRA政策废除；若政策稳定则为B+/A级机会。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px;">HUBB</span><span class="grade grade-B">B · 64分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">电网现代化受益，Electrical Solutions复苏拐点已确认(Q1+12%)，NSI收购扩大Utility Solutions规模。铜成本暴露是弱点。估值基本公允，+2.2%上行，分析师共识$537有+12.6%潜力。<b style="color:var(--yellow);">适合持有，不宜追涨。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--orange);">ETN</span><span class="grade grade-B">B · 62分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">数据中心电气化超级周期最纯正设备受益，Q1订单+240%，有机增速上调至10%，Mobility分拆(Q1 2027)是估值重评催化剂。<b style="color:var(--red);">⚠️已超模型目标-11.3%，估值充分定价，等待回调至$320-340区间建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--orange);">VRT</span><span class="grade grade-C">C · 53分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">AI液冷+电力管理最纯正受益，业务质量S级，但估值分重度拖累。分析师目标上调至$376.80。<b style="color:var(--red);">⚠️已超模型目标-23.8%，Forward PE 44x充分定价，等待回调$200-220建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--orange);">PWR</span><span class="grade grade-C">C · 59分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">$48.5B历史最高backlog，技术中立EPC执行使能不可替代，Q1+26%超预期。<b style="color:var(--red);">⚠️题目价超目标-10.3%；实际价$695更大幅超出；分析师共识已上调至$790，若基本面持续超预期可考虑跟踪。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--orange);">POWL</span><span class="grade grade-C">C · 54分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">高压开关柜被列国防战略物资，$4亿+历史最大DC订单，Backlog $18亿+33%。<b style="color:var(--yellow);">重要：update显示实际价~$270（比题目$516低约47%），若以实际价$270计算Forward PE仅15.9x，估值将进入A级区间。建议核实当前价格。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--orange);">MPWR</span><span class="grade grade-C">C · 58分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">AI数据中心电源IC最纯正受益，Enterprise Data增速85%+，Fabless FCF 23.9%。<b style="color:var(--red);">⚠️已超模型目标-17.6%；实际价$1,460，超目标+65.8%。Forward PE 55x+估值泡沫化，等待回调至$1,300-1,350再建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--red);">MYRG</span><span class="grade grade-D">D · 45分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">Q1营业利润率6.5%验证利润率改善，积压$28.4亿历史新高。<b style="color:var(--red);">⚠️已超模型目标-22.8%；实际价$468已超所有估值目标；移出主动买入池，等待更大幅回调（回归$300以下）再考虑。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--red);">AMSC</span><span class="grade grade-D">D · 43分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">FY2025营收$299M+34%，但含$112M一次性DTA税务释放，核心盈利实质性更低。分析师共识$52，较实际价$42有+23%空间。<b style="color:var(--red);">⚠️ AI直接暴露度中等，非AI能源核心标的，不推荐主动建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--red);">BE</span><span class="grade grade-D">D · 49分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">Q1 2026营收$751M+130%超预期，Nebius $26亿大单，FY2026指引上调至$3.4-3.8B。<b style="color:var(--red);">⚠️题目价$159已超PS目标，实际价$251更远超；置信度0.7，GAAP仍亏损，等待实质性盈利转正信号。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--red);">PLPC</span><span class="grade grade-D">D · 38分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">PLP-USA能源业务Q1+26%，电网现代化受益。<b style="color:var(--red);">⚠️净利率仅5%，大宗商品成本暴露高，已超目标-18.9%；实际价$388远超；不推荐新建仓。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid rgba(188,140,255,0.4); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--purple);">OKLO</span><span class="grade grade-D">D · 32分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">NRC PDC获批（2026年5月），Aurora-INL 2026年7月临界测试目标；18 GW客户管线（Switch/Meta）。<b style="color:var(--purple);">投机性持有，仅适合风险偏好者；临界测试成功可触发估值重评至$150+。</b></p>
+    </div>
+
+    <div style="background:var(--card); border:1px solid rgba(188,140,255,0.4); border-radius:8px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:700; font-size:15px; color:var(--purple);">SMR</span><span class="grade grade-D">D · 29分</span>
+      </div>
+      <p style="font-size:12px; color:var(--text2);">全球唯一NRC认证SMR，现金$1.3B约3年跑道，TVA 6 GW非约束性协议，罗马尼亚关键决策节点2026年中期。<b style="color:var(--purple);">投机性持有，Goldman下调至$9，分析师极度分化；高现金消耗$460M/年是核心风险。</b></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- SECTION 6: 关键催化剂日历 -->
+<div class="section">
+  <div class="section-title">近期可跟踪催化剂日历（2026年Q2-Q4）</div>
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px;">
+    <ul class="timeline">
+      <li>
+        <div class="timeline-date">2026年7月（目标）</div>
+        <div class="timeline-text"><b style="color:var(--purple);">OKLO Aurora-INL临界测试</b>——成功则是公司史上最重大技术里程碑，可触发估值重评至$150+；失败则短期压制股价</div>
+      </li>
+      <li>
+        <div class="timeline-date">2026年Q2-Q3财报季（7-8月）</div>
+        <div class="timeline-text"><b style="color:var(--teal);">VST</b> Cogentrix $47亿并购关闭进展；<b style="color:var(--teal);">CEG</b> Q2验证Calpine协同效应；<b style="color:var(--accent);">ETN/VRT/PWR</b> Q2财报验证订单能见度是否持续</div>
+      </li>
+      <li>
+        <div class="timeline-date">2026年中期</div>
+        <div class="timeline-text"><b style="color:var(--purple);">SMR（NuScale）</b>罗马尼亚RoPower项目go/no-go最终决策；若通过将是首个有约束力的国际商业项目</div>
+      </li>
+      <li>
+        <div class="timeline-date">2026年Q3（7月底）</div>
+        <div class="timeline-text"><b style="color:var(--orange);">MPWR</b> Q2 2026财报——验证$900M+指引能否兑现；Enterprise Data能否维持85%增速楼</div>
+      </li>
+      <li>
+        <div class="timeline-date">2026年Q1 2027（约）</div>
+        <div class="timeline-text"><b style="color:var(--orange);">ETN Mobility分拆完成</b>——纯电气+航空组合重新定价，分部利润率提升60-80bps，这是ETN最大潜在催化剂</div>
+      </li>
+      <li>
+        <div class="timeline-date">持续监控</div>
+        <div class="timeline-text">IRA 45X制造补贴立法动向（关键影响<b style="color:var(--yellow);">FSLR</b>）；FERC大型负荷快速互联规则最终版本；超大规模科技公司新核电PPA签约（影响<b style="color:var(--teal);">CEG/VST</b>）</div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">AI能源基础设施专项投资打分系统 v4.1</div>
+  <div>评分日期：2026-06-08 | 下次对比基准已记录至 base_scores_energy_v41.json（各公司）</div>
+  <div style="margin-top:6px;">数据来源：IEA Energy and AI Report | S&P Global | SMRIntel | EnkiAI | Utility Dive | SEC EDGAR | 各公司财报</div>
+  <div style="margin-top:6px; color:#444;">本报告仅供投资研究参考，不构成任何投资建议。所有目标价来自 valuation_result.json 模型数据，禁止使用训练记忆中的历史价格。</div>
+  <div style="margin-top:12px; font-size:10px; color:#333;">
+    ⚠️ 重要提示：POWL/MYRG/PLPC/PWR等多家公司存在题目给定价格与实际update价格差异，实际投资决策请以实时市场价格为准。
+    OKLO/SMR为pre-revenue高度投机性标的，仅适合风险偏好者，建议仓位不超过总仓位3%。
+  </div>
+</div>
+
+</div>
+</body>
+</html>
