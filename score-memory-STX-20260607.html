@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STX · 存储器专项打分 v4.1 · 20260607</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --accent: #58a6ff; --green: #3fb950; --yellow: #d29922;
+    --orange: #f0883e; --red: #f85149; --purple: #bc8cff;
+    --hbm: #76e3b0; --srv-dram: #58a6ff; --pc-dram: #d29922;
+    --ent-nand: #f0883e; --con-nand: #8b949e; --hdd: #e8b04b;
+    --text: #e6edf3; --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 28px 16px; }
+  .cover { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #e8b04b, #f0883e, #d29922); }
+  .cover-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+  .ticker-block .ticker { font-size: 52px; font-weight: 900; color: var(--hdd); letter-spacing: -2px; }
+  .ticker-block .company { font-size: 17px; color: var(--muted); margin-top: 4px; }
+  .ticker-block .track { font-size: 13px; background: rgba(232,176,75,0.12); color: var(--hdd); padding: 3px 12px; border-radius: 20px; display: inline-block; margin-top: 8px; border: 1px solid rgba(232,176,75,0.3); }
+  .score-block { text-align: right; }
+  .score-block .final-score { font-size: 80px; font-weight: 900; line-height: 1; color: var(--accent); }
+  .score-block .grade { font-size: 26px; font-weight: 700; color: var(--yellow); margin-top: 4px; }
+  .score-block .rating { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .cycle-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(210,153,34,0.15); border: 1px solid rgba(210,153,34,0.4); color: var(--yellow); padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 8px; }
+  .cover-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .meta-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-item .value { font-size: 17px; font-weight: 700; color: var(--text); margin-top: 2px; }
+  .meta-item .value.up { color: var(--green); }
+  .meta-item .value.down { color: var(--red); }
+  .meta-item .value.warn { color: var(--yellow); }
+  .conclusion { margin-top: 20px; padding: 14px 18px; background: rgba(232,176,75,0.06); border-left: 3px solid var(--hdd); border-radius: 4px; font-size: 14px; color: var(--text); line-height: 1.7; }
+  .conclusion strong { color: var(--hdd); }
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 4px; height: 16px; background: var(--hdd); border-radius: 2px; }
+  .arch-layers { display: flex; flex-direction: column; gap: 6px; }
+  .arch-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border); }
+  .arch-row.active-hdd { border-color: var(--hdd); background: rgba(232,176,75,0.07); }
+  .arch-row.active-hdd2 { border-color: rgba(232,176,75,0.4); background: rgba(232,176,75,0.03); }
+  .arch-tier { font-size: 11px; color: var(--muted); width: 52px; flex-shrink: 0; }
+  .arch-layer-label { font-size: 11px; color: var(--muted); width: 130px; flex-shrink: 0; }
+  .arch-track { font-size: 13px; font-weight: 600; flex: 1; }
+  .arch-badge { font-size: 11px; color: var(--muted); padding: 2px 8px; border-radius: 12px; background: rgba(255,255,255,0.05); margin-left: 8px; }
+  .arch-badge.stx { background: rgba(232,176,75,0.15); color: var(--hdd); border: 1px solid rgba(232,176,75,0.3); }
+  .arch-indicator { font-size: 18px; width: 28px; text-align: center; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: rgba(232,176,75,0.08); color: var(--hdd); font-weight: 700; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.6); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .num { text-align: right; font-weight: 600; }
+  .tag-hdd { color: var(--hdd); font-weight: 700; }
+  .tag-hdd2 { color: var(--pc-dram); font-weight: 700; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .score-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 18px; text-align: center; }
+  .score-card .sc-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .score-card .sc-val { font-size: 40px; font-weight: 900; line-height: 1.1; margin: 6px 0; }
+  .score-card .sc-weight { font-size: 12px; color: var(--muted); }
+  .final-box { background: rgba(232,176,75,0.06); border: 1px solid rgba(232,176,75,0.3); border-radius: 10px; padding: 24px; text-align: center; margin-top: 4px; }
+  .final-box .fb-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .final-box .fb-score { font-size: 64px; font-weight: 900; color: var(--hdd); line-height: 1; }
+  .final-box .fb-grade { font-size: 22px; font-weight: 700; color: var(--yellow); margin-top: 4px; }
+  .final-box .fb-formula { font-size: 12px; color: var(--muted); margin-top: 10px; font-family: monospace; }
+  .trigger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .trigger-card { border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .trigger-card.fail { border-color: var(--red); background: rgba(248,81,73,0.06); }
+  .trigger-card.marginal { border-color: var(--yellow); background: rgba(210,153,34,0.06); }
+  .trigger-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .trigger-icon { font-size: 18px; }
+  .trigger-name { font-size: 13px; font-weight: 700; }
+  .trigger-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .trigger-val { font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .trigger-val.fail { color: var(--red); }
+  .trigger-val.marginal { color: var(--yellow); }
+  .scenario-row-bull td { color: var(--green); }
+  .scenario-row-base td { color: var(--accent); }
+  .scenario-row-bear td { color: var(--yellow); }
+  .scenario-row-crisis td { color: var(--red); }
+  .prob-badge { display: inline-block; background: rgba(255,255,255,0.07); padding: 2px 8px; border-radius: 12px; font-size: 11px; }
+  .update-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .update-col { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .update-col-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .update-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+  .update-row .key { color: var(--muted); }
+  .update-row .val { font-weight: 700; }
+  .ev-calc { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; font-family: monospace; font-size: 13px; }
+  .ev-calc .ev-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .ev-line { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(48,54,61,0.4); }
+  .ev-line:last-child { border-bottom: none; }
+  .ev-line.result { color: var(--red); font-weight: 700; border-top: 2px solid var(--border); padding-top: 8px; margin-top: 4px; }
+  .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .footer strong { color: var(--hdd); }
+  @media (max-width: 700px) {
+    .score-grid { grid-template-columns: 1fr; }
+    .trigger-grid { grid-template-columns: 1fr; }
+    .update-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-header">
+    <div class="ticker-block">
+      <div class="ticker">STX</div>
+      <div class="company">Seagate Technology Holdings plc · NASDAQ</div>
+      <div class="track">HAMR44TB HDD近线 · AI数据中心存储 · 存储器专项</div>
+      <div style="margin-top:10px;">
+        <span class="cycle-badge">⚡ HAMR超级周期景气高峰 · 已超原目标价+34%</span>
+      </div>
+    </div>
+    <div class="score-block">
+      <div class="final-score">46.4</div>
+      <div class="grade">持有观望 / HOLD</div>
+      <div class="rating">置信度 1.00 · 存储器专项 v4.1</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <div class="meta-item">
+      <div class="label">当前股价</div>
+      <div class="value">$847</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">原研报基准价</div>
+      <div class="value up">$411 <span style="font-size:13px;color:var(--green);">↑+106%</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">原PE目标价</div>
+      <div class="value down">$632 <span style="font-size:12px;color:var(--red);">已超越+34%</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">更新目标价</div>
+      <div class="value warn">$697 <span style="font-size:12px;color:var(--red);">仍低于当价</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">分析师均值</div>
+      <div class="value warn">$829~$857</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">市值 / EV</div>
+      <div class="value">~$190B / ~$194.5B</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">通算EV/EBITDA</div>
+      <div class="value down" style="font-size:14px;">92.6x <span style="color:var(--red);font-size:11px;">极度高估</span></div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Q3 FCF（历史纪录）</div>
+      <div class="value up" style="font-size:14px;">$953M</div>
+    </div>
+  </div>
+  <div class="conclusion">
+    <strong>一句话投资结论：</strong> STX从原研报$411涨至$847，已上涨106%、超越原目标价$632约34%，HAMR44TB全球唯一量产、近线产能预订至2027年底，基本面极强；但通算EV/EBITDA达92.6x（HDD历史中位7.2x），概率加权年化回报约-37%，<strong>底部触发器均未激活，当前价格已充分甚至过度计入景气预期，建议持有观望等待周期调整后再评估重入机会</strong>。
+  </div>
+</div>
+
+<!-- AI内存五层架构 -->
+<div class="section">
+  <div class="section-title">AI内存五层架构 · STX定位图</div>
+  <div class="arch-layers">
+    <div class="arch-row">
+      <div class="arch-tier">Tier 0</div>
+      <div class="arch-layer-label">封装内HBM</div>
+      <div class="arch-track">HBM4 / HBM3E · GPU封装内带宽存储<span class="arch-badge">N/A · STX不涉及</span></div>
+      <div class="arch-indicator">—</div>
+      <div style="font-size:11px;color:var(--muted);">-</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-tier">Tier 1</div>
+      <div class="arch-layer-label">服务器主存</div>
+      <div class="arch-track">DDR5 / LPDDR5X · 服务器内存条<span class="arch-badge">N/A · STX不涉及</span></div>
+      <div class="arch-indicator">—</div>
+      <div style="font-size:11px;color:var(--muted);">-</div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-tier">Tier 2</div>
+      <div class="arch-layer-label">企业SSD</div>
+      <div class="arch-track">企业NAND · NVMe SSD<span class="arch-badge">N/A · STX不涉及</span></div>
+      <div class="arch-indicator">—</div>
+      <div style="font-size:11px;color:var(--muted);">-</div>
+    </div>
+    <div class="arch-row active-hdd">
+      <div class="arch-tier">Tier 3</div>
+      <div class="arch-layer-label">近线HDD</div>
+      <div class="arch-track">HAMR HDD · AI数据中心近线 · Mozaic 4+ 44TB<span class="arch-badge stx">STX ✓ 全球唯一量产44TB · 营收占比~80%</span></div>
+      <div class="arch-indicator">⚡</div>
+      <div style="font-size:11px;color:var(--hdd);">AI结构性</div>
+    </div>
+    <div class="arch-row active-hdd2">
+      <div class="arch-tier">Tier 4</div>
+      <div class="arch-layer-label">传统HDD</div>
+      <div class="arch-track">传统近线/桌面HDD · 消费端备份存储<span class="arch-badge stx">STX ✓ 传统HDD · 营收占比~20%</span></div>
+      <div class="arch-indicator">●</div>
+      <div style="font-size:11px;color:var(--pc-dram);">渐量缩减</div>
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:10px 14px;background:rgba(232,176,75,0.06);border-radius:6px;font-size:12px;color:var(--muted);">
+    STX战略价值：HAMR技术全球领先WDC约12-18个月 · 顶级CSP产能预订至2027年底 · CEO供给纪律（不扩厂）· Agentic AI新增需求增量 · FCF年化~$4B历史纪录
+  </div>
+</div>
+
+<!-- 行业分计算表 -->
+<div class="section">
+  <div class="section-title">行业分计算表 · 分部加权（权重20%）</div>
+  <table>
+    <thead>
+      <tr>
+        <th>分部</th>
+        <th>赛道分</th>
+        <th>归一化系数</th>
+        <th class="num">营收占比</th>
+        <th class="num">加权得分</th>
+        <th>加权逻辑</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag-hdd">HDD近线AI（Mozaic 4+ HAMR）</span></td>
+        <td>80</td>
+        <td>0.82 <span style="color:var(--muted);font-size:11px;">（AI结构性+产能锁定，dim6=3）</span></td>
+        <td class="num">80%</td>
+        <td class="num" style="color:var(--hdd);">52.48</td>
+        <td style="font-size:11px;color:var(--muted);">80×0.82×0.80</td>
+      </tr>
+      <tr>
+        <td><span class="tag-hdd2">HDD传统（桌面/消费）</span></td>
+        <td>58</td>
+        <td>0.75 <span style="color:var(--muted);font-size:11px;">（传统消费端，渐量缩减）</span></td>
+        <td class="num">20%</td>
+        <td class="num" style="color:var(--pc-dram);">8.70</td>
+        <td style="font-size:11px;color:var(--muted);">58×0.75×0.20</td>
+      </tr>
+      <tr style="background:rgba(232,176,75,0.05);">
+        <td colspan="3" style="font-weight:700;color:var(--hdd);">行业分合计</td>
+        <td class="num" style="font-weight:700;">100%</td>
+        <td class="num" style="font-size:18px;font-weight:900;color:var(--hdd);">61.2</td>
+        <td style="font-size:12px;color:var(--muted);">满分100分</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:12px;font-size:12px;color:var(--muted);padding:10px 14px;background:rgba(0,0,0,0.2);border-radius:6px;">
+    <strong style="color:var(--text);">行业分解读：</strong> STX行业分（61.2）明显高于MU（45.6），主要因为近线HDD AI赛道高度集中（80%营收×高归一化0.82）。随HAMR占比从当前约50%提升至2027年目标70%，行业分有进一步上行空间。但赛道分仅80（低于HBM的90），因HDD仍属"温冷存储层"，非算力核心。
+  </div>
+</div>
+
+<!-- 质量分 -->
+<div class="section">
+  <div class="section-title">质量分详情 · 8维度评估（权重50%）</div>
+  <div style="margin-bottom:16px;font-size:12px;color:var(--muted);padding:8px 12px;background:rgba(210,153,34,0.06);border:1px solid rgba(210,153,34,0.2);border-radius:6px;">
+    ⚠️ <strong style="color:var(--yellow);">通算口径强制：</strong>财务类维度（dim1/2/5）均使用3-5年均值，不使用当期Q3 FY2026峰值（毛利率47%），以反映穿越周期的真实盈利能力（通算GM约30%）。
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px;">
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">01 · 成长性</div>
+        <div style="font-size:11px;color:var(--muted);">权重20分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">3/5 → <span style="color:var(--green);">12.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">通算CAGR ~8% | 当期FY2026: YoY+32%</div>
+        FY2026约$12B（+32%），HAMR驱动结构性升级；但通算CAGR约8%（含2022-2023谷底），中等成长性。不扩厂策略限制营收弹性天花板。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">02 · 通算盈利能力</div>
+        <div style="font-size:11px;color:var(--muted);">权重10分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">3/5 → <span style="color:var(--green);">6.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">通算GM ~30% | 通算ROIC ~8-10% | 当期Q3 GM: 47%</div>
+        当期创历史纪录，通算口径约30%，ROIC约8-10%。HDD行业整体盈利能力低于DRAM/NAND，属中等护城河。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">03 · 技术壁垒/竞争地位</div>
+        <div style="font-size:11px;color:var(--muted);">权重18分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hdd);margin-bottom:6px;">4/5 → <span style="color:var(--green);">14.4分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">HAMR44TB全球唯一量产 | WDC落后12-18个月</div>
+        Mozaic 4+ 44TB全球唯一量产，西部数据HAMR量产预计H2 2026-H1 2027，认证再需6-12个月。双寡头HDD格局保障定价权。100TB路线图清晰。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">04 · AI战略布局</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">3/5 → <span style="color:var(--green);">7.2分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">AI数据中心受益 · 非AI芯片直接受益方</div>
+        AI近线数据中心结构性受益，Agentic AI新催化剂；但HDD属于存储价值链"温冷层"，非AI算力（HBM/GPU）直接受益，AI效率提升可能降低存储需求增速。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">05 · 财务健康度</div>
+        <div style="font-size:11px;color:var(--muted);">权重10分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">3/5 → <span style="color:var(--green);">6.0分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">净债务 $4.5B | FCF年化 ~$4B | 覆盖率~89%</div>
+        净债务$4.5B有一定杠杆，FCF年化约$4B（覆盖率约89%），去杠杆进程清晰（Q3单季偿债$641M）；净债务未消除前财务健康度受限。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">06 · 管理层&周期位置</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hdd);margin-bottom:6px;">4/5 → <span style="color:var(--green);">9.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">周期位置: AI景气高峰，非底部 ❌底部触发 | 供给纪律优异</div>
+        CEO Mosley FCF创历史纪录，明确不扩产能（供给纪律极佳），避免历史过度扩产；产能预订至2027年底。扣分：景气高峰非底部，底部触发器未激活（dim6底部位置仅2/5）。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">07 · 客户质量&锁定度</div>
+        <div style="font-size:11px;color:var(--muted);">权重12分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--hdd);margin-bottom:6px;">4/5 → <span style="color:var(--green);">9.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">顶级CSP产能预订至2027年底 · LTA覆盖</div>
+        全球前五大CSP均为STX客户，LTA长期采购协议覆盖；近线产能近满额分配；FY2027年H1订单已开始接受预订。罕见的远期可见性支撑估值倍数溢价。
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;color:var(--muted);">08 · 期权可选性</div>
+        <div style="font-size:11px;color:var(--muted);">权重6分</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:var(--orange);margin-bottom:6px;">3/5 → <span style="color:var(--green);">3.6分</span></div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6;">
+        <div style="color:var(--yellow);font-size:11px;">HAMR 60TB+路线图 · 100TB终极目标</div>
+        HAMR路线图：44TB→60TB+→100TB，每碟10TB技术路径清晰；Agentic AI存储新催化剂；但不扩厂策略限制总可寻址市场扩张。
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:16px;background:rgba(0,0,0,0.2);border-radius:8px;padding:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:13px;color:var(--muted);">质量分合计</span>
+      <span style="font-size:24px;font-weight:900;color:var(--hdd);">68.4 / 100</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);">= 12.0 + 6.0 + 14.4 + 7.2 + 6.0 + 9.6 + 9.6 + 3.6 = <strong style="color:var(--hdd);">68.4</strong></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--yellow);">注：当期Q3 FY2026毛利率47%创历史新高，但通算口径约30%（含2022-2023谷底），质量分基于通算口径计算，防止周期峰值误导。</div>
+  </div>
+</div>
+
+<!-- 估值安全边际 -->
+<div class="section">
+  <div class="section-title">估值安全边际 · 通算EV/EBITDA + 四情景分析（权重30%）</div>
+  <div class="ev-calc">
+    <div class="ev-title">通算EV/EBITDA计算（强制通算口径）</div>
+    <div class="ev-line"><span>当前市值</span><span style="color:var(--text);">~$190B</span></div>
+    <div class="ev-line"><span>净债务</span><span style="color:var(--orange);">+$4.5B</span></div>
+    <div class="ev-line"><span>当前EV</span><span style="color:var(--text);">~$194.5B</span></div>
+    <div class="ev-line" style="border-top:1px dashed var(--border);margin-top:6px;padding-top:6px;"><span>年化营收（FY2026E）</span><span style="color:var(--text);">~$12B</span></div>
+    <div class="ev-line"><span>通算营收（归一化：年化$12B×综合系数0.82）</span><span style="color:var(--text);">~$7.4B</span></div>
+    <div class="ev-line"><span>通算EBITDA margin（含2022-2023谷底）</span><span style="color:var(--text);">~28%</span></div>
+    <div class="ev-line"><span>通算EBITDA年化</span><span style="color:var(--text);">~$2.1B</span></div>
+    <div class="ev-line result">
+      <span>通算EV/EBITDA = $194.5B ÷ $2.1B</span>
+      <span style="font-size:18px;">92.6x ❌ 极度高估（HDD历史中位7.2x）</span>
+    </div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">四情景概率加权回报（5年持有期，退出10x nearline AI EV/EBITDA）</div>
+    <table>
+      <thead>
+        <tr>
+          <th>情景</th>
+          <th class="num">概率</th>
+          <th class="num">年化营收</th>
+          <th class="num">退出EV（EBITDA×倍数）</th>
+          <th class="num">年化回报</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="scenario-row-bull">
+          <td>乐观（HAMR持续+Agentic AI增量）</td>
+          <td class="num"><span class="prob-badge">25%</span></td>
+          <td class="num">$15B</td>
+          <td class="num">$3.0B×10x = $30B</td>
+          <td class="num" style="color:var(--red);">-29% p.a.</td>
+        </tr>
+        <tr class="scenario-row-base">
+          <td>基准（供给纪律+稳健增长）</td>
+          <td class="num"><span class="prob-badge">45%</span></td>
+          <td class="num">$12B</td>
+          <td class="num">$2.4B×8x = $19B</td>
+          <td class="num" style="color:var(--red);">-38% p.a.</td>
+        </tr>
+        <tr class="scenario-row-bear">
+          <td>悲观（AI Capex周期回调）</td>
+          <td class="num"><span class="prob-badge">20%</span></td>
+          <td class="num">$8B</td>
+          <td class="num">$1.5B×6x = $9B</td>
+          <td class="num" style="color:var(--red);">-50% p.a.</td>
+        </tr>
+        <tr class="scenario-row-crisis">
+          <td>颠覆（SSD快速替代+需求断崖）</td>
+          <td class="num"><span class="prob-badge">10%</span></td>
+          <td class="num">$5B</td>
+          <td class="num">$1.0B×4x = $4B</td>
+          <td class="num" style="color:var(--red);">-60% p.a.</td>
+        </tr>
+        <tr style="background:rgba(248,81,73,0.08);">
+          <td colspan="4" style="font-weight:700;color:var(--red);">概率加权年化回报</td>
+          <td class="num" style="font-size:18px;font-weight:900;color:var(--red);">~-37% p.a.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;">估值分 v1 = 0分 / 35分（概率加权年化回报为负，当前EV $194.5B远超所有情景5年退出价值）</div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">底部买入触发器状态</div>
+  <div class="trigger-grid">
+    <div class="trigger-card fail">
+      <div class="trigger-header">
+        <span class="trigger-icon">❌</span>
+        <span class="trigger-name" style="color:var(--red);">触发器A · 周期位置</span>
+      </div>
+      <div class="trigger-desc">要求：dim6周期位置≥4/5（谷底附近）<br>AI近线景气高峰，订单能见度至2027年底，明显非底部</div>
+      <div class="trigger-val fail">当前：2/5（底部评分）· 未触发</div>
+    </div>
+    <div class="trigger-card fail">
+      <div class="trigger-header">
+        <span class="trigger-icon">❌</span>
+        <span class="trigger-name" style="color:var(--red);">触发器B · EV/通算EBITDA</span>
+      </div>
+      <div class="trigger-desc">要求：EV/归一化EBITDA ≤ 7.2x（HDD历史中位）<br>当前92.6x，超过阈值约13倍</div>
+      <div class="trigger-val fail">当前：92.6x / 阈值7.2x · 未触发</div>
+    </div>
+    <div class="trigger-card marginal">
+      <div class="trigger-header">
+        <span class="trigger-icon">⚠️</span>
+        <span class="trigger-name" style="color:var(--yellow);">触发器C · 共识偏差</span>
+      </div>
+      <div class="trigger-desc">要求：分析师共识均值≥当前股价（正向偏差）<br>共识均值$829~$857 vs 当前$847（基本持平）</div>
+      <div class="trigger-val marginal">共识$829~857 ≈ $847 勉强✅ | A/B未满足→综合❌</div>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:10px 14px;background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:6px;font-size:12px;color:var(--muted);">
+    ⚠️ 结论：三触发器仅C勉强满足，A（周期位置）和B（估值水位）均未触发。<strong style="color:var(--red);">STX当前价格$847是原研报目标价$632的134%、更新目标$697的121%，已完全超越原估值框架。估值分 = 0/100。</strong>
+  </div>
+</div>
+
+<!-- 评分汇总 -->
+<div class="section">
+  <div class="section-title">评分汇总 · 三层结构</div>
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="sc-label">行业分</div>
+      <div class="sc-val" style="color:var(--hdd);">61.2</div>
+      <div class="sc-weight">权重 × 20%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--hdd);margin-top:4px;">→ 贡献 12.24</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">质量分</div>
+      <div class="sc-val" style="color:var(--orange);">68.4</div>
+      <div class="sc-weight">权重 × 50%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--hdd);margin-top:4px;">→ 贡献 34.20</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">估值分</div>
+      <div class="sc-val" style="color:var(--red);">0.0</div>
+      <div class="sc-weight">权重 × 30%</div>
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-top:4px;">→ 贡献 0.00</div>
+    </div>
+  </div>
+  <div class="final-box">
+    <div class="fb-label">基础分 = 12.24 + 34.20 + 0.00 = 46.44</div>
+    <div class="fb-score">46.4</div>
+    <div class="fb-grade">持有观望 / HOLD</div>
+    <div class="fb-formula">最终分 = 基础分 46.44 × 置信度 1.00 = 46.4</div>
+    <div style="margin-top:12px;font-size:12px;color:var(--muted);">
+      ● 行业61.2×20%=12.2 &nbsp;|&nbsp; ● 质量68.4×50%=34.2 &nbsp;|&nbsp; ● 估值0×30%=0.0
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);">
+      评级区间：80+ 强烈买入 / 65-79 买入 / 50-64 轻仓关注 / 35-49 持有观望 / &lt;35 规避
+    </div>
+  </div>
+  <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="padding:12px;background:rgba(232,176,75,0.06);border:1px solid rgba(232,176,75,0.2);border-radius:8px;">
+      <div style="font-size:11px;color:var(--hdd);font-weight:700;margin-bottom:6px;">优势项目</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        ✓ 技术壁垒（4/5）HAMR全球唯一量产<br>
+        ✓ 管理层（4/5）FCF纪录+供给纪律<br>
+        ✓ 客户锁定（4/5）CSP至2027年底<br>
+        ✓ 行业分最高（61.2）AI近线专注度
+      </div>
+    </div>
+    <div style="padding:12px;background:rgba(248,81,73,0.06);border:1px solid rgba(248,81,73,0.2);border-radius:8px;">
+      <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">关键制约</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        ✗ 估值（0/100）通算92.6x EV/EBITDA<br>
+        ✗ 已超原目标价134%（$411→$847 vs $632目标）<br>
+        ✗ 净债务$4.5B（非净现金状态）<br>
+        ✗ 不扩厂策略限制营收弹性上限
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 研报更新对比 -->
+<div class="section">
+  <div class="section-title">研报更新对比 · 原研报 → 20260607当前</div>
+  <div class="update-grid">
+    <div class="update-col">
+      <div class="update-col-title">原研报（20260603发布）</div>
+      <div class="update-row"><span class="key">当时股价</span><span class="val">$411</span></div>
+      <div class="update-row"><span class="key">评级</span><span class="val" style="color:var(--green);">买入 (Buy)</span></div>
+      <div class="update-row"><span class="key">PE目标价（主要）</span><span class="val">$632（PE45x×$14.04）</span></div>
+      <div class="update-row"><span class="key">EV/EBITDA目标</span><span class="val">$692</span></div>
+      <div class="update-row"><span class="key">分析师共识</span><span class="val">$829（当时均值）</span></div>
+      <div class="update-row"><span class="key">上行空间</span><span class="val" style="color:var(--green);">+53.7%</span></div>
+      <div class="update-row"><span class="key">市值</span><span class="val">~$93B</span></div>
+      <div class="update-row"><span class="key">Q3 FCF</span><span class="val">$953M（历史纪录）</span></div>
+    </div>
+    <div class="update-col">
+      <div class="update-col-title">20260607 当前状态（更新版）</div>
+      <div class="update-row"><span class="key">当前股价</span><span class="val up">$847 <span style="color:var(--green);">↑+106%</span></span></div>
+      <div class="update-row"><span class="key">评级</span><span class="val warn">持有观望（已超目标价）</span></div>
+      <div class="update-row"><span class="key">更新后建议目标</span><span class="val warn">$697（EPS上调至$15.5）</span></div>
+      <div class="update-row"><span class="key">分析师最高</span><span class="val up">Citi $1,150 · 富国$900</span></div>
+      <div class="update-row"><span class="key">当前 vs 更新目标</span><span class="val down">$847 > $697 已超越21%</span></div>
+      <div class="update-row"><span class="key">市值</span><span class="val up">~$190B（+104%）</span></div>
+      <div class="update-row"><span class="key">Q4指引</span><span class="val up">EPS $5.00（超预期+26%）</span></div>
+      <div class="update-row"><span class="key">近线产能</span><span class="val up">满额预订至2027年底</span></div>
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:12px 16px;background:rgba(232,176,75,0.06);border:1px solid rgba(232,176,75,0.2);border-radius:8px;font-size:12px;line-height:1.7;">
+    <strong style="color:var(--hdd);">STX核心变化（20260603→20260607）：</strong><br>
+    ① Q3 FY2026全面超预期（EPS $4.10 vs 预期$3.50，超+17%；FCF $953M历史纪录）<br>
+    ② Q4指引EPS $5.00大幅超预期+26%，FY2026全年预计$11.8-12.0B超历史峰值$11.66B<br>
+    ③ Mozaic 4+ 44TB正式向顶级CSP量产出货，HAMR技术领先优势进一步巩固<br>
+    ④ 股价从$411暴涨至$847，完全超越原目标$632（原始上行空间+53.7%已实现+兑现）<br>
+    ⑤ <strong style="color:var(--red);">新增风险：</strong>Nvidia Rubin平台HBM配置下调传言（55TB→28TB/机架）+ CEO不扩厂限制弹性<br>
+    ⑥ 研报建议上调目标至$697，但当前$847仍高于更新目标，属景气溢价定价
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>存储器专项投资打分系统 v4.1</strong> &nbsp;|&nbsp; 20260607更新版 &nbsp;|&nbsp; 数据截止 2026-06-07<br>
+  <span style="color:rgba(139,148,158,0.6);">本报告仅供研究参考，不构成投资建议。通算口径强制使用3-5年均值，防止周期峰值误导。</span>
+</div>
+
+</div>
+</body>
+</html>
