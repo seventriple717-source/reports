@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光模块&高速互联专项投资打分 v4.1 | 2026-06-08</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --green: #3fb950;
+    --green-dim: #1f6a2a;
+    --red: #f85149;
+    --red-dim: #6a1f1f;
+    --yellow: #d29922;
+    --yellow-dim: #4a3700;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --orange: #ffa657;
+    --teal: #39d353;
+    --cyan: #79c0ff;
+    --accent: #1f6feb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 24px;
+  }
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .header .meta {
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+  .header .meta span { margin-right: 20px; }
+
+  /* Industry Map */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .industry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .industry-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .industry-card .ic-title {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .industry-card .ic-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .industry-card .ic-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* Ranking Table */
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+  }
+  .ranking-table th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+  }
+  .ranking-table th.right { text-align: right; }
+  .ranking-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .ranking-table tr:hover { background: var(--surface); }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--surface2);
+    color: var(--text-dim);
+  }
+  .rank-badge.top1 { background: #b8860b; color: #fff; }
+  .rank-badge.top2 { background: #5a5a5a; color: #fff; }
+  .rank-badge.top3 { background: #8b4513; color: #fff; }
+
+  .sym {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--cyan);
+    font-family: 'SF Mono', monospace;
+  }
+  .grade-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .grade-Aplus  { background: #0d4a0d; color: #3fb950; border: 1px solid #1a7a1a; }
+  .grade-A      { background: #0d4a0d; color: #3fb950; border: 1px solid #1a7a1a; }
+  .grade-Aminus { background: #1a3a00; color: #7ee83f; border: 1px solid #2a5a00; }
+  .grade-Bplus  { background: #2a2a00; color: var(--yellow); border: 1px solid #4a4a00; }
+  .grade-B      { background: #2a1a00; color: var(--orange); border: 1px solid #4a3000; }
+  .grade-C      { background: #2a0000; color: var(--red); border: 1px solid #4a0000; }
+
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    min-width: 38px;
+  }
+  .bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 80px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  .dim-score {
+    display: inline-block;
+    width: 34px;
+    text-align: center;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .dim-high  { background: #0d3a0d; color: #5cb85c; }
+  .dim-mid   { background: #2a2a00; color: #d4ac0d; }
+  .dim-low   { background: #3a0d0d; color: #e74c3c; }
+
+  .price-cell { text-align: right; }
+  .price-now  { font-weight: 700; color: var(--text); font-size: 13px; }
+  .price-tgt  { color: var(--blue); font-size: 12px; margin-top: 1px; }
+  .upside-pos { color: var(--green); font-weight: 700; }
+  .upside-neg { color: var(--red); font-weight: 700; }
+  .upside-neu { color: var(--text-dim); font-weight: 700; }
+
+  .note-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  .val-status {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .val-undervalue  { background: #0d3a0d; color: #3fb950; }
+  .val-fair        { background: #1a2a00; color: #7ee83f; }
+  .val-fair-high   { background: #2a2a00; color: var(--yellow); }
+  .val-overvalue   { background: #3a0d0d; color: var(--red); }
+
+  /* Detail Cards */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .company-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .company-card:hover { border-color: var(--accent); }
+  .company-card.grade-Aplus-card  { border-left: 3px solid #3fb950; }
+  .company-card.grade-A-card      { border-left: 3px solid #3fb950; }
+  .company-card.grade-Aminus-card { border-left: 3px solid #7ee83f; }
+  .company-card.grade-Bplus-card  { border-left: 3px solid var(--yellow); }
+  .company-card.grade-B-card      { border-left: 3px solid var(--orange); }
+  .company-card.grade-C-card      { border-left: 3px solid var(--red); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .card-sym { font-size: 18px; font-weight: 700; color: var(--cyan); }
+  .card-grade { font-size: 22px; font-weight: 800; }
+
+  .dim-radar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .dim-item {
+    text-align: center;
+    padding: 6px 4px;
+    border-radius: 4px;
+    background: var(--surface2);
+  }
+  .dim-item .d-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
+  .dim-item .d-val { font-size: 18px; font-weight: 700; margin: 2px 0; }
+  .d-val-high { color: var(--green); }
+  .d-val-mid  { color: var(--yellow); }
+  .d-val-low  { color: var(--red); }
+
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .pr-left { color: var(--text-dim); font-size: 11px; }
+  .pr-right { font-size: 14px; font-weight: 700; }
+
+  /* Footer */
+  .footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .disclaimer {
+    max-width: 600px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    font-size: 10px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-right: 4px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .tag-ai { background: #0d2a4a; color: var(--blue); border-color: #1a4a8a; }
+  .tag-warn { background: #3a2a00; color: var(--yellow); border-color: #6a4a00; }
+  .tag-risk { background: #3a0d0d; color: var(--red); border-color: #6a1a1a; }
+
+  .alert-box {
+    background: #2a1500;
+    border: 1px solid #6a3500;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    color: var(--orange);
+    font-size: 12px;
+  }
+  .alert-box strong { color: #ffa657; }
+
+  .summary-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .summary-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 18px;
+    flex: 1;
+    min-width: 120px;
+  }
+  .ss-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .ss-value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+  .ss-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>光模块&高速互联专项投资打分 v4.1</h1>
+  <div class="meta">
+    <span>评分日期：2026-06-08</span>
+    <span>框架版本：investment-score-optical v1.0</span>
+    <span>覆盖标的：APH · COHR · GLW · CRDO · LITE · ALAB · MTSI · TE · CIEN · FN · CLS · AAOI</span>
+    <span>数据来源：公司研报 + 实时搜索</span>
+  </div>
+</div>
+
+<!-- 重要提醒 -->
+<div class="alert-box">
+  <strong>⚠ 重要说明：</strong>
+  代码 <strong>TE</strong> 对应的是 <strong>T1 Energy Inc.（太阳能制造公司）</strong>，而非 TE Connectivity（TEL）。T1 Energy 与光模块&高速互联赛道无关，请知悉。如需分析 TE Connectivity，请使用代码 TEL。
+</div>
+
+<!-- 行业全景扫描 -->
+<div class="section-title">第零步·光模块行业全景扫描（2026-06-08）</div>
+<div class="industry-grid">
+  <div class="industry-card">
+    <div class="ic-title">市场规模·2026E</div>
+    <div class="ic-value">$190亿</div>
+    <div class="ic-note">全球光收发器市场，YoY+52%。TrendForce预测AI光收发器单独$260亿</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">800G+出货量·2026E</div>
+    <div class="ic-value">6,300万+</div>
+    <div class="ic-note">占总出货量>60%（2024年仅19.5%），高盛预测800G需求3,350万台+58%</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">1.6T出货量·2026E</div>
+    <div class="ic-value">700万台</div>
+    <div class="ic-note">从小基数快速爬坡，供应缺口30-40%将持续至2029年（麦肯锡）</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">超大规模Capex·2026E</div>
+    <div class="ic-value">$6,300亿+</div>
+    <div class="ic-note">五大巨头（亚马逊$2000亿+微软$1200亿+Meta$1150亿+谷歌），YoY+36-62%</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">CPO替代时间线</div>
+    <div class="ic-value">2028年+</div>
+    <div class="ic-note">2026年初期商业化（Nvidia Spectrum-X），大规模部署2028-2030年，传统光模块3年安全</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">中国竞争渗透</div>
+    <div class="ic-value">800G 60%</div>
+    <div class="ic-note">InnoLight+Eoptolink占Nvidia 800G约60%供应，1.6T差距2-3年，高端相干差距更大</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">最紧卡点</div>
+    <div class="ic-value">激光光源</div>
+    <div class="ic-note">上游激光器（InP/VCSEL）供应是800G扩产主要瓶颈，短缺持续至2027年</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">核心护城河</div>
+    <div class="ic-value">InP制造</div>
+    <div class="ic-note">InP晶圆→VCSEL/EML→DSP/TIA芯片→光网络软件，越靠近底层壁垒越高</div>
+  </div>
+  <div class="industry-card">
+    <div class="ic-title">行业投资周期</div>
+    <div class="ic-value">中期上行</div>
+    <div class="ic-note">800G供不应求，1.6T导入期高溢价，超大规模Capex持续上调，周期仍在扩张</div>
+  </div>
+</div>
+
+<!-- 产业链价值分布 -->
+<div class="section-title">产业链价值分布</div>
+<table class="ranking-table" style="margin-bottom:20px;">
+  <thead>
+    <tr>
+      <th>层级</th>
+      <th>代表公司</th>
+      <th>毛利率区间</th>
+      <th>本次覆盖</th>
+      <th>中国竞争状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. DSP/光子IC芯片</td>
+      <td>Marvell / MACOM(MTSI) / Broadcom</td>
+      <td style="color:var(--green)">55-70%</td>
+      <td>MTSI</td>
+      <td style="color:var(--green)">落后3-5年</td>
+    </tr>
+    <tr>
+      <td>2. PCIe/CXL Retimer</td>
+      <td>Astera Labs(ALAB) / Marvell</td>
+      <td style="color:var(--green)">70-76%</td>
+      <td>ALAB</td>
+      <td style="color:var(--green)">落后3年+</td>
+    </tr>
+    <tr>
+      <td>3. AEC高速铜缆</td>
+      <td>Credo(CRDO) / Marvell</td>
+      <td style="color:var(--green)">65-70%</td>
+      <td>CRDO</td>
+      <td style="color:var(--green)">落后2-3年</td>
+    </tr>
+    <tr>
+      <td>4. 光网络系统</td>
+      <td>Ciena(CIEN) / Nokia</td>
+      <td style="color:var(--blue)">42-50%</td>
+      <td>CIEN</td>
+      <td style="color:var(--yellow)">华为退场，竞争减少</td>
+    </tr>
+    <tr>
+      <td>5. 高端相干光模块</td>
+      <td>Coherent(COHR) / Lumentum(LITE)</td>
+      <td style="color:var(--blue)">35-45%</td>
+      <td>COHR · LITE</td>
+      <td style="color:var(--yellow)">1.6T落后1-2年</td>
+    </tr>
+    <tr>
+      <td>6. 光纤/光缆基础设施</td>
+      <td>Corning(GLW) / 住友电工</td>
+      <td style="color:var(--blue)">35-45%</td>
+      <td>GLW</td>
+      <td style="color:var(--green)">规格壁垒保护</td>
+    </tr>
+    <tr>
+      <td>7. 高速连接器</td>
+      <td>Amphenol(APH) / T1 Energy(TE)</td>
+      <td style="color:var(--yellow)">30-40%</td>
+      <td>APH</td>
+      <td style="color:var(--yellow)">中等竞争</td>
+    </tr>
+    <tr>
+      <td>8. 光模块EMS代工</td>
+      <td>Fabrinet(FN) / Celestica(CLS)</td>
+      <td style="color:var(--orange)">10-13%</td>
+      <td>FN · CLS</td>
+      <td style="color:var(--green)">去中国化受益</td>
+    </tr>
+    <tr>
+      <td>9. 中低端光模块</td>
+      <td>AAOI / InnoLight / Eoptolink</td>
+      <td style="color:var(--red)">20-32%</td>
+      <td>AAOI</td>
+      <td style="color:var(--red)">中国主导</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 汇总统计 -->
+<div class="summary-row">
+  <div class="summary-stat">
+    <div class="ss-label">最高评级</div>
+    <div class="ss-value" style="color:var(--green)">A+</div>
+    <div class="ss-sub">CIEN · 82.2分</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-label">A级及以上</div>
+    <div class="ss-value" style="color:var(--green)">4家</div>
+    <div class="ss-sub">CIEN · CRDO · FN · APH/CLS</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-label">最佳上行空间</div>
+    <div class="ss-value" style="color:var(--blue)">+41.5%</div>
+    <div class="ss-sub">LITE · $1200目标</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-label">最高质量分</div>
+    <div class="ss-value" style="color:var(--cyan)">92</div>
+    <div class="ss-sub">ALAB · PCIe/CXL领域</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-label">最高行业分</div>
+    <div class="ss-value" style="color:var(--purple)">90</div>
+    <div class="ss-sub">ALAB · AI Retimer</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-label">估值警戒（<30）</div>
+    <div class="ss-value" style="color:var(--red)">5家</div>
+    <div class="ss-sub">COHR·ALAB·MTSI·LITE·AAOI</div>
+  </div>
+</div>
+
+<!-- 排行榜主表 -->
+<div class="section-title">综合评分排行榜（行业20% + 质量50% + 估值30%）</div>
+<table class="ranking-table">
+  <thead>
+    <tr>
+      <th>排名</th>
+      <th>代码</th>
+      <th>评级</th>
+      <th>综合分</th>
+      <th class="right">行业</th>
+      <th class="right">质量</th>
+      <th class="right">估值</th>
+      <th class="right">当前价</th>
+      <th class="right">目标价</th>
+      <th class="right">上行空间</th>
+      <th>估值状态</th>
+      <th>核心判断</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td><span class="rank-badge top1">1</span></td>
+      <td><span class="sym">CIEN</span></td>
+      <td><span class="grade-badge grade-Aplus">A+</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">82.2</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:82.2%;background:var(--green)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">83</span></td>
+      <td class="right"><span class="dim-score dim-high">91</span></td>
+      <td class="right"><span class="dim-score dim-high">67</span></td>
+      <td class="price-cell"><div class="price-now">$488.21</div></td>
+      <td class="price-cell"><div class="price-tgt">$580.00</div><div style="font-size:10px;color:var(--text-dim)">前瞻PE法</div></td>
+      <td class="price-cell"><span class="upside-pos">+18.8%</span></td>
+      <td><span class="val-status val-fair">合理偏低</span></td>
+      <td class="note-text">唯一1.6T量产相干系统供应商，$77亿订单积压创纪录，盈利拐点确立（EPS+290%），Hyper-Rail首单开启新TAM</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge top2">2</span></td>
+      <td><span class="sym">CRDO</span></td>
+      <td><span class="grade-badge grade-A">A</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">77.8</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:77.8%;background:var(--green)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">84</span></td>
+      <td class="right"><span class="dim-score dim-high">90</span></td>
+      <td class="right"><span class="dim-score dim-high">67</span></td>
+      <td class="price-cell"><div class="price-now">$234.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$256.30</div><div style="font-size:10px;color:var(--text-dim)">PE远期法</div></td>
+      <td class="price-cell"><span class="upside-pos">+9.5%</span></td>
+      <td><span class="val-status val-fair-high">估值合理</span></td>
+      <td class="note-text">AEC市场绝对领导者（75%+市场份额），FY2026营收+206%，Non-GAAP净利润$662M，光学DSP收购Dust Photonics拓展新赛道</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge top3">3</span></td>
+      <td><span class="sym">FN</span></td>
+      <td><span class="grade-badge grade-A">A</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">75.2</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:75.2%;background:var(--green)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">86</span></td>
+      <td class="right"><span class="dim-score dim-high">86</span></td>
+      <td class="right"><span class="dim-score dim-mid">50</span></td>
+      <td class="price-cell"><div class="price-now">$628.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$700.00</div><div style="font-size:10px;color:var(--text-dim)">前瞻PE法</div></td>
+      <td class="price-cell"><span class="upside-pos">+11.5%</span></td>
+      <td><span class="val-status val-fair-high">合理偏高</span></td>
+      <td class="note-text">1.6T光模块唯一NVIDIA指定代工商，FY2026全年+42%，零有息负债+ROE 17%，泰国去中国化最大受益者</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">4</span></td>
+      <td><span class="sym">APH</span></td>
+      <td><span class="grade-badge grade-Aminus">A-</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">71.3</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:71.3%;background:#7ee83f"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">77</span></td>
+      <td class="right"><span class="dim-score dim-high">80</span></td>
+      <td class="right"><span class="dim-score dim-mid">53</span></td>
+      <td class="price-cell"><div class="price-now">$138.81</div></td>
+      <td class="price-cell"><div class="price-tgt">$182.28</div><div style="font-size:10px;color:var(--text-dim)">EV/EBITDA法</div></td>
+      <td class="price-cell"><span class="upside-pos">+31.3%</span></td>
+      <td><span class="val-status val-fair">合理偏低</span></td>
+      <td class="note-text">连接器全球No.1，Q1有机增速33%、订单$94亿创历史新高，CommScope整合顺利，Net Cash +$7.6B</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">5</span></td>
+      <td><span class="sym">CLS</span></td>
+      <td><span class="grade-badge grade-Aminus">A-</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">71.2</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:71.2%;background:#7ee83f"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">71</span></td>
+      <td class="right"><span class="dim-score dim-high">81</span></td>
+      <td class="right"><span class="dim-score dim-mid">55</span></td>
+      <td class="price-cell"><div class="price-now">$371.71</div></td>
+      <td class="price-cell"><div class="price-tgt">$445.00</div><div style="font-size:10px;color:var(--text-dim)">DCF法</div></td>
+      <td class="price-cell"><span class="upside-pos">+19.7%</span></td>
+      <td><span class="val-status val-fair">合理偏低</span></td>
+      <td class="note-text">AI交换机核心EMS，FY2026指引$190亿+53%，Broadcom TH6首家完成原型，从高点回调21%逢低机会</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">6</span></td>
+      <td><span class="sym">MTSI</span></td>
+      <td><span class="grade-badge grade-Bplus">B+</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">68.9</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:68.9%;background:var(--yellow)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">85</span></td>
+      <td class="right"><span class="dim-score dim-high">84</span></td>
+      <td class="right"><span class="dim-score dim-low">33</span></td>
+      <td class="price-cell"><div class="price-now">$389.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$398.00</div><div style="font-size:10px;color:var(--text-dim)">P/S+Rule40法</div></td>
+      <td class="price-cell"><span class="upside-neu">+2.3%</span></td>
+      <td><span class="val-status val-overvalue">估值充分</span></td>
+      <td class="note-text">1.6T LPO独家TIA供应商+GaN国防护城河，行业与质量顶级，中国营收28%出口管制为最大风险</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">7</span></td>
+      <td><span class="sym">COHR</span></td>
+      <td><span class="grade-badge grade-Bplus">B+</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">68.4</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:68.4%;background:var(--yellow)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">87</span></td>
+      <td class="right"><span class="dim-score dim-high">87</span></td>
+      <td class="right"><span class="dim-score dim-low">25</span></td>
+      <td class="price-cell"><div class="price-now">$377.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$380.00</div><div style="font-size:10px;color:var(--text-dim)">EV/EBITDA+P/S法</div></td>
+      <td class="price-cell"><span class="upside-neu">+0.8%</span></td>
+      <td><span class="val-status val-overvalue">估值充分</span></td>
+      <td class="note-text">相干光模块全球领导者，6寸InP量产护城河，Q3 DC+Comm +41%，但股价+49%超越旧目标，短期估值充分</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">8</span></td>
+      <td><span class="sym">LITE</span></td>
+      <td><span class="grade-badge grade-Bplus">B+</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">66.5</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:66.5%;background:var(--yellow)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">78</span></td>
+      <td class="right"><span class="dim-score dim-high">82</span></td>
+      <td class="right"><span class="dim-score dim-low">33</span></td>
+      <td class="price-cell"><div class="price-now">$848.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$1,200.00</div><div style="font-size:10px;color:var(--text-dim)">Non-GAAP PE法</div></td>
+      <td class="price-cell"><span class="upside-pos">+41.5%</span></td>
+      <td><span class="val-status val-fair-high">估值充分</span></td>
+      <td class="note-text">Q3营收+90%，Q4指引$985M，运营利润率35-36%，债务转股$650M消除杠杆风险，但5年视角长期透支</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">9</span></td>
+      <td><span class="sym">GLW</span></td>
+      <td><span class="grade-badge grade-Bplus">B+</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">65.8</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:65.8%;background:var(--yellow)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">79</span></td>
+      <td class="right"><span class="dim-score dim-mid">73</span></td>
+      <td class="right"><span class="dim-score dim-mid">45</span></td>
+      <td class="price-cell"><div class="price-now">$177.58</div></td>
+      <td class="price-cell"><div class="price-tgt">$228.00</div><div style="font-size:10px;color:var(--text-dim)">EV/EBITDA法</div></td>
+      <td class="price-cell"><span class="upside-pos">+28.4%</span></td>
+      <td><span class="val-status val-fair-high">偏高但有空间</span></td>
+      <td class="note-text">光纤基础设施全球No.1，Meta+两家新hyperscaler长期协议，Springboard超前完成年化$200亿目标，但估值已扩张</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">10</span></td>
+      <td><span class="sym">ALAB</span></td>
+      <td><span class="grade-badge grade-B">B</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">60.8</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:60.8%;background:var(--orange)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-high">90</span></td>
+      <td class="right"><span class="dim-score dim-high">92</span></td>
+      <td class="right"><span class="dim-score dim-low">25</span></td>
+      <td class="price-cell"><div class="price-now">$317.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$350.00</div><div style="font-size:10px;color:var(--text-dim)">PE远期法</div></td>
+      <td class="price-cell"><span class="upside-pos">+10.4%</span></td>
+      <td><span class="val-status val-overvalue">估值偏高</span></td>
+      <td class="note-text">行业&质量双Top（90/92），Scorpio X提前放量，EPS大超预期+239%，但+173%涨幅后市值$53B已充分定价</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">11</span></td>
+      <td><span class="sym">AAOI</span></td>
+      <td><span class="grade-badge grade-C">C</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">49.4</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:49.4%;background:var(--red)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-mid">65</span></td>
+      <td class="right"><span class="dim-score dim-mid">65</span></td>
+      <td class="right"><span class="dim-score dim-low">13</span></td>
+      <td class="price-cell"><div class="price-now">$201.00</div></td>
+      <td class="price-cell"><div class="price-tgt">$200.00</div><div style="font-size:10px;color:var(--text-dim)">P/S法</div></td>
+      <td class="price-cell"><span class="upside-neg">-0.5%</span></td>
+      <td><span class="val-status val-overvalue">严重高估</span></td>
+      <td class="note-text">YTD+439%，P/S 16x严重透支，分析师均值$151低于当前价，仍亏损，1.6T首单有期权价值但高估风险大</td>
+    </tr>
+
+    <tr>
+      <td><span class="rank-badge">12</span></td>
+      <td><span class="sym">TE</span> <span class="tag tag-warn">非光互联</span></td>
+      <td><span class="grade-badge grade-C">C</span></td>
+      <td>
+        <div class="score-bar">
+          <span class="score-num">26.0</span>
+          <div class="bar-wrap"><div class="bar-fill" style="width:26%;background:var(--red)"></div></div>
+        </div>
+      </td>
+      <td class="right"><span class="dim-score dim-low">30</span></td>
+      <td class="right"><span class="dim-score dim-low">32</span></td>
+      <td class="right"><span class="dim-score dim-mid">42</span></td>
+      <td class="price-cell"><div class="price-now">$9.43</div></td>
+      <td class="price-cell"><div class="price-tgt">$13.32</div><div style="font-size:10px;color:var(--text-dim)">P/S法</div></td>
+      <td class="price-cell"><span class="upside-pos">+41.3%</span></td>
+      <td><span class="val-status val-risk" style="background:#3a0d0d;color:var(--red)">高风险</span></td>
+      <td class="note-text">⚠ T1 Energy太阳能制造公司，非TE Connectivity；与光互联无关，FEOC合规风险+DOJ调查+Trina关联方>99%营收</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- 公司详情卡片 -->
+<div class="section-title">公司详情（12家）</div>
+<div class="cards-grid">
+
+  <!-- CIEN -->
+  <div class="company-card grade-Aplus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">CIEN</div>
+        <div style="font-size:11px;color:var(--text-dim)">Ciena Corporation · 光网络系统</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">1.6T量产唯一</span><span class="tag tag-ai">Hyper-Rail</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--green)">A+</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">83</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">91</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-high">67</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$488.21 → <span style="color:var(--blue)">$580</span> <span class="upside-pos">+18.8%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      WaveLogic 6 Extreme全球唯一1.6T量产供应商 · $77亿订单积压（FY2026全年覆盖122%）· Q2调整EPS +290% · Hyper-Rail首单开启TAM重构
+    </div>
+  </div>
+
+  <!-- CRDO -->
+  <div class="company-card grade-A-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">CRDO</div>
+        <div style="font-size:11px;color:var(--text-dim)">Credo Technology · AEC高速铜缆</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">AEC 75%份额</span><span class="tag tag-ai">光学DSP</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--green)">A</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">84</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">90</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-high">67</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$234.00 → <span style="color:var(--blue)">$256.30</span> <span class="upside-pos">+9.5%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      FY2026营收$1.3B +206% · Non-GAAP净利润$662M，净利率51% · 收购Dust Photonics进军光学DSP · 股价+126%已大涨
+    </div>
+  </div>
+
+  <!-- FN -->
+  <div class="company-card grade-A-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">FN</div>
+        <div style="font-size:11px;color:var(--text-dim)">Fabrinet · 精密光器件代工</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">1.6T独家代工</span><span class="tag tag-ai">NVIDIA指定</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--green)">A</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">86</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">86</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-mid">50</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$628.00 → <span style="color:var(--blue)">$700.00</span> <span class="upside-pos">+11.5%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      FY2026全年约+42% · 零有息负债 · ROE 17% · 8/8季度持续超预期 · EMS利润率薄但护城河顶级
+    </div>
+  </div>
+
+  <!-- APH -->
+  <div class="company-card grade-Aminus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">APH</div>
+        <div style="font-size:11px;color:var(--text-dim)">Amphenol · 全球连接器No.1</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">AI DC连接器</span><span class="tag">CommScope整合</span></div>
+      </div>
+      <div class="card-grade" style="color:#7ee83f">A-</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">77</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">80</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-mid">53</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$138.81 → <span style="color:var(--blue)">$182.28</span> <span class="upside-pos">+31.3%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      Q1有机增速33%超预期 · 订单$94亿创历史最高 · Net Cash +$7.6B · FCF $4.38B（转化率126%）
+    </div>
+  </div>
+
+  <!-- CLS -->
+  <div class="company-card grade-Aminus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">CLS</div>
+        <div style="font-size:11px;color:var(--text-dim)">Celestica · AI基础设施EMS</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">AI交换机</span><span class="tag tag-ai">1.6T CPO</span></div>
+      </div>
+      <div class="card-grade" style="color:#7ee83f">A-</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-mid">71</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">81</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-mid">55</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$371.71 → <span style="color:var(--blue)">$445.00</span> <span class="upside-pos">+19.7%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      FY2026指引$190亿+53% · ROE 37.6% · 零债务 · 从$474高点回调21%提供介入机会 · 1.6T CPO交换机2027量产
+    </div>
+  </div>
+
+  <!-- MTSI -->
+  <div class="company-card grade-Bplus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">MTSI</div>
+        <div style="font-size:11px;color:var(--text-dim)">MACOM Technology · RF/光子半导体</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">1.6T TIA独供</span><span class="tag">GaN国防</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--yellow)">B+</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">85</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">84</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-low">33</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$389.00 → <span style="color:var(--blue)">$398.00</span> <span class="upside-neu">+2.3%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      1.6T LPO TIA独家供应90%份额 · GaN国防DoD认证护城河 · 毛利率58.5%→目标60% · 中国营收28%出口管制风险
+    </div>
+  </div>
+
+  <!-- COHR -->
+  <div class="company-card grade-Bplus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">COHR</div>
+        <div style="font-size:11px;color:var(--text-dim)">Coherent Corp. · 相干光模块系统</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">800G/1.6T</span><span class="tag">6寸InP量产</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--yellow)">B+</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">87</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">87</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-low">25</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$377.00 → <span style="color:var(--blue)">$380.00</span> <span class="upside-neu">+0.8%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      行业&质量双87分（最高组合之一）· Q3 DC+Comm +41% · 6寸InP量产护城河 · 但+49%涨幅后估值充分，等待回调
+    </div>
+  </div>
+
+  <!-- LITE -->
+  <div class="company-card grade-Bplus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">LITE</div>
+        <div style="font-size:11px;color:var(--text-dim)">Lumentum Holdings · 光模块/VCSEL</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">Q3+90%</span><span class="tag">债务转股</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--yellow)">B+</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">78</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">82</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-low">33</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$848.00 → <span style="color:var(--blue)">$1,200</span> <span class="upside-pos">+41.5%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      Q3营收$808M +90% · Q4指引$985M，运营利润率35-36% · 债务转股$650M消除最大风险 · 5年视角长期透支
+    </div>
+  </div>
+
+  <!-- GLW -->
+  <div class="company-card grade-Bplus-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">GLW</div>
+        <div style="font-size:11px;color:var(--text-dim)">Corning · 光纤/光缆基础设施</div>
+        <div style="margin-top:4px"><span class="tag">Meta $60亿协议</span><span class="tag">Springboard</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--yellow)">B+</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">79</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-mid">73</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-mid">45</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$177.58 → <span style="color:var(--blue)">$228.00</span> <span class="upside-pos">+28.4%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      Q1光通信+36% · Meta+两家新hyperscaler长期协议 · Springboard超前完成（年化$200亿目标）· 估值已从$129大幅扩张
+    </div>
+  </div>
+
+  <!-- ALAB -->
+  <div class="company-card grade-B-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">ALAB</div>
+        <div style="font-size:11px;color:var(--text-dim)">Astera Labs · PCIe/CXL Retimer</div>
+        <div style="margin-top:4px"><span class="tag tag-ai">行业90·质量92</span><span class="tag tag-warn">估值偏高</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--orange)">B</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-high">90</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-high">92</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-low">25</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$317.00 → <span style="color:var(--blue)">$350.00</span> <span class="upside-pos">+10.4%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      行业+质量双最高（90+92），Scorpio X提前量产，EPS超预期+239%，但+173%涨幅后市值$53B已完全定价
+    </div>
+  </div>
+
+  <!-- AAOI -->
+  <div class="company-card grade-C-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">AAOI</div>
+        <div style="font-size:11px;color:var(--text-dim)">Applied Optoelectronics · 光模块</div>
+        <div style="margin-top:4px"><span class="tag tag-warn">YTD+439%</span><span class="tag tag-risk">严重高估</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--red)">C</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-mid">65</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-mid">65</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-low">13</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$201.00 → <span style="color:var(--blue)">$200.00</span> <span class="upside-neg">-0.5%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      P/S 16x对亏损公司严重透支 · 分析师均值$151低于当前价 · 1.6T首批订单有期权价值但规模远不及COHR/LITE
+    </div>
+  </div>
+
+  <!-- TE -->
+  <div class="company-card grade-C-card">
+    <div class="card-header">
+      <div>
+        <div class="card-sym">TE</div>
+        <div style="font-size:11px;color:var(--text-dim)">T1 Energy Inc. · 太阳能制造</div>
+        <div style="margin-top:4px"><span class="tag tag-risk">非光互联赛道</span><span class="tag tag-risk">DOJ调查</span></div>
+      </div>
+      <div class="card-grade" style="color:var(--red)">C</div>
+    </div>
+    <div class="dim-radar">
+      <div class="dim-item"><div class="d-label">行业</div><div class="d-val d-val-low">30</div></div>
+      <div class="dim-item"><div class="d-label">质量</div><div class="d-val d-val-low">32</div></div>
+      <div class="dim-item"><div class="d-label">估值</div><div class="d-val d-val-mid">42</div></div>
+    </div>
+    <div class="price-row">
+      <div class="pr-left">当前价 / 目标价</div>
+      <div class="pr-right">$9.43 → <span style="color:var(--blue)">$13.32</span> <span class="upside-pos">+41.3%</span></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+      ⚠ T1 Energy（太阳能）非TE Connectivity（连接器）· FEOC合规争议 · DOJ大陪审团传票 · 99%收入来自Trina关联方
+    </div>
+  </div>
+
+</div>
+
+<!-- 投资策略矩阵 -->
+<div style="margin-top:32px;">
+<div class="section-title">投资策略矩阵（质量 vs 估值）</div>
+<table class="ranking-table">
+  <thead>
+    <tr>
+      <th>象限</th>
+      <th>标的</th>
+      <th>策略建议</th>
+      <th>核心逻辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="color:var(--green);font-weight:700">★ 高质量·低估值（首选）</td>
+      <td><span class="sym">CIEN</span> · <span class="sym">APH</span></td>
+      <td style="color:var(--green)">积极建仓，核心持仓</td>
+      <td>高质量+合理估值+向上催化剂明确，安全边际充足</td>
+    </tr>
+    <tr>
+      <td style="color:var(--blue);font-weight:700">★ 高质量·合理估值（次选）</td>
+      <td><span class="sym">CRDO</span> · <span class="sym">FN</span> · <span class="sym">CLS</span></td>
+      <td style="color:var(--blue)">持续持有，逢低加仓</td>
+      <td>质量验证充分，估值合理，有持续增长催化剂</td>
+    </tr>
+    <tr>
+      <td style="color:var(--yellow);font-weight:700">高质量·高估值（持有观望）</td>
+      <td><span class="sym">COHR</span> · <span class="sym">MTSI</span> · <span class="sym">LITE</span> · <span class="sym">GLW</span></td>
+      <td style="color:var(--yellow)">持有现仓，等待回调</td>
+      <td>质量优秀但估值偏高，等待10-20%回调再建仓</td>
+    </tr>
+    <tr>
+      <td style="color:var(--orange);font-weight:700">极高质量·极高估值（小仓期权）</td>
+      <td><span class="sym">ALAB</span></td>
+      <td style="color:var(--orange)">小仓持有，不追高</td>
+      <td>行业+质量双最高（90/92），但市值$53B已充分定价所有乐观预期</td>
+    </tr>
+    <tr>
+      <td style="color:var(--red);font-weight:700">高估值·低安全边际（规避）</td>
+      <td><span class="sym">AAOI</span></td>
+      <td style="color:var(--red)">规避或做空</td>
+      <td>YTD+439%后P/S 16x严重透支，亏损公司，分析师均值低于股价</td>
+    </tr>
+    <tr>
+      <td style="color:var(--red);font-weight:700">⚠ 非赛道（排除）</td>
+      <td><span class="sym">TE</span></td>
+      <td style="color:var(--red)">不在光互联框架内</td>
+      <td>T1 Energy为太阳能公司，应使用energy框架评估，光互联框架评分无效</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- CPO替代风险专栏 -->
+<div style="margin-top:24px;">
+<div class="section-title">CPO替代风险 & 中国竞争压力分析</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;">
+    <div style="color:var(--cyan);font-weight:700;margin-bottom:10px;font-size:12px;">CPO替代时间线</div>
+    <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
+      <div>2026：初期商业化（Nvidia Spectrum-X/Quantum-X）</div>
+      <div>2026-2027：早期超级数据中心试点，与插拔式共存</div>
+      <div>2028-2030：大规模部署开始，但插拔式仍为主流</div>
+      <div>2030+：CPO可能成为新建数据中心标配</div>
+      <div style="color:var(--yellow);margin-top:8px;">结论：未来3年插拔式光模块安全，2027年重新评估</div>
+      <div style="color:var(--green);margin-top:4px;">受益：COHR（CPO布局）· LITE（Nvidia认可）· CIEN（系统层不受影响）</div>
+      <div style="color:var(--red);margin-top:4px;">风险：传统小型可插拔光模块供应商长期压力</div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;">
+    <div style="color:var(--cyan);font-weight:700;margin-bottom:10px;font-size:12px;">中国竞争渗透状态</div>
+    <div style="font-size:11px;color:var(--text-dim);line-height:1.8;">
+      <div style="color:var(--red);">400G：中国已主导，InnoLight+Eoptolink主流</div>
+      <div style="color:var(--yellow);">800G：中国约60%（Nvidia订单），美国厂商防御1.6T</div>
+      <div style="color:var(--green);">1.6T：美国/台湾领先2-3年（相干光）</div>
+      <div style="color:var(--green);">DSP/TIA芯片：美国领先3-5年，出口管制保护</div>
+      <div style="color:var(--green);">AEC：Credo 88%市场份额，中国无可比产品</div>
+      <div style="color:var(--green);">PCIe Retimer：ALAB/Marvell主导，中国差距巨大</div>
+      <div style="color:var(--green);">光纤：Corning领先，中长途光纤美国制造保护</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  <div class="disclaimer">
+    本报告基于 investment-score-optical v4.1 框架，使用研究文件数据及2026年6月实时搜索结果。当前股价来源：公司update文件（APH/COHR/GLW/CRDO/LITE/ALAB）及联网搜索（MTSI/TE/CIEN/FN/CLS/AAOI）。目标价来源：valuation_result.json（原始）+ 研究员前瞻修正（CIEN/FN/CLS/COHR/GLW）。本报告仅供研究参考，不构成投资建议。市场存在不确定性，投资者应自行评估风险。
+  </div>
+  <div style="text-align:right;color:var(--text-dim);font-size:10px;">
+    <div>生成时间：2026-06-08</div>
+    <div>框架：investment-score-optical v1.0</div>
+    <div>数据刷新：update_20260608.md + 实时搜索</div>
+  </div>
+</div>
+
+</body>
+</html>
