@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存储器专项投资打分 v4.1 — 8家公司 — 20260608</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #1c2333;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #f0883e;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --teal: #76e3b0;
+    --gray: #8b949e;
+    --white: #e6edf3;
+    --hbm: #76e3b0;
+    --hbf: #bc8cff;
+    --svrdram: #58a6ff;
+    --pcdram: #d29922;
+    --enand: #f0883e;
+    --cnand: #8b949e;
+    --hdd: #e8b04b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2333 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(88,166,255,0.4);
+  }
+  .header-sub {
+    color: var(--gray);
+    font-size: 12px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .meta-badge {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--gray);
+  }
+  .meta-badge span { color: var(--white); }
+
+  /* HBM超级周期状态横幅 */
+  .hbm-banner {
+    background: linear-gradient(90deg, rgba(118,227,176,0.12) 0%, rgba(88,166,255,0.08) 100%);
+    border: 1px solid rgba(118,227,176,0.3);
+    border-radius: 8px;
+    margin: 24px 40px;
+    padding: 16px 24px;
+  }
+  .hbm-banner-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hbm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .hbm-item {
+    background: rgba(13,17,23,0.6);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .hbm-item-label { color: var(--gray); font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .hbm-item-val { font-size: 14px; font-weight: 700; margin-top: 2px; }
+  .hbm-item-sub { font-size: 10px; color: var(--gray); margin-top: 2px; }
+
+  /* 排行榜 */
+  .section { margin: 24px 40px; }
+  .section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding-left: 10px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  .ranking-table { width: 100%; border-collapse: collapse; }
+  .ranking-table th {
+    background: var(--card2);
+    color: var(--gray);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  .ranking-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+    vertical-align: middle;
+  }
+  .ranking-table tr:hover td { background: rgba(88,166,255,0.03); }
+  .rank-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray);
+    width: 36px;
+    text-align: center;
+  }
+  .rank-num.top1 { color: #ffd700; }
+  .rank-num.top2 { color: #c0c0c0; }
+  .rank-num.top3 { color: #cd7f32; }
+  .ticker-cell { font-size: 14px; font-weight: 700; color: var(--white); }
+  .company-name { font-size: 11px; color: var(--gray); }
+  .grade-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .grade-S { background: rgba(118,227,176,0.2); color: var(--teal); border: 1px solid var(--teal); }
+  .grade-A { background: rgba(88,166,255,0.2); color: var(--accent); border: 1px solid var(--accent); }
+  .grade-B { background: rgba(210,153,34,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+  .grade-C { background: rgba(248,81,73,0.2); color: var(--red); border: 1px solid var(--red); }
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    width: 100px;
+    overflow: hidden;
+  }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .score-num { font-size: 15px; font-weight: 700; }
+  .delta-pos { color: var(--green); }
+  .delta-neg { color: var(--red); }
+  .delta-neu { color: var(--gray); }
+  .price-cell { font-size: 13px; font-weight: 600; }
+  .sector-tag {
+    display: inline-block;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tag-hbm { background: rgba(118,227,176,0.15); color: var(--teal); }
+  .tag-hdd { background: rgba(232,176,75,0.15); color: var(--hdd); }
+  .tag-nand { background: rgba(240,136,62,0.15); color: var(--orange); }
+  .tag-software { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  /* 公司详情卡片 */
+  .company-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .company-card-header {
+    background: var(--card2);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .company-card-header .ticker { font-size: 20px; font-weight: 700; color: var(--white); }
+  .company-card-header .fullname { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .company-card-body { padding: 16px 20px; }
+
+  .score-tri {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .score-tri-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .score-tri-label { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.6px; }
+  .score-tri-val { font-size: 22px; font-weight: 700; margin-top: 2px; }
+  .score-tri-weight { font-size: 10px; color: var(--gray); }
+
+  .industry-bars { margin-bottom: 14px; }
+  .industry-bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    gap: 8px;
+  }
+  .industry-bar-label { width: 160px; font-size: 11px; color: var(--gray); flex-shrink: 0; }
+  .industry-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .industry-bar-fill { height: 100%; border-radius: 3px; }
+  .industry-bar-score { width: 32px; text-align: right; font-size: 12px; font-weight: 600; }
+  .industry-bar-weight { width: 40px; text-align: right; font-size: 10px; color: var(--gray); }
+
+  /* dim质量格 */
+  .quality-dims {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .dim-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .dim-box-label { font-size: 9px; color: var(--gray); text-transform: uppercase; }
+  .dim-box-score { font-size: 18px; font-weight: 700; margin-top: 2px; }
+  .dim-box-note { font-size: 10px; color: var(--gray); margin-top: 3px; line-height: 1.4; }
+  .star1 { color: #e0e0e0; }
+  .star2 { color: #d29922; }
+  .star3 { color: var(--green); }
+  .star4 { color: var(--accent); }
+  .star5 { color: var(--teal); }
+
+  /* delta对比 */
+  .delta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+  }
+  .delta-item { text-align: center; flex: 1; }
+  .delta-item-label { font-size: 10px; color: var(--gray); }
+  .delta-item-val { font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .delta-arrow { font-size: 20px; color: var(--gray); }
+
+  /* 触发器 */
+  .trigger-box {
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border: 1px solid;
+  }
+  .trigger-fired { background: rgba(118,227,176,0.08); border-color: var(--teal); }
+  .trigger-not { background: rgba(48,54,61,0.3); border-color: var(--border); }
+  .trigger-title { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .trigger-checks { display: flex; gap: 12px; flex-wrap: wrap; }
+  .trigger-check-item { font-size: 11px; }
+  .chk-ok { color: var(--green); }
+  .chk-no { color: var(--gray); }
+
+  /* 目标价表格 */
+  .target-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .target-table th {
+    background: var(--card2);
+    color: var(--gray);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  .target-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+  }
+  .target-table tr:hover td { background: rgba(88,166,255,0.03); }
+  .upside-good { color: var(--green); font-weight: 600; }
+  .upside-mid { color: var(--yellow); font-weight: 600; }
+  .upside-low { color: var(--gray); font-weight: 600; }
+
+  /* 布局工具 */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .note-box {
+    background: var(--bg);
+    border-left: 3px solid var(--accent);
+    padding: 8px 12px;
+    font-size: 11px;
+    color: var(--gray);
+    border-radius: 0 4px 4px 0;
+    margin-top: 6px;
+  }
+  .note-box span { color: var(--white); }
+  .valuation-scenarios {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .scenario-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .scenario-label { font-size: 9px; color: var(--gray); }
+  .scenario-prob { font-size: 10px; color: var(--gray); }
+  .scenario-return { font-size: 15px; font-weight: 700; margin-top: 2px; }
+
+  /* 底部 */
+  .footer {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+  }
+  .footer-left { color: var(--gray); font-size: 11px; }
+  .footer-right { color: var(--accent); font-size: 11px; }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .section { margin: 16px 20px; }
+    .hbm-banner { margin: 16px 20px; }
+    .score-tri { grid-template-columns: 1fr; }
+    .quality-dims { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .valuation-scenarios { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-title">◈ 存储器专项投资打分 v4.1 — 8家公司综合报告</div>
+  <div class="header-sub">Memory &amp; Storage Investment Scorecard · HBM Supercycle Framework · 超级周期盈利捕获法</div>
+  <div class="header-meta">
+    <div class="meta-badge">报告日期 <span>2026-06-08</span></div>
+    <div class="meta-badge">框架版本 <span>v4.1-HBM-Supercycle</span></div>
+    <div class="meta-badge">覆盖公司 <span>8家</span></div>
+    <div class="meta-badge">行业扫描 <span>6条实时搜索</span></div>
+    <div class="meta-badge">基准日期 <span>20260605</span></div>
+  </div>
+</div>
+
+<!-- ===== HBM超级周期状态 ===== -->
+<div class="hbm-banner">
+  <div class="hbm-banner-title">
+    🏗 HBM超级周期状态 | 基于2026-06-08行业重扫描
+  </div>
+  <div class="hbm-grid">
+    <div class="hbm-item">
+      <div class="hbm-item-label">HBM供需状态</div>
+      <div class="hbm-item-val" style="color:var(--teal)">结构性短缺</div>
+      <div class="hbm-item-sub">2026全年产能已售罄 · 短缺延续至2027+</div>
+    </div>
+    <div class="hbm-item">
+      <div class="hbm-item-label">DRAM ASP趋势</div>
+      <div class="hbm-item-val" style="color:var(--green)">+55~63% QoQ</div>
+      <div class="hbm-item-sub">三星Q1 ASP +146% · SK Q1 DRAM +mid-60%</div>
+    </div>
+    <div class="hbm-item">
+      <div class="hbm-item-label">NAND市场</div>
+      <div class="hbm-item-val" style="color:var(--orange)">全年订满</div>
+      <div class="hbm-item-sub">Kioxia 2026 NAND全订满 · NAND ASP +33~75% QoQ</div>
+    </div>
+    <div class="hbm-item">
+      <div class="hbm-item-label">HDD Nearline</div>
+      <div class="hbm-item-val" style="color:var(--hdd)">全年售罄</div>
+      <div class="hbm-item-sub">STX/WDC 2026全年 · 2027年可见性延伸</div>
+    </div>
+    <div class="hbm-item">
+      <div class="hbm-item-label">HBM4状态</div>
+      <div class="hbm-item-val" style="color:var(--teal)">量产进行中</div>
+      <div class="hbm-item-sub">SK Hynix 70%+ NVIDIA Rubin供货份额</div>
+    </div>
+    <div class="hbm-item">
+      <div class="hbm-item-label">AI超大规模需求</div>
+      <div class="hbm-item-val" style="color:var(--accent)">持续加速</div>
+      <div class="hbm-item-sub">推理需求驱动 · 超大规模客户预订2027年供应</div>
+    </div>
+  </div>
+  <div style="margin-top:12px; display:flex; gap:20px; flex-wrap:wrap;">
+    <span style="font-size:11px;">● <span style="color:var(--teal)">HBM dim6=4</span>（结构性超级周期）</span>
+    <span style="font-size:11px;">● <span style="color:var(--hdd)">HDD dim6=4</span>（nearline景气高峰，HAMR加速）</span>
+    <span style="font-size:11px;">● <span style="color:var(--orange)">NAND dim6=3</span>（AI驱动上行，但商品属性制约）</span>
+    <span style="font-size:11px;">● <span style="color:var(--purple)">软件 dim6=3</span>（中性，无周期影响）</span>
+  </div>
+</div>
+
+<!-- ===== 综合排行榜 ===== -->
+<div class="section">
+  <div class="section-title">◈ 8家公司综合排行榜 — 20260608</div>
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th>排名</th>
+        <th>代码</th>
+        <th>公司名称</th>
+        <th>赛道</th>
+        <th>评级</th>
+        <th>综合分（今日）</th>
+        <th>行业分</th>
+        <th>质量分</th>
+        <th>估值分</th>
+        <th>vs 基准</th>
+        <th>当前股价</th>
+        <th>5年目标价</th>
+        <th>隐含年化</th>
+        <th>核心判断</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- SK Hynix -->
+      <tr>
+        <td><div class="rank-num top1">1</div></td>
+        <td><div class="ticker-cell">000660.KS</div></td>
+        <td><div class="company-name">SK Hynix</div></td>
+        <td><span class="sector-tag tag-hbm">HBM</span></td>
+        <td><span class="grade-badge grade-S">S</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:86%;background:var(--teal)"></div></div>
+            <span class="score-num" style="color:var(--teal)">86</span>
+          </div>
+        </td>
+        <td style="color:var(--teal)">92</td>
+        <td style="color:var(--teal)">82</td>
+        <td style="color:var(--teal)">78</td>
+        <td><span class="delta-pos">+4</span></td>
+        <td class="price-cell">₩2,129,000</td>
+        <td style="color:var(--green)">₩4,200,000</td>
+        <td class="upside-good">+14.6%</td>
+        <td style="font-size:11px;color:var(--gray)">HBM全球霸主，Forward PE 6.2x严重低估，美国IPO重估催化</td>
+      </tr>
+      <!-- MU -->
+      <tr>
+        <td><div class="rank-num top2">2</div></td>
+        <td><div class="ticker-cell">MU</div></td>
+        <td><div class="company-name">Micron Technology</div></td>
+        <td><span class="sector-tag tag-hbm">HBM</span></td>
+        <td><span class="grade-badge grade-A">A</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:80%;background:var(--accent)"></div></div>
+            <span class="score-num" style="color:var(--accent)">80</span>
+          </div>
+        </td>
+        <td style="color:var(--accent)">87</td>
+        <td style="color:var(--accent)">79</td>
+        <td style="color:var(--accent)">73</td>
+        <td><span class="delta-pos">+2</span></td>
+        <td class="price-cell">$857</td>
+        <td style="color:var(--green)">$1,708</td>
+        <td class="upside-good">+14.8%</td>
+        <td style="font-size:11px;color:var(--gray)">美国唯一本土HBM，CHIPS护城河，$1,708目标+99%上行</td>
+      </tr>
+      <!-- STX -->
+      <tr>
+        <td><div class="rank-num top3">3</div></td>
+        <td><div class="ticker-cell">STX</div></td>
+        <td><div class="company-name">Seagate Technology</div></td>
+        <td><span class="sector-tag tag-hdd">HDD</span></td>
+        <td><span class="grade-badge grade-A">A</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:78%;background:var(--accent)"></div></div>
+            <span class="score-num" style="color:var(--accent)">78</span>
+          </div>
+        </td>
+        <td style="color:var(--accent)">82</td>
+        <td style="color:var(--accent)">78</td>
+        <td style="color:var(--accent)">70</td>
+        <td><span class="delta-pos">+4</span></td>
+        <td class="price-cell">$847</td>
+        <td style="color:var(--green)">$1,100</td>
+        <td class="upside-mid">+5.4%</td>
+        <td style="font-size:11px;color:var(--gray)">HAMR准垄断窗口3-5年，FCF $953M历史纪录，分析师目标$771-1000</td>
+      </tr>
+      <!-- WDC -->
+      <tr>
+        <td><div class="rank-num">4</div></td>
+        <td><div class="ticker-cell">WDC</div></td>
+        <td><div class="company-name">Western Digital</div></td>
+        <td><span class="sector-tag tag-hdd">HDD</span></td>
+        <td><span class="grade-badge grade-A">A</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:74%;background:var(--accent)"></div></div>
+            <span class="score-num" style="color:var(--accent)">74</span>
+          </div>
+        </td>
+        <td style="color:var(--accent)">78</td>
+        <td style="color:var(--accent)">74</td>
+        <td style="color:var(--accent)">68</td>
+        <td><span class="delta-pos">+4</span></td>
+        <td class="price-cell">$476</td>
+        <td style="color:var(--green)">$730</td>
+        <td class="upside-mid">+8.9%</td>
+        <td style="font-size:11px;color:var(--gray)">纯HDD分拆解锁集团折价，2026全年产能售罄，HAMR进度追赶</td>
+      </tr>
+      <!-- Samsung -->
+      <tr>
+        <td><div class="rank-num">5</div></td>
+        <td><div class="ticker-cell">005930.KS</div></td>
+        <td><div class="company-name">Samsung Electronics</div></td>
+        <td><span class="sector-tag tag-hbm">HBM</span></td>
+        <td><span class="grade-badge grade-A">A</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:74%;background:var(--accent)"></div></div>
+            <span class="score-num" style="color:var(--accent)">74</span>
+          </div>
+        </td>
+        <td style="color:var(--accent)">80</td>
+        <td style="color:var(--accent)">76</td>
+        <td style="color:var(--accent)">62</td>
+        <td><span class="delta-pos">+2</span><span style="color:var(--teal);font-size:10px;margin-left:4px">触发器+10</span></td>
+        <td class="price-cell">₩295,500</td>
+        <td style="color:var(--green)">₩550,000</td>
+        <td class="upside-good">+13.2%</td>
+        <td style="font-size:11px;color:var(--gray)">HBM4逆转超预期，三重触发器激活，Forward PE 6.5x严重低估</td>
+      </tr>
+      <!-- SNDK -->
+      <tr>
+        <td><div class="rank-num">6</div></td>
+        <td><div class="ticker-cell">SNDK</div></td>
+        <td><div class="company-name">SanDisk Corporation</div></td>
+        <td><span class="sector-tag tag-nand">NAND</span></td>
+        <td><span class="grade-badge grade-B">B</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:66%;background:var(--yellow)"></div></div>
+            <span class="score-num" style="color:var(--yellow)">66</span>
+          </div>
+        </td>
+        <td style="color:var(--yellow)">68</td>
+        <td style="color:var(--yellow)">72</td>
+        <td style="color:var(--yellow)">52</td>
+        <td><span class="delta-pos">+1</span></td>
+        <td class="price-cell">$1,559</td>
+        <td style="color:var(--yellow)">$2,200</td>
+        <td class="upside-mid">+7.1%</td>
+        <td style="font-size:11px;color:var(--gray)">NAND峰值+HBF期权，但商品属性限估值，股价从$710翻倍已充分定价</td>
+      </tr>
+      <!-- PSTG -->
+      <tr>
+        <td><div class="rank-num">7</div></td>
+        <td><div class="ticker-cell">PSTG</div></td>
+        <td><div class="company-name">Pure Storage / Everpure</div></td>
+        <td><span class="sector-tag tag-software">软件</span></td>
+        <td><span class="grade-badge grade-B">B</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:64%;background:var(--yellow)"></div></div>
+            <span class="score-num" style="color:var(--yellow)">64</span>
+          </div>
+        </td>
+        <td style="color:var(--yellow)">72</td>
+        <td style="color:var(--yellow)">68</td>
+        <td style="color:var(--yellow)">52</td>
+        <td><span class="delta-pos">+2</span></td>
+        <td class="price-cell">$76.05</td>
+        <td style="color:var(--yellow)">$145</td>
+        <td class="upside-good">+13.8%</td>
+        <td style="font-size:11px;color:var(--gray)">AI全闪存+Evergreen订阅，P/S目标$79≈当前价，分析师共识$89提供上行</td>
+      </tr>
+      <!-- Kioxia -->
+      <tr>
+        <td><div class="rank-num">8</div></td>
+        <td><div class="ticker-cell">285A.T</div></td>
+        <td><div class="company-name">Kioxia Holdings</div></td>
+        <td><span class="sector-tag tag-nand">NAND</span></td>
+        <td><span class="grade-badge grade-B">B</span></td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-fill" style="width:62%;background:var(--yellow)"></div></div>
+            <span class="score-num" style="color:var(--yellow)">62</span>
+          </div>
+        </td>
+        <td style="color:var(--yellow)">70</td>
+        <td style="color:var(--yellow)">66</td>
+        <td style="color:var(--yellow)">48</td>
+        <td><span class="delta-pos">+2</span></td>
+        <td class="price-cell">¥78,140</td>
+        <td style="color:var(--gray)">¥105,000</td>
+        <td class="upside-low">+6.1%</td>
+        <td style="font-size:11px;color:var(--gray)">BiCS10技术领先，但P/E 77x+Bain退出悬顶，当前价已超分析师均值</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== Delta对比汇总 ===== -->
+<div class="section">
+  <div class="section-title">◈ 基准分 vs 今日分 Delta 对比（基准日：20260605）</div>
+  <table class="ranking-table">
+    <thead>
+      <tr>
+        <th>代码</th>
+        <th>基准行业</th>
+        <th>今日行业</th>
+        <th>Δ行业</th>
+        <th>基准质量</th>
+        <th>今日质量</th>
+        <th>Δ质量</th>
+        <th>基准估值</th>
+        <th>今日估值</th>
+        <th>Δ估值</th>
+        <th>基准总分</th>
+        <th>今日总分</th>
+        <th>Δ总分</th>
+        <th>主要变化原因</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>000660.KS</strong></td>
+        <td>90</td><td style="color:var(--teal)">92</td><td class="delta-pos">+2</td>
+        <td>78</td><td style="color:var(--teal)">82</td><td class="delta-pos">+4</td>
+        <td>72</td><td style="color:var(--teal)">78</td><td class="delta-pos">+6</td>
+        <td>82</td><td style="color:var(--teal)">86</td><td class="delta-pos">+4</td>
+        <td style="font-size:11px;color:var(--gray)">HBM4良率提升确认+M15X投产+美国IPO计划公告</td>
+      </tr>
+      <tr>
+        <td><strong>MU</strong></td>
+        <td>85</td><td style="color:var(--accent)">87</td><td class="delta-pos">+2</td>
+        <td>76</td><td style="color:var(--accent)">79</td><td class="delta-pos">+3</td>
+        <td>70</td><td style="color:var(--accent)">73</td><td class="delta-pos">+3</td>
+        <td>78</td><td style="color:var(--accent)">80</td><td class="delta-pos">+2</td>
+        <td style="font-size:11px;color:var(--gray)">HBM4量产确认+股价从$1064降至$857，估值吸引力提升</td>
+      </tr>
+      <tr>
+        <td><strong>STX</strong></td>
+        <td>78</td><td style="color:var(--accent)">82</td><td class="delta-pos">+4</td>
+        <td>76</td><td style="color:var(--accent)">78</td><td class="delta-pos">+2</td>
+        <td>68</td><td style="color:var(--accent)">70</td><td class="delta-pos">+2</td>
+        <td>74</td><td style="color:var(--accent)">78</td><td class="delta-pos">+4</td>
+        <td style="font-size:11px;color:var(--gray)">Seagate 2027年前全部售罄确认+HAMR量产领先地位进一步强化</td>
+      </tr>
+      <tr>
+        <td><strong>WDC</strong></td>
+        <td>74</td><td style="color:var(--accent)">78</td><td class="delta-pos">+4</td>
+        <td>72</td><td style="color:var(--accent)">74</td><td class="delta-pos">+2</td>
+        <td>62</td><td style="color:var(--accent)">68</td><td class="delta-pos">+6</td>
+        <td>70</td><td style="color:var(--accent)">74</td><td class="delta-pos">+4</td>
+        <td style="font-size:11px;color:var(--gray)">2026全年售罄+Q3 YoY+45.5%超预期+HAMR认证提前，HDD dim6升为4</td>
+      </tr>
+      <tr>
+        <td><strong>005930.KS</strong></td>
+        <td>76</td><td style="color:var(--accent)">80</td><td class="delta-pos">+4</td>
+        <td>78</td><td style="color:var(--accent)">76</td><td class="delta-neg">-2</td>
+        <td>56</td><td style="color:var(--green)">62<span style="font-size:9px;color:var(--teal)">+10触发</span></td><td class="delta-pos">+6</td>
+        <td>72</td><td style="color:var(--accent)">74</td><td class="delta-pos">+2</td>
+        <td style="font-size:11px;color:var(--gray)">HBM4首发量产逆转+三重触发器激活+Forward PE 6.5x估值分+10</td>
+      </tr>
+      <tr>
+        <td><strong>SNDK</strong></td>
+        <td>55</td><td style="color:var(--yellow)">68</td><td class="delta-pos">+13</td>
+        <td>70</td><td style="color:var(--yellow)">72</td><td class="delta-pos">+2</td>
+        <td>62</td><td style="color:var(--yellow)">52</td><td class="delta-neg">-10</td>
+        <td>65</td><td style="color:var(--yellow)">66</td><td class="delta-pos">+1</td>
+        <td style="font-size:11px;color:var(--gray)">行业分随NAND超级周期上调，但股价翻倍+估值分下调抵消</td>
+      </tr>
+      <tr>
+        <td><strong>PSTG</strong></td>
+        <td>70</td><td style="color:var(--yellow)">72</td><td class="delta-pos">+2</td>
+        <td>68</td><td style="color:var(--yellow)">68</td><td class="delta-neu">0</td>
+        <td>48</td><td style="color:var(--yellow)">52</td><td class="delta-pos">+4</td>
+        <td>62</td><td style="color:var(--yellow)">64</td><td class="delta-pos">+2</td>
+        <td style="font-size:11px;color:var(--gray)">FY2027指引加速+ARR+RPO增速，估值接近目标价</td>
+      </tr>
+      <tr>
+        <td><strong>285A.T</strong></td>
+        <td>72</td><td style="color:var(--yellow)">70</td><td class="delta-neg">-2</td>
+        <td>68</td><td style="color:var(--yellow)">66</td><td class="delta-neg">-2</td>
+        <td>36</td><td style="color:var(--yellow)">48</td><td class="delta-pos">+12</td>
+        <td>60</td><td style="color:var(--yellow)">62</td><td class="delta-pos">+2</td>
+        <td style="font-size:11px;color:var(--gray)">估值分修正（上次过低），但行业质量分因Bain风险小幅下调</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 5年/10年目标价汇总 ===== -->
+<div class="section">
+  <div class="section-title">◈ 5年 / 10年目标价汇总表（超级周期盈利捕获法）</div>
+  <table class="target-table">
+    <thead>
+      <tr>
+        <th>公司</th>
+        <th>当前价</th>
+        <th>5年目标价</th>
+        <th>5年隐含回报</th>
+        <th>5年年化</th>
+        <th>10年目标价</th>
+        <th>10年隐含回报</th>
+        <th>10年年化</th>
+        <th>主要估值方法</th>
+        <th>CAGR假设</th>
+        <th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>000660.KS</strong><br><span style="color:var(--gray);font-size:10px">SK Hynix</span></td>
+        <td class="price-cell">₩2,129,000</td>
+        <td style="color:var(--green);font-weight:700">₩4,200,000</td>
+        <td class="upside-good">+97%</td>
+        <td class="upside-good">+14.6%</td>
+        <td style="color:var(--teal);font-weight:700">₩6,800,000</td>
+        <td class="upside-good">+219%</td>
+        <td class="upside-good">+12.3%</td>
+        <td>EV/EBITDA 13-16x</td>
+        <td>12% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">含美国IPO重估溢价15-20%</td>
+      </tr>
+      <tr>
+        <td><strong>MU</strong><br><span style="color:var(--gray);font-size:10px">Micron</span></td>
+        <td class="price-cell">$857</td>
+        <td style="color:var(--green);font-weight:700">$1,708</td>
+        <td class="upside-good">+99%</td>
+        <td class="upside-good">+14.8%</td>
+        <td style="color:var(--teal);font-weight:700">$2,800</td>
+        <td class="upside-good">+227%</td>
+        <td class="upside-good">+12.6%</td>
+        <td>EV/EBITDA 20x</td>
+        <td>10% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">CHIPS Act护城河，美国本土唯一</td>
+      </tr>
+      <tr>
+        <td><strong>005930.KS</strong><br><span style="color:var(--gray);font-size:10px">Samsung</span></td>
+        <td class="price-cell">₩295,500</td>
+        <td style="color:var(--green);font-weight:700">₩550,000</td>
+        <td class="upside-good">+86%</td>
+        <td class="upside-good">+13.2%</td>
+        <td style="color:var(--teal);font-weight:700">₩850,000</td>
+        <td class="upside-good">+187%</td>
+        <td class="upside-good">+11.1%</td>
+        <td>EV/EBITDA + 分析师</td>
+        <td>10% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">触发器激活，Forward PE 6.5x严重低估</td>
+      </tr>
+      <tr>
+        <td><strong>PSTG</strong><br><span style="color:var(--gray);font-size:10px">Pure Storage</span></td>
+        <td class="price-cell">$76.05</td>
+        <td style="color:var(--green);font-weight:700">$145</td>
+        <td class="upside-good">+91%</td>
+        <td class="upside-good">+13.8%</td>
+        <td style="color:var(--teal);font-weight:700">$235</td>
+        <td class="upside-good">+209%</td>
+        <td class="upside-good">+12.0%</td>
+        <td>P/S 6.955x</td>
+        <td>13% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">软件订阅模式，ARR复利驱动</td>
+      </tr>
+      <tr>
+        <td><strong>WDC</strong><br><span style="color:var(--gray);font-size:10px">Western Digital</span></td>
+        <td class="price-cell">$476</td>
+        <td style="color:var(--yellow);font-weight:700">$730</td>
+        <td class="upside-mid">+53%</td>
+        <td class="upside-mid">+8.9%</td>
+        <td style="color:var(--yellow);font-weight:700">$1,150</td>
+        <td class="upside-mid">+142%</td>
+        <td class="upside-mid">+9.2%</td>
+        <td>EV/EBITDA + 分析师均值</td>
+        <td>9% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">基准$293→$476已大涨，上行收窄</td>
+      </tr>
+      <tr>
+        <td><strong>SNDK</strong><br><span style="color:var(--gray);font-size:10px">SanDisk</span></td>
+        <td class="price-cell">$1,559</td>
+        <td style="color:var(--yellow);font-weight:700">$2,200</td>
+        <td class="upside-mid">+41%</td>
+        <td class="upside-mid">+7.1%</td>
+        <td style="color:var(--yellow);font-weight:700">$3,200</td>
+        <td class="upside-mid">+105%</td>
+        <td class="upside-mid">+7.5%</td>
+        <td>EV/EBITDA + 分析师共识</td>
+        <td>7% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">NAND商品性制约，峰值叠加+HBF期权</td>
+      </tr>
+      <tr>
+        <td><strong>STX</strong><br><span style="color:var(--gray);font-size:10px">Seagate</span></td>
+        <td class="price-cell">$847</td>
+        <td style="color:var(--yellow);font-weight:700">$1,100</td>
+        <td class="upside-mid">+30%</td>
+        <td class="upside-mid">+5.4%</td>
+        <td style="color:var(--yellow);font-weight:700">$1,680</td>
+        <td class="upside-mid">+98%</td>
+        <td class="upside-mid">+7.1%</td>
+        <td>PE 45x</td>
+        <td>8% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">基准$411→$847已翻倍，估值已较贵</td>
+      </tr>
+      <tr>
+        <td><strong>285A.T</strong><br><span style="color:var(--gray);font-size:10px">Kioxia</span></td>
+        <td class="price-cell">¥78,140</td>
+        <td style="color:var(--gray);font-weight:700">¥105,000</td>
+        <td class="upside-low">+34%</td>
+        <td class="upside-low">+6.1%</td>
+        <td style="color:var(--gray);font-weight:700">¥155,000</td>
+        <td class="upside-low">+98%</td>
+        <td class="upside-low">+7.1%</td>
+        <td>分析师一致目标价</td>
+        <td>7% CAGR（Y6-10）</td>
+        <td style="font-size:10px;color:var(--gray)">当前价已超分析师均值¥72,619，风险偏高</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="font-size:10px;color:var(--gray);margin-top:6px">
+    * 10年目标价计算方法：10年目标价 = 5年目标价 × (1 + 平均CAGR)^5，CAGR基于各公司研报增速假设 (Y6-Y10阶段)。估值方法：超级周期盈利捕获法（不使用通算EV/EBITDA）。
+  </div>
+</div>
+
+<!-- ===== 逐公司详细分析 ===== -->
+<div class="section">
+  <div class="section-title">◈ 逐公司详细评分</div>
+
+  <!-- SK Hynix -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">000660.KS · SK Hynix Inc.</div>
+        <div class="fullname">全球HBM绝对霸主 · 62%市场份额 · 美国IPO催化</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-S">S</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--teal)">86</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <!-- 触发器 -->
+      <div class="trigger-box trigger-not" style="border-color:var(--border)">
+        <div class="trigger-title" style="color:var(--gray)">存储器周期底部触发器检查</div>
+        <div class="trigger-checks">
+          <span class="trigger-check-item chk-ok">✓ A：周期位置 ≥4（景气加速）</span>
+          <span class="trigger-check-item chk-no">✗ B：EV/归一化EBITDA ≤7.2x（当前约8-9x，超过上限）</span>
+          <span class="trigger-check-item chk-ok">✓ C：共识偏差 ≥-5%（分析师目标₩2,076,603，当前₩2,129,000接近均值）</span>
+          <span class="trigger-check-item chk-no">未触发（需B/C同时满足）</span>
+        </div>
+      </div>
+      <!-- 三项分数 -->
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--teal)">92</div>
+          <div class="score-tri-weight">HBM 55% · 服务器DRAM 30% · 其他15%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--teal)">82</div>
+          <div class="score-tri-weight">8维度通算口径</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--teal)">78</div>
+          <div class="score-tri-weight">四情景加权 · Forward PE 6.2x</div>
+        </div>
+      </div>
+      <!-- 行业分拆 -->
+      <div class="industry-bars">
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--teal)">HBM 高带宽内存</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:92%;background:var(--teal)"></div></div>
+          <span class="industry-bar-score" style="color:var(--teal)">92</span>
+          <span class="industry-bar-weight">×55%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--svrdram)">服务器 DRAM DDR5</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:83%;background:var(--svrdram)"></div></div>
+          <span class="industry-bar-score" style="color:var(--svrdram)">83</span>
+          <span class="industry-bar-weight">×30%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--pcdram)">PC/移动 DRAM</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:62%;background:var(--pcdram)"></div></div>
+          <span class="industry-bar-score" style="color:var(--pcdram)">62</span>
+          <span class="industry-bar-weight">×10%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--enand)">企业级 NAND</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:72%;background:var(--enand)"></div></div>
+          <span class="industry-bar-score" style="color:var(--enand)">72</span>
+          <span class="industry-bar-weight">×5%</span>
+        </div>
+      </div>
+      <div class="note-box"><span>行业加权总分：92×0.55 + 83×0.30 + 62×0.10 + 72×0.05 = 85.3 → 最终行业分：92（置信度调整后）</span></div>
+      <!-- 估值情景 -->
+      <div style="margin-top:14px; margin-bottom:8px;font-size:11px;color:var(--gray)">四情景概率加权回报：</div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">HBM4E超预期+美国IPO</div><div class="scenario-return" style="color:var(--green)">+45%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">指引兑现+AI路径</div><div class="scenario-return" style="color:var(--accent)">+20%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">三星HBM4追赶</div><div class="scenario-return" style="color:var(--yellow)">-15%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">中国突破+CXL替代</div><div class="scenario-return" style="color:var(--red)">-45%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：全球HBM绝对霸主，Forward PE 6.2x为全球AI受益半导体最低，美国IPO是估值从韩国折价向全球科技重估的关键触发器，目标价₩4,200,000。</span></div>
+    </div>
+  </div>
+
+  <!-- Micron -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">MU · Micron Technology, Inc.</div>
+        <div class="fullname">美国本土唯一HBM · CHIPS Act护城河 · FY2026 EPS爆发</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-A">A</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--accent)">80</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--accent)">87</div>
+          <div class="score-tri-weight">HBM 40% · DDR5 35% · NVMe 15% · PC 10%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--accent)">79</div>
+          <div class="score-tri-weight">CHIPS护城河+5年长期协议</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--accent)">73</div>
+          <div class="score-tri-weight">股价从$1064回落至$857，吸引力提升</div>
+        </div>
+      </div>
+      <div class="industry-bars">
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--teal)">HBM 高带宽内存</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:90%;background:var(--teal)"></div></div>
+          <span class="industry-bar-score" style="color:var(--teal)">90</span>
+          <span class="industry-bar-weight">×40%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--svrdram)">服务器 DRAM DDR5</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:82%;background:var(--svrdram)"></div></div>
+          <span class="industry-bar-score" style="color:var(--svrdram)">82</span>
+          <span class="industry-bar-weight">×35%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--enand)">企业级 NVMe SSD</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:76%;background:var(--enand)"></div></div>
+          <span class="industry-bar-score" style="color:var(--enand)">76</span>
+          <span class="industry-bar-weight">×15%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--pcdram)">PC/移动 DRAM</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:60%;background:var(--pcdram)"></div></div>
+          <span class="industry-bar-score" style="color:var(--pcdram)">60</span>
+          <span class="industry-bar-weight">×10%</span>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">HBM4E成功+CHIPS扩产</div><div class="scenario-return" style="color:var(--green)">+40%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">指引兑现·Q3超预期</div><div class="scenario-return" style="color:var(--accent)">+18%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">2027年供过于求</div><div class="scenario-return" style="color:var(--yellow)">-20%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">出口管制扩大</div><div class="scenario-return" style="color:var(--red)">-50%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：AI超级周期唯一美国本土HBM，FY2026 EPS爆发，EV/EBITDA目标$1,708仍有+99%空间，股价从$1,064回落至$857反而提供更好入场机会。</span></div>
+    </div>
+  </div>
+
+  <!-- STX -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">STX · Seagate Technology Holdings plc</div>
+        <div class="fullname">HAMR技术准垄断 · 2026-2027全年产能已售罄 · FCF $953M历史纪录</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-A">A</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--accent)">78</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--accent)">82</div>
+          <div class="score-tri-weight">nearline HDD 90% · 消费HDD 10%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--accent)">78</div>
+          <div class="score-tri-weight">HAMR独占护城河dim3/4各5分</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--accent)">70</div>
+          <div class="score-tri-weight">股价从$411涨至$847，安全边际收窄</div>
+        </div>
+      </div>
+      <div class="industry-bars">
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--hdd)">HDD Nearline AI数据中心</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:82%;background:var(--hdd)"></div></div>
+          <span class="industry-bar-score" style="color:var(--hdd)">82</span>
+          <span class="industry-bar-weight">×90%</span>
+        </div>
+        <div class="industry-bar-row">
+          <span class="industry-bar-label" style="color:var(--gray)">消费级/客户端 HDD</span>
+          <div class="industry-bar-track"><div class="industry-bar-fill" style="width:58%;background:var(--gray)"></div></div>
+          <span class="industry-bar-score" style="color:var(--gray)">58</span>
+          <span class="industry-bar-weight">×10%</span>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">70TB HAMR提前量产</div><div class="scenario-return" style="color:var(--green)">+35%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">当前轨迹兑现</div><div class="scenario-return" style="color:var(--accent)">+10%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">WDC HAMR追上+Capex削减</div><div class="scenario-return" style="color:var(--yellow)">-20%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">AI CAPEX大幅削减</div><div class="scenario-return" style="color:var(--red)">-45%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：HAMR技术独占窗口3-5年，2026-2027全年产能售罄，FCQ季度纪录，分析师目标$856，但股价已从$411翻倍至$847，近端上行收窄。</span></div>
+    </div>
+  </div>
+
+  <!-- WDC -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">WDC · Western Digital Corporation</div>
+        <div class="fullname">全球最大纯HDD · 纯HDD分拆解锁价值 · HAMR进度追赶</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-A">A</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--accent)">74</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--accent)">78</div>
+          <div class="score-tri-weight">nearline HDD 89% · Client 11%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--accent)">74</div>
+          <div class="score-tri-weight">毛利率50.2%历史新高 · LTA至2028</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--accent)">68</div>
+          <div class="score-tri-weight">股价从$293涨至$476，仍低于分析师$518</div>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">HAMR提前+分析师$620</div><div class="scenario-return" style="color:var(--green)">+30%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">EV/EBITDA $365+分析师$518均值</div><div class="scenario-return" style="color:var(--accent)">+12%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">HAMR延期+CSP削减Capex</div><div class="scenario-return" style="color:var(--yellow)">-25%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">SSD加速替代+AI需求停滞</div><div class="scenario-return" style="color:var(--red)">-50%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：纯HDD聚焦解锁集团折价，2026年已全面售罄，HAMR认证比原计划提前，但股价从$293飙升至$476，上行空间已明显收窄。</span></div>
+    </div>
+  </div>
+
+  <!-- Samsung -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">005930.KS · Samsung Electronics Co., Ltd.</div>
+        <div class="fullname">HBM4全球首发量产 · 2026Q1利润创历史 · 三重触发器激活</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-A">A</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--accent)">74</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <!-- 触发器 - 激活 -->
+      <div class="trigger-box trigger-fired">
+        <div class="trigger-title" style="color:var(--teal)">⚡ 存储器底部触发器已激活！估值分+10</div>
+        <div class="trigger-checks">
+          <span class="trigger-check-item chk-ok">✓ A：周期位置 =4（复苏+景气加速）</span>
+          <span class="trigger-check-item chk-ok">✓ B：Forward PE 6.5x ≤ 历史均值，超级低估</span>
+          <span class="trigger-check-item chk-ok">✓ C：共识偏差正向（分析师均值₩397,803 vs 当前₩295,500，+35%溢价）</span>
+          <span style="color:var(--teal);font-size:11px;font-weight:700">→ 三条全满足，估值分加10，置信度提升至0.95</span>
+        </div>
+      </div>
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--accent)">80</div>
+          <div class="score-tri-weight">HBM 30% · DDR5 25% · NAND 30% · 其他15%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--accent)">76</div>
+          <div class="score-tri-weight">HBM4逆转+净现金₩37.5T · Foundry拖累</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--teal)">62<span style="font-size:12px"> (+10触发)</span></div>
+          <div class="score-tri-weight">Forward PE 6.5x + 分析师+35%溢价</div>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">HBM5领先+PE修复至15x</div><div class="scenario-return" style="color:var(--green)">+66%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">分析师均值₩397,803</div><div class="scenario-return" style="color:var(--accent)">+35%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">Foundry持续拖累+供给过剩</div><div class="scenario-return" style="color:var(--yellow)">-20%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">AI CAPEX断崖+周期崩溃</div><div class="scenario-return" style="color:var(--red)">-60%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：HBM4技术逆转+2026Q1利润超全年+三重触发器激活，Forward PE 6.5x全球最便宜AI受益股，主要风险是Foundry业务持续拖累ROIC。目标价₩550,000。</span></div>
+    </div>
+  </div>
+
+  <!-- SNDK -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">SNDK · SanDisk Corporation</div>
+        <div class="fullname">全球唯一纯NAND上市标的 · NAND超级周期历史最强 · HBF期权</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-B">B</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--yellow)">66</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">68</div>
+          <div class="score-tri-weight">企业NVMe 40% · 消费NAND 30% · 移动20% · HBF期权10%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">72</div>
+          <div class="score-tri-weight">NAND超级周期峰值财务表现出色</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">52</div>
+          <div class="score-tri-weight">股价从$710→$1,559翻倍，正常化PE目标$473已低于股价</div>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">HBF商业化+分析师$1,659</div><div class="scenario-return" style="color:var(--green)">+25%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">EV/EBITDA $866 + 分析师均值</div><div class="scenario-return" style="color:var(--accent)">+10%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">NAND周期顶部+三星扩产</div><div class="scenario-return" style="color:var(--yellow)">-30%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">NAND崩塌+Kioxia JV分裂</div><div class="scenario-return" style="color:var(--red)">-55%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：NAND超级周期历史最强（Q3FY26营收$59.5B，毛利率78%），但商品属性决定峰值不可持续，股价已翻倍+正常化PE目标$473下行-30%，持有评级，等待$550-620区间。</span></div>
+    </div>
+  </div>
+
+  <!-- PSTG -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">PSTG · Pure Storage, Inc. (Everpure)</div>
+        <div class="fullname">AI全闪存存储 · Evergreen订阅护城河 · ARR复利模式</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-B">B</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--yellow)">64</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">72</div>
+          <div class="score-tri-weight">企业全闪存75% · 订阅ARR 25% · dim6=3（软件中性）</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">68</div>
+          <div class="score-tri-weight">FCF 16.6% · 零债务 · Evergreen留存率近100%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">52</div>
+          <div class="score-tri-weight">P/S目标$79≈当前$76，近端上行有限</div>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">分析师共识$89.89</div><div class="scenario-return" style="color:var(--green)">+18%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">P/S 7x · FY2027 +18.8%</div><div class="scenario-return" style="color:var(--accent)">+4%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">超大规模自建存储</div><div class="scenario-return" style="color:var(--yellow)">-20%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">Dell/NetApp价格战+毛利压缩</div><div class="scenario-return" style="color:var(--red)">-35%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：AI全闪存最纯粹标的，Evergreen订阅护城河+FCF 16.6%，但P/S目标$79当前$76已接近，分析师共识$89.89提供进一步上行空间，ARR复利支撑5年目标$145。</span></div>
+    </div>
+  </div>
+
+  <!-- Kioxia -->
+  <div class="company-card">
+    <div class="company-card-header">
+      <div>
+        <div class="ticker">285A.T · KIOXIA HOLDINGS CORPORATION</div>
+        <div class="fullname">BiCS10技术领先 · NAND超级周期纯标的 · Bain退出风险</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="grade-badge grade-B">B</span>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--yellow)">62</div>
+          <div style="font-size:10px;color:var(--gray)">综合总分 · 置信度0.85</div>
+        </div>
+      </div>
+    </div>
+    <div class="company-card-body">
+      <div class="score-tri">
+        <div class="score-tri-item">
+          <div class="score-tri-label">行业分 · 权重20%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">70</div>
+          <div class="score-tri-weight">企业NAND 45% · 消费NAND 35% · 移动20%</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">质量分 · 权重50%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">66</div>
+          <div class="score-tri-weight">BiCS10领先 · IPO&lt;18个月数据不足</div>
+        </div>
+        <div class="score-tri-item">
+          <div class="score-tri-label">估值分 · 权重30%</div>
+          <div class="score-tri-val" style="color:var(--yellow)">48</div>
+          <div class="score-tri-weight">P/E 77x · 当前价已超分析师均值</div>
+        </div>
+      </div>
+      <div class="valuation-scenarios">
+        <div class="scenario-box"><div class="scenario-label">乐观 25%</div><div class="scenario-prob">高盛目标¥93,000+ADS上市</div><div class="scenario-return" style="color:var(--green)">+19%</div></div>
+        <div class="scenario-box"><div class="scenario-label">基准 45%</div><div class="scenario-prob">分析师均值¥72,619</div><div class="scenario-return" style="color:var(--yellow)">-7%</div></div>
+        <div class="scenario-box"><div class="scenario-label">悲观 20%</div><div class="scenario-prob">周期顶部+Bain减持</div><div class="scenario-return" style="color:var(--red)">-40%</div></div>
+        <div class="scenario-box"><div class="scenario-label">颠覆 10%</div><div class="scenario-prob">三星扩产崩塌</div><div class="scenario-return" style="color:var(--red)">-65%</div></div>
+      </div>
+      <div class="note-box"><span>核心判断：NAND超级周期纯标的，BiCS10技术领先12-18个月，但P/E 77x当前价已超分析师均值，Bain Capital持股51.3%退出风险是核心下行风险，5年目标¥105,000，回调至¥55,000-65,000再考虑建仓。</span></div>
+    </div>
+  </div>
+
+</div><!-- end section -->
+
+<!-- ===== 底部 ===== -->
+<div class="footer">
+  <div class="footer-left">
+    存储器投资跟踪 v4.1 · 框架：超级周期盈利捕获法 · 行业扫描：6条实时数据源<br>
+    HBM dim6=4（结构性超级周期）· HDD dim6=4（nearline景气高峰）· NAND dim6=3（AI支撑）· 软件 dim6=3（中性）<br>
+    下次对比基准已记录：score-memory-ALL-20260608.json · 供下次更新比较使用
+  </div>
+  <div class="footer-right">
+    存储器投资跟踪 v4.1 | 20260608 | 下次对比基准已记录
+  </div>
+</div>
+
+</body>
+</html>
