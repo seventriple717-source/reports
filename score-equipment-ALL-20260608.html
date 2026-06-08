@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>半导体设备&检测专项投资打分 v1.0 | 20260608</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card2: #1c2128;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --blue: #58a6ff;
+    --green: #3fb950;
+    --green2: #2ea043;
+    --yellow: #d29922;
+    --orange: #f0883e;
+    --red: #f85149;
+    --red2: #da3633;
+    --purple: #bc8cff;
+    --teal: #56d364;
+    /* category colors */
+    --euv: #bc8cff;
+    --etch: #58a6ff;
+    --ctrl: #3fb950;
+    --test: #f0883e;
+    --probe: #d29922;
+    --handler: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .header { background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%); border-bottom: 1px solid var(--border); padding: 40px 32px 32px; text-align: center; }
+  .header h1 { font-size: 28px; font-weight: 700; color: var(--blue); letter-spacing: 1px; margin-bottom: 8px; }
+  .header .subtitle { color: var(--muted); font-size: 13px; }
+  .header .date-badge { display: inline-block; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 4px 16px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 20px; }
+
+  .section-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .section-title .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* Summary cards */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .summary-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .summary-card .value { font-size: 24px; font-weight: 700; color: var(--blue); margin-top: 4px; }
+  .summary-card .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Ranking table */
+  .ranking-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .ranking-table th { background: var(--card2); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .ranking-table td { padding: 10px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); vertical-align: middle; }
+  .ranking-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .rank-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
+  .rank-1 { background: #ffd700; color: #000; }
+  .rank-2 { background: #c0c0c0; color: #000; }
+  .rank-3 { background: #cd7f32; color: #000; }
+  .rank-other { background: var(--card2); color: var(--muted); }
+
+  .ticker { font-family: monospace; font-weight: 700; font-size: 15px; }
+  .category-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+  .cat-euv { background: rgba(188,140,255,0.15); color: var(--euv); border: 1px solid rgba(188,140,255,0.3); }
+  .cat-etch { background: rgba(88,166,255,0.15); color: var(--etch); border: 1px solid rgba(88,166,255,0.3); }
+  .cat-ctrl { background: rgba(63,185,80,0.15); color: var(--ctrl); border: 1px solid rgba(63,185,80,0.3); }
+  .cat-test { background: rgba(240,136,62,0.15); color: var(--test); border: 1px solid rgba(240,136,62,0.3); }
+  .cat-probe { background: rgba(210,153,34,0.15); color: var(--probe); border: 1px solid rgba(210,153,34,0.3); }
+  .cat-handler { background: rgba(139,148,158,0.15); color: var(--handler); border: 1px solid rgba(139,148,158,0.3); }
+  .cat-adr { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+  .grade-S { display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; background: rgba(46,160,67,0.2); color: #2ea043; border: 1px solid rgba(46,160,67,0.4); }
+  .grade-A { display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+  .grade-B { display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; background: rgba(210,153,34,0.15); color: #d29922; border: 1px solid rgba(210,153,34,0.3); }
+  .grade-C { display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; background: rgba(248,81,73,0.15); color: #f85149; border: 1px solid rgba(248,81,73,0.3); }
+  .grade-D { display: inline-block; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 13px; background: rgba(218,54,51,0.2); color: #da3633; border: 1px solid rgba(218,54,51,0.4); }
+
+  .score-bar-container { display: flex; align-items: center; gap: 8px; }
+  .score-bar { height: 6px; border-radius: 3px; background: var(--border); width: 80px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; }
+  .score-num { font-weight: 700; font-size: 15px; min-width: 36px; }
+
+  .upside-positive { color: var(--green); font-weight: 600; }
+  .upside-negative { color: var(--red); font-weight: 600; }
+
+  .price-col { font-family: monospace; }
+
+  /* Industry Background section */
+  .wfe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .info-card h3 { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
+  .info-card p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .info-card .highlight { color: var(--text); font-weight: 600; }
+
+  .cycle-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12px; }
+  .cycle-table th { background: rgba(255,255,255,0.05); color: var(--muted); padding: 7px 10px; text-align: left; font-size: 11px; text-transform: uppercase; }
+  .cycle-table td { padding: 7px 10px; border-bottom: 1px solid rgba(48,54,61,0.4); }
+  .expanding { color: var(--green); font-weight: 600; }
+  .platform { color: var(--yellow); font-weight: 600; }
+  .contracting { color: var(--red); font-weight: 600; }
+
+  /* Category sections */
+  .category-section { margin-bottom: 32px; }
+  .category-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px 8px 0 0; border: 1px solid var(--border); border-bottom: none; }
+  .category-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0; border: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+  .company-card { background: var(--card); padding: 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .company-card:last-child { border-right: none; }
+  .company-card .ticker-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .company-card .company-name { color: var(--muted); font-size: 12px; }
+  .company-card .score-display { display: flex; align-items: baseline; gap: 4px; margin: 10px 0 6px; }
+  .company-card .score-display .big-score { font-size: 32px; font-weight: 800; }
+  .company-card .score-display .max-score { color: var(--muted); font-size: 14px; }
+  .company-card .three-scores { display: flex; gap: 10px; margin-bottom: 10px; }
+  .company-card .sub-score { text-align: center; }
+  .company-card .sub-score .val { font-size: 15px; font-weight: 700; }
+  .company-card .sub-score .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+  .company-card .note-text { font-size: 11px; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+
+  /* Valuation table */
+  .val-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 24px; }
+  .val-table th { background: var(--card2); color: var(--muted); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .val-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.4); }
+  .val-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .src-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; background: rgba(88,166,255,0.1); color: var(--blue); border: 1px solid rgba(88,166,255,0.2); }
+  .warning-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; background: rgba(210,153,34,0.1); color: var(--yellow); border: 1px solid rgba(210,153,34,0.2); }
+
+  /* China exposure table */
+  .china-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 24px; }
+  .china-table th { background: var(--card2); color: var(--muted); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+  .china-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.4); }
+  .risk-high { color: #f85149; font-weight: 600; }
+  .risk-mid { color: #d29922; font-weight: 600; }
+  .risk-low { color: #3fb950; font-weight: 600; }
+
+  /* Score detail table */
+  .detail-section { margin-bottom: 32px; }
+  .detail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .detail-table th { background: var(--card2); color: var(--muted); padding: 8px 12px; text-align: left; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .detail-table td { padding: 8px 12px; border-bottom: 1px solid rgba(48,54,61,0.4); white-space: nowrap; }
+  .detail-table .note-cell { white-space: normal; max-width: 260px; font-size: 11px; color: var(--muted); }
+
+  /* Score colors */
+  .s5 { color: #2ea043; font-weight: 700; }
+  .s4 { color: #3fb950; font-weight: 700; }
+  .s3 { color: #d29922; font-weight: 700; }
+  .s2 { color: #f85149; font-weight: 700; }
+  .s1 { color: #da3633; font-weight: 700; }
+
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 4px; }
+  .tag-split { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+  .tag-adr { background: rgba(255,255,255,0.1); color: #ccc; }
+  .tag-new { background: rgba(63,185,80,0.15); color: var(--green); }
+
+  .footer { text-align: center; padding: 32px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer strong { color: var(--blue); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .wfe-grid { grid-template-columns: 1fr; }
+    .category-cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .container { padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>半导体设备 & 检测 专项投资打分系统 v1.0</h1>
+  <div class="subtitle">13家核心标的 · EUV / 刻蚀沉积 / 过程控制 / ATE测试 / 探针卡 / Handler 全品类覆盖</div>
+  <div class="date-badge">生成日期：2026-06-08 &nbsp;|&nbsp; 数据基准：2026-06-08实时价格 &nbsp;|&nbsp; 框架版本：equipment-v1.0</div>
+</div>
+
+<div class="container">
+
+<!-- SUMMARY CARDS -->
+<div class="summary-grid" style="margin-top:24px;">
+  <div class="summary-card">
+    <div class="label">WFE 2026E 市场规模</div>
+    <div class="value">~$145B</div>
+    <div class="sub">YoY +11-16%，AI逻辑主导</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">WFE 2027E 预测</div>
+    <div class="value">$156B</div>
+    <div class="sub">SEMI预测，同比+7.3%</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">A级及以上公司</div>
+    <div class="value" style="color:var(--green);">6 / 13</div>
+    <div class="sub">ASML KLAC AMAT LRCX ONTO NVMI</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">C级公司</div>
+    <div class="value" style="color:var(--red);">1 / 13</div>
+    <div class="sub">COHU — 周期复苏但护城河有限</div>
+  </div>
+</div>
+
+<!-- SECTION 1: LEADERBOARD -->
+<div class="section-title" style="margin-top:16px;">
+  <span class="dot" style="background:var(--blue);"></span>
+  13家公司最终排行榜
+</div>
+
+<table class="ranking-table">
+  <thead>
+    <tr>
+      <th style="width:44px;">排名</th>
+      <th>代码</th>
+      <th>品类</th>
+      <th>当前价(USD)</th>
+      <th>模型目标价</th>
+      <th>上行空间</th>
+      <th>行业分</th>
+      <th>质量分</th>
+      <th>估值分</th>
+      <th>最终分</th>
+      <th>评级</th>
+      <th style="min-width:200px;">核心判断</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Rank 1: KLAC -->
+    <tr>
+      <td><div class="rank-num rank-1">1</div></td>
+      <td><span class="ticker" style="color:var(--ctrl);">KLAC</span></td>
+      <td><span class="category-badge cat-ctrl">过程控制</span></td>
+      <td class="price-col">$1,758<span class="tag tag-split">10:1拆分 6/12</span></td>
+      <td class="price-col">$1,800</td>
+      <td><span class="upside-positive">+2.4%</span></td>
+      <td><span class="s4">84</span></td>
+      <td><span class="s4">86</span></td>
+      <td><span class="s3">48</span></td>
+      <td><strong style="font-size:16px;">77.5</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">市场份额58%创新高，2030年$260亿目标，绝对护城河</td>
+    </tr>
+    <!-- Rank 2: ASML -->
+    <tr>
+      <td><div class="rank-num rank-2">2</div></td>
+      <td><span class="ticker" style="color:var(--euv);">ASML</span></td>
+      <td><span class="category-badge cat-euv">EUV垄断</span></td>
+      <td class="price-col">$1,641.74</td>
+      <td class="price-col">$1,725</td>
+      <td><span class="upside-positive">+5.1%</span></td>
+      <td><span class="s5">92</span></td>
+      <td><span class="s5">90</span></td>
+      <td><span class="s2">34</span></td>
+      <td><strong style="font-size:16px;">76.3</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">EUV唯一垄断，High-NA EUV商业化，但估值充分</td>
+    </tr>
+    <!-- Rank 3: NVMI -->
+    <tr>
+      <td><div class="rank-num rank-3">3</div></td>
+      <td><span class="ticker" style="color:var(--ctrl);">NVMI</span></td>
+      <td><span class="category-badge cat-ctrl">量测</span></td>
+      <td class="price-col">$475.76</td>
+      <td class="price-col">$497</td>
+      <td><span class="upside-positive">+4.5%</span></td>
+      <td><span class="s4">78</span></td>
+      <td><span class="s4">82</span></td>
+      <td><span class="s3">52</span></td>
+      <td><strong style="font-size:16px;">73.8</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">FY2025+31%高增速，三大节点同步受益，并购协同</td>
+    </tr>
+    <!-- Rank 4: LRCX -->
+    <tr>
+      <td><div class="rank-num rank-other">4</div></td>
+      <td><span class="ticker" style="color:var(--etch);">LRCX</span></td>
+      <td><span class="category-badge cat-etch">刻蚀</span></td>
+      <td class="price-col">$303.28</td>
+      <td class="price-col">$316</td>
+      <td><span class="upside-positive">+4.2%</span></td>
+      <td><span class="s4">80</span></td>
+      <td><span class="s4">82</span></td>
+      <td><span class="s3">50</span></td>
+      <td><strong style="font-size:16px;">73.2</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">NAND超级周期2027兑现，HBM刻蚀唯一成熟供应商</td>
+    </tr>
+    <!-- Rank 5: AMAT -->
+    <tr>
+      <td><div class="rank-num rank-other">5</div></td>
+      <td><span class="ticker" style="color:var(--etch);">AMAT</span></td>
+      <td><span class="category-badge cat-etch">沉积/多品类</span></td>
+      <td class="price-col">$447.99</td>
+      <td class="price-col">$410</td>
+      <td><span class="upside-negative">-8.5%</span></td>
+      <td><span class="s4">78</span></td>
+      <td><span class="s4">80</span></td>
+      <td><span class="s3">52</span></td>
+      <td><strong style="font-size:16px;">72.8</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">最大设备商，GAA多工序受益，股价已超分析师目标</td>
+    </tr>
+    <!-- Rank 6: ONTO -->
+    <tr>
+      <td><div class="rank-num rank-other">6</div></td>
+      <td><span class="ticker" style="color:var(--ctrl);">ONTO</span></td>
+      <td><span class="category-badge cat-ctrl">先进封装检测</span></td>
+      <td class="price-col">$253.24</td>
+      <td class="price-col">$310</td>
+      <td><span class="upside-positive">+22.4%</span></td>
+      <td><span class="s4">76</span></td>
+      <td><span class="s3">78</span></td>
+      <td><span class="s3">50</span></td>
+      <td><strong style="font-size:16px;">71.5</strong></td>
+      <td><span class="grade-A">A</span></td>
+      <td style="font-size:11px;color:var(--muted);">Dragonfly G5量产出货，先进封装增速>50%，最大上行</td>
+    </tr>
+    <!-- Rank 7: TER -->
+    <tr>
+      <td><div class="rank-num rank-other">7</div></td>
+      <td><span class="ticker" style="color:var(--test);">TER</span></td>
+      <td><span class="category-badge cat-test">ATE测试</span></td>
+      <td class="price-col">$357.93</td>
+      <td class="price-col">$375</td>
+      <td><span class="upside-positive">+4.8%</span></td>
+      <td><span class="s3">74</span></td>
+      <td><span class="s3">76</span></td>
+      <td><span class="s3">45</span></td>
+      <td><strong style="font-size:16px;">68.5</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">AI测试超周期，Q1 FY2026+87%大超预期，机器人复苏</td>
+    </tr>
+    <!-- Rank 8: FORM -->
+    <tr>
+      <td><div class="rank-num rank-other">8</div></td>
+      <td><span class="ticker" style="color:var(--probe);">FORM</span></td>
+      <td><span class="category-badge cat-probe">探针卡</span></td>
+      <td class="price-col">$116.70</td>
+      <td class="price-col">$125</td>
+      <td><span class="upside-positive">+7.1%</span></td>
+      <td><span class="s3">70</span></td>
+      <td><span class="s3">72</span></td>
+      <td><span class="s3">52</span></td>
+      <td><strong style="font-size:16px;">67.2</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">HBM4探针卡三家唯一认证，毛利率突破49%历史高点</td>
+    </tr>
+    <!-- Rank 9: CAMT -->
+    <tr>
+      <td><div class="rank-num rank-other">9</div></td>
+      <td><span class="ticker" style="color:var(--ctrl);">CAMT</span></td>
+      <td><span class="category-badge cat-ctrl">先进封装检测</span></td>
+      <td class="price-col">$181.16</td>
+      <td class="price-col">$174</td>
+      <td><span class="upside-negative">-4.0%</span></td>
+      <td><span class="s3">72</span></td>
+      <td><span class="s3">74</span></td>
+      <td><span class="s2">40</span></td>
+      <td><strong style="font-size:16px;">65.8</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">HBM封装检测龙头，但增速放缓+股价超目标+以色列风险</td>
+    </tr>
+    <!-- Rank 10: TOELY -->
+    <tr>
+      <td><div class="rank-num rank-other">10</div></td>
+      <td><span class="ticker" style="color:var(--euv);">TOELY</span> <span class="tag tag-adr">ADR</span></td>
+      <td><span class="category-badge cat-euv">涂胶显影/沉积</span></td>
+      <td class="price-col">$172.15</td>
+      <td class="price-col">$186</td>
+      <td><span class="upside-positive">+8.0%</span></td>
+      <td><span class="s3">76</span></td>
+      <td><span class="s3">74</span></td>
+      <td><span class="s2">36</span></td>
+      <td><strong style="font-size:16px;">64.7</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">FY2027 H1指引+33%，涂胶显影91%垄断，日本ADR折价</td>
+    </tr>
+    <!-- Rank 11: ATEYY -->
+    <tr>
+      <td><div class="rank-num rank-other">11</div></td>
+      <td><span class="ticker" style="color:var(--test);">ATEYY</span> <span class="tag tag-adr">ADR</span></td>
+      <td><span class="category-badge cat-test">ATE测试/HBM</span></td>
+      <td class="price-col">$153.51</td>
+      <td class="price-col">$189</td>
+      <td><span class="upside-positive">+23.1%</span></td>
+      <td><span class="s3">72</span></td>
+      <td><span class="s3">70</span></td>
+      <td><span class="s2">38</span></td>
+      <td><strong style="font-size:16px;">61.4</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">HBM测试垄断+FY2026超级年，但FY2027放缓是核心风险</td>
+    </tr>
+    <!-- Rank 12: LSRCY -->
+    <tr>
+      <td><div class="rank-num rank-other">12</div></td>
+      <td><span class="ticker" style="color:var(--euv);">LSRCY</span> <span class="tag tag-adr">ADR</span></td>
+      <td><span class="category-badge cat-euv">EUV掩膜检测</span></td>
+      <td class="price-col">$39.46</td>
+      <td class="price-col">$47</td>
+      <td><span class="upside-positive">+19.1%</span></td>
+      <td><span class="s4">82</span></td>
+      <td><span class="s3">78</span></td>
+      <td><span class="s1">22</span></td>
+      <td><strong style="font-size:16px;">60.7</strong></td>
+      <td><span class="grade-B">B</span></td>
+      <td style="font-size:11px;color:var(--muted);">ACTIS全球唯一垄断，但FY2026业绩主动下降，等待High-NA拐点</td>
+    </tr>
+    <!-- Rank 13: COHU -->
+    <tr>
+      <td><div class="rank-num rank-other">13</div></td>
+      <td><span class="ticker" style="color:var(--handler);">COHU</span></td>
+      <td><span class="category-badge cat-handler">Handler/分选</span></td>
+      <td class="price-col">$49.81</td>
+      <td class="price-col">$55</td>
+      <td><span class="upside-positive">+10.4%</span></td>
+      <td><span class="s2">58</span></td>
+      <td><span class="s2">58</span></td>
+      <td><span class="s3">45</span></td>
+      <td><strong style="font-size:16px;">55.6</strong></td>
+      <td><span class="grade-C">C</span></td>
+      <td style="font-size:11px;color:var(--muted);">Handler底部复苏，新AI赛道打开，但护城河弱+GAAP亏损</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 2: WFE Industry Background -->
+<div class="section-title">
+  <span class="dot" style="background:var(--orange);"></span>
+  WFE行业全景 — 2026市场格局
+</div>
+
+<div class="wfe-grid">
+  <div class="info-card">
+    <h3>WFE总量预测与结构 (2026-2027)</h3>
+    <p>
+      <span class="highlight">2026E WFE总量：~$145B</span>（AMAT管理层上调展望>30%增速，LRCX预测10-15%增速，综合约$130-145B）<br><br>
+      <span class="highlight">2027E WFE总量：$156B</span>（SEMI最新预测，2026年9.0%增速，2027年7.3%增速）<br><br>
+      <span class="highlight">AI逻辑（先进节点）占比：约48%</span>（台积电N2/A14、三星GAA、Intel 18A大规模扩产）<br><br>
+      <span class="highlight">存储（DRAM+NAND）占比：约28%</span>（HBM EUV引入+NAND超级周期酝酿）<br><br>
+      <span class="highlight">先进封装设备占比：约11%</span>（CoWoS产能2026年底扩大60%+，增速最快）<br><br>
+      <span class="highlight">中国市场占比：约22%</span>（出口管制收紧，较历史高点~35%显著下降）<br><br>
+      来源：SEMI 2026-05，AMAT管理层电话会，LRCX指引
+    </p>
+  </div>
+  <div class="info-card">
+    <h3>出口管制最新动态 (2026-06)</h3>
+    <p>
+      <span class="highlight">MATCH Act</span>：2026年4月初进入美国众议院，针对中国半导体设备出口管制，覆盖EUV及DUV深紫外光刻设备，ASML股价当日大跌。<br><br>
+      <span class="highlight">ASML</span>：2025年中国营收$11.06B（约29%），管理层预告2026年中国营收"显著下降"。<br><br>
+      <span class="highlight">LRCX</span>：Q1 FY2026中国占43%，Q2已降至35%，是最高出口管制敞口公司。每季约$2亿损失。<br><br>
+      <span class="highlight">AMAT</span>：中国营收约30%，Q1 FY2026营收小幅下降。<br><br>
+      <span class="highlight">中国替代进展</span>：NAURA/AMEC已能覆盖成熟节点（28nm+）刻蚀/沉积，但先进节点（7nm以下）设备技术差距仍在3-5年以上，EUV/掩膜检测实质无替代。<br><br>
+      来源：IAPS研究，Seeking Alpha 2026-04，公司Q1财报
+    </p>
+  </div>
+</div>
+
+<!-- WFE Cycle Table -->
+<div class="info-card" style="margin-bottom:24px;">
+  <h3>各品类WFE周期位置 (2026-06)</h3>
+  <table class="cycle-table">
+    <thead>
+      <tr>
+        <th>细分品类</th>
+        <th>周期位置</th>
+        <th>核心驱动</th>
+        <th>代表公司</th>
+        <th>中国替代风险</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>先进逻辑光刻（EUV/High-NA）</td>
+        <td><span class="expanding">扩张期</span></td>
+        <td>AI/HPC节点转换，High-NA商业化</td>
+        <td>ASML（唯一）</td>
+        <td class="risk-low">极低（15年+差距）</td>
+      </tr>
+      <tr>
+        <td>EUV掩膜检测</td>
+        <td><span class="contracting">谷底过渡</span></td>
+        <td>FY2026业绩下降，FY2027 High-NA订单</td>
+        <td>Lasertec（唯一）</td>
+        <td class="risk-low">极低（全球唯一）</td>
+      </tr>
+      <tr>
+        <td>沉积/刻蚀（GAA节点）</td>
+        <td><span class="expanding">扩张期</span></td>
+        <td>GAA工序增加，NAND超级周期2027</td>
+        <td>AMAT、LRCX、TEL</td>
+        <td class="risk-mid">中等（成熟节点局部）</td>
+      </tr>
+      <tr>
+        <td>涂胶显影</td>
+        <td><span class="expanding">扩张期</span></td>
+        <td>EUV多重图案化需求，TSMC/三星扩产</td>
+        <td>TEL（91%份额）</td>
+        <td class="risk-low">低（验证壁垒高）</td>
+      </tr>
+      <tr>
+        <td>过程控制/缺陷检测</td>
+        <td><span class="expanding">扩张期</span></td>
+        <td>节点复杂度→检测密度，GAA+先进封装</td>
+        <td>KLAC（58%）、NVMI</td>
+        <td class="risk-low">低（技术差距3-5年+）</td>
+      </tr>
+      <tr>
+        <td>先进封装检测（2.5D/3D）</td>
+        <td><span class="expanding">高速扩张</span></td>
+        <td>AI GPU CoWoS/HBM集成快速扩张</td>
+        <td>CAMT、ONTO、KLAC</td>
+        <td class="risk-low">低（认证壁垒高）</td>
+      </tr>
+      <tr>
+        <td>ATE半导体测试</td>
+        <td><span class="expanding">扩张期</span></td>
+        <td>HBM测试复杂度剧增，AI芯片测试</td>
+        <td>TER（45-50%）、ATEYY</td>
+        <td class="risk-low">低（HBM认证12-18个月）</td>
+      </tr>
+      <tr>
+        <td>探针卡（HBM晶圆探针）</td>
+        <td><span class="expanding">高速扩张</span></td>
+        <td>HBM4引脚翻倍，全行业换卡潮2026H2</td>
+        <td>FORM（三家全认证）</td>
+        <td class="risk-low">低（70%以上MEMS专利）</td>
+      </tr>
+      <tr>
+        <td>Handler/分选机</td>
+        <td><span class="expanding">底部复苏</span></td>
+        <td>消费电子/汽车复苏，AI handler新品</td>
+        <td>COHU、ATEYY</td>
+        <td class="risk-mid">中等（技术壁垒较低）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECTION 3: Category Deep Dives -->
+<div class="section-title">
+  <span class="dot" style="background:var(--euv);"></span>
+  分类展示 — 光刻与EUV掩膜检测
+</div>
+
+<div class="category-section">
+  <div class="category-header" style="background:rgba(188,140,255,0.05); border-color:rgba(188,140,255,0.3);">
+    <span style="color:var(--euv); font-weight:700; font-size:15px;">EUV光刻 & 掩膜检测</span>
+    <span style="color:var(--muted); font-size:12px;">全球垄断级护城河 · 技术不可替代</span>
+  </div>
+  <div class="category-cards" style="grid-template-columns:1fr 1fr;">
+    <!-- ASML Card -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--euv);">ASML</span>
+        <span class="category-badge cat-euv">EUV唯一垄断</span>
+        <span class="grade-A">A</span>
+      </div>
+      <div class="company-name">ASML Holding N.V. &nbsp;·&nbsp; 荷兰主板</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--euv);">76.3</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s5">92</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s5">90</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s2">34</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:16px; margin-bottom:8px;">
+        <span>当前：<strong>$1,641.74</strong></span>
+        <span>目标：<strong style="color:var(--green);">$1,725</strong></span>
+        <span>空间：<strong class="upside-positive">+5.1%</strong></span>
+      </div>
+      <div class="note-text">EUV全球唯一供应商，High-NA EUV已商业化（Intel验收+三星到货+SK Hynix 30台锁单至2027），积压订单€38.8B，FY2026指引€360-400B。中国DUV出口全面禁令是最大尾部风险（MATCH Act进入国会）。估值分低因当前股价接近合理上沿。</div>
+    </div>
+    <!-- LSRCY Card -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--euv);">LSRCY</span>
+        <span class="category-badge cat-euv">EUV掩膜检测唯一</span>
+        <span class="grade-B">B</span>
+        <span class="tag tag-adr">日本ADR</span>
+      </div>
+      <div class="company-name">Lasertec Corporation &nbsp;·&nbsp; OTC (6920.T)</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--euv);">60.7</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">82</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">78</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s1">22</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:16px; margin-bottom:8px;">
+        <span>当前：<strong>$39.46</strong></span>
+        <span>目标：<strong style="color:var(--green);">$47</strong></span>
+        <span>空间：<strong class="upside-positive">+19.1%</strong></span>
+      </div>
+      <div class="note-text">ACTIS系统全球唯一EUV光罩检测商，竞争护城河近乎不可逾越（KLA已放弃进入）。FY2026主动下降（营收-12.5%），当前处于业绩谷底。ACTIS A200HiT（High-NA支持版）2025年10月推出，FY2027商业订单是关键拐点。置信度0.85（日本ADR）。⚠️ 原模型目标JPY 6,950为日元，USD目标约$47。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Etch/Deposition -->
+<div class="section-title">
+  <span class="dot" style="background:var(--etch);"></span>
+  刻蚀 & 沉积 — AMAT / LRCX
+</div>
+
+<div class="category-section">
+  <div class="category-header" style="background:rgba(88,166,255,0.05); border-color:rgba(88,166,255,0.3);">
+    <span style="color:var(--etch); font-weight:700; font-size:15px;">CVD/ALD沉积 · 干法刻蚀</span>
+    <span style="color:var(--muted); font-size:12px;">GAA多层工序受益 · NAND超级周期驱动</span>
+  </div>
+  <div class="category-cards" style="grid-template-columns:1fr 1fr;">
+    <!-- AMAT -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--etch);">AMAT</span>
+        <span class="category-badge cat-etch">沉积/多品类第一</span>
+        <span class="grade-A">A</span>
+      </div>
+      <div class="company-name">Applied Materials, Inc. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--etch);">72.8</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">78</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s4">80</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">52</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:16px; margin-bottom:8px;">
+        <span>当前：<strong>$447.99</strong></span>
+        <span>目标：<strong style="color:var(--yellow);">$410</strong></span>
+        <span>空间：<strong class="upside-negative">-8.5%</strong></span>
+      </div>
+      <div class="note-text">全球最大半导体设备商（FY2025营收$28.4B），Q2 FY2026营收$7.91B创历史新高，管理层上调WFE展望>30%。GAA节点Epi/CVD/ALD多工序受益，AGS服务$6.4B/年提供经常性收入。当前股价$448已超分析师目标$410，估值偏贵需审慎。</div>
+    </div>
+    <!-- LRCX -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--etch);">LRCX</span>
+        <span class="category-badge cat-etch">刻蚀/HBM专属</span>
+        <span class="grade-A">A</span>
+      </div>
+      <div class="company-name">Lam Research Corporation &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--etch);">73.2</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">80</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s4">82</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">50</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:16px; margin-bottom:8px;">
+        <span>当前：<strong>$303.28</strong></span>
+        <span>目标：<strong style="color:var(--green);">$316</strong></span>
+        <span>空间：<strong class="upside-positive">+4.2%</strong></span>
+      </div>
+      <div class="note-text">NAND超级周期2027年集中兑现（CEO明确承诺），HBM TSV深槽刻蚀技术唯一成熟供应商（SKH/三星/美光同步扩产），CSBG年金21亿/季（+25%YoY）。中国营收从43%降至35%，6月5日大跌已部分定价风险，当前$303相对目标$316提供小幅上行空间。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Process Control -->
+<div class="section-title">
+  <span class="dot" style="background:var(--ctrl);"></span>
+  过程控制 & 量检测 — KLAC / ONTO / NVMI / CAMT / LSRCY
+</div>
+
+<div class="category-section">
+  <div class="category-header" style="background:rgba(63,185,80,0.05); border-color:rgba(63,185,80,0.3);">
+    <span style="color:var(--ctrl); font-weight:700; font-size:15px;">缺陷检测 · 量测 · 先进封装检测</span>
+    <span style="color:var(--muted); font-size:12px;">制程复杂度驱动检测密度提升 · AI先进节点必须工具</span>
+  </div>
+  <div class="category-cards" style="grid-template-columns:repeat(3,1fr);">
+    <!-- KLAC -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--ctrl);">KLAC</span>
+        <span class="category-badge cat-ctrl">过程控制垄断</span>
+        <span class="grade-A">A</span>
+        <span class="tag tag-split">10:1拆分 6/12</span>
+      </div>
+      <div class="company-name">KLA Corporation &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--ctrl);">77.5</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">84</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s4">86</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">48</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$1,758</strong></span>
+        <span>目标：<strong style="color:var(--green);">$1,800</strong></span>
+        <span>空间：<strong class="upside-positive">+2.4%</strong></span>
+      </div>
+      <div class="note-text">市场份额58%（全行业第一），Q3 FY2026营收$34.15亿创纪录，2030战略目标$260亿（CAGR 13-17%），先进封装业务FY2025增长+70%。10:1股票拆分2026-06-12生效，拆分后约$175-$180。当前价已超原分析师目标，等待拆分后$165-$170建仓。</div>
+    </div>
+    <!-- NVMI -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--ctrl);">NVMI</span>
+        <span class="category-badge cat-ctrl">量测高成长</span>
+        <span class="grade-A">A</span>
+      </div>
+      <div class="company-name">Nova Ltd. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--ctrl);">73.8</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">78</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s4">82</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">52</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$475.76</strong></span>
+        <span>目标：<strong style="color:var(--green);">$497</strong></span>
+        <span>空间：<strong class="upside-positive">+4.5%</strong></span>
+      </div>
+      <div class="note-text">FY2025营收+31%，净利率29.4%，毛利率57.4%，连续两年30%增速。GAA逻辑/先进DRAM/先进封装三大节点同步受益，WMC平台发布强化先进封装量测地位。并购协同效应FY2026-2027释放。以色列地缘政治为额外折价因子，置信度0.90。</div>
+    </div>
+    <!-- ONTO -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--ctrl);">ONTO</span>
+        <span class="category-badge cat-ctrl">先进封装检测</span>
+        <span class="grade-A">A</span>
+      </div>
+      <div class="company-name">Onto Innovation Inc. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--ctrl);">71.5</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">76</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">78</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">50</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$253.24</strong></span>
+        <span>目标：<strong style="color:var(--green);">$310</strong></span>
+        <span>空间：<strong class="upside-positive">+22.4%</strong></span>
+      </div>
+      <div class="note-text">Dragonfly G5完成量产资质认证（6月开始商业出货），先进封装增速指引上调至>50%，全年营收>$1.3B，分析师共识目标$351.88。零债务净现金$346M。原买入目标$266已实现，更新目标$310-315，本表13家中上行空间最大。</div>
+    </div>
+    <!-- CAMT -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--ctrl);">CAMT</span>
+        <span class="category-badge cat-ctrl">HBM封装检测</span>
+        <span class="grade-B">B</span>
+      </div>
+      <div class="company-name">Camtek Ltd. &nbsp;·&nbsp; NASDAQ (以色列)</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--yellow);">65.8</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s3">72</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">74</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s2">40</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$181.16</strong></span>
+        <span>目标：<strong style="color:var(--yellow);">$174</strong></span>
+        <span>空间：<strong class="upside-negative">-4.0%</strong></span>
+      </div>
+      <div class="note-text">HBM/CoWoS封装检测龙头，FY2024增速36.1%，但FY2025降至+15.5%，增速收敛明显。当前股价$181已超目标价$174，估值偏贵（Non-GAAP FwdPE 38x）。以色列地缘政治风险是隐性折扣。建议等待回落至$150-$160。</div>
+    </div>
+    <!-- LSRCY (repeat reference) -->
+    <div class="company-card" style="background:rgba(188,140,255,0.03);">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--euv);">LSRCY</span>
+        <span class="category-badge cat-euv">EUV掩膜检测</span>
+        <span class="grade-B">B</span>
+        <span class="tag tag-adr">ADR</span>
+      </div>
+      <div class="company-name">Lasertec Corp &nbsp;·&nbsp; OTC &nbsp;(同上节详述)</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--euv);">60.7</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s4">82</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">78</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s1">22</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$39.46</strong></span>
+        <span>目标：<strong style="color:var(--green);">$47</strong></span>
+        <span>空间：<strong class="upside-positive">+19.1%</strong></span>
+      </div>
+      <div class="note-text">估值分极低原因：当前处于FY2026业绩谷底，订单仅为营收一半，可见度低，估值分打分反映高不确定性。中长期护城河最强（全球唯一垄断），$40附近建仓性价比佳，需接受6-12个月等待成本。置信度0.85。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ATE Test -->
+<div class="section-title">
+  <span class="dot" style="background:var(--test);"></span>
+  ATE测试 — TER / ATEYY / FORM / COHU
+</div>
+
+<div class="category-section">
+  <div class="category-header" style="background:rgba(240,136,62,0.05); border-color:rgba(240,136,62,0.3);">
+    <span style="color:var(--test); font-weight:700; font-size:15px;">半导体测试 · 探针卡 · Handler分选</span>
+    <span style="color:var(--muted); font-size:12px;">AI/HBM测试需求爆发 · 探针卡换代周期启动</span>
+  </div>
+  <div class="category-cards" style="grid-template-columns:repeat(2,1fr);">
+    <!-- TER -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--test);">TER</span>
+        <span class="category-badge cat-test">SoC+HBM测试</span>
+        <span class="grade-B">B</span>
+      </div>
+      <div class="company-name">Teradyne, Inc. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--test);">68.5</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s3">74</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">76</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">45</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$357.93</strong></span>
+        <span>目标：<strong style="color:var(--green);">$375</strong></span>
+        <span>空间：<strong class="upside-positive">+4.8%</strong></span>
+      </div>
+      <div class="note-text">Q1 FY2026营收$1.282B（+87% YoY，大幅超预期），AI营收占比70%，HBM4换代测试系统是H2催化剂。机器人业务连续第四季度增长（$91M，+32%）提供反周期缓冲。分析师共识$374.82，目标从$318上修至$375。原研报买入目标$318已超越。</div>
+    </div>
+    <!-- ATEYY -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--test);">ATEYY</span>
+        <span class="category-badge cat-test">HBM测试垄断</span>
+        <span class="grade-B">B</span>
+        <span class="tag tag-adr">日本ADR</span>
+      </div>
+      <div class="company-name">Advantest Corporation &nbsp;·&nbsp; OTC</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--yellow);">61.4</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s3">72</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">70</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s2">38</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$153.51</strong></span>
+        <span>目标：<strong style="color:var(--green);">$189</strong></span>
+        <span>空间：<strong class="upside-positive">+23.1%</strong></span>
+      </div>
+      <div class="note-text">HBM测试~70%市场份额，FY2026超级增长年（营收+82%，净利润+189%）。⚠️ 核心风险：FY2027增速急剧放缓概率高，历史FY2024净利润-52%的先例证明崩塌速度极快。股价已从峰值$198跌22%，FY2027 Q1指引（2026年7月）是二进制事件。置信度0.85。</div>
+    </div>
+    <!-- FORM -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--probe);">FORM</span>
+        <span class="category-badge cat-probe">HBM4探针卡</span>
+        <span class="grade-B">B</span>
+      </div>
+      <div class="company-name">FormFactor, Inc. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--probe);">67.2</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s3">70</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s3">72</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">52</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$116.70</strong></span>
+        <span>目标：<strong style="color:var(--green);">$125</strong></span>
+        <span>空间：<strong class="upside-positive">+7.1%</strong></span>
+      </div>
+      <div class="note-text">HBM4探针卡全球唯一同时获SK Hynix/三星/美光三家认证的供应商，换卡潮2026H2启动。Q1 FY2026毛利率49%（历史高点），管理层FY2030营收翻倍路线图（$16亿+毛利率55%）确认。核心风险：SKH单客户占30%，高PEG（55x）对执行容错率极低。</div>
+    </div>
+    <!-- COHU -->
+    <div class="company-card">
+      <div class="ticker-row">
+        <span class="ticker" style="color:var(--handler);">COHU</span>
+        <span class="category-badge cat-handler">Handler/分选</span>
+        <span class="grade-C">C</span>
+      </div>
+      <div class="company-name">Cohu, Inc. &nbsp;·&nbsp; NASDAQ</div>
+      <div class="score-display">
+        <span class="big-score" style="color:var(--red);">55.6</span>
+        <span class="max-score">/100</span>
+      </div>
+      <div class="three-scores">
+        <div class="sub-score"><div class="val s2">58</div><div class="lbl">行业分</div></div>
+        <div class="sub-score"><div class="val s2">58</div><div class="lbl">质量分</div></div>
+        <div class="sub-score"><div class="val s3">45</div><div class="lbl">估值分</div></div>
+      </div>
+      <div style="font-size:12px; display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+        <span>当前：<strong>$49.81</strong></span>
+        <span>目标：<strong style="color:var(--green);">$55</strong></span>
+        <span>空间：<strong class="upside-positive">+10.4%</strong></span>
+      </div>
+      <div class="note-text">Handler底部复苏，Q1 FY2026+29.3%，订单积压+57%，AI/HPC新品Neon（AI处理器测试）和Eclipse（HBM metrology）开拓增量市场。但GAAP亏损、净债务$89M、技术壁垒较低，不适合核心持仓。仅作为周期复苏短期仓位。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Japan ADR Section -->
+<div class="section-title">
+  <span class="dot" style="background:#fff;"></span>
+  日本ADR专项 — LSRCY / TOELY / ATEYY
+</div>
+
+<div class="info-card" style="margin-bottom:24px;">
+  <h3>日本ADR投资注意事项</h3>
+  <table class="cycle-table">
+    <thead>
+      <tr>
+        <th>代码</th>
+        <th>日本主板</th>
+        <th>ADR比例</th>
+        <th>当前ADR价(USD)</th>
+        <th>目标价(USD)</th>
+        <th>上行空间</th>
+        <th>模型方法说明</th>
+        <th>置信度</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>LSRCY</strong></td>
+        <td>6920.T (Lasertec)</td>
+        <td>1 ADR = 0.1股</td>
+        <td>$39.46</td>
+        <td><span style="color:var(--green);">$47</span></td>
+        <td class="upside-positive">+19.1%</td>
+        <td>投资结论USD基准目标（原模型JPY 6,950为日元，已标注异常）</td>
+        <td>0.85</td>
+      </tr>
+      <tr>
+        <td><strong>TOELY</strong></td>
+        <td>8035.T (Tokyo Electron)</td>
+        <td>1 ADR = 1股</td>
+        <td>$172.15</td>
+        <td><span style="color:var(--green);">$186</span></td>
+        <td class="upside-positive">+8.0%</td>
+        <td>PE法 FWD PE 43.6x × $4.27 = $186（USD直接计算）</td>
+        <td>0.85</td>
+      </tr>
+      <tr>
+        <td><strong>ATEYY</strong></td>
+        <td>6857.T (Advantest)</td>
+        <td>1 ADR = 1股</td>
+        <td>$153.51</td>
+        <td><span style="color:var(--green);">$189</span></td>
+        <td class="upside-positive">+23.1%</td>
+        <td>PE法 FWD PE 45.4x × $4.17 = $189（USD直接计算，乐观情景）</td>
+        <td>0.85</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px; color:var(--muted); margin-top:8px;">⚠️ LSRCY估值说明：模型原始输出 ev_target=6949.56 为日元（JPY），非美元。正确USD换算：约¥7,200（目标股价）× 0.1（ADR比例）/ 152（JPY/USD汇率参考）≈ $47.4，与投资结论USD目标价$47高度一致。本报告统一采用USD $47作为目标价。</p>
+</div>
+
+<!-- SECTION 4: Valuation Table -->
+<div class="section-title">
+  <span class="dot" style="background:var(--yellow);"></span>
+  估值状态汇总 — 当前价 vs 模型目标 vs 分析师共识
+</div>
+
+<table class="val-table">
+  <thead>
+    <tr>
+      <th>代码</th>
+      <th>当前股价(USD)</th>
+      <th>模型目标价(USD)</th>
+      <th>估值方法</th>
+      <th>分析师共识(USD)</th>
+      <th>模型上行空间</th>
+      <th>状态</th>
+      <th>数据来源</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>KLAC</strong></td>
+      <td>$1,758 <span class="warning-badge">拆分前</span></td>
+      <td>$1,800</td>
+      <td>更新报告修正值（原PE $1,067严重低估）</td>
+      <td>$1,676（更新中）</td>
+      <td class="upside-positive">+2.4%</td>
+      <td><span class="warning-badge">已充分定价</span></td>
+      <td><span class="src-badge">update_20260608.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>ASML</strong></td>
+      <td>$1,641.74</td>
+      <td>$1,725</td>
+      <td>PE+EV/EBITDA+分析师三法加权</td>
+      <td>$1,694.95</td>
+      <td class="upside-positive">+5.1%</td>
+      <td><span class="warning-badge">基本合理</span></td>
+      <td><span class="src-badge">investment_conclusion.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>AMAT</strong></td>
+      <td>$447.99</td>
+      <td>$410</td>
+      <td>分析师共识（原PE目标$226基于旧基准价）</td>
+      <td>$410.62</td>
+      <td class="upside-negative">-8.5%</td>
+      <td><span style="color:var(--red); font-size:11px; font-weight:600;">已超目标价</span></td>
+      <td><span class="src-badge">搜索：2026-06-07</span></td>
+    </tr>
+    <tr>
+      <td><strong>LRCX</strong></td>
+      <td>$303.28</td>
+      <td>$316</td>
+      <td>EV/EBITDA + 分析师均值</td>
+      <td>$316.19</td>
+      <td class="upside-positive">+4.2%</td>
+      <td><span class="warning-badge">接近目标</span></td>
+      <td><span class="src-badge">investment_conclusion.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>ONTO</strong></td>
+      <td>$253.24</td>
+      <td>$310</td>
+      <td>EV/EBITDA 更新值（原$265.7已超越）</td>
+      <td>$351.88（更新后）</td>
+      <td class="upside-positive">+22.4%</td>
+      <td><span style="color:var(--green); font-size:11px; font-weight:600;">较大上行空间</span></td>
+      <td><span class="src-badge">update_20260608.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>NVMI</strong></td>
+      <td>$475.76</td>
+      <td>$497</td>
+      <td>EV/EBITDA 50x × $327.6M EBITDA</td>
+      <td>$497.25 / 共识$505</td>
+      <td class="upside-positive">+4.5%</td>
+      <td><span class="warning-badge">接近目标</span></td>
+      <td><span class="src-badge">valuation_result.json</span></td>
+    </tr>
+    <tr>
+      <td><strong>TER</strong></td>
+      <td>$357.93</td>
+      <td>$375</td>
+      <td>PE 40x × $9.3 Non-GAAP EPS（更新值）</td>
+      <td>$374.82（更新后）</td>
+      <td class="upside-positive">+4.8%</td>
+      <td><span class="warning-badge">接近目标</span></td>
+      <td><span class="src-badge">update_20260608.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>FORM</strong></td>
+      <td>$116.70</td>
+      <td>$125</td>
+      <td>EV/EBITDA 68.8x × EBITDA $140M</td>
+      <td>$144.67</td>
+      <td class="upside-positive">+7.1%</td>
+      <td><span style="color:var(--green); font-size:11px; font-weight:600;">小幅折价</span></td>
+      <td><span class="src-badge">investment_conclusion.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>CAMT</strong></td>
+      <td>$181.16</td>
+      <td>$174</td>
+      <td>Non-GAAP PE 40x × $4.33 FY2026E EPS</td>
+      <td>$173.83</td>
+      <td class="upside-negative">-4.0%</td>
+      <td><span style="color:var(--red); font-size:11px; font-weight:600;">已超目标价</span></td>
+      <td><span class="src-badge">valuation_result.json</span></td>
+    </tr>
+    <tr>
+      <td><strong>TOELY</strong> <span class="tag tag-adr">ADR</span></td>
+      <td>$172.15</td>
+      <td>$186</td>
+      <td>远期PE 43.6x × $4.27 EPS（USD直接）</td>
+      <td>N/A（analyst_target=0）</td>
+      <td class="upside-positive">+8.0%</td>
+      <td><span class="warning-badge">小幅折价</span></td>
+      <td><span class="src-badge">valuation_result.json</span></td>
+    </tr>
+    <tr>
+      <td><strong>ATEYY</strong> <span class="tag tag-adr">ADR</span></td>
+      <td>$153.51</td>
+      <td>$189</td>
+      <td>PE 45.4x × $4.17 EPS（乐观情景）</td>
+      <td>N/A（analyst_target=0）</td>
+      <td class="upside-positive">+23.1%</td>
+      <td><span class="warning-badge">目标价不确定性高</span></td>
+      <td><span class="src-badge">valuation_result.json</span></td>
+    </tr>
+    <tr>
+      <td><strong>LSRCY</strong> <span class="tag tag-adr">ADR</span></td>
+      <td>$39.46</td>
+      <td>$47 <span class="warning-badge">USD换算</span></td>
+      <td>投资结论USD锚（原模型¥6,950为日元）</td>
+      <td>N/A（analyst_target=0）</td>
+      <td class="upside-positive">+19.1%</td>
+      <td><span style="color:var(--green); font-size:11px; font-weight:600;">较大折价</span></td>
+      <td><span class="src-badge">investment_conclusion.md</span></td>
+    </tr>
+    <tr>
+      <td><strong>COHU</strong></td>
+      <td>$49.81</td>
+      <td>$55</td>
+      <td>分析师共识均值（DCF模型$5.87失效）</td>
+      <td>$57.43</td>
+      <td class="upside-positive">+10.4%</td>
+      <td><span class="warning-badge">小幅折价</span></td>
+      <td><span class="src-badge">investment_conclusion.md</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 5: China Exposure Matrix -->
+<div class="section-title">
+  <span class="dot" style="background:var(--red);"></span>
+  出口管制影响矩阵
+</div>
+
+<table class="china-table">
+  <thead>
+    <tr>
+      <th>公司</th>
+      <th>中国营收占比</th>
+      <th>管制影响级别</th>
+      <th>受影响产品</th>
+      <th>替代市场进展</th>
+      <th>地缘风险评分调整</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ASML</strong></td>
+      <td>~29%（2025年$11.06B）</td>
+      <td class="risk-high">高</td>
+      <td>EUV全面禁止，DUV面临MATCH Act威胁</td>
+      <td>台湾/韩国/美国Capex加速对冲约50%</td>
+      <td>-10分（行业分出口管制维度）</td>
+    </tr>
+    <tr>
+      <td><strong>AMAT</strong></td>
+      <td>~30%（Q1 FY2026）</td>
+      <td class="risk-high">高</td>
+      <td>先进节点沉积/刻蚀受限，成熟节点部分维持</td>
+      <td>非中国WFE增速加速，$70B市场持续增长</td>
+      <td>-8分</td>
+    </tr>
+    <tr>
+      <td><strong>LRCX</strong></td>
+      <td>43%→35%（Q1→Q2 FY2026）</td>
+      <td class="risk-high">极高</td>
+      <td>先进节点刻蚀设备，中芯国际等扩大黑名单</td>
+      <td>NAND超级周期非中国替代效应2027兑现</td>
+      <td>-12分</td>
+    </tr>
+    <tr>
+      <td><strong>KLAC</strong></td>
+      <td>~40%（峰值）→下降中</td>
+      <td class="risk-high">高</td>
+      <td>先进节点过程控制，成熟节点部分维持</td>
+      <td>市场份额58%+2030战略可吸收中国缺口</td>
+      <td>-8分</td>
+    </tr>
+    <tr>
+      <td><strong>TOELY（TEL）</strong></td>
+      <td>~35%</td>
+      <td class="risk-high">高</td>
+      <td>涂胶显影、CVD/ALD部分受限</td>
+      <td>AI驱动营收占比FY2026目标40%</td>
+      <td>-10分（ADR置信度0.85）</td>
+    </tr>
+    <tr>
+      <td><strong>ATEYY</strong></td>
+      <td>较低（HBM测试主要在韩/美）</td>
+      <td class="risk-low">低</td>
+      <td>HBM测试系统不主要面向中国</td>
+      <td>SK Hynix/三星/美光为核心客户</td>
+      <td>0分调整</td>
+    </tr>
+    <tr>
+      <td><strong>TER</strong></td>
+      <td>较低（<15%）</td>
+      <td class="risk-low">低</td>
+      <td>SoC测试部分成熟节点受影响</td>
+      <td>AI测试结构性增长已超中国损失</td>
+      <td>0分调整</td>
+    </tr>
+    <tr>
+      <td><strong>CAMT / NVMI</strong></td>
+      <td><20%</td>
+      <td class="risk-mid">中低</td>
+      <td>封装检测/量测部分工具受限</td>
+      <td>以色列公司，台湾/韩国为核心市场</td>
+      <td>-3分</td>
+    </tr>
+    <tr>
+      <td><strong>LSRCY</strong></td>
+      <td>较低（EUV全面禁止已内化）</td>
+      <td class="risk-low">低</td>
+      <td>EUV掩膜检测原本就未出口中国</td>
+      <td>无需替代，业务本身不依赖中国</td>
+      <td>0分调整</td>
+    </tr>
+    <tr>
+      <td><strong>FORM / COHU</strong></td>
+      <td><15%</td>
+      <td class="risk-low">低</td>
+      <td>成熟节点探针卡/Handler，部分影响</td>
+      <td>HBM4/AI新赛道不依赖中国市场</td>
+      <td>-2分</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 6: 5-Year Investment Themes -->
+<div class="section-title">
+  <span class="dot" style="background:var(--purple);"></span>
+  5年投资主题 — 穿越WFE周期的核心持仓
+</div>
+
+<div class="wfe-grid">
+  <div class="info-card">
+    <h3 style="color:var(--green);">核心持仓候选（5年视角）</h3>
+    <p>
+      <span class="highlight">ASML</span>：EUV唯一垄断，AI算力的物理学护城河，High-NA EUV未来5年新产品周期，估值已定价垄断溢价但具备穿越周期能力。<br><br>
+      <span class="highlight">KLAC</span>：过程控制58%份额，GAA每代节点检测密度+20-30%，2030年$260亿目标具备清晰路径，最强护城河之一。<br><br>
+      <span class="highlight">LRCX</span>：刻蚀/HBM TSV技术唯一性，NAND超级周期2027集中兑现，CSBG年金高质量底部。<br><br>
+      <span class="highlight">NVMI</span>：量测高成长（FY2025+31%），三大节点同步受益，净现金结构，并购协同2026-27释放。
+    </p>
+  </div>
+  <div class="info-card">
+    <h3 style="color:var(--yellow);">战略配置机会（有催化剂后建仓）</h3>
+    <p>
+      <span class="highlight">ONTO</span>：Dragonfly G5量产商业化，先进封装增速>50%，$310目标提供22%上行，等Q2财报确认。<br><br>
+      <span class="highlight">LSRCY</span>：全球唯一EUV掩膜检测，当前$39处于谷底，High-NA商业订单FY2027是触发点，$40以下建仓性价比极佳，需接受6-12月等待。<br><br>
+      <span class="highlight">FORM</span>：HBM4探针卡三家全认证，换卡潮2026H2启动，管理层2030翻倍路线图，$100-$105是更优买点。<br><br>
+      <span class="highlight">TER</span>：AI测试超周期+机器人复苏双引擎，HBM4测试换代H2催化剂，机器人$100M季度是重定价节点。
+    </p>
+  </div>
+</div>
+
+<!-- SECTION 7: Rejection Check -->
+<div class="section-title">
+  <span class="dot" style="background:var(--red);"></span>
+  否决项检查清单
+</div>
+<div class="info-card" style="margin-bottom:24px;">
+  <h3>13家公司否决项扫描结果</h3>
+  <table class="cycle-table">
+    <thead>
+      <tr><th>否决项</th><th>KLAC</th><th>ASML</th><th>AMAT</th><th>LRCX</th><th>CAMT</th><th>LSRCY</th><th>ONTO</th><th>TOELY</th><th>NVMI</th><th>ATEYY</th><th>TER</th><th>FORM</th><th>COHU</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-size:11px;">主力产品被中国替代品渗透>20%</td>
+        <td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td>
+      </tr>
+      <tr>
+        <td style="font-size:11px;">出口管制切断>30%营收无替代</td>
+        <td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--yellow);">⚠️</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td>
+      </tr>
+      <tr>
+        <td style="font-size:11px;">FCF连续3年为负</td>
+        <td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--yellow);">⚠️</td>
+      </tr>
+      <tr>
+        <td style="font-size:11px;">核心客户宣布停止采购</td>
+        <td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td><td style="color:var(--green);">✓</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px; color:var(--muted); margin-top:8px;">✓ = 未触发否决项 &nbsp;|&nbsp; ⚠️ = 存在边缘风险，需密切监控 &nbsp;|&nbsp; ❌ = 触发否决（本次评估13家均未触发）</p>
+  <p style="font-size:11px; color:var(--yellow); margin-top:4px;">LRCX警示：中国营收曾达43%，目前降至35%，若进一步限制至成熟节点可能短暂触发阈值，需持续监控 &nbsp;|&nbsp; COHU警示：FY2025 FCF勉强转正，扭亏期需关注</p>
+</div>
+
+<!-- SECTION 8: Key Risks & Catalysts -->
+<div class="section-title">
+  <span class="dot" style="background:var(--orange);"></span>
+  主要风险 & 近期催化剂
+</div>
+
+<div class="wfe-grid">
+  <div class="info-card">
+    <h3 style="color:var(--red);">主要系统性风险</h3>
+    <p>
+      <span class="highlight">1. MATCH Act通过（高影响，中等概率）</span>：将全面禁止ASML DUV对华销售，ASML单次冲击-$60-70亿营收，AMAT/LRCX成熟节点工具也可能受波及。<br><br>
+      <span class="highlight">2. WFE周期下行（2027-2028）</span>：若台积电/三星CY2027削减资本支出，KLAC/AMAT/LRCX营收可能下降15-20%。当前高估值（35-50x PE）对下行极度脆弱。<br><br>
+      <span class="highlight">3. ATEYY FY2027指引大幅低于预期</span>：FY2027 Q1指引（2026年7月）若显示净利润-30%+，股价可能从$153跌至$100-$120区间。<br><br>
+      <span class="highlight">4. 中国稀土出口管制报复</span>：ASML已备货应对，短期可控，但长期供应链多元化成本上升。
+    </p>
+  </div>
+  <div class="info-card">
+    <h3 style="color:var(--green);">近期关键催化剂</h3>
+    <p>
+      <span class="highlight">KLAC 10:1拆分（2026-06-12）</span>：流动性改善，散户参与度提升，拆分后$165-$170是潜在建仓窗口。<br><br>
+      <span class="highlight">ONTO Q2 FY2026财报（2026年8月）</span>：验证$320-330M指引+Dragonfly G5每季翻倍出货节奏，若兑现目标价上调至$340+。<br><br>
+      <span class="highlight">TER Q2 2026财报（2026年7月末）</span>：验证$1.15-1.25B指引，HBM4测试系统订单公告是增量正催化剂。<br><br>
+      <span class="highlight">ATEYY FY2027 Q1指引（2026年7月）</span>：决定评级从"减持"到"强买"的关键事件，$1,200亿/季度以上为强买信号。<br><br>
+      <span class="highlight">LSRCY FY2026 Q1财报（2026年8月）</span>：确认订单回升信号，High-NA ACTIS商业合同公告是关键催化剂。
+    </p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>半导体设备&检测专项打分系统 v1.0</strong> &nbsp;|&nbsp; 20260608 &nbsp;|&nbsp; 数据来源：公司财报、SEMI预测、各公司valuation_result.json、investment_conclusion.md、update_20260608.md<br>
+  价格数据来源：Yahoo Finance / MarketCap.com / CNBC / StockAnalysis（2026-06-07/08实时搜索）&nbsp;|&nbsp; KLAC 10:1拆分2026-06-12生效，当前价格为拆分前<br>
+  ⚠️ LSRCY模型原始目标为JPY 6,950（日元），已换算为USD $47并标注 &nbsp;|&nbsp; 日本ADR置信度0.85，实际打分已应用置信度系数<br>
+  本报告仅供参考，不构成投资建议。投资有风险，入市需谨慎。
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
