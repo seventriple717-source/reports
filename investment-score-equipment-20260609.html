@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>半导体设备专项投资打分 · 2026-06-09</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box}
+body {background:#0d1117;color:#c9d1d9;font-family:'Segoe UI',monospace,sans-serif;padding:20px}
+.header {background:linear-gradient(135deg,#161b22,#1f2937);border:1px solid #30363d;border-radius:12px;padding:24px;margin-bottom:20px;text-align:center}
+.title {font-size:24px;font-weight:700;color:#58a6ff;margin-bottom:8px}
+.subtitle {font-size:13px;color:#8b949e}
+.badge {display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:0 4px}
+.section {background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;margin-bottom:16px}
+.section-title {font-size:16px;font-weight:700;color:#58a6ff;margin-bottom:16px;border-bottom:1px solid #30363d;padding-bottom:8px}
+table {width:100%;border-collapse:collapse;font-size:13px}
+th {background:#21262d;color:#8b949e;text-align:left;padding:10px 8px;font-weight:600;border-bottom:2px solid #30363d}
+td {padding:8px;border-bottom:1px solid #21262d;vertical-align:middle}
+tr:hover td {background:#1c2128}
+.grade-S {color:#2ea043;font-weight:700;font-size:15px}
+.grade-A {color:#3fb950;font-weight:700;font-size:15px}
+.grade-B {color:#d29922;font-weight:700;font-size:15px}
+.grade-C {color:#f85149;font-weight:700}
+.grade-D {color:#da3633;font-weight:700}
+.score-bar {height:6px;border-radius:3px;background:#21262d;display:inline-block;width:80px;vertical-align:middle;margin-right:6px}
+.score-fill {height:100%;border-radius:3px}
+.chip-euv {color:#bc8cff}
+.chip-etch {color:#58a6ff}
+.chip-ctrl {color:#3fb950}
+.chip-test {color:#f0883e}
+.chip-probe {color:#d29922}
+.chip-handler {color:#8b949e}
+.alert {background:#1c2128;border-left:3px solid #f85149;padding:8px 12px;margin:8px 0;border-radius:0 4px 4px 0;font-size:12px}
+.good {border-left-color:#3fb950}
+.warn {border-left-color:#d29922}
+.info-grid {display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.info-card {background:#21262d;border-radius:8px;padding:12px;text-align:center}
+.info-val {font-size:20px;font-weight:700;color:#58a6ff}
+.info-lbl {font-size:11px;color:#8b949e;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">🔬 半导体设备 &amp; 检测专项投资打分报告</div>
+  <div class="subtitle">v1.0框架 · 2026-06-09 · 11家公司全覆盖 · 数据来源：联网搜索实时数据</div>
+  <div style="margin-top:12px">
+    <span class="badge" style="background:#0d2e0d;color:#3fb950">A级: ASML KLAC</span>
+    <span class="badge" style="background:#2d2000;color:#d29922">B级: AMAT LRCX TER</span>
+    <span class="badge" style="background:#2d0a0a;color:#f85149">C级: LSRCY MTSI ATEYY FORM TOELY</span>
+    <span class="badge" style="background:#1a0a0a;color:#da3633">D级: COHU</span>
+  </div>
+</div>
+
+<!-- WFE行业全景 -->
+<div class="section">
+  <div class="section-title">📊 WFE行业全景（2026年6月）</div>
+  <div class="info-grid">
+    <div class="info-card"><div class="info-val">$112-131B</div><div class="info-lbl">2026年WFE总市场</div></div>
+    <div class="info-card"><div class="info-val">+9.0%</div><div class="info-lbl">2026年YoY增速</div></div>
+    <div class="info-card"><div class="info-val">$156B</div><div class="info-lbl">2027年预测规模</div></div>
+    <div class="info-card"><div class="info-val">€38.8B</div><div class="info-lbl">ASML年末积压订单</div></div>
+    <div class="info-card"><div class="info-val">35%</div><div class="info-lbl">中国国产设备渗透率</div></div>
+    <div class="info-card"><div class="info-val">11x</div><div class="info-lbl">TSMC AI晶圆需求增幅(2022→2026)</div></div>
+  </div>
+  <table>
+    <tr><th>细分品类</th><th>周期位置</th><th>2026增速</th><th>主要驱动</th><th>中国替代进展</th></tr>
+    <tr><td class="chip-euv">先进逻辑光刻(EUV/High-NA)</td><td>🟢 扩张</td><td>+15%</td><td>AI芯片N2 GAA节点转换</td><td>SMEE DUV量产，EUV差距5年+</td></tr>
+    <tr><td class="chip-etch">沉积/刻蚀(GAA)</td><td>🟢 扩张</td><td>+11%</td><td>GAA工序增加30-50%</td><td>NAURA/AMEC 28nm量产，14nm验证中</td></tr>
+    <tr><td class="chip-ctrl">过程控制/检测</td><td>🟢 强劲扩张</td><td>+52%YoY(KLAC)</td><td>制程复杂度→检测密度增加</td><td>国内工具与KLAC差距3-5年</td></tr>
+    <tr><td class="chip-euv">HBM/先进封装设备</td><td>🟢 扩张</td><td>+30%</td><td>AI GPU HBM需求全年sold out</td><td>差距显著</td></tr>
+    <tr><td>NAND设备</td><td>🟡 平台期</td><td>+35%</td><td>eSSD需求恢复</td><td>YMTC层数追赶</td></tr>
+    <tr><td class="chip-test">ATE测试</td><td>🟢 强劲</td><td>+87%(TER)</td><td>HBM测试10x更复杂</td><td>华峰测控追赶中</td></tr>
+    <tr><td class="chip-probe">探针卡</td><td>🟢 扩张</td><td>+32%(FORM)</td><td>HBM晶圆探针需求激增</td><td>差距3年+</td></tr>
+  </table>
+</div>
+
+<!-- 出口管制矩阵 -->
+<div class="section">
+  <div class="section-title">🚨 出口管制影响矩阵</div>
+  <div class="alert">⚠️ AMAT于2026年2月支付$252M出口违规罚款；LRCX中国敞口38%最高，为最大风险公司</div>
+  <table>
+    <tr><th>公司</th><th>中国营收占比</th><th>管制影响</th><th>受影响产品</th><th>趋势</th></tr>
+    <tr><td>ASML</td><td>20%（↓从33%）</td><td>🔴 高</td><td>EUV完全禁止，DUV受限</td><td>主动压缩，非先进节点维持</td></tr>
+    <tr><td>AMAT</td><td>27-28%</td><td>🔴 高</td><td>先进CVD/刻蚀受限</td><td>$252M罚款，VEU通道关闭</td></tr>
+    <tr><td>LRCX</td><td>34-43%（最高）</td><td>🔴 极高</td><td>先进刻蚀受限</td><td>预期年内降至30%以下</td></tr>
+    <tr><td>KLAC</td><td>24-26%</td><td>🟡 中高</td><td>先进检测受限</td><td>稳步压缩</td></tr>
+    <tr><td>TER</td><td>11%</td><td>🟢 低</td><td>部分ATE受限</td><td>影响有限</td></tr>
+    <tr><td>TOELY</td><td>28%</td><td>🔴 高</td><td>先进涂胶显影受限</td><td>日本跟进荷兰管制</td></tr>
+    <tr><td>FORM/COHU</td><td>7%/12%</td><td>🟢 低</td><td>影响极小</td><td>几乎无影响</td></tr>
+  </table>
+</div>
+
+<!-- 综合评分表 -->
+<div class="section">
+  <div class="section-title">🏆 综合评分总表</div>
+  <table>
+    <tr><th>排名</th><th>代码</th><th>公司</th><th>品类</th><th>评级</th><th>综合分</th><th>行业分</th><th>质量分</th><th>估值分</th><th>当前价</th><th>分析师目标</th><th>5yr DCF回报</th><th>中国敞口</th></tr>
+    <tr>
+      <td><b>1</b></td>
+      <td><b>ASML</b></td>
+      <td>ASML Holding</td>
+      <td class="">EUV光刻垄断</td>
+      <td class="grade-A">A</td>
+      <td><b>77.0</b></td>
+      <td>96.0</td>
+      <td>92.8</td>
+      <td>38.0</td>
+      <td>$1,749</td>
+      <td>$1,522</td>
+      <td style="color:#d29922">+0.8%</td>
+      <td>20%</td>
+    </tr>
+    <tr>
+      <td><b>2</b></td>
+      <td><b>KLAC</b></td>
+      <td>KLA Corporation</td>
+      <td class="chip-ctrl">过程控制/检测垄断</td>
+      <td class="grade-A">A</td>
+      <td><b>76.4</b></td>
+      <td>96.0</td>
+      <td>92.8</td>
+      <td>36.0</td>
+      <td>$2,108</td>
+      <td>$1,842</td>
+      <td style="color:#f85149">-4.0%</td>
+      <td>25%</td>
+    </tr>
+    <tr>
+      <td><b>3</b></td>
+      <td><b>AMAT</b></td>
+      <td>Applied Materials</td>
+      <td class="">CVD/ALD/刻蚀寡头</td>
+      <td class="grade-B">B</td>
+      <td><b>69.1</b></td>
+      <td>79.2</td>
+      <td>83.2</td>
+      <td>39.0</td>
+      <td>$492</td>
+      <td>$511</td>
+      <td style="color:#f85149">-7.6%</td>
+      <td>27%</td>
+    </tr>
+    <tr>
+      <td><b>4</b></td>
+      <td><b>LRCX</b></td>
+      <td>Lam Research</td>
+      <td class="chip-etch">刻蚀设备龙头</td>
+      <td class="grade-B">B</td>
+      <td><b>66.5</b></td>
+      <td>77.2</td>
+      <td>78.8</td>
+      <td>39.0</td>
+      <td>$324</td>
+      <td>$315</td>
+      <td style="color:#f85149">-13.8%</td>
+      <td>38%</td>
+    </tr>
+    <tr>
+      <td><b>5</b></td>
+      <td><b>TER</b></td>
+      <td>Teradyne</td>
+      <td class="">ATE测试设备</td>
+      <td class="grade-B">B</td>
+      <td><b>62.3</b></td>
+      <td>77.0</td>
+      <td>75.2</td>
+      <td>31.0</td>
+      <td>$374</td>
+      <td>$394</td>
+      <td style="color:#f85149">-13.3%</td>
+      <td>11%</td>
+    </tr>
+    <tr>
+      <td><b>6</b></td>
+      <td><b>LSRCY</b></td>
+      <td>Lasertec</td>
+      <td class="">EUV掩膜检测唯一供应商</td>
+      <td class="grade-C">C</td>
+      <td><b>59.2</b></td>
+      <td>92.0</td>
+      <td>79.2</td>
+      <td>39.0</td>
+      <td>$55</td>
+      <td>$60</td>
+      <td style="color:#f85149">-10.0%</td>
+      <td>5%</td>
+    </tr>
+    <tr>
+      <td><b>7</b></td>
+      <td><b>MTSI</b></td>
+      <td>MACOM Technology</td>
+      <td class="chip-handler">RF/模拟半导体(非设备)</td>
+      <td class="grade-C">C</td>
+      <td><b>58.1</b></td>
+      <td>65.0</td>
+      <td>71.6</td>
+      <td>31.0</td>
+      <td>$362</td>
+      <td>$393</td>
+      <td style="color:#f85149">-12.8%</td>
+      <td>5%</td>
+    </tr>
+    <tr>
+      <td><b>8</b></td>
+      <td><b>ATEYY</b></td>
+      <td>Advantest</td>
+      <td class="">ATE内存测试龙头</td>
+      <td class="grade-C">C</td>
+      <td><b>55.3</b></td>
+      <td>80.0</td>
+      <td>79.6</td>
+      <td>31.0</td>
+      <td>$165</td>
+      <td>$185</td>
+      <td style="color:#f85149">-11.9%</td>
+      <td>15%</td>
+    </tr>
+    <tr>
+      <td><b>9</b></td>
+      <td><b>FORM</b></td>
+      <td>FormFactor</td>
+      <td class="chip-probe">探针卡</td>
+      <td class="grade-C">C</td>
+      <td><b>52.0</b></td>
+      <td>74.6</td>
+      <td>67.2</td>
+      <td>31.0</td>
+      <td>$124</td>
+      <td>$144</td>
+      <td style="color:#f85149">-18.8%</td>
+      <td>7%</td>
+    </tr>
+    <tr>
+      <td><b>10</b></td>
+      <td><b>TOELY</b></td>
+      <td>Tokyo Electron</td>
+      <td class="chip-etch">沉积/刻蚀/涂胶显影</td>
+      <td class="grade-C">C</td>
+      <td><b>50.8</b></td>
+      <td>70.6</td>
+      <td>68.0</td>
+      <td>39.0</td>
+      <td>$179</td>
+      <td>$185</td>
+      <td style="color:#f85149">-11.0%</td>
+      <td>28%</td>
+    </tr>
+    <tr>
+      <td><b>11</b></td>
+      <td><b>COHU</b></td>
+      <td>Cohu</td>
+      <td class="">Handler/分选机</td>
+      <td class="grade-D">D</td>
+      <td><b>49.5</b></td>
+      <td>57.2</td>
+      <td>60.8</td>
+      <td>44.0</td>
+      <td>$52</td>
+      <td>$57</td>
+      <td style="color:#f85149">-15.5%</td>
+      <td>12%</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 各公司详细评分 -->
+<div class="section">
+  <div class="section-title">📋 各公司评分说明</div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">ASML</b> <span style="color:#8b949e;font-size:12px">ASML Holding · EUV光刻垄断</span></div>
+      <span class="grade-A" style="font-size:18px">A 77.0分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>96.0</b>/100</div>
+      <div>质量分 <b>92.8</b>/100</div>
+      <div>估值分 <b>38.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">全球EUV唯一供应商，High-NA量产中，€38.8B积压订单，但当前估值已充分定价</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $1,749 | 分析师目标 $1,522 | 5yr加权DCF <span style="color:#3fb950">+0.8%/年</span> | 中国敞口 20%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">KLAC</b> <span style="color:#8b949e;font-size:12px">KLA Corporation · 过程控制/检测垄断</span></div>
+      <span class="grade-A" style="font-size:18px">A 76.4分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>96.0</b>/100</div>
+      <div>质量分 <b>92.8</b>/100</div>
+      <div>估值分 <b>36.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">过程控制市场56%+垄断，62.2%毛利率行业最高，AI制程复杂度红利</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $2,108 | 分析师目标 $1,842 | 5yr加权DCF <span style="color:#f85149">-4.0%/年</span> | 中国敞口 25%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">AMAT</b> <span style="color:#8b949e;font-size:12px">Applied Materials · CVD/ALD/刻蚀寡头</span></div>
+      <span class="grade-B" style="font-size:18px">B 69.1分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>79.2</b>/100</div>
+      <div>质量分 <b>83.2</b>/100</div>
+      <div>估值分 <b>39.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">最大设备商，GAA节点受益，但$252M出口违规罚款+27%中国敞口是主要风险</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $492 | 分析师目标 $511 | 5yr加权DCF <span style="color:#f85149">-7.6%/年</span> | 中国敞口 27%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">LRCX</b> <span style="color:#8b949e;font-size:12px">Lam Research · 刻蚀设备龙头</span></div>
+      <span class="grade-B" style="font-size:18px">B 66.5分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>77.2</b>/100</div>
+      <div>质量分 <b>78.8</b>/100</div>
+      <div>估值分 <b>39.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">全球刻蚀45%市占，GAA工序增加受益，但38%中国敞口最高，出口管制风险最大</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $324 | 分析师目标 $315 | 5yr加权DCF <span style="color:#f85149">-13.8%/年</span> | 中国敞口 38%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">TER</b> <span style="color:#8b949e;font-size:12px">Teradyne · ATE测试设备</span></div>
+      <span class="grade-B" style="font-size:18px">B 62.3分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>77.0</b>/100</div>
+      <div>质量分 <b>75.2</b>/100</div>
+      <div>估值分 <b>31.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">AI芯片测试受益，87%超强增速但具周期性，11%中国敞口低，估值相对较高</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $374 | 分析师目标 $394 | 5yr加权DCF <span style="color:#f85149">-13.3%/年</span> | 中国敞口 11%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">LSRCY</b> <span style="color:#8b949e;font-size:12px">Lasertec · EUV掩膜检测唯一供应商</span></div>
+      <span class="grade-C" style="font-size:18px">C 59.2分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>92.0</b>/100</div>
+      <div>质量分 <b>79.2</b>/100</div>
+      <div>估值分 <b>39.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">EUV掩膜检测全球唯一，护城河极深，但FY2026主动去库存，订单能见度较低</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $55 | 分析师目标 $60 | 5yr加权DCF <span style="color:#f85149">-10.0%/年</span> | 中国敞口 5%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">MTSI</b> <span style="color:#8b949e;font-size:12px">MACOM Technology · RF/模拟半导体(非设备)</span></div>
+      <span class="grade-C" style="font-size:18px">C 58.1分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>65.0</b>/100</div>
+      <div>质量分 <b>71.6</b>/100</div>
+      <div>估值分 <b>31.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">注：MACOM为RF/模拟芯片商，非设备公司，适用行业为光模块/AI基础设施，此处评分供参考</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $362 | 分析师目标 $393 | 5yr加权DCF <span style="color:#f85149">-12.8%/年</span> | 中国敞口 5%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">ATEYY</b> <span style="color:#8b949e;font-size:12px">Advantest · ATE内存测试龙头</span></div>
+      <span class="grade-C" style="font-size:18px">C 55.3分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>80.0</b>/100</div>
+      <div>质量分 <b>79.6</b>/100</div>
+      <div>估值分 <b>31.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">HBM测试市场70%垄断，但当前市值$116B对$9B营收估值偏高，v1加权回报为负</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $165 | 分析师目标 $185 | 5yr加权DCF <span style="color:#f85149">-11.9%/年</span> | 中国敞口 15%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">FORM</b> <span style="color:#8b949e;font-size:12px">FormFactor · 探针卡</span></div>
+      <span class="grade-C" style="font-size:18px">C 52.0分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>74.6</b>/100</div>
+      <div>质量分 <b>67.2</b>/100</div>
+      <div>估值分 <b>31.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">HBM探针卡受益，7%中国敞口低，但$9.1B市值对$900M营收溢价较高，毛利率较低</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $124 | 分析师目标 $144 | 5yr加权DCF <span style="color:#f85149">-18.8%/年</span> | 中国敞口 7%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">TOELY</b> <span style="color:#8b949e;font-size:12px">Tokyo Electron · 沉积/刻蚀/涂胶显影</span></div>
+      <span class="grade-C" style="font-size:18px">C 50.8分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>70.6</b>/100</div>
+      <div>质量分 <b>68.0</b>/100</div>
+      <div>估值分 <b>39.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">涂胶显影91%垄断份额，但FY2026收入下降、28%中国敞口、$165B市值偏高</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $179 | 分析师目标 $185 | 5yr加权DCF <span style="color:#f85149">-11.0%/年</span> | 中国敞口 28%
+    </div>
+  </div>
+  <div style="border:1px solid #30363d;border-radius:6px;padding:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><b style="font-size:15px">COHU</b> <span style="color:#8b949e;font-size:12px">Cohu · Handler/分选机</span></div>
+      <span class="grade-D" style="font-size:18px">D 49.5分</span>
+    </div>
+    <div style="margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px">
+      <div>行业分 <b>57.2</b>/100</div>
+      <div>质量分 <b>60.8</b>/100</div>
+      <div>估值分 <b>44.0</b>/100</div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:#8b949e">Handler测试设备，护城河较弱，AI HPC测试管道$750M是亮点，估值相对合理</div>
+    <div style="margin-top:6px;font-size:12px">
+      📈 当前价 $52 | 分析师目标 $57 | 5yr加权DCF <span style="color:#f85149">-15.5%/年</span> | 中国敞口 12%
+    </div>
+  </div>
+</div>
+
+<!-- 投资建议 -->
+<div class="section">
+  <div class="section-title">💡 投资主题与建议</div>
+  <div class="alert good">🟢 穿越WFE周期核心持仓：ASML（EUV垄断）、KLAC（过程控制垄断）— 在任何WFE周期均有强正增长，估值高但行业地位无可替代</div>
+  <div class="alert warn">🟡 高增速但估值需跟踪：TER（AI测试87%增速周期性强）、AMAT（最大设备商但出口合规风险）— 需等待回调或跟踪订单趋势</div>
+  <div class="alert">🔴 高风险注意：LRCX（38%中国敞口最高）、TOELY（收入下滑+28%中国）— 出口管制持续冲击，需要大幅折价才有吸引力</div>
+  <div class="alert">ℹ️ 注：MTSI(MACOM)为RF/模拟芯片商，非设备公司，建议移至 /investment-score-optical 或 /investment-score-ai 行业评分</div>
+</div>
+
+<div style="text-align:center;color:#484f58;font-size:11px;margin-top:20px;padding:10px">
+  半导体设备专项投资打分系统 v1.0 · 2026-06-09 更新 · 数据来源：联网实时搜索<br>
+  行业全景：13项强制搜索 · 个股分析：11家完整覆盖 · 三层框架：行业20%+质量50%+估值30%
+</div>
+
+</body></html>
