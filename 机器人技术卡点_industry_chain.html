@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机器人7大技术卡点全景图</title>
+<style>
+:root{--bg:#070c19;--bg2:#0d1526;--bg3:#131f35;--text:#e8eef7;--text2:#a8bdd4;--text3:#6e8eac;--border:rgba(255,255,255,0.07);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse at 15% 15%,rgba(99,102,241,.07) 0%,transparent 55%),radial-gradient(ellipse at 85% 85%,rgba(20,184,166,.05) 0%,transparent 55%);}
+.page{max-width:1800px;margin:0 auto;padding:28px 22px 52px;}
+.hdr{text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.hdr h1{font-size:22px;font-weight:700;letter-spacing:3px;background:linear-gradient(130deg,#f472b6 0%,#a78bfa 40%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:7px;}
+.hdr .meta{font-size:11.5px;color:var(--text3);letter-spacing:1.5px;}
+.hdr .meta em{color:#4ade80;font-style:normal;}
+.kv-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:18px;}
+.kv{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.kv-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.kv-val{font-size:15px;font-weight:800;line-height:1.2;}
+.kv-sub{font-size:9.5px;color:var(--text3);margin-top:3px;line-height:1.4;}
+.notice{background:rgba(244,114,182,.07);border:1px solid rgba(244,114,182,.22);border-radius:8px;padding:9px 16px;margin-bottom:16px;font-size:11.5px;color:#f9a8d4;display:flex;align-items:center;gap:8px;}
+.notice b{color:#fce7f3;}
+.section-title{font-size:12px;font-weight:700;color:var(--text3);letter-spacing:3px;text-transform:uppercase;text-align:center;margin:24px 0 14px;}
+/* chain */
+.chain-scroll{overflow-x:auto;padding-bottom:8px;margin-bottom:16px;}
+.chain-wrap{display:flex;align-items:flex-start;min-width:1500px;gap:0;}
+.arr-col{flex-shrink:0;width:28px;display:flex;flex-direction:column;align-items:center;}
+.arr-sp{height:54px;flex-shrink:0;}
+.arr-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding-top:28px;}
+.arr-body svg{opacity:.3;}
+.tb{flex:1;min-width:0;}
+.tb.wide{flex:1.35;}
+.tb.narrow{flex:.8;}
+.th{border-radius:10px 10px 0 0;padding:9px 13px;min-height:54px;display:flex;flex-direction:column;justify-content:center;}
+.th-badge{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;opacity:.65;line-height:1;margin-bottom:2px;}
+.th-title{font-size:11.5px;font-weight:700;letter-spacing:.6px;line-height:1.3;}
+.th-mkt{font-size:9px;opacity:.7;margin-top:2px;}
+.tb-body{border-radius:0 0 10px 10px;padding:11px 9px;border:1px solid;border-top:none;}
+.bk-why{font-size:10px;line-height:1.5;padding:7px 9px;border-radius:5px;margin-bottom:9px;border-left:2px solid;}
+.sub-lbl{font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:4px;margin:8px 0 4px;letter-spacing:.3px;}
+.sub-lbl:first-child{margin-top:0;}
+.sub-note{font-size:9px;line-height:1.4;padding:3px 8px 5px;margin-bottom:5px;margin-top:-3px;opacity:.8;border-radius:0 0 4px 4px;}
+.cc{background:rgba(255,255,255,.033);border:1px solid rgba(255,255,255,.07);border-left:3px solid;border-radius:0 6px 6px 0;
+  padding:6px 8px;margin-bottom:5px;transition:all .17s ease;cursor:default;position:relative;}
+.cc:last-child{margin-bottom:0;}
+.cc:hover{background:rgba(255,255,255,.07);transform:translateX(3px);box-shadow:-3px 0 12px rgba(0,0,0,.3);}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:5px;}
+.cc-info{flex:1;min-width:0;}
+.cc-ticker{font-weight:800;font-size:12px;letter-spacing:.4px;line-height:1;}
+.cc-name{font-size:9.5px;color:var(--text2);margin-top:2px;line-height:1.2;}
+.cc-desc{font-size:9px;color:var(--text3);margin-top:3px;line-height:1.3;}
+.cc-tag{display:inline-block;font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;margin-top:3px;letter-spacing:.3px;}
+.cc-links{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.cc-btn{display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:2px 5px;border-radius:3px;text-decoration:none;transition:all .15s;white-space:nowrap;}
+.cc-btn.doc{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:#60a5fa;}
+.cc-btn.xls{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:#34d399;}
+.cc-btn.pending{background:rgba(100,100,100,.08);border:1px solid rgba(100,100,100,.15);color:var(--text3);cursor:default;}
+.cc-btn.unlisted{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:#fbbf24;cursor:default;}
+/* special */
+.special-row{border-radius:12px;padding:15px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
+.special-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:11px;}
+.special-title{font-size:13px;font-weight:700;letter-spacing:1px;}
+.special-sub{font-size:11px;color:var(--text3);}
+.special-cards{display:flex;gap:10px;flex-wrap:wrap;}
+.special-card{flex:1;min-width:220px;border-radius:0 8px 8px 0;padding:10px 12px;transition:all .17s;border-left:3px solid;}
+.special-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+/* insight */
+.insight-row{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px;}
+.insight-row h3{font-size:11.5px;font-weight:700;letter-spacing:2px;margin-bottom:12px;text-transform:uppercase;}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;}
+.i-item{border-radius:7px;padding:10px 12px;border-left:3px solid;}
+.i-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.i-text{font-size:10px;color:var(--text2);line-height:1.5;}
+.i-val{font-size:12px;font-weight:700;margin-top:4px;}
+/* 2x2 matrix */
+.quad-wrap{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;margin-bottom:20px;}
+.quad{border-radius:10px;padding:14px 16px;border:1px solid;}
+.quad-title{font-size:11px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;}
+.quad-cos{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.quad-co{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;border:1px solid;}
+.quad-desc{font-size:10px;color:var(--text3);line-height:1.5;}
+/* matrix */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:22px 0;}
+.matrix-wrap{overflow-x:auto;}
+.matrix-table{width:100%;border-collapse:separate;border-spacing:4px;min-width:1200px;}
+.matrix-table th{font-size:10px;font-weight:700;padding:7px 5px;text-align:center;letter-spacing:.5px;white-space:nowrap;border-radius:5px;background:rgba(255,255,255,.04);}
+.matrix-table th.seg{border-bottom:2px solid;}
+.matrix-table td.theme-info{width:280px;padding:10px 13px;border-radius:6px;vertical-align:top;background:var(--bg3);border:1px solid var(--border);}
+.matrix-table td.cell{border-radius:5px;padding:6px 5px;text-align:center;vertical-align:top;transition:all .15s;cursor:default;}
+.cell.none{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);}
+.cell-empty{font-size:14px;opacity:.15;line-height:3;}
+.seg-header{font-size:9.5px;font-weight:700;letter-spacing:.3px;line-height:1.4;}
+.seg-header span{display:block;font-size:8px;opacity:.75;margin-top:1px;}
+.footnote{text-align:center;font-size:11px;color:var(--text3);margin-top:28px;letter-spacing:1px;}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:18px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hdr">
+  <h1>机器人 · 7大技术卡点 · 投资全景图</h1>
+  <div class="meta">从机器人"本体解剖"出发，逐一拆解关键卡点 → 识别不可或缺者与市场空间最大者 &nbsp;·&nbsp; 覆盖 <em>40+</em> 家全球及中国上市公司 &nbsp;·&nbsp; 2026-06</div>
+</div>
+
+<!-- 关键量化数据 -->
+<div class="kv-bar">
+  <div class="kv">
+    <div class="kv-label">灵巧手市场</div>
+    <div class="kv-val" style="color:#f472b6;">$10.3B</div>
+    <div class="kv-sub">2031E，CAGR <b style="color:#f9a8d4;">40.4%</b>，几乎全部待填补</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">力矩传感器</div>
+    <div class="kv-val" style="color:#fb923c;">$7.87B</div>
+    <div class="kv-sub">2032E，CAGR <b style="color:#fed7aa;">48.2%</b>，全卡点中增速最快</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">执行器整体</div>
+    <div class="kv-val" style="color:#60a5fa;">$8B+</div>
+    <div class="kv-sub">2030E，每台人形机器人需14+执行器</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">人形整机出货</div>
+    <div class="kv-val" style="color:#34d399;">5万台</div>
+    <div class="kv-sub">2026E，同比+178%，中国占86.9%份额</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">具身AI投资</div>
+    <div class="kv-val" style="color:#a78bfa;">$407亿</div>
+    <div class="kv-sub">2025年全球VC投入，同比3x增长</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">行星滚柱丝杠</div>
+    <div class="kv-val" style="color:#fbbf24;">35%</div>
+    <div class="kv-sub">占人形机器人线性关节BOM，国产化降价40%潜力</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">谐波减速器国产</div>
+    <div class="kv-val" style="color:#38bdf8;">28%</div>
+    <div class="kv-sub">绿的谐波国内市占，出货40万台/年，人形占25%</div>
+  </div>
+  <div class="kv">
+    <div class="kv-label">续航时间（当前）</div>
+    <div class="kv-val" style="color:#f87171;">90分钟</div>
+    <div class="kv-sub">人形机器人连续工作极限，商业化最大非技术障碍</div>
+  </div>
+</div>
+
+<div class="notice">
+  <span>⚠️</span>
+  <span><b>核心洞察：</b>机器人不是"上下游供应链问题"，而是 <b>7个并行卡点</b> 的系统工程——任何一个卡点不突破，整体商业化就无法到达下一阶段。灵巧手和续航是当前最后两公里。</span>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<!-- 主链：7大卡点 -->
+<div class="section-title">七 大 技 术 卡 点 · 关 键 公 司 图 谱</div>
+<div class="chain-scroll">
+  <div class="chain-wrap" id="chain-wrap"></div>
+</div>
+
+<!-- 中国机器人新势力 -->
+<div class="special-row" id="special-cn" style="background:rgba(3,105,161,.07);border:1px solid rgba(3,105,161,.25);">
+  <div class="special-hdr">
+    <div class="special-title" style="color:#38bdf8;">🇨🇳 中国机器人新势力（整机+核心零部件）</div>
+    <div class="special-sub">2025年中国六大厂商占全球人形机器人出货量86.9%，已是全球最强人形机器人制造集群</div>
+  </div>
+  <div class="special-cards" id="special-cn-cards"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 不可或缺 vs 最大机会 四象限 -->
+<div class="section-title">关 键 公 司 定 位 · 不 可 或 缺 vs 最 大 机 会</div>
+<div class="quad-wrap" id="quad-wrap">
+  <div class="quad" style="background:rgba(244,114,182,.06);border-color:rgba(244,114,182,.2);">
+    <div class="quad-title" style="color:#f472b6;">🔒 不可或缺 × 市场规模巨大<br><span style="font-size:9px;font-weight:400;color:var(--text3);">护城河最深，持有不动</span></div>
+    <div class="quad-cos">
+      <span class="quad-co" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.1);">NVDA</span>
+      <span class="quad-co" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.1);">ISRG</span>
+      <span class="quad-co" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.1);">688017绿的谐波</span>
+      <span class="quad-co" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.1);">HDDSF</span>
+    </div>
+    <div class="quad-desc">NVDA是物理AI唯一成熟生态（训练+推理+仿真），无可替代。ISRG以医疗机器人绑定手术室25年，3重护城河。绿的谐波+HDDSF是精密关节的必经之路，换不掉。</div>
+  </div>
+  <div class="quad" style="background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.2);">
+    <div class="quad-title" style="color:#fbbf24;">🚀 市场空间最大 × 竞争格局未定<br><span style="font-size:9px;font-weight:400;color:var(--text3);">弯道超车机会，胆大心细</span></div>
+    <div class="quad-cos">
+      <span class="quad-co" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08);">灵巧手赛道</span>
+      <span class="quad-co" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08);">VLA模型</span>
+      <span class="quad-co" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08);">力矩传感器</span>
+      <span class="quad-co" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08);">TSLA Optimus</span>
+    </div>
+    <div class="quad-desc">灵巧手$10.3B市场几乎全部待填补，全球无主导者。力矩传感器CAGR 48%，正从稀缺品变成标配。VLA模型winner-takes-most，赢家价值万亿。TSLA Optimus若规模量产=颠覆性事件。</div>
+  </div>
+  <div class="quad" style="background:rgba(99,102,241,.06);border-color:rgba(99,102,241,.2);">
+    <div class="quad-title" style="color:#818cf8;">🏗 国产替代 × 确定性最高<br><span style="font-size:9px;font-weight:400;color:var(--text3);">A股最佳切入点，趋势已验证</span></div>
+    <div class="quad-cos">
+      <span class="quad-co" style="color:#818cf8;border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.08);">300124汇川</span>
+      <span class="quad-co" style="color:#818cf8;border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.08);">002472双环</span>
+      <span class="quad-co" style="color:#818cf8;border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.08);">603667五洲新春</span>
+      <span class="quad-co" style="color:#818cf8;border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.08);">002052步科</span>
+    </div>
+    <div class="quad-desc">日本减速器/伺服垄断正在被中国厂商打破。行星滚柱丝杠国产化使成本降40%。汇川技术伺服国内市占30%+，持续蚕食安川/松下。这是最有确定性的产业趋势。</div>
+  </div>
+  <div class="quad" style="background:rgba(20,184,166,.06);border-color:rgba(20,184,166,.2);">
+    <div class="quad-title" style="color:#2dd4bf;">⏰ 等待催化剂 × 时机未到<br><span style="font-size:9px;font-weight:400;color:var(--text3);">需等关键信号，不宜过早重仓</span></div>
+    <div class="quad-cos">
+      <span class="quad-co" style="color:#2dd4bf;border-color:rgba(20,184,166,.3);background:rgba(20,184,166,.08);">300750宁德时代</span>
+      <span class="quad-co" style="color:#2dd4bf;border-color:rgba(20,184,166,.3);background:rgba(20,184,166,.08);">09660地平线</span>
+      <span class="quad-co" style="color:#2dd4bf;border-color:rgba(20,184,166,.3);background:rgba(20,184,166,.08);">SLDP固态电池</span>
+    </div>
+    <div class="quad-desc">续航问题依赖固态电池（2027-2028商业化）。地平线机器人芯片需等VLA规模落地。这些是"第二波"受益标的，信号是：人形机器人年出货突破10万台，单台&lt;2万美元。</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 主题矩阵 -->
+<div class="section-title">投 资 主 题 × 技 术 卡 点 对 应 关 系</div>
+<div class="matrix-wrap">
+  <table class="matrix-table" id="matrix"></table>
+</div>
+
+<div class="footnote" id="footnote">共覆盖 40+ 家全球及中国上市公司 · 7大技术卡点框架 · 数据来源：IDTechEx、Valuates、IFR、Bloomberg、各公司财报 · 2026-06</div>
+
+</div>
+
+<script>
+const FEISHU = {};
+
+/* ═══════════════════ 产业链数据 ═══════════════════ */
+const TIERS = [
+  {
+    id:'BK1', num:'卡点 ①', title:'具身AI / VLA模型', width:'',
+    color:'#7c3aed', bgGrad:['#3b0764','#6d28d9'],
+    bodyBg:'rgba(109,40,217,.08)', borderColor:'rgba(109,40,217,.22)',
+    ccBorderColor:'#7c3aed', tickerColor:'#c4b5fd',
+    descBg:'rgba(109,40,217,.1)', descBorder:'#7c3aed', descColor:'#c4b5fd',
+    mkt:'具身AI市场 $44B→$230B 2030E',
+    desc:'机器人的"大脑"。卡点在于：实验室VLA成功率95%→真实环境60%，sim-to-real gap巨大；机器人无法泛化到未见过的场景。谁解决通用具身智能，谁主导整个产业。这是所有卡点中价值最高、竞争最激烈的一层。',
+    subs:[
+      {
+        id:'BK1A', label:'🧠 VLA具身大模型（最高价值层）',
+        color:'#7c3aed', bgColor:'rgba(124,58,237,.18)', labelColor:'#c4b5fd',
+        valBg:'rgba(124,58,237,.08)', valColor:'#a78bfa',
+        ccBorder:'#7c3aed', tickerColor:'#c4b5fd',
+        desc:'Vision-Language-Action三模态统一架构，2026年ICLR VLA论文164篇（同比+18x），ChatGPT时刻到来',
+        companies:[
+          {ticker:'NVDA', name:'NVIDIA', desc:'GR00T N1.6世界模型+Isaac仿真平台，唯一全栈AI机器人生态，不可或缺'},
+          {ticker:'GOOGL', name:'Alphabet / DeepMind', desc:'Gemini Robotics+RT-2, 顶尖研究实力，π0协议'},
+          {ticker:'MSFT', name:'Microsoft', desc:'Azure AI+OpenAI战略合作，GPT-4o控制机器人，云端训练基础设施'},
+        ]
+      },
+      {
+        id:'BK1B', label:'🌐 仿真平台与合成数据',
+        color:'#6d28d9', bgColor:'rgba(109,40,217,.15)', labelColor:'#a78bfa',
+        valBg:'rgba(109,40,217,.07)', valColor:'#8b5cf6',
+        ccBorder:'#6d28d9', tickerColor:'#a78bfa',
+        desc:'物理世界数据稀缺，合成数据+数字孪生是VLA训练的唯一可扩展方案',
+        companies:[
+          {ticker:'NVDA', name:'NVIDIA Omniverse', desc:'Cosmos世界模型+Isaac Sim，合成数据生成的事实标准'},
+          {ticker:'U',    name:'Unity Technologies', desc:'轻量级机器人仿真环境，学术界广泛采用'},
+          {ticker:'ANSS', name:'ANSYS', desc:'高精度物理仿真，机器人本体结构/电磁/热验证'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK2', num:'卡点 ②', title:'灵巧手 / 末端执行', width:'',
+    color:'#be185d', bgGrad:['#500724','#be185d'],
+    bodyBg:'rgba(190,24,93,.08)', borderColor:'rgba(190,24,93,.25)',
+    ccBorderColor:'#e11d48', tickerColor:'#fda4af',
+    descBg:'rgba(190,24,93,.1)', descBorder:'#e11d48', descColor:'#fecdd3',
+    mkt:'灵巧手市场 $0.8B→$10.3B 2031E，CAGR 40%',
+    desc:'人类手部27个自由度，机器人最难解的硬件问题。灵巧手占人形机器人整机BOM的31%，是BOM占比最高的单一部件，但全球至今没有可量产、可靠、低成本的商业解决方案。这是投资白空间最大的卡点。',
+    subs:[
+      {
+        id:'BK2A', label:'🤲 多指灵巧手（全球最大白空间）',
+        color:'#be185d', bgColor:'rgba(190,24,93,.18)', labelColor:'#fda4af',
+        valBg:'rgba(190,24,93,.09)', valColor:'#fb7185',
+        ccBorder:'#be185d', tickerColor:'#fda4af',
+        desc:'$10.3B市场几乎全部待填补，无主导公司。因时机器人(inHand)已是中国出货量第一，单手价格从¥10万降至¥2999',
+        companies:[
+          {ticker:'003021', name:'兆威机电', desc:'微型减速器模组供货灵巧手，已进入多家机器人厂商供应链'},
+          {ticker:'09880.HK', name:'优必选 UBTECH', desc:'自研5指灵巧手集成至Walker X，已落地比亚迪工厂'},
+          {ticker:'TSLA', name:'Tesla', desc:'Optimus配备灵巧手，11指×22自由度，最先进量产目标'},
+        ]
+      },
+      {
+        id:'BK2B', label:'🔬 六维力矩传感器（增速最快卡点）',
+        color:'#9f1239', bgColor:'rgba(159,18,57,.18)', labelColor:'#fecdd3',
+        valBg:'rgba(159,18,57,.09)', valColor:'#fda4af',
+        ccBorder:'#9f1239', tickerColor:'#fecdd3',
+        desc:'力矩传感器CAGR 48.2%，每个关节都需要，从$1.28B→$7.87B 2032E。中国宇立传感器占国内50%+市场（未上市）',
+        companies:[
+          {ticker:'603662', name:'柯力传感', desc:'力传感器专业厂商，切入机器人六维力矩传感赛道'},
+          {ticker:'300007', name:'汉威科技', desc:'多种工业传感器龙头，布局六维力传感器产品线'},
+          {ticker:'ROP',    name:'Roper Technologies', desc:'旗下ATI全球工业力矩传感器龙头，机器人场景标准件'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK3', num:'卡点 ③', title:'执行器 / 传动系统', width:'wide',
+    color:'#1d4ed8', bgGrad:['#1e3a8a','#1d4ed8'],
+    bodyBg:'rgba(29,78,216,.08)', borderColor:'rgba(29,78,216,.25)',
+    ccBorderColor:'#2563eb', tickerColor:'#93c5fd',
+    descBg:'rgba(29,78,216,.1)', descBorder:'#1d4ed8', descColor:'#bfdbfe',
+    mkt:'执行器系统 $8B+ 2030E，每台人形需14+',
+    desc:'机器人的"骨骼+肌肉"。谐波/RV减速器+伺服电机+行星滚柱丝杠三类部件合计占整机成本66%以上。人体肌肉功率密度~1000W/kg，机器人执行器当前仅200W/kg，差距5倍——这是人形机器人步态和力量的根本限制。',
+    subs:[
+      {
+        id:'BK3A', label:'⚙️ 谐波减速器（精密关节必需品）',
+        color:'#1e40af', bgColor:'rgba(30,64,175,.18)', labelColor:'#93c5fd',
+        valBg:'rgba(30,64,175,.08)', valColor:'#60a5fa',
+        ccBorder:'#1e40af', tickerColor:'#93c5fd',
+        desc:'关节精度0.1 arcmin级，换不掉。日本HDDSF发明，绿的谐波国产替代中，2025年出货40万台，人形占比25%且快速增长',
+        companies:[
+          {ticker:'HDDSF',  name:'Harmonic Drive JP', desc:'谐波减速器发明者，高端市场仍占绝对主导，精度天花板'},
+          {ticker:'688017', name:'绿的谐波',           desc:'国内市占28%，全球第二，人形机器人核心供应商，不可或缺'},
+        ]
+      },
+      {
+        id:'BK3B', label:'🔩 RV减速器（大扭矩工业关节）',
+        color:'#1e3a8a', bgColor:'rgba(30,58,138,.18)', labelColor:'#93c5fd',
+        valBg:'rgba(30,58,138,.09)', valColor:'#60a5fa',
+        ccBorder:'#1e3a8a', tickerColor:'#93c5fd',
+        desc:'工业机器人腰/肩大扭矩关节核心，Nabtesco日本垄断，国内双环传动/环动科技正在实现国产替代',
+        companies:[
+          {ticker:'NTCOY',  name:'Nabtesco JP',  desc:'RV减速器全球第一，工业机器人六轴关节绝对标准件'},
+          {ticker:'002472', name:'双环传动',      desc:'旗下环动科技IPO申请中，国内RV龙头，埃斯顿核心供应商'},
+          {ticker:'002896', name:'中大力德',      desc:'RV+谐波双线布局，品类最全的国产减速器厂商'},
+        ]
+      },
+      {
+        id:'BK3C', label:'📏 行星滚柱丝杠（人形线性关节核心）',
+        color:'#1e4d8c', bgColor:'rgba(30,77,140,.18)', labelColor:'#7dd3fc',
+        valBg:'rgba(30,77,140,.09)', valColor:'#38bdf8',
+        ccBorder:'#1e4d8c', tickerColor:'#7dd3fc',
+        desc:'Tesla Optimus 14个线性关节每个都用行星滚柱丝杠，单台BOM占比35%，成本超12万元。国产化后降价40%潜力',
+        companies:[
+          {ticker:'603667', name:'五洲新春', desc:'行星滚柱丝杠国内领先，已进入特斯拉供应链体系'},
+          {ticker:'603966', name:'富临精工', desc:'突破0.3μm级丝杠研磨工艺，微型行星滚柱丝杠量产'},
+        ]
+      },
+      {
+        id:'BK3D', label:'🔄 伺服电机与驱动器',
+        color:'#2563eb', bgColor:'rgba(37,99,235,.15)', labelColor:'#bfdbfe',
+        valBg:'rgba(37,99,235,.07)', valColor:'#93c5fd',
+        ccBorder:'#2563eb', tickerColor:'#bfdbfe',
+        desc:'电机+驱动器实现精确运动控制，Yaskawa全球市占20%，汇川技术国内市占30%+，国产替代趋势最明确',
+        companies:[
+          {ticker:'YASKY',  name:'Yaskawa JP',  desc:'全球伺服电机市占20%，运动控制50年积累，行业标准制定者'},
+          {ticker:'NIDCY',  name:'Nidec JP',    desc:'精密电机全球第一，专项布局人形机器人关节电机'},
+          {ticker:'300124', name:'汇川技术',    desc:'国内伺服第一（市占30%+），从工控跨入人形机器人核心配套'},
+          {ticker:'002052', name:'步科股份',    desc:'伺服驱动器+关节模组，已送样多家人形机器人厂商'},
+          {ticker:'688320', name:'禾川科技',    desc:'伺服驱动器，线性关节执行器送样阶段，商业化进行中'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK4', num:'卡点 ④', title:'多模态感知系统', width:'',
+    color:'#0f766e', bgGrad:['#042f2e','#0f766e'],
+    bodyBg:'rgba(15,118,110,.08)', borderColor:'rgba(15,118,110,.25)',
+    ccBorderColor:'#0d9488', tickerColor:'#5eead4',
+    descBg:'rgba(15,118,110,.1)', descBorder:'#0d9488', descColor:'#99f6e4',
+    mkt:'机器人传感器市场 $1.86B→2035E，触觉CAGR 13.7%',
+    desc:'机器人"眼睛+皮肤"。3D视觉已部分解决（LiDAR+深度相机），但触觉传感几乎空白——没有触觉就无法抓取鸡蛋不碎、无法精细操作。触觉感知是灵巧手能力的决定性前置条件。',
+    subs:[
+      {
+        id:'BK4A', label:'👁 3D视觉与LiDAR（中国已领先）',
+        color:'#0f766e', bgColor:'rgba(15,118,110,.18)', labelColor:'#5eead4',
+        valBg:'rgba(15,118,110,.09)', valColor:'#2dd4bf',
+        ccBorder:'#0f766e', tickerColor:'#5eead4',
+        desc:'禾赛+速腾在激光雷达领域已是全球前三，中国公司在这个子卡点实现了领先全球的逆袭',
+        companies:[
+          {ticker:'HSAI',    name:'禾赛科技 NASDAQ',   desc:'激光雷达全球出货量第二，车规+机器人双线，中国传感器出海标杆'},
+          {ticker:'02498.HK',name:'速腾聚创',           desc:'激光雷达全球第三，专攻机器人版低成本LIDAR'},
+          {ticker:'CGNX',    name:'Cognex',             desc:'机器视觉全球龙头，2D/3D工业视觉检测与引导定位'},
+          {ticker:'ADI',     name:'Analog Devices',    desc:'精密传感器信号链，力矩感知与位置反馈核心模拟芯片'},
+        ]
+      },
+      {
+        id:'BK4B', label:'✋ 触觉感知（几乎全为空白）',
+        color:'#0d9488', bgColor:'rgba(13,148,136,.18)', labelColor:'#99f6e4',
+        valBg:'rgba(13,148,136,.09)', valColor:'#5eead4',
+        ccBorder:'#0d9488', tickerColor:'#99f6e4',
+        desc:'触觉传感器是机器人的最大感知缺口，全球无成熟商业解决方案。触觉$60.4B市场到2034年，机器人是增速最快细分',
+        companies:[
+          {ticker:'TXN',    name:'Texas Instruments', desc:'模拟芯片+电机控制IC，传感器信号链基础设施'},
+          {ticker:'603662', name:'柯力传感',            desc:'力传感器专业厂商，探索皮肤级触觉传感方向'},
+          {ticker:'300007', name:'汉威科技',            desc:'多维传感器平台，机器人触觉感知潜在供应商'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK5', num:'卡点 ⑤', title:'边缘AI算力芯片', width:'',
+    color:'#b45309', bgGrad:['#451a03','#b45309'],
+    bodyBg:'rgba(180,83,9,.08)', borderColor:'rgba(180,83,9,.26)',
+    ccBorderColor:'#d97706', tickerColor:'#fcd34d',
+    descBg:'rgba(180,83,9,.1)', descBorder:'#d97706', descColor:'#fde68a',
+    mkt:'边缘AI芯片 $20B+ 2030E（机器人专用部分）',
+    desc:'机器人需要在&lt;20ms内完成感知→决策→动作闭环，云端延迟不可接受。NVDA Jetson Thor是目前唯一成熟生态（7.5x性能提升），QCOM Dragonwing IQ10刚于2026年CES发布，中国地平线/寒武纪正在追赶。',
+    subs:[
+      {
+        id:'BK5A', label:'🖥 AI训练基础设施（最高门槛）',
+        color:'#b45309', bgColor:'rgba(180,83,9,.18)', labelColor:'#fcd34d',
+        valBg:'rgba(180,83,9,.09)', valColor:'#f59e0b',
+        ccBorder:'#b45309', tickerColor:'#fcd34d',
+        desc:'机器人VLA模型训练需要H100/B200级算力集群，NVDA在训练侧几乎垄断，短期无有效替代',
+        companies:[
+          {ticker:'NVDA', name:'NVIDIA', desc:'H100/B200训练集群+Isaac GR00T模型，机器人AI训练唯一成熟生态'},
+          {ticker:'AMD',  name:'Advanced Micro Devices', desc:'MI300X挑战H100，性价比路线，数据中心GPU份额持续提升'},
+          {ticker:'ARM',  name:'Arm Holdings', desc:'几乎所有边缘AI SoC都基于ARM架构，芯片IP层的隐形基础设施'},
+        ]
+      },
+      {
+        id:'BK5B', label:'📱 边缘推理SoC（竞争白热化）',
+        color:'#92400e', bgColor:'rgba(146,64,14,.18)', labelColor:'#fde68a',
+        valBg:'rgba(146,64,14,.09)', valColor:'#fbbf24',
+        ccBorder:'#92400e', tickerColor:'#fde68a',
+        desc:'Jetson Thor成行业标准，QCOM Dragonwing IQ10 2026年追击，中国地平线Journey 6正在切入',
+        companies:[
+          {ticker:'QCOM',    name:'Qualcomm', desc:'Dragonwing IQ10 CES2026发布，功耗优化路线，目标取代Jetson中端市场'},
+          {ticker:'09660.HK',name:'地平线机器人', desc:'Journey 6芯片，中国机器人AI SoC最强竞争者，已获多家人形厂商测试'},
+          {ticker:'688256',  name:'寒武纪',  desc:'思元AI加速芯片，国内AI训练芯片第一上市公司，积极布局机器人'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK6', num:'卡点 ⑥', title:'能源续航 / 电池', width:'narrow',
+    color:'#c2410c', bgGrad:['#431407','#c2410c'],
+    bodyBg:'rgba(194,65,12,.08)', borderColor:'rgba(194,65,12,.25)',
+    ccBorderColor:'#ea580c', tickerColor:'#fdba74',
+    descBg:'rgba(194,65,12,.1)', descBorder:'#ea580c', descColor:'#fed7aa',
+    mkt:'固态电池 2027-2028E商业化',
+    desc:'当前人形机器人连续工作仅90分钟，工业部署至少需要4-6小时。这是商业化最直接的非技术障碍。提升路径唯一：等待固态电池（500Wh/kg目标）量产，当前LiPo约250Wh/kg。丰田+CATL竞赛2027年量产。',
+    subs:[
+      {
+        id:'BK6A', label:'🔋 电芯与电池管理',
+        color:'#c2410c', bgColor:'rgba(194,65,12,.18)', labelColor:'#fdba74',
+        valBg:'rgba(194,65,12,.09)', valColor:'#fb923c',
+        ccBorder:'#c2410c', tickerColor:'#fdba74',
+        desc:'CATL+BYD提供机器人电芯，智元已与比亚迪深度绑定。固态电池是2027-2028年最重要的催化剂',
+        companies:[
+          {ticker:'300750', name:'宁德时代 CATL', desc:'全球动力电池第一，机器人专用电池研发中，下一增量市场'},
+          {ticker:'002594', name:'比亚迪 BYD',    desc:'刀片电池，已合作智元等中国头部机器人厂商，供应链绑定'},
+          {ticker:'SLDP',   name:'Solid Power',  desc:'固态电池先驱（美股），2027-2028商业化是机器人续航的关键催化剂'},
+          {ticker:'TM',     name:'Toyota Motor', desc:'固态电池最激进推进者，2026年试产，若成功将触发行业拐点'},
+        ]
+      }
+    ]
+  },
+  {
+    id:'BK7', num:'卡点 ⑦', title:'整机量产 / 系统集成', width:'wide',
+    color:'#166534', bgGrad:['#052e16','#166534'],
+    bodyBg:'rgba(22,101,52,.08)', borderColor:'rgba(22,101,52,.25)',
+    ccBorderColor:'#16a34a', tickerColor:'#86efac',
+    descBg:'rgba(22,101,52,.1)', descBorder:'#16a34a', descColor:'#bbf7d0',
+    mkt:'人形整机 $200B+ 长期TAM（100万台×$20k）',
+    desc:'将上述6个卡点的解决方案集成为可量产、可靠的机器人是独立的工程挑战。中国六大厂商占2025年全球出货量86.9%，形成最强量产集群。TSLA Optimus是颠覆性事件的唯一候选者。医疗机器人护城河最深。',
+    subs:[
+      {
+        id:'BK7A', label:'🤖 人形机器人（最大增量市场）',
+        color:'#166534', bgColor:'rgba(22,101,52,.18)', labelColor:'#86efac',
+        valBg:'rgba(22,101,52,.09)', valColor:'#4ade80',
+        ccBorder:'#166534', tickerColor:'#86efac',
+        desc:'2025年全球出货1.3万台，中国6家占86.9%。2026E突破5万台，BOM成本从10万降至3-5万美元，商业临界点',
+        companies:[
+          {ticker:'TSLA',     name:'Tesla',       desc:'Optimus人形机器人，2027年目标100万台产能，垂直整合最深，颠覆性标的'},
+          {ticker:'09880.HK', name:'优必选',       desc:'港股唯一人形机器人纯正标的，Walker X已商业落地比亚迪、东风工厂'},
+        ]
+      },
+      {
+        id:'BK7B', label:'🏭 工业/协作机器人（稳健现金流）',
+        color:'#14532d', bgColor:'rgba(20,83,45,.18)', labelColor:'#6ee7b7',
+        valBg:'rgba(20,83,45,.09)', valColor:'#34d399',
+        ccBorder:'#14532d', tickerColor:'#6ee7b7',
+        desc:'工业四大家族CAGR 8-12%，稳健但不性感。埃斯顿是A股工业机器人最纯正标的，海外并购提速',
+        companies:[
+          {ticker:'ABB',    name:'ABB Ltd',          desc:'工业机器人四大家族，AI协作机器人+人形双线布局'},
+          {ticker:'FANUY',  name:'FANUC JP',          desc:'四大家族盈利最强，数控系统深度绑定工厂，护城河深'},
+          {ticker:'TER',    name:'Teradyne',          desc:'Universal Robots协作机器人全球第一，低壁垒高端切入'},
+          {ticker:'002747', name:'埃斯顿',            desc:'A股工业机器人龙头，海外并购扩张，国内市占持续提升'},
+          {ticker:'688165', name:'埃夫特',            desc:'工业机器人+系统集成，汽车焊接主战场，已切入海外市场'},
+        ]
+      },
+      {
+        id:'BK7C', label:'🔬 医疗手术机器人（护城河最深）',
+        color:'#166534', bgColor:'rgba(22,101,52,.15)', labelColor:'#86efac',
+        valBg:'rgba(22,101,52,.07)', valColor:'#4ade80',
+        ccBorder:'#166534', tickerColor:'#86efac',
+        desc:'外科机器人渗透率<5%，ISRG三重护城河（FDA认证+培训+数据），da Vinci 5新平台升级大周期',
+        companies:[
+          {ticker:'ISRG', name:'Intuitive Surgical', desc:'手术机器人绝对霸主，CAGR 15%+，全产业链质量最高资产'},
+          {ticker:'SYK',  name:'Stryker',            desc:'MAKO骨科手术机器人，骨科大赛道领军，与ISRG互补'},
+        ]
+      }
+    ]
+  }
+];
+
+/* 中国机器人新势力 */
+const CN_COMPANIES = [
+  {ticker:'宇树科技',   exchange:'IPO待定', name:'Unitree Robotics',  color:'#38bdf8',
+   desc:'2025年出货4200台G1/H1，全球第二。自研QDD准直驱执行器技术路线，成本控制能力最强。首款人形R1已量产。估值持续攀升。'},
+  {ticker:'智元机器人', exchange:'未上市',  name:'Agibot',           color:'#38bdf8',
+   desc:'2025年出货5168台，全球第一（39%市占）。背后有华为生态赋能，自研具身智能模型。已与BYD深度合作供应链。'},
+  {ticker:'优必选',     exchange:'09880.HK',name:'UBTECH Robotics',  color:'#60a5fa',
+   desc:'港股唯一人形机器人纯正标的。Walker X已规模落地比亚迪、东风汽车工厂，从demo走向真实商业部署。'},
+  {ticker:'银河通用',   exchange:'未上市',  name:'Galbot',           color:'#38bdf8',
+   desc:'2025年12月完成3亿美元B+轮，估值300亿美元！背后有中移动等战略投资。专注通用抓取，灵巧操作技术路线。'},
+  {ticker:'逐际动力',   exchange:'未上市',  name:'ZNBot Dynamics',   color:'#38bdf8',
+   desc:'2026年1月完成13.91亿元B轮融资。聚焦步态控制和关节驱动，号称下肢运动最强，正从四足向双足扩张。'},
+  {ticker:'因时机器人', exchange:'未上市',  name:'inHand Robotics',  color:'#f472b6',
+   desc:'灵巧手出货量中国第一，已突破10000+只。eHand-5/6系列，价格从¥10万降至¥2999，颠覆性定价策略。'},
+];
+
+/* 矩阵分段 */
+const SEGMENTS = [
+  {id:'BK1',color:'#a78bfa',label:'卡点①',sub:'具身AI'},
+  {id:'BK2',color:'#f472b6',label:'卡点②',sub:'灵巧手'},
+  {id:'BK3',color:'#60a5fa',label:'卡点③',sub:'执行器'},
+  {id:'BK4',color:'#2dd4bf',label:'卡点④',sub:'感知'},
+  {id:'BK5',color:'#fbbf24',label:'卡点⑤',sub:'算力'},
+  {id:'BK6',color:'#fb923c',label:'卡点⑥',sub:'续航'},
+  {id:'BK7',color:'#4ade80',label:'卡点⑦',sub:'整机'},
+];
+
+const THEMES = [
+  {
+    color:'#f472b6', icon:'🧠', name:'具身AI×物理化大爆发',
+    priority:{lvl:0,label:'P0 最优先',color:'#f87171'},
+    reason:'VLA论文ICLR 2026同比+18x，GR00T N1.6=机器人ChatGPT时刻，物理AI进入奇点',
+    desc:'VLA统一架构成行业共识，合成数据飞轮解决数据稀缺。具身AI市场$44B→$230B 2030E，CAGR 39%。谁赢得VLA模型战争，谁主导整个机器人产业未来10年。',
+    note:'核心：BK1(NVDA/GOOGL/MSFT是训练+仿真基础设施)；传导：BK5(推理芯片需求暴增)、BK7(本体价值因AI重估)；边缘：BK3(更智能控制减少执行器依赖)。',
+    segs:{
+      BK1:{lvl:'high',cos:['NVDA','GOOGL','MSFT','U','ANSS'],desc:'训练+仿真平台是具身AI最直接受益'},
+      BK2:{lvl:'med', cos:['TSLA'],desc:'灵巧操作是VLA最迫切需要的硬件配套'},
+      BK3:{lvl:'low', cos:['688017'],desc:'更智能VLA可能减少对高精度机械的依赖'},
+      BK4:{lvl:'high',cos:['CGNX','ADI'],desc:'多模态感知数据是VLA训练的原材料'},
+      BK5:{lvl:'high',cos:['NVDA','AMD','ARM'],desc:'训练H100需求暴增，Jetson推理端激增'},
+      BK6:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK7:{lvl:'med', cos:['TSLA','09880.HK'],desc:'具身AI赋能整机价值重估'},
+    }
+  },
+  {
+    color:'#fb923c', icon:'🤖', name:'人形机器人量产元年',
+    priority:{lvl:0,label:'P0 最优先',color:'#fb923c'},
+    reason:'2026年出货5万台(+178%)，CAGR 73%，BOM成本降至3-5万美元，商业拐点',
+    desc:'2026年是人形从PoC走向量产的拐点年。中国6家占全球86.9%出货量，TSLA Optimus 2027目标100万台。BOM成本持续下降，商业可行性窗口正式打开。宇树/智元IPO是重要催化剂。',
+    note:'核心：BK7整机(TSLA/优必选直接受益)、BK3执行器(14+关节需求量价齐升)；传导：BK2灵巧手(随整机出货放量)、BK6续航(制约商业部署进度)；边缘：BK1(AI赋能)。',
+    segs:{
+      BK1:{lvl:'med', cos:['NVDA'],desc:'Isaac GR00T是人形机器人训练标准平台'},
+      BK2:{lvl:'high',cos:['003021','09880.HK','TSLA'],desc:'灵巧手随人形出货量价齐升，供给紧缺'},
+      BK3:{lvl:'high',cos:['HDDSF','688017','002472','603667','300124'],desc:'执行器是量产瓶颈，每台需14+执行器'},
+      BK4:{lvl:'med', cos:['HSAI','02498.HK'],desc:'感知传感器随整机出货成比例增长'},
+      BK5:{lvl:'med', cos:['QCOM','09660.HK'],desc:'边缘推理SoC需求随量产爬坡'},
+      BK6:{lvl:'high',cos:['300750','002594'],desc:'续航是商业化最大制约，CATL/BYD是解锁者'},
+      BK7:{lvl:'high',cos:['TSLA','09880.HK','ABB','002747'],desc:'整机厂商直接获益，中国阵营最强'},
+    }
+  },
+  {
+    color:'#818cf8', icon:'🔩', name:'执行器国产替代（A股核心机会）',
+    priority:{lvl:1,label:'P1 高优先',color:'#818cf8'},
+    reason:'绿的谐波国内市占28%，行星滚柱丝杠国产化降价40%，汇川技术伺服市占30%，趋势最确定',
+    desc:'日本厂商对减速器和伺服电机的垄断正被中国厂商系统性打破。绿的谐波人形占比从0→25%仅用2年。行星滚柱丝杠国产化进度超预期。这是A股中有最明确产业趋势和业绩兑现能力的赛道。',
+    note:'核心：BK3执行器(绿的谐波/双环/汇川/步科/五洲新春，A股主战场)；传导：BK7整机(国产零部件降低整机成本，加速渗透)；边缘：BK2灵巧手(驱动模组也受益)。',
+    segs:{
+      BK1:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK2:{lvl:'med', cos:['003021'],desc:'灵巧手驱动模组也是国产替代方向'},
+      BK3:{lvl:'high',cos:['688017','002472','002896','603667','603966','300124','002052'],desc:'A股执行器全赛道，国产替代主战场'},
+      BK4:{lvl:'low', cos:['603662'],desc:'传感器国产化也在推进'},
+      BK5:{lvl:'low', cos:['688256'],desc:'芯片国产化边际受益'},
+      BK6:{lvl:'low', cos:['300750'],desc:'电池国产已完成，此处不是主题重点'},
+      BK7:{lvl:'med', cos:['002747','688165'],desc:'整机成本下降加速国内机器人厂商渗透'},
+    }
+  },
+  {
+    color:'#f472b6', icon:'🤲', name:'灵巧手商业化（最大白空间）',
+    priority:{lvl:1,label:'P1 高优先',color:'#f472b6'},
+    reason:'$10.3B市场CAGR 40%，几乎全部待填补，无主导者，中国因时机器人已出货10000+',
+    desc:'灵巧手是人形机器人BOM占比最高的单一部件（31%），也是最难解的硬件问题。全球无成熟量产方案。中国因时机器人通过激进降价策略（¥10万→¥2999）正在快速建立市场地位。这是未来3年最大的新标的涌现窗口。',
+    note:'核心：BK2灵巧手(直接受益，兆威机电/优必选是目前A股/港股最接近的标的)；传导：BK4触觉(灵巧手必须配合触觉传感才能真正发挥价值)；协同：BK1(VLA模型让灵巧操作变得可能)。',
+    segs:{
+      BK1:{lvl:'med', cos:['NVDA','GOOGL'],desc:'VLA模型让灵巧操作从硬件问题变成软硬件协同问题'},
+      BK2:{lvl:'high',cos:['003021','09880.HK','TSLA','603662','300007'],desc:'灵巧手卡点直接受益，市场最大'},
+      BK3:{lvl:'med', cos:['688017','300124'],desc:'灵巧手内部驱动也需要微型减速器和伺服'},
+      BK4:{lvl:'high',cos:['603662','300007','ROP'],desc:'触觉传感器是灵巧操作的前置条件'},
+      BK5:{lvl:'low', cos:['QCOM'],desc:'灵巧手边缘推理需要低功耗SoC'},
+      BK6:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK7:{lvl:'med', cos:['09880.HK','TSLA'],desc:'整机厂商集成灵巧手后功能跃升'},
+    }
+  },
+  {
+    color:'#2dd4bf', icon:'⚡', name:'边缘AI专用化×国产替代',
+    priority:{lvl:1,label:'P1 高优先',color:'#2dd4bf'},
+    reason:'QCOM Dragonwing IQ10 CES2026推出，中国地平线Journey 6切入，Jetson垄断被挑战',
+    desc:'机器人需要<20ms实时推理，Jetson是当前唯一成熟生态但价格高、供应受限。QCOM 2026年发力，中国地平线是A股/港股最佳标的。中美机器人芯片竞争与AI大模型同步激烈。',
+    note:'核心：BK5算力(AMD/QCOM/地平线/寒武纪，边缘推理赛道竞争加剧)；传导：BK1(更强端侧算力让VLA在机器人上实时运行)；协同：BK7(搭载更强算力的机器人能力跃升)。',
+    segs:{
+      BK1:{lvl:'high',cos:['NVDA','AMD'],desc:'训练算力仍是NVDA主场，AMD持续挑战'},
+      BK2:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK3:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK4:{lvl:'med', cos:['ADI','TXN'],desc:'感知芯片与推理芯片协同优化'},
+      BK5:{lvl:'high',cos:['QCOM','09660.HK','688256','ARM'],desc:'边缘AI芯片竞争主战场，NVDA垄断被挑战'},
+      BK6:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK7:{lvl:'med', cos:['TSLA'],desc:'TSLA自研FSD延伸到Optimus，芯片整合优势'},
+    }
+  },
+  {
+    color:'#fb923c', icon:'🔋', name:'续航突破×固态电池催化剂',
+    priority:{lvl:2,label:'P2 中关注',color:'#fb923c'},
+    reason:'固态电池2027-2028E商业化，续航从90min提升至4-6h，触发人形机器人商业化第二阶段',
+    desc:'90分钟续航是当前人形机器人商业化的隐形杀手，工业部署必须连续4-6小时。固态电池（目标500Wh/kg，当前LiPo 250Wh/kg）若在2027-2028年量产，将是机器人商业化的重大催化剂，届时需要重仓续航受益链。',
+    note:'核心：BK6续航(CATL/BYD/SLDP/丰田，等待固态电池量产信号)；传导：BK7整机(续航提升直接解锁更多商业场景)；边缘：BK5(低功耗推理芯片帮助延长电池寿命)。',
+    segs:{
+      BK1:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK2:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK3:{lvl:'low', cos:[],desc:'功耗优化的执行器间接延长续航'},
+      BK4:{lvl:'low', cos:[],desc:'低功耗传感器间接延长续航'},
+      BK5:{lvl:'med', cos:['QCOM','09660.HK'],desc:'低功耗SoC延长机器人工作时间'},
+      BK6:{lvl:'high',cos:['300750','002594','SLDP','TM'],desc:'固态电池是最直接的续航解锁路径'},
+      BK7:{lvl:'med', cos:['09880.HK','TSLA'],desc:'续航提升后整机商业场景大幅扩展'},
+    }
+  },
+  {
+    color:'#4ade80', icon:'🏥', name:'医疗机器人高壁垒成长',
+    priority:{lvl:1,label:'P1 高优先',color:'#4ade80'},
+    reason:'外科机器人渗透率<5%，ISRG CAGR 15%+，da Vinci 5升级周期，三重护城河最深',
+    desc:'医疗机器人是整个机器人行业护城河最深的赛道：FDA认证壁垒+外科医生培训壁垒+手术数据网络效应。ISRG基本上是一家永续经营的机器人公司。SYK MAKO骨科扩张迅速。这是质量资产在机器人赛道的最佳代表。',
+    note:'核心：BK7医疗机器人(ISRG/SYK，质量最高，持有型资产)；传导：BK2灵巧手(手术机器人末端执行精度)、BK4感知(手术导航视觉)；边缘：BK1(AI辅助手术决策)。',
+    segs:{
+      BK1:{lvl:'low', cos:['MSFT'],desc:'Azure医疗AI辅助手术决策'},
+      BK2:{lvl:'high',cos:['ISRG'],desc:'ISRG手术末端执行器是最精密的商业化灵巧手案例'},
+      BK3:{lvl:'med', cos:['HDDSF'],desc:'高精度减速器用于手术机械臂'},
+      BK4:{lvl:'med', cos:['CGNX','ADI'],desc:'手术机器人精密视觉和力觉引导'},
+      BK5:{lvl:'low', cos:[],desc:'不直接相关'},
+      BK6:{lvl:'low', cos:[],desc:'医疗机器人有线供电，不受续航限制'},
+      BK7:{lvl:'high',cos:['ISRG','SYK'],desc:'医疗机器人整机，护城河最深的长期持有标的'},
+    }
+  },
+];
+
+/* ═══════════════════════ 渲染 ═══════════════════════ */
+
+const FEISHU_MAP = {};
+function initLinks(){
+  document.querySelectorAll('[data-ticker]').forEach(card=>{
+    const t=card.dataset.ticker;
+    const info=FEISHU[t];
+    const el=card.querySelector('.cc-links');
+    if(!el)return;
+    if(info&&info.researched){
+      const a1=document.createElement('a');a1.href=info.doc||'#';a1.target='_blank';a1.className='cc-btn doc';a1.textContent='📄 研报';el.appendChild(a1);
+      const a2=document.createElement('a');a2.href=info.val||'#';a2.target='_blank';a2.className='cc-btn xls';a2.textContent='📊 估值';el.appendChild(a2);
+    }else{
+      const sp=document.createElement('span');sp.className='cc-btn pending';sp.textContent='待研究';el.appendChild(sp);
+    }
+  });
+}
+
+function renderLegend(){
+  const el=document.getElementById('legend');if(!el)return;
+  const items=[
+    {color:'#a78bfa',label:'卡点① 具身AI/VLA'},{color:'#f472b6',label:'卡点② 灵巧手'},
+    {color:'#60a5fa',label:'卡点③ 执行器传动'},{color:'#2dd4bf',label:'卡点④ 感知'},
+    {color:'#fbbf24',label:'卡点⑤ 算力'},{color:'#fb923c',label:'卡点⑥ 续航'},
+    {color:'#4ade80',label:'卡点⑦ 整机量产'},{color:'#38bdf8',label:'🇨🇳 中国新势力'},
+  ];
+  items.forEach(i=>{
+    const d=document.createElement('div');d.className='leg';
+    d.innerHTML=`<div class="leg-dot" style="background:${i.color}"></div>${i.label}`;
+    el.appendChild(d);
+  });
+}
+
+function renderChain(){
+  const wrap=document.getElementById('chain-wrap');if(!wrap)return;
+  const arrow=`<div class="arr-col"><div class="arr-sp"></div><div class="arr-body"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>`;
+  TIERS.forEach((t,i)=>{
+    if(i>0)wrap.innerHTML+=arrow;
+    let subsHtml='';
+    (t.subs||[]).forEach(s=>{
+      const cosHtml=s.companies.map(c=>`
+        <div class="cc" data-ticker="${c.ticker}" style="border-left-color:${s.ccBorder};">
+          <div class="cc-top"><div class="cc-info">
+            <div class="cc-ticker" style="color:${s.tickerColor};">${c.ticker}</div>
+            <div class="cc-name">${c.name}</div>
+            <div class="cc-desc">${c.desc}</div>
+          </div><div class="cc-links"></div></div>
+        </div>`).join('');
+      subsHtml+=`<div>
+        <div class="sub-lbl" style="background:${s.bgColor};color:${s.labelColor};">${s.label}</div>
+        <div class="sub-note" style="background:${s.valBg};color:${s.valColor};">${s.desc}</div>
+        ${cosHtml}</div>`;
+    });
+    wrap.innerHTML+=`
+      <div class="tb ${t.width||''}" id="${t.id}">
+        <div class="th" style="background:linear-gradient(135deg,${t.bgGrad[0]},${t.bgGrad[1]});">
+          <div class="th-badge">${t.num}</div>
+          <div class="th-title">${t.title}</div>
+          <div class="th-mkt">${t.mkt}</div>
+        </div>
+        <div class="tb-body" style="background:${t.bodyBg};border-color:${t.borderColor};">
+          <div class="bk-why" style="background:${t.descBg};border-left-color:${t.descBorder};color:${t.descColor};">${t.desc}</div>
+          ${subsHtml}
+        </div>
+      </div>`;
+  });
+}
+
+function renderSpecialCN(){
+  const el=document.getElementById('special-cn-cards');if(!el)return;
+  CN_COMPANIES.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='special-card';
+    div.style.cssText=`background:rgba(3,105,161,.08);border-left-color:${c.color};`;
+    const tag=c.exchange.includes('HK')||c.exchange.includes('IPO')||c.exchange.includes('上市')
+      ?`<span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:#60a5fa;">${c.exchange}</span>`
+      :`<span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);color:#fbbf24;">${c.exchange}</span>`;
+    div.innerHTML=`
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;">
+        <div class="cc-ticker" style="color:${c.color};font-size:13px;">${c.ticker}</div>
+        ${tag}
+      </div>
+      <div class="cc-name" style="margin-top:3px;">${c.name}</div>
+      <div class="cc-desc" style="margin-top:4px;line-height:1.4;">${c.desc}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function renderMatrix(){
+  const tbl=document.getElementById('matrix');if(!tbl)return;
+  const lvlBg={high:'rgba(255,255,255,.1)',med:'rgba(255,255,255,.055)',low:'rgba(255,255,255,.02)'};
+  const lvlLbl={high:'核心',med:'协同',low:'边缘'};
+  const lvlOpa={high:1,med:.85,low:.55};
+  let hdr='<tr><th style="width:280px;"></th>';
+  SEGMENTS.forEach(s=>{hdr+=`<th class="seg" style="border-color:${s.color}99;color:${s.color};"><div class="seg-header">${s.label}<span>${s.sub}</span></div></th>`;});
+  hdr+='</tr>';tbl.innerHTML=hdr;
+  THEMES.forEach(th=>{
+    const tr=document.createElement('tr');
+    const td=document.createElement('td');td.className='theme-info';
+    td.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+        <div style="font-size:12px;font-weight:700;color:${th.color};">${th.icon} ${th.name}</div>
+        <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:${th.priority.color}20;border:1px solid ${th.priority.color}55;color:${th.priority.color};">${th.priority.label}</span>
+      </div>
+      <div style="font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px;margin-bottom:6px;background:${th.priority.color}12;color:${th.priority.color}bb;">${th.reason}</div>
+      <div style="font-size:10px;color:#9ab8d0;line-height:1.45;margin-bottom:6px;">${th.desc}</div>
+      <div style="font-size:9px;color:#7a9ab8;border-top:1px solid rgba(255,255,255,.06);padding-top:5px;line-height:1.45;"><b style="color:#90b0cc;">链路：</b>${th.note}</div>`;
+    tr.appendChild(td);
+    SEGMENTS.forEach(seg=>{
+      const cell=document.createElement('td');
+      const d=th.segs[seg.id];
+      if(!d||d.cos.length===0){cell.className='cell none';cell.innerHTML='<div class="cell-empty">·</div>';}
+      else{
+        cell.className='cell';
+        cell.style.opacity=String(lvlOpa[d.lvl]);
+        cell.style.background=lvlBg[d.lvl];
+        cell.style.border=`1px solid ${seg.color}50`;
+        cell.style.verticalAlign='top';cell.style.padding='6px 5px';
+        const badge=`<div style="display:inline-block;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;margin-bottom:4px;background:${seg.color}25;color:${seg.color};border:1px solid ${seg.color}60;">${lvlLbl[d.lvl]}</div>`;
+        const cos=d.cos.map(c=>`<span style="display:inline-block;font-size:8.5px;font-weight:700;padding:1px 4px;border-radius:3px;margin:1px;background:rgba(255,255,255,.06);border:1px solid ${seg.color}44;color:${seg.color};">${c}</span>`).join('');
+        const desc=d.desc?`<div style="font-size:7.5px;color:${seg.color}aa;margin-top:4px;text-align:left;line-height:1.35;">${d.desc}</div>`:'';
+        cell.innerHTML=`${badge}<div>${cos}</div>${desc}`;
+      }
+      tr.appendChild(cell);
+    });
+    tbl.appendChild(tr);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderLegend();renderChain();renderSpecialCN();renderMatrix();initLinks();
+});
+</script>
+</body>
+</html>

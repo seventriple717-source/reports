@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>机器人与具身AI产业链全景图</title>
+<style>
+:root {
+  --bg: #070c19;
+  --bg2: #0d1526;
+  --bg3: #131f35;
+  --text: #e8eef7;
+  --text2: #a8bdd4;
+  --text3: #6e8eac;
+  --border: rgba(255,255,255,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse at 15% 15%,rgba(99,102,241,.07) 0%,transparent 55%),
+                   radial-gradient(ellipse at 85% 85%,rgba(20,184,166,.05) 0%,transparent 55%);}
+.page{max-width:1700px;margin:0 auto;padding:28px 22px 52px;}
+.hdr{text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.hdr h1{font-size:23px;font-weight:700;letter-spacing:4px;
+  background:linear-gradient(130deg,#60a5fa 0%,#a78bfa 45%,#34d399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:7px;}
+.hdr .meta{font-size:11.5px;color:var(--text3);letter-spacing:1.5px;}
+.hdr .meta em{color:#4ade80;font-style:normal;}
+.notice{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:8px;
+  padding:9px 16px;margin-bottom:18px;font-size:11.5px;color:#fbbf24;
+  display:flex;align-items:center;gap:8px;}
+.notice b{color:#fde68a;}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:20px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.callout{background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.2);border-radius:8px;
+  padding:10px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.callout-lbl{font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:.5px;white-space:nowrap;}
+.callout-flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.ctag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  border:1px solid rgba(37,99,235,.3);color:#93c5fd;background:rgba(37,99,235,.1);}
+.carrow{color:#6a85a0;font-size:11px;}
+.chain-scroll{overflow-x:auto;padding-bottom:8px;margin-bottom:20px;}
+.chain-wrap{display:flex;align-items:flex-start;min-width:1300px;gap:0;}
+.arr-col{flex-shrink:0;width:32px;display:flex;flex-direction:column;align-items:center;}
+.arr-sp{height:48px;flex-shrink:0;}
+.arr-body{flex:1;display:flex;align-items:flex-start;justify-content:center;padding-top:24px;}
+.arr-body svg{opacity:.35;}
+.tb{flex:1;min-width:0;}
+.tb.wide{flex:1.4;}
+.tb.narrow{flex:.8;}
+.th{border-radius:10px 10px 0 0;padding:9px 13px;height:48px;
+  display:flex;flex-direction:column;justify-content:center;}
+.th-num{font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:.6;line-height:1;}
+.th-title{font-size:12px;font-weight:700;letter-spacing:.8px;margin-top:2px;}
+.t-desc{font-size:10px;line-height:1.5;padding:8px 10px;border-radius:5px;
+  margin-bottom:10px;border-left:2px solid;}
+.tb-body{border-radius:0 0 10px 10px;padding:11px 9px;border:1px solid;border-top:none;}
+.sub-lbl{font-size:10px;font-weight:600;padding:4px 8px;border-radius:4px;
+  margin:10px 0 5px;letter-spacing:.3px;}
+.sub-lbl:first-child{margin-top:0;}
+.sub-val{font-size:9.5px;line-height:1.4;padding:4px 8px 6px;margin-bottom:6px;
+  border-radius:0 0 4px 4px;margin-top:-4px;opacity:.85;}
+.cc{background:rgba(255,255,255,.033);border:1px solid rgba(255,255,255,.07);
+  border-left:3px solid;border-radius:0 6px 6px 0;
+  padding:7px 9px 7px 9px;margin-bottom:6px;transition:all .17s ease;cursor:default;position:relative;}
+.cc:last-child{margin-bottom:0;}
+.cc:hover{background:rgba(255,255,255,.07);transform:translateX(3px);
+  box-shadow:-3px 0 14px rgba(0,0,0,.3);}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
+.cc-info{flex:1;min-width:0;}
+.cc-ticker{font-weight:800;font-size:13px;letter-spacing:.4px;line-height:1;}
+.cc-name{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.2;}
+.cc-desc{font-size:9.5px;color:var(--text3);margin-top:3px;line-height:1.3;}
+.cc-links{display:flex;flex-direction:column;gap:3px;flex-shrink:0;}
+.cc-btn{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;
+  padding:2px 5px;border-radius:3px;text-decoration:none;transition:all .15s;white-space:nowrap;}
+.cc-btn.doc{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:#60a5fa;}
+.cc-btn.doc:hover{background:rgba(96,165,250,.25);color:#93c5fd;}
+.cc-btn.xls{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:#34d399;}
+.cc-btn.xls:hover{background:rgba(52,211,153,.25);color:#6ee7b7;}
+.cc-btn.pending{background:rgba(100,100,100,.08);border:1px solid rgba(100,100,100,.15);
+  color:var(--text3);cursor:default;}
+.researched-badge{position:absolute;top:4px;right:4px;font-size:8px;padding:1px 4px;
+  border-radius:3px;background:rgba(74,222,128,.12);color:#4ade80;
+  border:1px solid rgba(74,222,128,.2);font-weight:600;}
+.special-row{border-radius:12px;padding:15px 18px;margin-bottom:22px;position:relative;overflow:hidden;}
+.special-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
+.special-hdr{display:flex;align-items:baseline;gap:12px;margin-bottom:11px;}
+.special-title{font-size:13px;font-weight:700;letter-spacing:1px;}
+.special-sub{font-size:11px;color:var(--text3);}
+.special-cards{display:flex;gap:12px;flex-wrap:wrap;}
+.special-card{flex:1;min-width:200px;border-radius:0 8px 8px 0;padding:10px 13px;transition:all .17s;}
+.special-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+.special-card .cc-links{flex-direction:row;margin-top:7px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:22px 0;}
+.matrix-section{margin-top:4px;}
+.matrix-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:3px;text-align:center;
+  text-transform:uppercase;margin-bottom:16px;}
+.matrix-wrap{overflow-x:auto;}
+.matrix-table{width:100%;border-collapse:separate;border-spacing:4px;min-width:1200px;}
+.matrix-table th{font-size:10px;font-weight:700;padding:7px 5px;text-align:center;
+  letter-spacing:.5px;white-space:nowrap;border-radius:5px;
+  background:rgba(255,255,255,.04);}
+.matrix-table th.seg{border-bottom:2px solid;}
+.matrix-table td.theme-info{width:260px;padding:10px 13px;border-radius:6px;vertical-align:top;
+  background:var(--bg3);border:1px solid var(--border);}
+.theme-info-name{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.theme-info-desc{font-size:10px;color:var(--text3);line-height:1.45;}
+.matrix-table td.cell{border-radius:5px;padding:6px 5px;text-align:center;vertical-align:top;
+  transition:all .15s;cursor:default;}
+.cell.none{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);}
+.cell-cos{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;}
+.cell-co{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);}
+.cell-empty{font-size:14px;opacity:.18;line-height:3;}
+.seg-header{font-size:9.5px;font-weight:700;letter-spacing:.5px;line-height:1.4;}
+.seg-header span{display:block;font-size:8.5px;opacity:.8;margin-top:1px;}
+.footnote{text-align:center;font-size:11px;color:var(--text3);margin-top:30px;letter-spacing:1px;}
+.insight-bar{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.18);border-radius:10px;
+  padding:14px 18px;margin-bottom:20px;}
+.insight-bar h3{font-size:12px;font-weight:700;color:#34d399;letter-spacing:2px;margin-bottom:10px;}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}
+.insight-item{background:rgba(255,255,255,.03);border-radius:6px;padding:10px 12px;
+  border-left:2px solid;}
+.insight-item .i-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.insight-item .i-text{font-size:10.5px;color:var(--text2);line-height:1.5;}
+.insight-item .i-data{font-size:12px;font-weight:700;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hdr">
+  <h1>机器人 · 具身AI 产业链全景图</h1>
+  <div class="meta">覆盖 <em>30</em> 家全球上市公司 &nbsp;·&nbsp; AI芯片感知 → 精密零部件 → 机器人本体 → AI软件仿真 → 系统集成 → 终端应用 &nbsp;·&nbsp; 2026-06 &nbsp;·&nbsp; 已深度研究 <em id="researched-count">0</em> 家</div>
+</div>
+
+<div class="notice">
+  <span>⚡</span>
+  <span>物理AI元年：<b>2026年人形机器人全球出货量预计突破5万台（同比+178%）</b>，VLA具身模型进入ChatGPT时刻，产业链进入从1→10规模化关键窗口期。</span>
+</div>
+
+<!-- 关键数据洞察 -->
+<div class="insight-bar">
+  <h3>🔬 产业链关键量化指标</h3>
+  <div class="insight-grid">
+    <div class="insight-item" style="border-color:#a78bfa;">
+      <div class="i-label" style="color:#a78bfa;">市场规模</div>
+      <div class="i-text">全球机器人市场2026年规模约</div>
+      <div class="i-data" style="color:#a78bfa;">883亿美元，2031年预计达2186亿美元，CAGR 19.86%</div>
+    </div>
+    <div class="insight-item" style="border-color:#60a5fa;">
+      <div class="i-label" style="color:#60a5fa;">人形机器人</div>
+      <div class="i-text">全球2025年出货约1.3万台，2026E突破5万台</div>
+      <div class="i-data" style="color:#60a5fa;">2025-2030E CAGR：73%，中国占42%份额</div>
+    </div>
+    <div class="insight-item" style="border-color:#34d399;">
+      <div class="i-label" style="color:#34d399;">具身AI投资</div>
+      <div class="i-text">全球机器人VC投资2023-2025年三倍增长</div>
+      <div class="i-data" style="color:#34d399;">2025年达407亿美元/年，ICLR VLA论文同比+18x</div>
+    </div>
+    <div class="insight-item" style="border-color:#fb923c;">
+      <div class="i-label" style="color:#fb923c;">零部件国产化</div>
+      <div class="i-text">谐波减速器国产化率突破25%，整机成本下降</div>
+      <div class="i-data" style="color:#fb923c;">15-20%，内资厂商市占率突破51.6%</div>
+    </div>
+    <div class="insight-item" style="border-color:#f87171;">
+      <div class="i-label" style="color:#f87171;">物理AI预测</div>
+      <div class="i-text">黄仁勋：AI下一浪潮是物理AI，将从虚拟走入物理世界</div>
+      <div class="i-data" style="color:#f87171;">2040年物理AI规模预计达3.25万亿美元</div>
+    </div>
+    <div class="insight-item" style="border-color:#38bdf8;">
+      <div class="i-label" style="color:#38bdf8;">医疗机器人</div>
+      <div class="i-text">外科机器人渗透率仍低于5%，ISRG CAGR 15%+</div>
+      <div class="i-data" style="color:#38bdf8;">da Vinci 5新平台升级，手术机器人壁垒最高</div>
+    </div>
+  </div>
+</div>
+
+<!-- AGI→Physical AI 路径说明 -->
+<div class="callout">
+  <div class="callout-lbl">🧠 AGI→物理AI 演变主线</div>
+  <div class="callout-flow">
+    <span class="ctag">语言AI (LLM)</span>
+    <span class="carrow">→</span>
+    <span class="ctag">多模态AI (VLM)</span>
+    <span class="carrow">→</span>
+    <span class="ctag">世界模型 (World Model)</span>
+    <span class="carrow">→</span>
+    <span class="ctag">具身智能 (VLA)</span>
+    <span class="carrow">→</span>
+    <span class="ctag">物理AI通用本体</span>
+    <span class="carrow">→</span>
+    <span class="ctag">AGI实体化</span>
+  </div>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="chain-scroll">
+<div class="chain-wrap" id="chain-wrap"></div>
+</div>
+
+<!-- Special: Platform Giants -->
+<div class="special-row" id="special-plat"
+  style="background:rgba(3,105,161,.07);border:1px solid rgba(3,105,161,.25);">
+  <div class="special-hdr">
+    <div class="special-title" style="color:#0ea5e9;">⬡ 跨层平台科技巨头</div>
+    <div class="special-sub">从算力基础设施(T1)到具身AI模型(T4)，水平贯穿整条产业链价值创造</div>
+  </div>
+  <div class="special-cards" id="special-cards"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Physical AI 路径深度分析 -->
+<div class="insight-bar" style="background:rgba(109,40,217,.06);border-color:rgba(109,40,217,.2);margin-bottom:20px;">
+  <h3 style="color:#a78bfa;">🛤 AGI→物理AI 发生的必然条件与驱动因素</h3>
+  <div class="insight-grid">
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">必然条件①：算力普惠化</div>
+      <div class="i-text">推理成本指数级下降（每18月下降10x），使机器人搭载强模型成本可接受。NVIDIA Jetson Orin出货量2025年同比+150%，边缘AI SoC成本已降至百美元级。</div>
+    </div>
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">必然条件②：VLA模型成熟</div>
+      <div class="i-text">视觉-语言-动作三模态统一架构成为行业共识，2026年ICLR VLA论文164篇（同比+18x）。GR00T N1.6、Gemini Robotics等标志着"机器人的ChatGPT时刻"到来。</div>
+    </div>
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">必然条件③：仿真数据飞轮</div>
+      <div class="i-text">物理世界数据稀缺问题通过数字孪生+合成数据解决。NVIDIA Cosmos/Omniverse、Google DeepMind Genie构建可交互虚拟环境，实现大规模机器人训练。</div>
+    </div>
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">驱动因素①：劳动力短缺</div>
+      <div class="i-text">全球老龄化+制造业回流形成结构性劳动力缺口。美国制造业岗位空缺率2025年仍高达4.2%，日本制造业机器人密度380台/万人仍远不够。</div>
+    </div>
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">驱动因素②：成本临界点</div>
+      <div class="i-text">人形机器人BOM成本已从2023年10万美元降至2026年约3-5万美元，正逼近工厂工人年度人力成本，商业可行性窗口打开。</div>
+    </div>
+    <div class="insight-item" style="border-color:#c4b5fd;">
+      <div class="i-label" style="color:#c4b5fd;">驱动因素③：政策与资本</div>
+      <div class="i-text">中国将机器人列为战略性新兴产业，2025-2026年A股机器人公司IPO潮（宇树、乐聚、银河通用）；美国将机器人视为制造业回流关键基础设施。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Investment signals -->
+<div class="insight-bar" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.2);margin-bottom:20px;">
+  <h3 style="color:#fbbf24;">🔮 长周期突破的关键信号（观察清单）</h3>
+  <div class="insight-grid">
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">信号①（短期2026-2027）</div>
+      <div class="i-text">人形机器人年出货量突破10万台，单台价格跌破2万美元 → 验证规模量产可行性</div>
+    </div>
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">信号②（中期2027-2029）</div>
+      <div class="i-text">机器人在非结构化环境（厨房/仓库）任务成功率>95%，实验室→现实落差<5% → 标志VLA模型真正成熟</div>
+    </div>
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">信号③（中期2028-2030）</div>
+      <div class="i-text">机器人RaaS商业模式ROI>工人成本，主流大型制造商宣布大规模机器人替代计划 → 商业拐点</div>
+    </div>
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">信号④（长期2030+）</div>
+      <div class="i-text">通用机器人完成跨场景零样本迁移（工厂→家庭→医院）无需重新训练 → AGI具身化实现</div>
+    </div>
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">风险信号（Abort Signal）</div>
+      <div class="i-text">机器人可靠性无法从95%实验室提升至99.5%工业级（当前量产机器人连续工作时间仅90min）→ 商业化受阻</div>
+    </div>
+    <div class="insight-item" style="border-color:#fbbf24;">
+      <div class="i-label" style="color:#fbbf24;">能源约束信号</div>
+      <div class="i-text">电池能量密度是否突破500Wh/kg（当前固态电池量产进度），若未突破将限制移动机器人续航，拖慢场景渗透</div>
+    </div>
+  </div>
+</div>
+
+<div class="matrix-section">
+  <div class="matrix-title">投 资 主 题 × 产 业 链 对 应 关 系</div>
+  <div class="matrix-wrap">
+    <table class="matrix-table" id="matrix"></table>
+  </div>
+</div>
+
+<div class="footnote" id="footnote"></div>
+
+</div>
+
+<script>
+const FEISHU = {};
+
+const TIERS = [
+  {
+    id: 'T1',
+    num: 'Tier 1',
+    title: 'AI芯片与感知基础',
+    width: '',
+    color: '#7c3aed',
+    bgGrad: ['#3b0764','#6d28d9'],
+    bodyBg: 'rgba(109,40,217,.08)',
+    borderColor: 'rgba(109,40,217,.22)',
+    ccBorderColor: '#7c3aed',
+    tickerColor: '#c4b5fd',
+    descBg: 'rgba(109,40,217,.1)',
+    descBorder: '#7c3aed',
+    descColor: '#c4b5fd',
+    desc: '为机器人提供"大脑算力"与"感知神经"。AI芯片负责端侧推理与训练，传感器/机器视觉负责感知环境，构成整条产业链的技术基础，具有最高附加值与技术壁垒。',
+    subs: [
+      {
+        id: 'T1A',
+        label: '🧠 AI计算芯片',
+        color: '#7c3aed',
+        bgColor: 'rgba(124,58,237,.18)',
+        labelColor: '#c4b5fd',
+        valBg: 'rgba(124,58,237,.08)',
+        valColor: '#a78bfa',
+        ccBorder: '#7c3aed',
+        tickerColor: '#c4b5fd',
+        desc: '端侧推理与训练加速，NVIDIA Jetson/QCOM骁龙赋能机器人自主决策，成本快速下降',
+        companies: [
+          { ticker: 'AMD', name: 'Advanced Micro Devices', desc: 'GPU+EPYC双线布局，抢占机器人边缘计算市场' },
+          { ticker: 'QCOM', name: 'Qualcomm', desc: '骁龙X系列边缘AI SoC，机器人端侧推理核心方案' },
+          { ticker: 'INTC', name: 'Intel', desc: 'Gaudi AI加速芯片+x86控制器，工业机器人控制层' }
+        ]
+      },
+      {
+        id: 'T1B',
+        label: '👁 传感器与机器视觉',
+        color: '#6d28d9',
+        bgColor: 'rgba(109,40,217,.15)',
+        labelColor: '#a78bfa',
+        valBg: 'rgba(109,40,217,.07)',
+        valColor: '#8b5cf6',
+        ccBorder: '#6d28d9',
+        tickerColor: '#a78bfa',
+        desc: '机器视觉是机器人感知环境的核心窗口，力传感器/编码器赋予触觉与本体感知',
+        companies: [
+          { ticker: 'ADI', name: 'Analog Devices', desc: '精密传感器+信号链，力矩感知与位置反馈核心' },
+          { ticker: 'TXN', name: 'Texas Instruments', desc: '模拟芯片+电机控制IC，与KUKA深度战略合作' },
+          { ticker: 'CGNX', name: 'Cognex', desc: '机器视觉全球龙头，工厂质检与机器人引导定位' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'T2',
+    num: 'Tier 2',
+    title: '精密机械零部件',
+    width: '',
+    color: '#334155',
+    bgGrad: ['#1e2a3b','#334155'],
+    bodyBg: 'rgba(51,65,85,.1)',
+    borderColor: 'rgba(71,85,105,.3)',
+    ccBorderColor: '#64748b',
+    tickerColor: '#94a3b8',
+    descBg: 'rgba(51,65,85,.15)',
+    descBorder: '#475569',
+    descColor: '#94a3b8',
+    desc: '减速器、伺服电机、执行器是机器人"骨骼与肌肉"，三大核心部件占整机成本约66%（减速器32%、伺服22%、控制器12%）。日本厂商长期垄断高端市场，国产替代是最重要的结构性机会。',
+    subs: [
+      {
+        id: 'T2A',
+        label: '⚙️ 减速器',
+        color: '#475569',
+        bgColor: 'rgba(71,85,105,.2)',
+        labelColor: '#94a3b8',
+        valBg: 'rgba(71,85,105,.1)',
+        valColor: '#64748b',
+        ccBorder: '#475569',
+        tickerColor: '#94a3b8',
+        desc: '谐波减速器(关节精度)+RV减速器(大扭矩)，日本Harmonic Drive与Nabtesco合计占全球80%+市场',
+        companies: [
+          { ticker: 'HDDSF', name: 'Harmonic Drive Systems (JP)', desc: '谐波减速器全球鼻祖，人形机器人关节核心供应商' },
+          { ticker: 'NTCOY', name: 'Nabtesco Corp (JP)', desc: 'RV减速器全球第一，工业机器人六轴关节标准件' }
+        ]
+      },
+      {
+        id: 'T2B',
+        label: '🔄 伺服电机与驱动',
+        color: '#52637a',
+        bgColor: 'rgba(82,99,122,.2)',
+        labelColor: '#a8bdd4',
+        valBg: 'rgba(82,99,122,.1)',
+        valColor: '#8299b2',
+        ccBorder: '#52637a',
+        tickerColor: '#a8bdd4',
+        desc: '伺服电机+驱动器实现机器人精确运动控制，Yaskawa占全球伺服市场约20%份额',
+        companies: [
+          { ticker: 'YASKY', name: 'Yaskawa Electric (JP)', desc: '全球伺服电机龙头，运动控制技术50年积累' },
+          { ticker: 'NIDCY', name: 'Nidec Corp (JP)', desc: '精密电机巨头，布局人形机器人关节电机赛道' }
+        ]
+      },
+      {
+        id: 'T2C',
+        label: '🦾 精密执行器/线性系统',
+        color: '#3d5166',
+        bgColor: 'rgba(61,81,102,.2)',
+        labelColor: '#7fa3c4',
+        valBg: 'rgba(61,81,102,.1)',
+        valColor: '#6090b2',
+        ccBorder: '#3d5166',
+        tickerColor: '#7fa3c4',
+        desc: '滚珠丝杠、行星减速器、线性执行器是人形机器人腿部/腰部的核心传动部件',
+        companies: [
+          { ticker: 'RRX', name: 'Regal Rexnord', desc: '线性执行器+精密传动，人形机器人丝杠核心供应商' },
+          { ticker: 'ROK', name: 'Rockwell Automation', desc: '工业运动控制器+驱动器，IIoT化工厂自动化' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'T3',
+    num: 'Tier 3',
+    title: '机器人本体系统',
+    width: 'wide',
+    color: '#1d4ed8',
+    bgGrad: ['#1e3a8a','#1d4ed8'],
+    bodyBg: 'rgba(29,78,216,.08)',
+    borderColor: 'rgba(29,78,216,.25)',
+    ccBorderColor: '#2563eb',
+    tickerColor: '#93c5fd',
+    descBg: 'rgba(29,78,216,.1)',
+    descBorder: '#1d4ed8',
+    descColor: '#93c5fd',
+    desc: '整机制造商将上游零部件集成为完整机器人系统，是产业链价值分配的核心节点。工业四大家族占传统市场，人形机器人赛道是新增量，医疗机器人壁垒最高、护城河最深。',
+    subs: [
+      {
+        id: 'T3A',
+        label: '🏭 工业机器人（四大家族）',
+        color: '#1e40af',
+        bgColor: 'rgba(30,64,175,.18)',
+        labelColor: '#93c5fd',
+        valBg: 'rgba(30,64,175,.08)',
+        valColor: '#60a5fa',
+        ccBorder: '#1e40af',
+        tickerColor: '#93c5fd',
+        desc: 'ABB/FANUC/Yaskawa/KUKA四大家族合计占全球工业机器人60%+份额，AI赋能带来新增长曲线',
+        companies: [
+          { ticker: 'ABB', name: 'ABB Ltd (Swiss/NYSE)', desc: '工业机器人+AI协作机器人双线，百年自动化巨头' },
+          { ticker: 'FANUY', name: 'FANUC Corp (JP OTC)', desc: '数控系统+工业机器人，盈利最强的机器人纯正标的' },
+          { ticker: 'TER', name: 'Teradyne', desc: '拥有Universal Robots(UR)，协作机器人全球第一' }
+        ]
+      },
+      {
+        id: 'T3B',
+        label: '🤖 人形/具身机器人',
+        color: '#2563eb',
+        bgColor: 'rgba(37,99,235,.18)',
+        labelColor: '#bfdbfe',
+        valBg: 'rgba(37,99,235,.08)',
+        valColor: '#93c5fd',
+        ccBorder: '#2563eb',
+        tickerColor: '#bfdbfe',
+        desc: '人形机器人2026年进入量产拐点，全球出货量预计5万台（中国宇树34%市占），TSLA是唯一A/H股+美股大盘投资标的',
+        companies: [
+          { ticker: 'TSLA', name: 'Tesla', desc: 'Optimus人形机器人，目标2027量产百万台，垂直整合度最高' }
+        ]
+      },
+      {
+        id: 'T3C',
+        label: '🔬 医疗手术机器人',
+        color: '#1e3a8a',
+        bgColor: 'rgba(30,58,138,.2)',
+        labelColor: '#93c5fd',
+        valBg: 'rgba(30,58,138,.1)',
+        valColor: '#60a5fa',
+        ccBorder: '#1e3a8a',
+        tickerColor: '#93c5fd',
+        desc: '外科机器人渗透率<5%，监管壁垒+学习曲线构建极深护城河，ISRG是全产业链最佳质量资产',
+        companies: [
+          { ticker: 'ISRG', name: 'Intuitive Surgical', desc: '达芬奇手术机器人，医疗机器人绝对龙头，CAGR 15%+' },
+          { ticker: 'SYK', name: 'Stryker', desc: 'MAKO骨科手术机器人，关节置换手术AI辅助标杆' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'T4',
+    num: 'Tier 4',
+    title: 'AI软件与具身智能',
+    width: '',
+    color: '#92400e',
+    bgGrad: ['#451a03','#92400e'],
+    bodyBg: 'rgba(146,64,14,.08)',
+    borderColor: 'rgba(146,64,14,.28)',
+    ccBorderColor: '#b45309',
+    tickerColor: '#fcd34d',
+    descBg: 'rgba(146,64,14,.12)',
+    descBorder: '#b45309',
+    descColor: '#fde68a',
+    desc: '具身智能(VLA模型)是物理AI的"灵魂"，使机器人从预编程转向通用推理。仿真平台解决训练数据稀缺，RPA/流程自动化是软件机器人层。这一层是2026年最值得关注的新兴高增速赛道。',
+    subs: [
+      {
+        id: 'T4A',
+        label: '🧬 VLA具身智能模型',
+        color: '#b45309',
+        bgColor: 'rgba(180,83,9,.18)',
+        labelColor: '#fcd34d',
+        valBg: 'rgba(180,83,9,.09)',
+        valColor: '#f59e0b',
+        ccBorder: '#b45309',
+        tickerColor: '#fcd34d',
+        desc: 'VLA（视觉+语言+动作）模型是机器人大脑，NVIDIA GR00T N1.6是目前最领先的开放模型',
+        companies: [
+          { ticker: 'PATH', name: 'UiPath', desc: 'RPA流程自动化SaaS龙头，软件机器人+AI Agent结合' }
+        ]
+      },
+      {
+        id: 'T4B',
+        label: '🛠 仿真与数字孪生',
+        color: '#92400e',
+        bgColor: 'rgba(146,64,14,.15)',
+        labelColor: '#fde68a',
+        valBg: 'rgba(146,64,14,.07)',
+        valColor: '#fbbf24',
+        ccBorder: '#92400e',
+        tickerColor: '#fde68a',
+        desc: '合成数据+数字孪生解决具身AI数据稀缺瓶颈，是支撑大规模机器人训练的关键基础设施',
+        companies: [
+          { ticker: 'U', name: 'Unity Technologies', desc: '机器人仿真训练环境，合成数据生成与物理渲染引擎' },
+          { ticker: 'ANSS', name: 'ANSYS', desc: '工程仿真软件领导者，机器人本体结构/热/电磁仿真' },
+          { ticker: 'PTC', name: 'PTC Inc', desc: 'ThingWorx IoT平台+Vuforia AR，工厂数字孪生集成' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'T5',
+    num: 'Tier 5',
+    title: '系统集成与自动化',
+    width: '',
+    color: '#166534',
+    bgGrad: ['#052e16','#166534'],
+    bodyBg: 'rgba(22,101,52,.08)',
+    borderColor: 'rgba(22,101,52,.25)',
+    ccBorderColor: '#16a34a',
+    tickerColor: '#86efac',
+    descBg: 'rgba(22,101,52,.12)',
+    descBorder: '#16a34a',
+    descColor: '#bbf7d0',
+    desc: '系统集成商将机器人本体、传感器、软件、网络整合为可交付的自动化解决方案，是产业链"最后一公里"。工业自动化集成需求随制造业回流、劳动力成本上升持续扩大。',
+    subs: [
+      {
+        id: 'T5A',
+        label: '🔧 工业自动化集成',
+        color: '#166534',
+        bgColor: 'rgba(22,101,52,.18)',
+        labelColor: '#86efac',
+        valBg: 'rgba(22,101,52,.09)',
+        valColor: '#4ade80',
+        ccBorder: '#166534',
+        tickerColor: '#86efac',
+        desc: 'IIoT+工业自动化系统集成，受益于欧美制造业回流政策和劳动力短缺双重驱动',
+        companies: [
+          { ticker: 'ROK', name: 'Rockwell Automation', desc: '工业自动化系统集成商No.1，IIoT+数字化工厂' },
+          { ticker: 'HON', name: 'Honeywell', desc: '楼宇+工业+国防自动化，跨场景一站式解决方案' },
+          { ticker: 'EMR', name: 'Emerson Electric', desc: '流程控制与精密测量，化工/能源行业自动化领导者' }
+        ]
+      },
+      {
+        id: 'T5B',
+        label: '📦 物流智能化',
+        color: '#14532d',
+        bgColor: 'rgba(20,83,45,.18)',
+        labelColor: '#6ee7b7',
+        valBg: 'rgba(20,83,45,.09)',
+        valColor: '#34d399',
+        ccBorder: '#14532d',
+        tickerColor: '#6ee7b7',
+        desc: '仓储物流机器人是目前ROI最清晰的机器人应用场景，AMZN是最大的自用+技术输出方',
+        companies: [
+          { ticker: 'AMZN', name: 'Amazon', desc: 'Amazon Robotics全球最大仓储机器人运营商，内部孵化+商业输出' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'T6',
+    num: 'Tier 6',
+    title: '终端应用场景',
+    width: '',
+    color: '#0c4a6e',
+    bgGrad: ['#062033','#0c4a6e'],
+    bodyBg: 'rgba(12,74,110,.08)',
+    borderColor: 'rgba(12,74,110,.28)',
+    ccBorderColor: '#0369a1',
+    tickerColor: '#7dd3fc',
+    descBg: 'rgba(12,74,110,.12)',
+    descBorder: '#0369a1',
+    descColor: '#bae6fd',
+    desc: '终端应用场景决定机器人的真实渗透速度与商业价值天花板。制造/物流/医疗是当前ROI最清晰的三大主战场，未来5-10年将向家庭服务、建筑施工、农业等场景延伸。',
+    subs: [
+      {
+        id: 'T6A',
+        label: '🚗 制造与汽车',
+        color: '#0369a1',
+        bgColor: 'rgba(3,105,161,.18)',
+        labelColor: '#7dd3fc',
+        valBg: 'rgba(3,105,161,.09)',
+        valColor: '#38bdf8',
+        ccBorder: '#0369a1',
+        tickerColor: '#7dd3fc',
+        desc: '汽车厂商是工业机器人最大买家，新能源汽车产线自动化率超90%，内部自研机器人趋势加速',
+        companies: [
+          { ticker: 'TM', name: 'Toyota Motor', desc: '全球最大汽车厂，T-HR3人形机器人自研+深度自用' },
+          { ticker: 'GM', name: 'General Motors', desc: '与Cruise深度绑定，工厂自动化投入+机器人应用' }
+        ]
+      },
+      {
+        id: 'T6B',
+        label: '🏥 医疗与手术',
+        color: '#075985',
+        bgColor: 'rgba(7,89,133,.18)',
+        labelColor: '#7dd3fc',
+        valBg: 'rgba(7,89,133,.09)',
+        valColor: '#38bdf8',
+        ccBorder: '#075985',
+        tickerColor: '#93c5fd',
+        desc: '手术机器人渗透率仍低，医院资本性支出向机器人倾斜，大型医疗集团是ISRG最重要的终端客户',
+        companies: [
+          { ticker: 'HCA', name: 'HCA Healthcare', desc: '美国最大私立医院集团，ISRG手术机器人重度部署方' }
+        ]
+      },
+      {
+        id: 'T6C',
+        label: '📬 物流与零售',
+        color: '#0c4a6e',
+        bgColor: 'rgba(12,74,110,.18)',
+        labelColor: '#bae6fd',
+        valBg: 'rgba(12,74,110,.09)',
+        valColor: '#7dd3fc',
+        ccBorder: '#0c4a6e',
+        tickerColor: '#bae6fd',
+        desc: '物流自动化ROI清晰（人力成本占比>50%），FedEx/UPS是仓储机器人采购主力军',
+        companies: [
+          { ticker: 'FDX', name: 'FedEx', desc: '物流巨头，仓储配送机器人大规模部署先驱' },
+          { ticker: 'UPS', name: 'United Parcel Service', desc: '全球物流，自动化仓储效率提升+人力成本压降' }
+        ]
+      }
+    ]
+  }
+];
+
+const SPECIAL_COMPANIES = [
+  {
+    ticker: 'NVDA',
+    name: 'NVIDIA Corporation',
+    desc: '物理AI绝对核心。H100/B200训练集群→Jetson Orin边缘推理→GR00T N1.6具身大模型→Isaac Sim仿真平台→Cosmos世界模型，垂直打通T1到T4全栈，2025年机器人业务爆发式增长',
+    accentColor: '#0ea5e9'
+  },
+  {
+    ticker: 'MSFT',
+    name: 'Microsoft Corporation',
+    desc: 'Azure AI机器人云平台+OpenAI GPT-4o战略合作，Phi-3小模型赋能边缘机器人，Azure Digital Twins工厂数字孪生，从T4软件层到T5集成层的AI赋能提供者',
+    accentColor: '#0ea5e9'
+  },
+  {
+    ticker: 'GOOGL',
+    name: 'Alphabet / Google DeepMind',
+    desc: 'Gemini Robotics多模态模型、RT-2/SayCan具身AI先驱研究、Genie可交互仿真环境，TPU云基础设施支撑大规模机器人训练，跨芯片(T1)到模型(T4)全栈布局',
+    accentColor: '#0ea5e9'
+  }
+];
+
+const SEGMENTS = [
+  { id: 'T1', label: 'T1', sub: 'AI芯片感知', color: '#a78bfa' },
+  { id: 'T2', label: 'T2', sub: '精密零部件', color: '#94a3b8' },
+  { id: 'T3', label: 'T3', sub: '机器人本体', color: '#60a5fa' },
+  { id: 'T4', label: 'T4', sub: 'AI软件仿真', color: '#fbbf24' },
+  { id: 'T5', label: 'T5', sub: '系统集成', color: '#4ade80' },
+  { id: 'T6', label: 'T6', sub: '终端应用', color: '#38bdf8' },
+  { id: 'PLAT', label: '平台', sub: '科技巨头', color: '#f472b6' }
+];
+
+const THEMES = [
+  {
+    color: '#f87171',
+    icon: '⚡',
+    name: '物理AI×具身智能大爆发',
+    priority: { lvl: 0, label: 'P0 最优先', color: '#f87171' },
+    reason: '2026年VLA论文量18x增长，GR00T N1.6被称"机器人的ChatGPT时刻"，物理AI进入奇点',
+    desc: '视觉-语言-动作(VLA)统一架构成为行业共识，机器人从预编程走向通用推理。NVIDIA Cosmos世界模型+合成数据解决训练瓶颈。全球具身AI市场2025年44亿美元，2030年预计230亿，CAGR 39%。',
+    note: '核心受益：T4仿真/软件(数据飞轮)、PLAT平台巨头(NVDA训练基础设施)；传导：T1芯片端侧需求(推理芯片)、T3本体(AI赋能价值重估)；边缘：T5集成(AI化改造)。',
+    segs: {
+      T1: { lvl: 'high', cos: ['AMD','QCOM','ADI'], desc: '端侧推理芯片需求爆发，Jetson Orin出货+150%' },
+      T2: { lvl: 'med', cos: ['YASKY','NIDCY'], desc: '高精度执行器配合VLA模型，联动受益' },
+      T3: { lvl: 'high', cos: ['TSLA','TER'], desc: '本体价值因AI智能化重估，TSLA Optimus核心' },
+      T4: { lvl: 'high', cos: ['U','ANSS','PTC','PATH'], desc: '仿真数据生成是训练的瓶颈，核心基础设施' },
+      T5: { lvl: 'low', cos: ['ROK'], desc: '工厂AI化集成需求提升' },
+      T6: { lvl: 'low', cos: ['AMZN'], desc: '最先受益AI机器人的部署场景' },
+      PLAT: { lvl: 'high', cos: ['NVDA','MSFT','GOOGL'], desc: '训练算力+模型+云平台，物理AI核心基础设施' }
+    }
+  },
+  {
+    color: '#fb923c',
+    icon: '🤖',
+    name: '人形机器人量产元年',
+    priority: { lvl: 0, label: 'P0 最优先', color: '#fb923c' },
+    reason: '2026年全球出货量预计5万台(+178%)，CAGR 73%，宇树/智元/优必选已开始量产，价格拐点临近',
+    desc: '2026年是人形机器人从PoC走向规模化量产的拐点年。Tesla Optimus目标2027年百万台产能。中国宇树科技2025年市占34%，IPO在即。人形机器人BOM成本已降至3-5万美元，正逼近劳动力替代经济临界点。',
+    note: '核心受益：T3人形本体(TSLA直接)、T2零部件(需求量价齐升)；传导：T1芯片(端侧推理需求)、PLAT(NVDA Isaac训练)；边缘：T5集成(工厂改造)、T6制造终端(部署方)。',
+    segs: {
+      T1: { lvl: 'med', cos: ['AMD','QCOM','CGNX'], desc: '端侧算力+感知组件需求随量产爬坡' },
+      T2: { lvl: 'high', cos: ['HDDSF','NTCOY','YASKY','NIDCY','RRX'], desc: '减速器/伺服/丝杠需求量价齐升，供应紧缺' },
+      T3: { lvl: 'high', cos: ['TSLA','TER'], desc: 'TSLA是最纯正的人形机器人标的，TER通过UR协作机器人联动' },
+      T4: { lvl: 'med', cos: ['U','ANSS'], desc: '量产前仿真训练需求激增' },
+      T5: { lvl: 'low', cos: ['ROK','HON'], desc: '工厂接入人形机器人需要改造集成' },
+      T6: { lvl: 'med', cos: ['TM','GM','AMZN'], desc: '制造+物流是人形机器人最先规模落地场景' },
+      PLAT: { lvl: 'high', cos: ['NVDA'], desc: 'Isaac GR00T是人形机器人训练的标准平台' }
+    }
+  },
+  {
+    color: '#34d399',
+    icon: '🏭',
+    name: '工业自动化加速补缺',
+    priority: { lvl: 1, label: 'P1 高优先', color: '#34d399' },
+    reason: '全球劳动力结构性短缺+制造业回流政策双驱动，美国制造业岗位空缺率4.2%，工业机器人密度仍大幅低于日韩',
+    desc: '美国制造业回流（芯片法案、IRA法案）+欧洲能源危机后的自动化升级+中国内资厂商市占率首超50%，工业机器人迎来新一轮景气上行。工业机器人2025年全球销量33.2万台，3C电子+金属加工超50%。',
+    note: '核心受益：T5集成商(ROK/HON受益回流订单)、T3工业机器人(ABB/FANUY需求回暖)；传导：T2零部件供应链、T6制造终端；边缘：T1传感芯片。',
+    segs: {
+      T1: { lvl: 'low', cos: ['TXN','CGNX'], desc: '传感器和控制芯片随工业机器人出货增长' },
+      T2: { lvl: 'med', cos: ['YASKY','RRX'], desc: '工业自动化零部件需求稳步扩张' },
+      T3: { lvl: 'high', cos: ['ABB','FANUY','TER'], desc: '工业机器人四大家族直接受益，ABB/FANUY订单回暖' },
+      T4: { lvl: 'low', cos: ['PTC'], desc: '数字孪生赋能工厂改造' },
+      T5: { lvl: 'high', cos: ['ROK','HON','EMR'], desc: '制造业回流+工厂自动化改造，集成商最直接受益' },
+      T6: { lvl: 'med', cos: ['TM','GM'], desc: '汽车厂商自动化率持续提升' },
+      PLAT: { lvl: 'low', cos: ['MSFT'], desc: 'Azure工业云服务辅助工厂数字化' }
+    }
+  },
+  {
+    color: '#38bdf8',
+    icon: '🔬',
+    name: '医疗机器人高壁垒成长',
+    priority: { lvl: 1, label: 'P1 高优先', color: '#38bdf8' },
+    reason: '外科机器人渗透率<5%，ISRG连续CAGR 15%+，da Vinci 5新平台进入硬件升级大周期',
+    desc: 'ISRG医疗机器人护城河极深：FDA认证壁垒+培训壁垒+数据网络效应三重锁定。SYK MAKO骨科手术机器人渗透骨科大赛道。医疗AI与手术机器人结合提升精准度，术后效果数据持续积累形成正反馈。',
+    note: '核心受益：T3医疗机器人(ISRG/SYK价值稳定增长，质量最高)、T6医疗终端(HCA持续采购)；传导：T1精密传感(ADI/CGNX用于手术导航)；边缘：T4软件(MSFT Azure医疗AI)。',
+    segs: {
+      T1: { lvl: 'med', cos: ['ADI','CGNX'], desc: '手术机器人精密传感和视觉引导核心供应' },
+      T2: { lvl: 'low', cos: ['HDDSF'], desc: '高精度减速器用于手术机械臂' },
+      T3: { lvl: 'high', cos: ['ISRG','SYK'], desc: 'ISRG达芬奇5新周期，SYK MAKO骨科扩张' },
+      T4: { lvl: 'low', cos: ['PATH'], desc: '医院RPA流程优化' },
+      T5: { lvl: 'low', cos: ['HON'], desc: '医院楼宇和设备自动化' },
+      T6: { lvl: 'high', cos: ['HCA'], desc: '最大私立医院集团持续扩充手术机器人配置' },
+      PLAT: { lvl: 'low', cos: ['MSFT'], desc: 'Azure Health+OpenAI医疗AI辅助诊断' }
+    }
+  },
+  {
+    color: '#a78bfa',
+    icon: '🧠',
+    name: 'AI芯片向边缘深度渗透',
+    priority: { lvl: 1, label: 'P1 高优先', color: '#a78bfa' },
+    reason: 'NVIDIA Jetson Orin出货量2025年同比+150%，骁龙X Elite进入机器人控制器，边缘AI成本跌至百美元级',
+    desc: '机器人智能化要求在端侧完成实时推理（延迟<10ms），云端推理延迟和隐私问题驱动边缘AI芯片需求爆发。模型压缩技术（蒸馏/量化）使大模型可以在低功耗芯片上高效运行。TXN与KUKA深度合作是典型案例。',
+    note: '核心受益：T1芯片层(AMD/QCOM/ADI边缘AI产品线)、PLAT(NVDA Jetson平台)；传导：T3本体(搭载更强算力的机器人价值提升)；边缘：T4软件(端侧模型部署工具链)、T5集成(IIoT边缘计算需求)。',
+    segs: {
+      T1: { lvl: 'high', cos: ['AMD','QCOM','ADI','TXN'], desc: '边缘AI SoC/MCU/传感器组合，核心直接受益层' },
+      T2: { lvl: 'low', cos: ['ROK'], desc: '智能驱动器集成边缘AI能力' },
+      T3: { lvl: 'med', cos: ['TSLA','ABB'], desc: '搭载强算力芯片的机器人能力跃升' },
+      T4: { lvl: 'med', cos: ['PATH','U'], desc: 'AI赋能RPA+边缘仿真推理' },
+      T5: { lvl: 'low', cos: ['ROK','HON'], desc: 'IIoT边缘计算节点需求提升' },
+      T6: { lvl: 'low', cos: ['AMZN'], desc: '仓储机器人边缘AI升级' },
+      PLAT: { lvl: 'high', cos: ['NVDA','MSFT'], desc: 'NVDA Jetson+Azure IoT Edge，双边缘AI平台领导者' }
+    }
+  },
+  {
+    color: '#fbbf24',
+    icon: '🔩',
+    name: '核心零部件国产替代',
+    priority: { lvl: 2, label: 'P2 中关注', color: '#fbbf24' },
+    reason: '谐波减速器国产率突破25%，整机成本下降15-20%，内资厂商市占率首超51.6%，A股供应链核心机会',
+    desc: '中国机器人产业链对日本零部件依赖正快速下降。绿的谐波/双环传动/汇川技术已实现减速器/伺服国产化，推动国产机器人BOM成本下降。此主题主要体现在A股，美股体现为日本巨头市场份额下滑风险与中国机器人本体崛起。',
+    note: '核心受益：T2零部件(国产A股标的，国际厂商HDDSF/NTCOY面临竞争压力)；传导：T3本体(中国机器人成本竞争力提升)；边缘：T5集成(系统成本下降推动渗透率提升)。',
+    segs: {
+      T1: { lvl: 'low', cos: ['INTC'], desc: '国产芯片替代对INTC影响边际' },
+      T2: { lvl: 'high', cos: ['HDDSF','NTCOY','YASKY'], desc: '国产替代压力最大，份额面临侵蚀风险/机会二元' },
+      T3: { lvl: 'med', cos: ['ABB','FANUY'], desc: '国产整机崛起，中高端市场竞争加剧' },
+      T4: { lvl: 'low', cos: ['PTC'], desc: '国产软件替代影响有限' },
+      T5: { lvl: 'low', cos: ['EMR'], desc: '国产集成商能力提升边际影响' },
+      T6: { lvl: 'med', cos: ['TM','GM'], desc: '国产低价机器人加速向汽车厂商渗透' },
+      PLAT: { lvl: 'low', cos: [], desc: '国产大模型竞争格局演变中' }
+    }
+  },
+  {
+    color: '#e879f9',
+    icon: '🌐',
+    name: '仿真数据飞轮×RaaS商业模式',
+    priority: { lvl: 2, label: 'P2 中关注', color: '#e879f9' },
+    reason: '合成数据+数字孪生解决具身AI数据稀缺，RaaS模式颠覆传统一次性销售，商业模式升级提升估值倍数',
+    desc: '机器人数据稀缺是AI训练最大瓶颈（互联网数据可爬，物理世界数据需机器人实际采集）。仿真平台生成合成数据是突破口。同时，机器人从一次性卖硬件转向订阅制"Robot as a Service"，毛利率从15%提升至50%+，商业模式升维。',
+    note: '核心受益：T4软件仿真(U/ANSS/PTC是仿真数据飞轮核心)、PLAT(NVDA Omniverse/Cosmos平台)；传导：T3本体(TSLA先行探索RaaS)、T5集成(数字孪生服务化)；边缘：T6终端(AMZN内部RaaS实践)。',
+    segs: {
+      T1: { lvl: 'low', cos: ['CGNX'], desc: '视觉数据采集是训练数据来源之一' },
+      T2: { lvl: 'low', cos: [], desc: '硬件层不直接受益，RaaS降低前期资本门槛' },
+      T3: { lvl: 'med', cos: ['TSLA','ISRG'], desc: 'TSLA探索RaaS，ISRG已是类订阅商业模式先驱' },
+      T4: { lvl: 'high', cos: ['U','ANSS','PTC','PATH'], desc: '仿真平台+数字孪生是数据飞轮核心基础设施' },
+      T5: { lvl: 'med', cos: ['ROK','HON'], desc: '数字孪生工厂服务化，从卖设备到卖服务' },
+      T6: { lvl: 'med', cos: ['AMZN','FDX'], desc: '仓储物流RaaS模型ROI已验证，复制推广中' },
+      PLAT: { lvl: 'high', cos: ['NVDA','MSFT'], desc: 'Omniverse仿真生态+Azure数字孪生是双平台核心' }
+    }
+  }
+];
+
+/* ═══════════════════════════════════════════
+   渲染引擎
+═══════════════════════════════════════════ */
+
+function initLinks() {
+  document.querySelectorAll('[data-ticker]').forEach(card => {
+    const ticker = card.dataset.ticker;
+    const info = FEISHU[ticker];
+    const el = card.querySelector('.cc-links');
+    if (!el) return;
+    const makeBtn = (href, cls, label) => {
+      const a = document.createElement('a');
+      const isReal = href && href !== '#';
+      if (isReal) { a.href = href; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      else { a.href = 'javascript:void(0)'; a.title = '链接待配置'; a.style.opacity = '0.4'; a.style.cursor = 'default'; a.addEventListener('click', e => e.preventDefault()); }
+      a.className = 'cc-btn ' + cls;
+      a.innerHTML = label;
+      return a;
+    };
+    if (info && info.researched) {
+      el.appendChild(makeBtn(info.doc, 'doc', '📄 研报'));
+      el.appendChild(makeBtn(info.val, 'xls', '📊 估值'));
+    } else {
+      const sp = document.createElement('span');
+      sp.className = 'cc-btn pending';
+      sp.textContent = '待研究';
+      el.appendChild(sp);
+    }
+  });
+  const total = document.querySelectorAll('[data-ticker]').length;
+  const done = Object.values(FEISHU).filter(v => v.researched).length;
+  const prog = document.getElementById('research-progress');
+  if (prog) prog.textContent = done + ' / ' + total + ' 家已完成深度研究';
+  const rc = document.getElementById('researched-count');
+  if (rc) rc.textContent = done;
+}
+
+function renderLegend() {
+  const legend = document.getElementById('legend');
+  if (!legend) return;
+  const items = [
+    { color: '#a78bfa', label: 'T1 AI芯片与感知' },
+    { color: '#64748b', label: 'T2 精密机械零部件' },
+    { color: '#3b82f6', label: 'T3 机器人本体系统' },
+    { color: '#f59e0b', label: 'T4 AI软件与具身智能' },
+    { color: '#22c55e', label: 'T5 系统集成与自动化' },
+    { color: '#0ea5e9', label: 'T6 终端应用场景' },
+    { color: '#f472b6', label: '⬡ 跨层平台科技巨头' },
+  ];
+  items.forEach(item => {
+    const d = document.createElement('div');
+    d.className = 'leg';
+    d.innerHTML = `<div class="leg-dot" style="background:${item.color}"></div>${item.label}`;
+    legend.appendChild(d);
+  });
+}
+
+function renderChain() {
+  const wrap = document.getElementById('chain-wrap');
+  if (!wrap) return;
+  const arrow = `<div class="arr-col"><div class="arr-sp"></div><div class="arr-body">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></div>`;
+
+  TIERS.forEach((t, i) => {
+    if (i > 0) wrap.innerHTML += arrow;
+    let subsHtml = '';
+    if (t.subs && t.subs.length) {
+      t.subs.forEach(s => {
+        let cosHtml = s.companies.map(c => `
+          <div class="cc" data-ticker="${c.ticker}" style="border-left-color:${s.ccBorder||t.ccBorderColor};">
+            <div class="cc-top"><div class="cc-info">
+              <div class="cc-ticker" style="color:${s.tickerColor||t.tickerColor};">${c.ticker}</div>
+              <div class="cc-name">${c.name}</div>
+              <div class="cc-desc">${c.desc}</div>
+            </div><div class="cc-links"></div></div>
+          </div>`).join('');
+        subsHtml += `
+          <div>
+            <div class="sub-lbl" style="background:${s.bgColor};color:${s.labelColor};">${s.label}</div>
+            ${s.desc ? `<div class="sub-val" style="background:${s.valBg||s.bgColor};color:${s.valColor||s.labelColor};">${s.desc}</div>` : ''}
+            ${cosHtml}
+          </div>`;
+      });
+    }
+    wrap.innerHTML += `
+      <div class="tb ${t.width||''}" id="${t.id}">
+        <div class="th" style="background:linear-gradient(135deg,${t.bgGrad[0]},${t.bgGrad[1]});">
+          <div class="th-num">${t.num}</div>
+          <div class="th-title">${t.title}</div>
+        </div>
+        <div class="tb-body" style="background:${t.bodyBg};border-color:${t.borderColor};">
+          <div class="t-desc" style="background:${t.descBg};border-left-color:${t.descBorder};color:${t.descColor};">${t.desc}</div>
+          ${subsHtml}
+        </div>
+      </div>`;
+  });
+}
+
+function renderSpecial() {
+  const cardsContainer = document.getElementById('special-cards');
+  if (!cardsContainer) return;
+  SPECIAL_COMPANIES.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'special-card';
+    div.dataset.ticker = c.ticker;
+    div.style.cssText = `background:rgba(3,105,161,.08);border:1px solid rgba(3,105,161,.2);border-left:3px solid ${c.accentColor};`;
+    div.innerHTML = `
+      <div class="cc-ticker" style="color:${c.accentColor};font-size:14px;">${c.ticker}</div>
+      <div class="cc-name" style="color:var(--text2);font-size:11px;margin-top:3px;">${c.name}</div>
+      <div class="cc-desc" style="color:var(--text3);font-size:10px;margin-top:4px;line-height:1.4;">${c.desc}</div>
+      <div class="cc-links" style="flex-direction:row;margin-top:7px;"></div>`;
+    cardsContainer.appendChild(div);
+  });
+}
+
+function renderMatrix() {
+  const tbl = document.getElementById('matrix');
+  if (!tbl || !SEGMENTS.length || !THEMES.length) return;
+  const lvlBg      = { high:'rgba(255,255,255,.11)', med:'rgba(255,255,255,.06)', low:'rgba(255,255,255,.03)' };
+  const lvlLabel   = { high:'核心', med:'协同', low:'边缘' };
+  const lvlOpacity = { high:1, med:0.88, low:0.62 };
+
+  let headRow = '<tr><th style="width:300px;"></th>';
+  SEGMENTS.forEach(s => {
+    headRow += `<th class="seg" style="border-color:${s.color}99;color:${s.color};">
+      <div class="seg-header">${s.label}<span>${s.sub}</span></div></th>`;
+  });
+  headRow += '</tr>';
+  tbl.innerHTML = headRow;
+
+  THEMES.forEach(th => {
+    const tr = document.createElement('tr');
+    const tdInfo = document.createElement('td');
+    tdInfo.className = 'theme-info';
+    tdInfo.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px;">
+        <div class="theme-info-name" style="color:${th.color};font-size:12px;">${th.icon} ${th.name}</div>
+        <span style="flex-shrink:0;font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;
+          background:${th.priority.color}20;border:1px solid ${th.priority.color}60;
+          color:${th.priority.color};">${th.priority.label}</span>
+      </div>
+      <div style="font-size:9px;font-weight:600;padding:3px 8px;margin-bottom:7px;border-radius:4px;
+        background:${th.priority.color}15;color:${th.priority.color}cc;">${th.reason}</div>
+      <div style="font-size:10px;color:#9ab8d0;line-height:1.45;margin-bottom:6px;">${th.desc}</div>
+      <div style="font-size:9.5px;color:#7a9ab8;border-top:1px solid rgba(255,255,255,.06);
+        padding-top:6px;line-height:1.45;">
+        <b style="color:#90b0cc;">链路对应：</b>${th.note}
+      </div>`;
+    tr.appendChild(tdInfo);
+
+    SEGMENTS.forEach(seg => {
+      const td = document.createElement('td');
+      const d = th.segs[seg.id];
+      if (!d || (!d.cos.length && d.lvl === 'low')) {
+        td.className = 'cell none';
+        td.innerHTML = '<div class="cell-empty">·</div>';
+      } else {
+        td.className = 'cell';
+        td.style.opacity  = String(lvlOpacity[d.lvl]);
+        td.style.background = lvlBg[d.lvl];
+        td.style.border   = `1px solid ${seg.color}55`;
+        td.style.verticalAlign = 'top';
+        td.style.padding  = '6px 5px';
+        const badge = `<div style="display:inline-block;font-size:8.5px;font-weight:700;
+          padding:2px 7px;border-radius:3px;margin-bottom:5px;
+          background:${seg.color}30;color:${seg.color};
+          border:1px solid ${seg.color}70;letter-spacing:.4px;">${lvlLabel[d.lvl]}</div>`;
+        const cosHtml = d.cos.map(c =>
+          `<span style="display:inline-block;font-size:9px;font-weight:700;
+            padding:1px 5px;border-radius:3px;margin:1px;
+            background:rgba(255,255,255,.07);border:1px solid ${seg.color}55;
+            color:${seg.color};">${c}</span>`
+        ).join('');
+        const descHtml = d.desc
+          ? `<div style="font-size:8px;color:${seg.color}cc;margin-top:5px;line-height:1.35;text-align:left;padding:0 1px;">${d.desc}</div>`
+          : '';
+        td.innerHTML = `${badge}<div>${cosHtml}</div>${descHtml}`;
+      }
+      tr.appendChild(td);
+    });
+    tbl.appendChild(tr);
+  });
+}
+
+function renderFootnote() {
+  const el = document.getElementById('footnote');
+  if (!el) return;
+  const total = document.querySelectorAll('[data-ticker]').length;
+  el.textContent = `共 ${total} 家全球上市公司 · AI芯片感知 → 精密零部件 → 机器人本体 → AI软件仿真 → 系统集成 → 终端应用 · 2026-06 · 数据来源：IFR、IDC、Mordor Intelligence、StartUs Insights、Bloomberg、各公司财报`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderLegend();
+  renderChain();
+  renderSpecial();
+  renderMatrix();
+  initLinks();
+  renderFootnote();
+});
+</script>
+</body>
+</html>
