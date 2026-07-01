@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TSEM 股价历史相位图 1994–2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d10;
+  --s1:#17171d;
+  --s2:#1f1f28;
+  --border:#2a2a36;
+  --border-strong:#3a3a4d;
+  --text-primary:#e2e2ea;
+  --text-secondary:#8e8ea8;
+  --text-muted:#52526a;
+}
+html,body{background:var(--bg);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+body{padding:24px 28px 40px}
+h1{font-size:17px;font-weight:600;color:var(--text-primary);margin-bottom:4px;letter-spacing:-0.01em}
+.subtitle{font-size:12px;color:var(--text-muted);margin-bottom:20px}
+#tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tab-btn{font-size:12px;padding:4px 11px;border-radius:6px;border:0.5px solid var(--border-strong);background:var(--s1);color:var(--text-secondary);cursor:pointer;transition:all .15s;line-height:1.5}
+.tab-btn:hover{background:var(--s2);color:var(--text-primary)}
+.chart-wrap{position:relative;width:100%;height:320px;background:var(--s1);border-radius:12px;border:0.5px solid var(--border);padding:16px 16px 12px}
+canvas{width:100%!important}
+#card{background:var(--s1);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:14px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:12px}
+.stat-item{background:var(--s2);border-radius:7px;padding:9px 11px}
+.stat-label{font-size:11px;color:var(--text-muted);margin-bottom:3px}
+.stat-val{font-size:13px;font-weight:500;color:var(--text-primary)}
+.phase-tag{font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.card-meta{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.card-title{font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:2px}
+.card-range{font-size:12px;color:var(--text-secondary)}
+.card-body{font-size:13px;color:var(--text-secondary);line-height:1.7}
+</style>
+</head>
+<body>
+<h1>TSEM · Tower Semiconductor 股价历史相位图</h1>
+<p class="subtitle">1994—2026 · 对数坐标 · 点击阶段标签查看详情</p>
+
+<div id="tabs"></div>
+
+<div class="chart-wrap">
+  <canvas id="ch" role="img" aria-label="TSEM log-scale price chart 1994-2026 with 8 color-coded phases"></canvas>
+</div>
+
+<div id="card"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var PHASES = [
+  { label:"① 点com泡沫", color:"#f5a623",
+    title:"互联网泡沫 — 暴涨与崩塌", range:"1998—2001",
+    from:"1998-01-01", to:"2001-12-31",
+    body:"互联网热潮将TSEM推至$598历史顶（2000年3月），估值与基本面严重脱节。随纳斯达克崩盘，叠加全球半导体库存过剩，股价跌超90%，2001年11月低至$61。",
+    stats:[["顶部价格","$598（2000.3）"],["随后跌幅","-90%+"],["驱动","互联网泡沫"]] },
+  { label:"② 债务重建期", color:"#b0afa8",
+    title:"财务困境与漫长底部", range:"2002—2013",
+    from:"2002-01-01", to:"2013-12-31",
+    body:"Fab 2建设债务压顶，2008年金融危机令股价跌至$1.5濒临破产。公司通过债务重组、收购Jazz(2008)向模拟代工转型，但市场认可极慢，股价在低位震荡超10年。",
+    stats:[["金融危机低点","$1.5（2008.12）"],["关键转型","收购Jazz 2008"],["战略","→ Specialty Foundry"]] },
+  { label:"③ 模式认可", color:"#2ed8a0",
+    title:"Specialty foundry模式被市场认可", range:"2014—2019",
+    from:"2014-01-01", to:"2019-12-31",
+    body:"2014年TPSCo合资公司（低价获得Panasonic三座工厂）是重要转折。RF/BCD/CIS高价值工艺打造客户粘性。2016收购Maxim San Antonio工厂。2017-18半导体超级周期推升至$36，后因加息+贸易战回调，2019年企稳。",
+    stats:[["区间涨幅","$5.5→$36 (+554%)"],["关键收购","TPSCo 2014"],["压力","2018加息+贸易战"]] },
+  { label:"④ 疫情冲击", color:"#f05c5b",
+    title:"疫情暴跌 — 快速修复", range:"2020",
+    from:"2020-01-01", to:"2020-12-31",
+    body:"2020年3月疫情引发全球股灾，TSEM单月跌45%至$13.6。但美联储无限QE+半导体需求因居家/5G/汽车电子爆发而反转，全年基本收平，芯片短缺更凸显specialty foundry稀缺性。",
+    stats:[["3月低点","$13.6（-45%）"],["全年涨幅","+5%（抹平）"],["修复驱动","QE+芯片短缺"]] },
+  { label:"⑤ 并购锁定", color:"#5b9cf6",
+    title:"Intel $54亿要约 — 套利价锁定", range:"2021—2023.8",
+    from:"2021-01-01", to:"2023-08-16",
+    body:"2021年随半导体牛市升至$40。2022年1月加息预期致跌至$31.8。2022年2月15日Intel宣布$53/股收购，当日暴涨41%至$47。此后套利逻辑将股价钉在$43-50横盘18个月。2023年8月16日因中国SAMR不批，双方宣布终止，TSEM获$353M终止补偿。",
+    stats:[["要约价","$53/股 (+41%单日)"],["横盘区间","$43–50（18个月）"],["终止补偿","$353M"]] },
+  { label:"⑥ 双重底", color:"#f05c5b",
+    title:"并购终止 + 半导体下行周期", range:"2023.8—2024中",
+    from:"2023-08-17", to:"2024-06-30",
+    body:"并购溢价消失后股价回归基本面。叠加半导体下行：2023年收入同比-15.2%，消费电子/工业需求低迷，库存高企。2023年10月以色列地缘冲突+高利率进一步压制，触及$21.9低点。2024年初硅光子订单信号出现，开始筑底。",
+    stats:[["2023年10月低点","$21.9"],["2023收入YoY","-15.2%"],["额外压力","以色列地缘冲突"]] },
+  { label:"⑦ AI叙事重构", color:"#a78cf5",
+    title:"AI光互联叙事重构 — 估值爬坡", range:"2024下半年—2025Q3",
+    from:"2024-07-01", to:"2025-08-31",
+    body:"AI数据中心光互联需求实质兑现为订单，硅光子收入快速放量。2025年Q3财报SiPho收入$52M同比+70%，股价单日+15%。公司宣布$650M扩产计划。机构大举入场（T.Rowe Q4增持超450万股+3223%）。TSEM完成从「周期性代工」到「AI光基础设施入口」的叙事重构。",
+    stats:[["区间涨幅","$28→$129 (+361%)"],["SiPho YoY","+70%（Q3 2025）"],["机构入场","T.Rowe +3223%"]] },
+  { label:"⑧ 硅光子爆发", color:"#2ed8a0",
+    title:"$13亿合同锁定 — 估值再跃升", range:"2025Q4—2026",
+    from:"2025-09-01", to:"2026-12-31",
+    body:"Q4 2025收入创纪录$440M。2026年Q1 SiPho收入同比增3倍。2026年5月签署$1.3B合同锁定2027年收入+$290M预付款，市场反应空前，股价数日大涨50%+。与Marvell累计出货500万颗相干PIC。分析师目标价从$63上调至$335，2026年6月22日创ATH $317。",
+    stats:[["2026 ATH","$317（2026.6.22）"],["SiPho合同","$1.3B锁定2027"],["Marvell里程碑","500万颗PIC"]] }
+];
+
+var RAW = [
+  ["1994-10-26",210],["1995-01-06",153.75],["1995-09-13",534],
+  ["1996-01-03",356],["1996-09-17",88],["1997-10-14",341],
+  ["1998-01-02",142],["1998-08-11",86],["1999-03-25",97],
+  ["1999-08-13",198],["2000-03-24",598],["2000-12-29",158],
+  ["2001-01-24",251],["2001-11-02",62],["2001-12-31",95],
+  ["2002-06-01",65],["2002-12-31",48],
+  ["2003-02-20",33],["2003-06-01",75],["2003-12-31",118],
+  ["2004-01-16",151],["2004-06-01",80],["2004-11-04",25],
+  ["2005-06-01",22],["2005-10-18",17],["2005-12-31",22],
+  ["2006-06-01",20],["2006-10-09",32],["2007-02-06",31],
+  ["2007-08-16",18],["2007-12-31",21],
+  ["2008-01-02",22],["2008-06-01",10],["2008-12-30",1.5],
+  ["2009-01-27",2.25],["2009-06-01",10],["2009-08-13",20],
+  ["2010-03-03",28],["2010-09-01",20],["2010-12-31",21],
+  ["2011-01-14",23],["2011-06-01",15],["2011-10-04",9.15],
+  ["2012-03-01",13],["2012-08-28",7],["2012-12-31",8],
+  ["2013-01-23",8.55],["2013-06-01",5.5],["2013-12-12",3.86],
+  ["2014-01-09",5.54],["2014-06-01",9],["2014-12-05",13.9],
+  ["2015-03-17",17.95],["2015-08-24",11.67],["2015-12-31",14],
+  ["2016-05-12",11.05],["2016-12-19",19.8],
+  ["2017-01-03",19.16],["2017-06-01",28],["2017-11-24",35.45],
+  ["2018-01-08",35.95],["2018-06-01",28],["2018-12-24",13.59],
+  ["2019-01-22",13.85],["2019-06-01",20],["2019-12-20",24.9],
+  ["2020-01-02",24.61],["2020-03-16",13.56],["2020-06-01",20],["2020-12-07",26.95],
+  ["2021-01-04",26],["2021-06-01",33],["2021-12-27",39.87],
+  ["2022-01-03",40.22],["2022-01-27",31.83],
+  ["2022-02-14",33.13],["2022-02-15",47.07],
+  ["2022-05-04",49.12],["2022-09-01",43],["2022-12-31",43.2],
+  ["2023-01-03",43.06],["2023-04-27",45.43],
+  ["2023-08-14",33.94],["2023-08-16",30.17],
+  ["2023-10-16",21.91],["2023-12-31",30.52],
+  ["2024-01-16",28.3],["2024-04-01",38],["2024-06-30",43],
+  ["2024-09-01",46],["2024-12-26",52.93],
+  ["2025-01-02",51.55],["2025-03-01",40],["2025-04-04",29.65],
+  ["2025-06-30",43.35],["2025-08-31",72],
+  ["2025-10-01",95],["2025-11-10",90],["2025-12-11",128.94],
+  ["2026-01-02",121.74],["2026-03-06",110.59],["2026-04-01",160],
+  ["2026-05-13",200],["2026-06-22",316.85],["2026-06-30",260.64]
+];
+
+var labels = RAW.map(function(r){ return r[0]; });
+var prices = RAW.map(function(r){ return r[1]; });
+
+function inPhase(dateStr, p) {
+  return dateStr >= p.from && dateStr <= p.to;
+}
+
+var datasets = PHASES.map(function(p) {
+  var data = labels.map(function(d, i) {
+    return inPhase(d, p) ? prices[i] : null;
+  });
+  return {
+    label: p.label,
+    data: data,
+    borderColor: p.color,
+    backgroundColor: 'transparent',
+    borderWidth: 2.5,
+    pointRadius: 0,
+    pointHoverRadius: 5,
+    spanGaps: false,
+    tension: 0.3
+  };
+});
+
+var ctx = document.getElementById('ch').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: { labels: labels, datasets: datasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: {
+        ticks: {
+          color: '#52526a', font: { size: 11 },
+          maxTicksLimit: 9,
+          callback: function(val, idx) {
+            var d = labels[idx];
+            if (!d) return '';
+            var yr = d.substring(0,4);
+            var mo = d.substring(5,7);
+            return mo === '01' || mo === '06' ? yr : '';
+          }
+        },
+        grid: { color: '#1e1e28' },
+        border: { color: '#2a2a36' }
+      },
+      y: {
+        type: 'logarithmic',
+        min: 1,
+        ticks: {
+          color: '#52526a', font: { size: 11 },
+          callback: function(v) {
+            if ([1,2,5,10,20,50,100,200,300].indexOf(Math.round(v)) > -1) return '$'+Math.round(v);
+            return '';
+          }
+        },
+        grid: { color: '#1e1e28' },
+        border: { color: '#2a2a36' }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1f1f28',
+        borderColor: 'rgba(255,255,255,0.08)',
+        borderWidth: 0.5,
+        titleColor: '#e2e2ea',
+        bodyColor: '#8e8ea8',
+        padding: 10,
+        filter: function(item) { return item.parsed.y !== null; },
+        callbacks: {
+          label: function(ctx) {
+            return ' ' + ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(0);
+          }
+        }
+      }
+    }
+  }
+});
+
+var tabsEl = document.getElementById('tabs');
+var cardEl = document.getElementById('card');
+
+PHASES.forEach(function(p, i) {
+  var btn = document.createElement('button');
+  btn.className = 'tab-btn';
+  btn.textContent = p.label;
+  btn.onclick = function() { showPhase(i); };
+  tabsEl.appendChild(btn);
+});
+
+function showPhase(idx) {
+  tabsEl.querySelectorAll('.tab-btn').forEach(function(b, i) {
+    if (i === idx) {
+      b.style.background = PHASES[idx].color + '22';
+      b.style.color = PHASES[idx].color;
+      b.style.borderColor = PHASES[idx].color + '66';
+    } else {
+      b.style.background = '';
+      b.style.color = '';
+      b.style.borderColor = '';
+    }
+  });
+
+  var p = PHASES[idx];
+  var statsHtml = p.stats.map(function(s) {
+    return '<div class="stat-item"><div class="stat-label">'+s[0]+'</div><div class="stat-val">'+s[1]+'</div></div>';
+  }).join('');
+
+  cardEl.innerHTML =
+    '<div class="card-meta">'
+    + '<span class="phase-tag" style="background:'+p.color+'22;color:'+p.color+';">'+p.label+'</span>'
+    + '<div><div class="card-title">'+p.title+'</div>'
+    + '<div class="card-range">'+p.range+'</div></div>'
+    + '</div>'
+    + '<div class="card-body">'+p.body+'</div>'
+    + '<div class="stat-grid">'+statsHtml+'</div>';
+}
+
+showPhase(4);
+</script>
+</body>
+</html>
