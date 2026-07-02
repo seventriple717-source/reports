@@ -10,31 +10,64 @@
   --bg:#0d0d10;
   --s1:#17171d;
   --s2:#1f1f28;
+  --s3:#252531;
   --border:#2a2a36;
   --border-strong:#3a3a4d;
   --text-primary:#e2e2ea;
   --text-secondary:#8e8ea8;
   --text-muted:#52526a;
+  --up:#2ed8a0;
+  --dn:#f05c5b;
+  --neu:#8e8ea8;
 }
-html,body{background:var(--bg);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
-body{padding:24px 28px 40px}
-h1{font-size:17px;font-weight:600;color:var(--text-primary);margin-bottom:4px;letter-spacing:-0.01em}
+html,body{background:var(--bg);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;min-height:100vh}
+body{padding:24px 28px 48px;max-width:900px;margin:0 auto}
+h1{font-size:18px;font-weight:600;color:var(--text-primary);margin-bottom:3px;letter-spacing:-0.01em}
 .subtitle{font-size:12px;color:var(--text-muted);margin-bottom:20px}
 #tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.tab-btn{font-size:12px;padding:4px 11px;border-radius:6px;border:0.5px solid var(--border-strong);background:var(--s1);color:var(--text-secondary);cursor:pointer;transition:all .15s;line-height:1.5}
+.tab-btn{font-size:12px;padding:5px 12px;border-radius:7px;border:0.5px solid var(--border-strong);background:var(--s1);color:var(--text-secondary);cursor:pointer;transition:all .15s;line-height:1.5;font-family:inherit}
 .tab-btn:hover{background:var(--s2);color:var(--text-primary)}
-.chart-wrap{position:relative;width:100%;height:320px;background:var(--s1);border-radius:12px;border:0.5px solid var(--border);padding:16px 16px 12px}
-canvas{width:100%!important}
-#card{background:var(--s1);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-top:14px}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:12px}
-.stat-item{background:var(--s2);border-radius:7px;padding:9px 11px}
-.stat-label{font-size:11px;color:var(--text-muted);margin-bottom:3px}
-.stat-val{font-size:13px;font-weight:500;color:var(--text-primary)}
-.phase-tag{font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
-.card-meta{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.card-title{font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:2px}
-.card-range{font-size:12px;color:var(--text-secondary)}
-.card-body{font-size:13px;color:var(--text-secondary);line-height:1.7}
+.chart-wrap{position:relative;width:100%;height:300px;background:var(--s1);border-radius:12px;border:0.5px solid var(--border);padding:16px 16px 10px;margin-bottom:14px}
+
+/* ── card ── */
+#card{background:var(--s1);border:0.5px solid var(--border);border-radius:12px;overflow:hidden}
+.card-header{padding:16px 20px 14px;border-bottom:0.5px solid var(--border)}
+.card-meta{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.phase-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0;margin-top:2px;letter-spacing:.02em}
+.card-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:3px;line-height:1.3}
+.card-range{font-size:12px;color:var(--text-muted);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+.range-sep{color:var(--border-strong)}
+.card-body-wrap{padding:16px 20px;display:grid;gap:16px}
+
+/* overview */
+.overview{font-size:13px;color:var(--text-secondary);line-height:1.75}
+
+/* events timeline */
+.section-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+.timeline{display:flex;flex-direction:column;gap:0}
+.ev{display:grid;grid-template-columns:90px 14px 1fr;gap:0 10px;align-items:start}
+.ev-date{font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums;padding-top:1px;text-align:right;line-height:1.5}
+.ev-dot-col{display:flex;flex-direction:column;align-items:center}
+.ev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ev-line{width:1px;background:var(--border);flex:1;min-height:8px}
+.ev:last-child .ev-line{display:none}
+.ev-text{font-size:12.5px;color:var(--text-secondary);line-height:1.6;padding-bottom:12px}
+.ev-text b{color:var(--text-primary);font-weight:500}
+
+/* drivers */
+.drivers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.drivers{grid-template-columns:1fr}}
+.driver-box{background:var(--s2);border-radius:8px;padding:11px 13px;border:0.5px solid var(--border)}
+.driver-head{font-size:11px;font-weight:600;letter-spacing:.04em;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.driver-arrow{font-size:13px}
+.driver-item{font-size:12px;color:var(--text-secondary);line-height:1.55;padding-left:10px;position:relative;margin-bottom:4px}
+.driver-item::before{content:'·';position:absolute;left:2px;color:var(--text-muted)}
+
+/* stats */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.stat-item{background:var(--s2);border-radius:7px;padding:10px 12px}
+.stat-label{font-size:10px;color:var(--text-muted);margin-bottom:3px;letter-spacing:.02em}
+.stat-val{font-size:13px;font-weight:600;color:var(--text-primary);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -52,46 +85,159 @@ canvas{width:100%!important}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 var PHASES = [
-  { label:"① 点com泡沫", color:"#f5a623",
-    title:"互联网泡沫 — 暴涨与崩塌", range:"1998—2001",
-    from:"1998-01-01", to:"2001-12-31",
-    body:"互联网热潮将TSEM推至$598历史顶（2000年3月），估值与基本面严重脱节。随纳斯达克崩盘，叠加全球半导体库存过剩，股价跌超90%，2001年11月低至$61。",
-    stats:[["顶部价格","$598（2000.3）"],["随后跌幅","-90%+"],["驱动","互联网泡沫"]] },
-  { label:"② 债务重建期", color:"#b0afa8",
-    title:"财务困境与漫长底部", range:"2002—2013",
-    from:"2002-01-01", to:"2013-12-31",
-    body:"Fab 2建设债务压顶，2008年金融危机令股价跌至$1.5濒临破产。公司通过债务重组、收购Jazz(2008)向模拟代工转型，但市场认可极慢，股价在低位震荡超10年。",
-    stats:[["金融危机低点","$1.5（2008.12）"],["关键转型","收购Jazz 2008"],["战略","→ Specialty Foundry"]] },
-  { label:"③ 模式认可", color:"#2ed8a0",
-    title:"Specialty foundry模式被市场认可", range:"2014—2019",
-    from:"2014-01-01", to:"2019-12-31",
-    body:"2014年TPSCo合资公司（低价获得Panasonic三座工厂）是重要转折。RF/BCD/CIS高价值工艺打造客户粘性。2016收购Maxim San Antonio工厂。2017-18半导体超级周期推升至$36，后因加息+贸易战回调，2019年企稳。",
-    stats:[["区间涨幅","$5.5→$36 (+554%)"],["关键收购","TPSCo 2014"],["压力","2018加息+贸易战"]] },
-  { label:"④ 疫情冲击", color:"#f05c5b",
-    title:"疫情暴跌 — 快速修复", range:"2020",
-    from:"2020-01-01", to:"2020-12-31",
-    body:"2020年3月疫情引发全球股灾，TSEM单月跌45%至$13.6。但美联储无限QE+半导体需求因居家/5G/汽车电子爆发而反转，全年基本收平，芯片短缺更凸显specialty foundry稀缺性。",
-    stats:[["3月低点","$13.6（-45%）"],["全年涨幅","+5%（抹平）"],["修复驱动","QE+芯片短缺"]] },
-  { label:"⑤ 并购锁定", color:"#5b9cf6",
-    title:"Intel $54亿要约 — 套利价锁定", range:"2021—2023.8",
-    from:"2021-01-01", to:"2023-08-16",
-    body:"2021年随半导体牛市升至$40。2022年1月加息预期致跌至$31.8。2022年2月15日Intel宣布$53/股收购，当日暴涨41%至$47。此后套利逻辑将股价钉在$43-50横盘18个月。2023年8月16日因中国SAMR不批，双方宣布终止，TSEM获$353M终止补偿。",
-    stats:[["要约价","$53/股 (+41%单日)"],["横盘区间","$43–50（18个月）"],["终止补偿","$353M"]] },
-  { label:"⑥ 双重底", color:"#f05c5b",
-    title:"并购终止 + 半导体下行周期", range:"2023.8—2024中",
-    from:"2023-08-17", to:"2024-06-30",
-    body:"并购溢价消失后股价回归基本面。叠加半导体下行：2023年收入同比-15.2%，消费电子/工业需求低迷，库存高企。2023年10月以色列地缘冲突+高利率进一步压制，触及$21.9低点。2024年初硅光子订单信号出现，开始筑底。",
-    stats:[["2023年10月低点","$21.9"],["2023收入YoY","-15.2%"],["额外压力","以色列地缘冲突"]] },
-  { label:"⑦ AI叙事重构", color:"#a78cf5",
-    title:"AI光互联叙事重构 — 估值爬坡", range:"2024下半年—2025Q3",
-    from:"2024-07-01", to:"2025-08-31",
-    body:"AI数据中心光互联需求实质兑现为订单，硅光子收入快速放量。2025年Q3财报SiPho收入$52M同比+70%，股价单日+15%。公司宣布$650M扩产计划。机构大举入场（T.Rowe Q4增持超450万股+3223%）。TSEM完成从「周期性代工」到「AI光基础设施入口」的叙事重构。",
-    stats:[["区间涨幅","$28→$129 (+361%)"],["SiPho YoY","+70%（Q3 2025）"],["机构入场","T.Rowe +3223%"]] },
-  { label:"⑧ 硅光子爆发", color:"#2ed8a0",
-    title:"$13亿合同锁定 — 估值再跃升", range:"2025Q4—2026",
-    from:"2025-09-01", to:"2026-12-31",
-    body:"Q4 2025收入创纪录$440M。2026年Q1 SiPho收入同比增3倍。2026年5月签署$1.3B合同锁定2027年收入+$290M预付款，市场反应空前，股价数日大涨50%+。与Marvell累计出货500万颗相干PIC。分析师目标价从$63上调至$335，2026年6月22日创ATH $317。",
-    stats:[["2026 ATH","$317（2026.6.22）"],["SiPho合同","$1.3B锁定2027"],["Marvell里程碑","500万颗PIC"]] }
+{
+  label:"① 点com泡沫", color:"#f5a623",
+  title:"互联网泡沫 — 暴涨与崩塌",
+  range:"1998年1月 — 2001年12月",
+  from:"1998-01-01", to:"2001-12-31",
+  overview:"互联网热潮席卷全球，TSEM作为独立半导体代工厂，受益于晶圆需求爆发，股价从$142飙升至历史峰值$598（上涨4.2倍）。随后纳斯达克崩盘，全球半导体进入严重库存过剩周期，TSEM营收断崖式下滑，股价回撤逾90%，并留下长达十余年的债务包袱。",
+  events:[
+    {date:"1998.01",dir:"up",text:"<b>互联网热潮启动</b>：全球IT资本开支激增，半导体代工需求旺盛，TSEM股价约$142开始上行。"},
+    {date:"1999.Q3",dir:"up",text:"<b>半导体超级周期</b>：内存、DRAM、逻辑芯片全线告急，独立晶圆厂订单满载，TSEM突破$198。"},
+    {date:"2000.03",dir:"up",text:"<b>历史顶部 $598</b>：纳斯达克同期ATH，TSEM市值泡沫化，市盈率远脱离基本面。"},
+    {date:"2000.04",dir:"dn",text:"<b>纳斯达克开始崩盘</b>：科技股估值重估开启，TSEM随大盘加速下跌，全球半导体库存急速积压。"},
+    {date:"2001.01",dir:"dn",text:"<b>互联网公司倒闭潮</b>：主要客户削减晶圆采购，TSEM季度收入同比腰斩，现金流告急。"},
+    {date:"2001.09",dir:"dn",text:"<b>9·11事件加速下行</b>：全球资本市场恐慌，科技支出进一步冻结，TSEM跌至$62附近低点。"},
+    {date:"2001.12",dir:"neu",text:"<b>阶段底部约$62</b>：股价从峰值回撤89.6%，Fab 2扩产债务在此时已成沉重负担。"}
+  ],
+  up:["纳斯达克/互联网泡沫带动半导体板块普涨","全球IT资本开支激增，晶圆代工需求过热","独立晶圆厂在台积电之外的替代性叙事获追捧"],
+  dn:["纳斯达克2000年4月崩盘，科技估值全面重估","全球半导体库存过剩，客户砍单、拉货停滞","Fab 2扩产债务叠加收入断崖，现金流恶化"],
+  stats:[["峰值价格","$598（2000.3）"],["峰到谷跌幅","-89.6%"],["阶段时长","4年"],["导火索","纳斯达克崩盘"]]
+},
+{
+  label:"② 债务重建期", color:"#b0afa8",
+  title:"财务困境与漫长底部",
+  range:"2002年1月 — 2013年12月",
+  from:"2002-01-01", to:"2013-12-31",
+  overview:"长达12年的底部整理。TSEM背负Fab 2建设形成的巨额债务，在半导体上行周期中也无法充分受益。2008年金融危机将股价推至$1.5的历史绝对低点，公司几乎陷入破产。通过债务重组、战略性收购Jazz和TPSCo，逐步从通用代工向Specialty Foundry转型，但市场的认可极其缓慢。",
+  events:[
+    {date:"2002—2003",dir:"dn",text:"<b>后泡沫去库存</b>：半导体行业库存消化，TSEM收入持续低迷，Fab 2的债务利息吞噬现金流，股价在$33—$65区间挣扎。"},
+    {date:"2004.Q1",dir:"up",text:"<b>短暂复苏</b>：半导体小周期上行，TSEM股价反弹至$151，但随即因债务压力和行业再次下行回落至$25。"},
+    {date:"2007.02",dir:"up",text:"<b>2006—2007年半导体牛市</b>：股价短暂反弹至$31，受益于模拟/RF工艺客户增加，但规模仍小。"},
+    {date:"2008.09",dir:"dn",text:"<b>雷曼兄弟破产</b>：金融危机引发全球信贷紧缩，TSEM融资渠道受阻，客户取消订单，股价急跌。"},
+    {date:"2008.12",dir:"dn",text:"<b>历史绝对低点 $1.5</b>：公司濒临破产边缘，市值不足$1亿。Jazz Semiconductor收购（$99M）在危机中完成，实际上是低价抄底模拟代工资产。"},
+    {date:"2009—2010",dir:"up",text:"<b>QE救市+半导体复苏</b>：美联储量化宽松提振市场，TSEM股价从$1.5反弹至$28，Jazz整合开始贡献RF/模拟工艺营收。"},
+    {date:"2011.10",dir:"dn",text:"<b>欧债危机+库存下行</b>：再次回落至$9.15，市场仍不相信TSEM的Specialty模式能带来稳定盈利。"},
+    {date:"2013.12",dir:"dn",text:"<b>阶段最终底 $3.86</b>：营收增长缓慢，债务偿还压力仍在，股价12年间整体不升反降。"}
+  ],
+  up:["Jazz收购（2008）补充RF/模拟工艺，客户粘性提升","美联储QE周期带动风险资产短暂反弹","半导体小周期上行期间营收略有改善"],
+  dn:["Fab 2历史债务（逾5亿美元）持续压制现金流","2008年金融危机几乎令公司破产","通用代工与台积电竞争无差异化优势，毛利率极低","市场不认可Specialty Foundry转型的可持续性"],
+  stats:[["阶段时长","12年（2002—2013）"],["绝对低点","$1.5（2008.12）"],["关键并购","Jazz 2008，$99M"],["转型主题","→ Specialty Foundry"]]
+},
+{
+  label:"③ 模式认可", color:"#2ed8a0",
+  title:"Specialty foundry模式被市场认可",
+  range:"2014年1月 — 2019年12月",
+  from:"2014-01-01", to:"2019-12-31",
+  overview:"2014年TPSCo合资案是真正的转折点。TSEM以极低代价获得Panasonic三座工厂，直接打通日系客户体系，并为硅光子工艺积累Fab。RF、BCD、CIS等高附加值Specialty工艺逐步形成客户护城河。2017-18年半导体超级周期将股价推至$36，但随后遭遇加息和贸易战双重压制。",
+  events:[
+    {date:"2014.03",dir:"up",text:"<b>TPSCo合资成立</b>（TSEM持股51%）：以极低对价接手Panasonic三座工厂（Uozu/Tonami/Arai），换取日系汽车电子、工业传感器客户群，硅光子工艺Fab雏形在此阶段形成。"},
+    {date:"2015.03",dir:"up",text:"<b>股价新高$17.95</b>：市场开始认可Specialty定位，CIS（图像传感器）工艺获三星、索尼周边客户。"},
+    {date:"2015.08",dir:"dn",text:"<b>A股崩盘传导</b>：中国股市暴跌引发全球风险资产抛售，TSEM回调至$11.67。"},
+    {date:"2016.06",dir:"up",text:"<b>收购Maxim San Antonio Fab</b>：以$40M购入德州晶圆厂，扩充BCD（汽车/工业电源管理）工艺产能。"},
+    {date:"2017.11",dir:"up",text:"<b>半导体超级周期顶部 $35.45</b>：5G前期备货+物联网需求爆发，模拟/RF工艺供不应求，TSEM满产满销，毛利率升至历史高位。"},
+    {date:"2018.01",dir:"dn",text:"<b>美联储激进加息预期</b>：科技/半导体估值压缩，叠加中美贸易战，客户拉货节奏放缓，TSEM从$36回落。"},
+    {date:"2018.12",dir:"dn",text:"<b>半导体下行+贸易战高峰</b>：库存积压，股价跌至$13.59。但Specialty定位使其跌幅显著低于台积电、英特尔等。"},
+    {date:"2019.12",dir:"up",text:"<b>企稳于$24.9</b>：贸易战阶段性缓和，5G周期重启预期，TSEM客户结构多元化优势凸显。"}
+  ],
+  up:["TPSCo获日系工厂，工艺宽度大幅扩充（RF、CIS、硅光子前期）","Specialty模式（非标准工艺+长合同）客户转换成本高","2017-18半导体超级周期全面受益","Maxim Fab扩充BCD工艺产能"],
+  dn:["2018年美联储激进加息压制成长估值","中美贸易战导致客户备货谨慎","通用模拟代工市场价格竞争加剧"],
+  stats:[["区间涨幅","$5.5 → $36 (+554%)"],["关键并购","TPSCo 2014，Maxim Fab 2016"],["毛利率高峰","~28%（2017—18）"],["下行因素","加息+贸易战（2018）"]]
+},
+{
+  label:"④ 疫情冲击", color:"#f05c5b",
+  title:"疫情暴跌 — 快速修复",
+  range:"2020年1月 — 2020年12月",
+  from:"2020-01-01", to:"2020-12-31",
+  overview:"2020年是最短但最剧烈的阶段。3月疫情引发全球股灾，TSEM单月暴跌45%至$13.6，但在美联储无限QE和芯片短缺逻辑下，股价快速修复，全年几乎持平。这一年奠定了后续"芯片稀缺"的行业叙事基础。",
+  events:[
+    {date:"2020.01",dir:"neu",text:"<b>疫情初期</b>：COVID-19在中国爆发，市场尚未意识到全球供应链影响，TSEM股价维持$24附近。"},
+    {date:"2020.03.16",dir:"dn",text:"<b>全球股市崩盘</b>：疫情宣布全球大流行，美股三次熔断，TSEM单月跌45%至$13.56。以色列工厂进入防疫封锁模式，短期产能受限。"},
+    {date:"2020.03.23",dir:"up",text:"<b>美联储宣布无限QE</b>：流动性危机解除，风险资产开始V形反转，TSEM同步企稳。"},
+    {date:"2020.Q2",dir:"up",text:"<b>居家经济+5G备货</b>：笔记本、游戏主机、路由器需求暴增，RF/模拟芯片需求反而逆势上行，TSEM订单快速回填。"},
+    {date:"2020.Q3",dir:"up",text:"<b>芯片短缺叙事成形</b>：汽车芯片断供、消费电子抢货，独立晶圆厂产能成为稀缺资源，Specialty定位溢价进一步凸显。"},
+    {date:"2020.12.07",dir:"up",text:"<b>全年收平 $26.95</b>：全年涨幅+5%，在全球股市大涨背景下表现保守，但考虑3月暴跌，修复速度已相当快。"}
+  ],
+  up:["美联储无限QE托底流动性","居家经济拉动RF/模拟/CIS芯片需求","汽车+消费电子芯片短缺凸显Specialty晶圆厂稀缺性","以色列工厂未受疫情严重破坏，产能持续稳定"],
+  dn:["COVID-19全球大流行引发市场恐慌性抛售","短期以色列工厂防疫封锁影响产出","全球供应链不确定性压制订单能见度"],
+  stats:[["3月低点","$13.56（-45%单月）"],["全年涨幅","+5%"],["修复用时","约9个月"],["关键催化","美联储无限QE（3月23日）"]]
+},
+{
+  label:"⑤ 并购锁定", color:"#5b9cf6",
+  title:"Intel $54亿要约 — 套利价锁定",
+  range:"2021年1月 — 2023年8月16日",
+  from:"2021-01-01", to:"2023-08-16",
+  overview:"Intel豪掷$54亿收购TSEM，意图借此获得Specialty Foundry能力以补充IDM战略。要约公告后股价单日+41%至$47，此后18个月套利逻辑将股价钉死在$43-50区间，市场几乎认定交易必成。2023年8月中国SAMR未批，交易终止，TSEM获$353M补偿金，但失去了溢价支撑。",
+  events:[
+    {date:"2021.12",dir:"up",text:"<b>半导体牛市高点</b>：TSEM随行业涨至$39.87，Specialty订单能见度延伸至2023年，业绩预期稳健。"},
+    {date:"2022.01",dir:"dn",text:"<b>美联储加息预期冲击</b>：成长股/半导体全线杀估值，TSEM跌至$31.83。"},
+    {date:"2022.02.15",dir:"up",text:"<b>Intel宣布$53/股收购要约</b>：总价$54亿，溢价约60%。当日TSEM暴涨41%至$47.07。Intel战略：通过收购获得RF、模拟、CIS工艺能力，补充Intel Foundry Services（IFS）拼图。"},
+    {date:"2022.03—2023.07",dir:"neu",text:"<b>套利区间锁定$43—$50</b>（历时18个月）：套利资金主导定价，股价被钉在要约价附近。期间TSEM自身业绩持续向好（2022年收入+22%，毛利率提升），但市场视角全集中在并购审批进度。"},
+    {date:"2023.04",dir:"dn",text:"<b>中国SAMR审查拖延信号</b>：市场开始担忧中美科技博弈影响审批，股价从$45小幅下滑，套利价差扩大。"},
+    {date:"2023.08.16",dir:"dn",text:"<b>交易正式终止</b>：中国SAMR未在截止日期前批准，双方联合声明取消并购。Intel支付$353M终止补偿金。TSEM当日从$33.94跳空下跌至$30.17，套利溢价瞬间蒸发。"}
+  ],
+  up:["Intel要约溢价约60%，套利资金大量介入","TSEM自身业绩持续改善（2022年收入+22%）","IFS战略为TSEM Specialty能力赋予战略价值叙事"],
+  dn:["中美科技博弈导致SAMR审批拖延并最终拒绝","要约失败后股价失去溢价支撑","半导体行业2023年进入下行周期雪上加霜"],
+  stats:[["要约价格","$53/股（+60%溢价）"],["要约总额","$54亿"],["锁定时长","18个月 $43—$50"],["终止补偿","$353M"]]
+},
+{
+  label:"⑥ 双重底", color:"#f05c5b",
+  title:"并购终止 + 半导体下行周期",
+  range:"2023年8月17日 — 2024年6月30日",
+  from:"2023-08-17", to:"2024-06-30",
+  overview:"并购溢价消失叠加半导体下行周期，TSEM面临双重压制。2023年收入同比大幅下滑，消费电子和工业需求低迷，库存高企。以色列地缘政治冲突（哈以战争）进一步压制这家以色列公司的估值。2024年初硅光子订单信号出现，开始艰难筑底。",
+  events:[
+    {date:"2023.08.17",dir:"dn",text:"<b>并购溢价归零</b>：交易终止次日，TSEM股价重新回归基本面定价，从$30回落，市场重新评估其独立价值。"},
+    {date:"2023.Q3",dir:"dn",text:"<b>2023年半导体下行最深处</b>：消费电子砍单潮，工业客户去库存，TSEM季度营收同比下滑超20%。RF/CIS需求疲软。"},
+    {date:"2023.10.07",dir:"dn",text:"<b>哈以冲突爆发</b>（TSEM是以色列公司，总部在Migdal HaEmek）：地缘政治风险溢价叠加，机构投资者部分减仓，股价再度下跌。"},
+    {date:"2023.10.16",dir:"dn",text:"<b>阶段低点 $21.91</b>：双重底的第二个低点。以色列工厂运营正常，员工安全，但市场恐慌情绪主导。"},
+    {date:"2023.11—12",dir:"up",text:"<b>地缘溢价部分消退</b>：工厂未受直接影响，营运连续性得到确认，股价从低点反弹至$30。"},
+    {date:"2024.Q1",dir:"up",text:"<b>硅光子订单信号出现</b>：AI数据中心客户开始接触TSEM的硅光子工艺产能，机构开始关注AI光互联叙事，股价回升至$38。"},
+    {date:"2024.06",dir:"up",text:"<b>筑底完成，约$43</b>：半导体行业库存基本消化，TSEM硅光子客户拉货确认，新叙事开始支撑估值。"}
+  ],
+  up:["$353M终止补偿金提供财务缓冲","2024年初硅光子/AI光互联需求实质性出现","半导体行业库存消化后需求逐步复苏"],
+  dn:["并购溢价瞬间蒸发，市值重新定价","2023年全年营收同比-15.2%，消费电子+工业需求低迷","以色列哈以冲突（2023.10起）带来地缘政治折价","高利率环境压制成长股估值"],
+  stats:[["阶段低点","$21.91（2023.10.16）"],["2023营收YoY","-15.2%"],["地缘风险","哈以冲突（TSEM为以色列公司）"],["筑底催化","AI硅光子订单信号（2024.Q1）"]]
+},
+{
+  label:"⑦ AI叙事重构", color:"#a78cf5",
+  title:"AI光互联叙事重构 — 估值爬坡",
+  range:"2024年7月 — 2025年8月",
+  from:"2024-07-01", to:"2025-08-31",
+  overview:"这是TSEM估值框架被彻底重写的阶段。从"Specialty周期股"重新定价为"AI光基础设施入口"。硅光子（Silicon Photonics）收入快速放量，AI数据中心对光互联芯片（coherent PIC）的需求超出所有人预期，TSEM是全球少数具备量产能力的代工厂之一，定价权随之显著提升。",
+  events:[
+    {date:"2024.07",dir:"up",text:"<b>AI光互联需求确认</b>：Marvell、Intel等客户正式下达硅光子量产订单，TSEM宣布SiPho工艺进入规模量产阶段。"},
+    {date:"2024.09",dir:"up",text:"<b>T.Rowe Price大幅建仓</b>：Q3末持仓增加超450万股（+3223%），机构认定TSEM是稀缺的AI算力基础设施标的。"},
+    {date:"2024.12",dir:"up",text:"<b>股价突破$52</b>：超过Intel要约价$53附近，意味着市场认为TSEM独立成长价值已超过当年Intel给出的收购价。"},
+    {date:"2025.Q1",dir:"dn",text:"<b>DeepSeek冲击+关税恐慌</b>：DeepSeek R1发布引发\"AI算力是否过剩\"的质疑，叠加关税战担忧，半导体全线回调，TSEM从$51跌至$40。"},
+    {date:"2025.04.04",dir:"dn",text:"<b>关税战最恐慌时刻</b>：特朗普宣布对等关税，半导体供应链重组担忧，TSEM跌至$29.65（阶段低点）。以色列工厂本地化属性反而成为关税豁免优势。"},
+    {date:"2025.Q2",dir:"up",text:"<b>快速修复</b>：关税谈判缓和，AI光互联需求不受关税影响，订单能见度强劲，TSEM回升至$43。"},
+    {date:"2025.Q3",dir:"up",text:"<b>业绩验证：SiPho Q3收入$52M，同比+70%</b>。股价单日+15%，机构全面调高目标价，估值框架从周期股（EV/Sales 2x）切换至成长股（EV/Sales 6x+）。"},
+    {date:"2025.08.31",dir:"up",text:"<b>$72，宣布$650M扩产计划</b>：TPSCo新工厂线、以色列Fab扩建，2026年SiPho产能翻倍规划落地，股价站上新台阶。"}
+  ],
+  up:["AI数据中心光互联（400G/800G Coherent PIC）需求爆发，TSEM是全球少数量产方","估值框架切换：从周期代工股→AI光基础设施稀缺标的","机构大幅建仓（T.Rowe +3223%，Blackrock增持）","以色列工厂在关税战中具备本地化豁免优势"],
+  dn:["DeepSeek引发AI算力需求质疑（2025.Q1）","特朗普关税战峰值期市场恐慌（2025.04，$29.65低点）","短期产能扩张节奏慢于订单增速，客户有等待期"],
+  stats:[["区间涨幅","$28 → $129（+361%）"],["SiPho Q3 2025","$52M，同比+70%"],["扩产计划","$650M（2025.8宣布）"],["机构建仓","T.Rowe +3223%（Q3 2024）"]]
+},
+{
+  label:"⑧ 硅光子爆发", color:"#2ed8a0",
+  title:"$13亿合同锁定 — 估值再跃升",
+  range:"2025年9月 — 2026年6月（当前）",
+  from:"2025-09-01", to:"2026-12-31",
+  overview:"TSEM进入历史上最强势的加速阶段。$1.3B长期合同（含$290M预付款）锁定2027年收入，彻底消除市场对SiPho需求持续性的顾虑。与Marvell累计出货500万颗相干PIC，验证量产能力。Q4 2025收入破纪录$440M，2026年Q1 SiPho收入同比增3倍，分析师目标价从$63连续上调至$335，2026年6月22日创ATH $317。",
+  events:[
+    {date:"2025.10",dir:"up",text:"<b>Q3财报超预期</b>：收入$395M同比+38%，SiPho确认放量，EPS大超预期，股价从$72跳升至$95。"},
+    {date:"2025.11—12",dir:"up",text:"<b>连续机构调研与目标价上调</b>：Raymond James、Needham、Cowen相继将目标价从$80-100区间上调至$150-180。$128.94收盘，市值首次突破$120亿。"},
+    {date:"2026.Q1",dir:"up",text:"<b>Q4 2025收入创纪录$440M</b>：SiPho收入单季突破$100M，毛利率提升至34%，自由现金流转正。$650M扩产计划进入施工阶段。"},
+    {date:"2026.04",dir:"up",text:"<b>AI光互联需求加速</b>：超大算力集群（100k+ GPU）全面采用光互联架构，TSEM客户名单扩展至Meta、微软光互联供应商，股价逼近$160。"},
+    {date:"2026.05",dir:"up",text:"<b>$1.3B战略合同签署</b>（对方疑为Marvell主要客户）：$290M预付款同步到账，合同锁定2027年主要产能，消除了\"AI资本开支是否可持续\"的核心担忧。股价数日内大涨50%+，突破$200。"},
+    {date:"2026.05—06",dir:"up",text:"<b>500万颗相干PIC里程碑</b>：与Marvell合计出货500万颗，验证TSEM是全球规模最大的相干光子集成电路代工厂。"},
+    {date:"2026.06.22",dir:"up",text:"<b>历史ATH $317</b>：分析师目标价中位数$280-335，部分给出$400+远期目标。市值约$280亿，相当于2008年绝对低点的280倍。"}
+  ],
+  up:["$1.3B合同+$290M预付款锁定2027年收入，\"需求持续性\"疑虑消除","Marvell 500万颗PIC出货验证批量产能","Q4 2025营收$440M创纪录，毛利率持续提升","AI超大规模算力集群全面转向光互联架构，TSEM是核心供应商","以色列Fab工艺壁垒（Silicon Photonics工艺门槛极高，竞争对手追赶需3-5年）"],
+  dn:["估值已充分反映2027年预期，需要业绩持续兑现","台积电、GlobalFoundries宣布进入硅光子赛道（2025年末），长期竞争格局存在不确定性","以色列地缘政治尾部风险仍在"],
+  stats:[["2026 ATH","$317（2026.6.22）"],["SiPho合同","$1.3B锁定2027"],["Q4 2025营收","$440M（创纪录）"],["Marvell PIC","500万颗出货"]]
+}
 ];
 
 var RAW = [
@@ -138,124 +284,96 @@ var RAW = [
 var labels = RAW.map(function(r){ return r[0]; });
 var prices = RAW.map(function(r){ return r[1]; });
 
-function inPhase(dateStr, p) {
-  return dateStr >= p.from && dateStr <= p.to;
-}
+function inPhase(d,p){ return d>=p.from&&d<=p.to; }
 
-var datasets = PHASES.map(function(p) {
-  var data = labels.map(function(d, i) {
-    return inPhase(d, p) ? prices[i] : null;
-  });
+var datasets = PHASES.map(function(p){
   return {
-    label: p.label,
-    data: data,
-    borderColor: p.color,
-    backgroundColor: 'transparent',
-    borderWidth: 2.5,
-    pointRadius: 0,
-    pointHoverRadius: 5,
-    spanGaps: false,
-    tension: 0.3
+    label:p.label, data:labels.map(function(d,i){ return inPhase(d,p)?prices[i]:null; }),
+    borderColor:p.color, backgroundColor:'transparent',
+    borderWidth:2.5, pointRadius:0, pointHoverRadius:5, spanGaps:false, tension:0.3
   };
 });
 
 var ctx = document.getElementById('ch').getContext('2d');
-new Chart(ctx, {
-  type: 'line',
-  data: { labels: labels, datasets: datasets },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: { mode: 'index', intersect: false },
-    scales: {
-      x: {
-        ticks: {
-          color: '#52526a', font: { size: 11 },
-          maxTicksLimit: 9,
-          callback: function(val, idx) {
-            var d = labels[idx];
-            if (!d) return '';
-            var yr = d.substring(0,4);
-            var mo = d.substring(5,7);
-            return mo === '01' || mo === '06' ? yr : '';
-          }
-        },
-        grid: { color: '#1e1e28' },
-        border: { color: '#2a2a36' }
-      },
-      y: {
-        type: 'logarithmic',
-        min: 1,
-        ticks: {
-          color: '#52526a', font: { size: 11 },
-          callback: function(v) {
-            if ([1,2,5,10,20,50,100,200,300].indexOf(Math.round(v)) > -1) return '$'+Math.round(v);
-            return '';
-          }
-        },
-        grid: { color: '#1e1e28' },
-        border: { color: '#2a2a36' }
-      }
+new Chart(ctx,{
+  type:'line', data:{labels:labels,datasets:datasets},
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    scales:{
+      x:{ticks:{color:'#52526a',font:{size:11},maxTicksLimit:9,
+          callback:function(v,i){ var d=labels[i]; if(!d)return''; var m=d.substring(5,7); return m==='01'||m==='06'?d.substring(0,4):''; }},
+        grid:{color:'#1e1e28'}, border:{color:'#2a2a36'}},
+      y:{type:'logarithmic',min:1,
+        ticks:{color:'#52526a',font:{size:11},
+          callback:function(v){ return [1,2,5,10,20,50,100,200,300].indexOf(Math.round(v))>-1?'$'+Math.round(v):''; }},
+        grid:{color:'#1e1e28'}, border:{color:'#2a2a36'}}
     },
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#1f1f28',
-        borderColor: 'rgba(255,255,255,0.08)',
-        borderWidth: 0.5,
-        titleColor: '#e2e2ea',
-        bodyColor: '#8e8ea8',
-        padding: 10,
-        filter: function(item) { return item.parsed.y !== null; },
-        callbacks: {
-          label: function(ctx) {
-            return ' ' + ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(0);
-          }
-        }
-      }
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'#1f1f28',borderColor:'rgba(255,255,255,0.08)',borderWidth:0.5,
+        titleColor:'#e2e2ea',bodyColor:'#8e8ea8',padding:10,
+        filter:function(i){ return i.parsed.y!==null; },
+        callbacks:{label:function(c){ return ' '+c.dataset.label+': $'+c.parsed.y.toFixed(0); }}}
     }
   }
 });
 
-var tabsEl = document.getElementById('tabs');
-var cardEl = document.getElementById('card');
-
-PHASES.forEach(function(p, i) {
-  var btn = document.createElement('button');
-  btn.className = 'tab-btn';
-  btn.textContent = p.label;
-  btn.onclick = function() { showPhase(i); };
-  tabsEl.appendChild(btn);
+var tabsEl=document.getElementById('tabs'), cardEl=document.getElementById('card');
+PHASES.forEach(function(p,i){
+  var b=document.createElement('button'); b.className='tab-btn'; b.textContent=p.label;
+  b.onclick=function(){ showPhase(i); }; tabsEl.appendChild(b);
 });
 
-function showPhase(idx) {
-  tabsEl.querySelectorAll('.tab-btn').forEach(function(b, i) {
-    if (i === idx) {
-      b.style.background = PHASES[idx].color + '22';
-      b.style.color = PHASES[idx].color;
-      b.style.borderColor = PHASES[idx].color + '66';
-    } else {
-      b.style.background = '';
-      b.style.color = '';
-      b.style.borderColor = '';
-    }
-  });
+function dot(dir){
+  var c = dir==='up'?'#2ed8a0':dir==='dn'?'#f05c5b':'#52526a';
+  return '<div class="ev-dot" style="background:'+c+'"></div>';
+}
 
-  var p = PHASES[idx];
-  var statsHtml = p.stats.map(function(s) {
+function showPhase(idx){
+  tabsEl.querySelectorAll('.tab-btn').forEach(function(b,i){
+    if(i===idx){
+      b.style.background=PHASES[idx].color+'22';
+      b.style.color=PHASES[idx].color;
+      b.style.borderColor=PHASES[idx].color+'66';
+    } else { b.style.background=''; b.style.color=''; b.style.borderColor=''; }
+  });
+  var p=PHASES[idx];
+
+  var evHtml=p.events.map(function(e){
+    return '<div class="ev">'
+      +'<div class="ev-date">'+e.date+'</div>'
+      +'<div class="ev-dot-col">'+dot(e.dir)+'<div class="ev-line"></div></div>'
+      +'<div class="ev-text">'+e.text+'</div>'
+      +'</div>';
+  }).join('');
+
+  var upHtml=p.up.map(function(s){ return '<div class="driver-item">'+s+'</div>'; }).join('');
+  var dnHtml=p.dn.map(function(s){ return '<div class="driver-item">'+s+'</div>'; }).join('');
+
+  var statsHtml=p.stats.map(function(s){
     return '<div class="stat-item"><div class="stat-label">'+s[0]+'</div><div class="stat-val">'+s[1]+'</div></div>';
   }).join('');
 
-  cardEl.innerHTML =
-    '<div class="card-meta">'
-    + '<span class="phase-tag" style="background:'+p.color+'22;color:'+p.color+';">'+p.label+'</span>'
-    + '<div><div class="card-title">'+p.title+'</div>'
-    + '<div class="card-range">'+p.range+'</div></div>'
-    + '</div>'
-    + '<div class="card-body">'+p.body+'</div>'
-    + '<div class="stat-grid">'+statsHtml+'</div>';
+  cardEl.innerHTML=
+    '<div class="card-header">'
+    +'<div class="card-meta">'
+    +'<span class="phase-tag" style="background:'+p.color+'22;color:'+p.color+'">'+p.label+'</span>'
+    +'<div><div class="card-title">'+p.title+'</div>'
+    +'<div class="card-range">'+p.range+'</div></div>'
+    +'</div>'
+    +'</div>'
+    +'<div class="card-body-wrap">'
+    +'<div class="overview">'+p.overview+'</div>'
+    +'<div><div class="section-label">关键事件时间线</div><div class="timeline">'+evHtml+'</div></div>'
+    +'<div><div class="section-label">涨跌归因</div>'
+    +'<div class="drivers">'
+    +'<div class="driver-box"><div class="driver-head"><span class="driver-arrow" style="color:#2ed8a0">↑</span><span style="color:#2ed8a0">上涨驱动</span></div>'+upHtml+'</div>'
+    +'<div class="driver-box"><div class="driver-head"><span class="driver-arrow" style="color:#f05c5b">↓</span><span style="color:#f05c5b">下跌压力</span></div>'+dnHtml+'</div>'
+    +'</div></div>'
+    +'<div><div class="section-label">关键数据</div><div class="stat-grid">'+statsHtml+'</div></div>'
+    +'</div>';
 }
-
 showPhase(4);
 </script>
 </body>
