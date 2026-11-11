@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中期选举选后推演</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --plane:          #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* S&P 500 */
+    --series-2:       #eb6834; /* Nasdaq */
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --card-bg:        #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --plane:          #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
+      --series-2:       #d95926;
+      --good:           #0ca30c;
+      --warning:        #fab219;
+      --serious:        #ec835a;
+      --critical:       #e66767;
+      --card-bg:        #232322;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --plane:          #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-1:       #3987e5;
+    --series-2:       #d95926;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #e66767;
+    --card-bg:        #232322;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--plane);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+  .viz-root { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  h2 { font-size: 1.3rem; margin: 44px 0 4px; padding-top: 10px; border-top: 1px solid var(--border); }
+  h2 .part-no { color: var(--series-1); }
+  h3 { font-size: 1.02rem; margin: 0 0 10px; }
+  h4 { font-size: 0.95rem; margin: 16px 0 6px; color: var(--text-secondary); }
+  .subtitle { color: var(--text-secondary); font-size: 0.92rem; margin: 0 0 4px; }
+  .section-desc { color: var(--text-secondary); font-size: 0.9rem; margin: 0 0 20px; }
+
+  .meta-bar { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 28px; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+  .stat-tile {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .stat-tile .label { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px; }
+  .stat-tile .value { font-size: 1.4rem; font-weight: 600; }
+  .stat-tile .value.good { color: var(--good); }
+  .stat-tile .value.crit { color: var(--critical); }
+  .stat-tile .sub { font-size: 0.76rem; color: var(--text-secondary); margin-top: 4px; }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  .tag {
+    display: inline-block; font-size: 0.72rem; padding: 2px 9px; border-radius: 999px;
+    border: 1px solid var(--border); color: var(--text-secondary); margin-left: 8px; font-weight: 500;
+    vertical-align: middle;
+  }
+  .tag.crisis { color: var(--critical); border-color: var(--critical); }
+  .tag.hawkish { color: var(--serious); border-color: var(--serious); }
+  .tag.expansion { color: var(--good); border-color: var(--good); }
+
+  dl.fact-grid { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; margin: 10px 0 0; font-size: 0.87rem; }
+  dl.fact-grid dt { color: var(--text-muted); }
+  dl.fact-grid dd { margin: 0; color: var(--text-secondary); }
+
+  .legend { display: flex; gap: 18px; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px; }
+  .legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+
+  .chart-wrap { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px 20px 8px; margin-bottom: 28px; overflow-x: auto; }
+  .bar-chart { display: flex; align-items: stretch; height: 260px; gap: 18px; min-width: 480px; position: relative; }
+  .bar-chart::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--baseline);
+  }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+  .bar-pair { flex: 1; width: 100%; position: relative; display: flex; justify-content: center; gap: 12px; }
+  .bar-col { width: 34%; max-width: 30px; position: relative; height: 100%; }
+  .bar { position: absolute; left: 0; right: 0; border-radius: 4px 4px 0 0; }
+  .bar.neg { border-radius: 0 0 4px 4px; }
+  .bar-val {
+    position: absolute; left: 50%; transform: translateX(-50%); font-size: 0.68rem;
+    color: var(--text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  .bar-group .x-label { margin-top: 8px; font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+  .winrate-chart { display: flex; align-items: flex-end; height: 190px; gap: 18px; min-width: 480px; }
+  .wr-group { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .wr-bars { flex: 1; width: 100%; display: flex; justify-content: center; align-items: flex-end; gap: 12px; }
+  .wr-col { width: 34%; max-width: 30px; border-radius: 4px 4px 0 0; position: relative; }
+  .wr-col .wr-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.68rem; color: var(--text-secondary); }
+  .wr-group .x-label { margin-top: 8px; font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+  table.data-table { border-collapse: collapse; width: 100%; font-size: 0.78rem; }
+  table.data-table th, table.data-table td {
+    padding: 7px 9px; text-align: center; border-bottom: 1px solid var(--grid); vertical-align: top;
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; font-weight: 600; white-space: nowrap; }
+  table.data-table td:nth-child(2), table.data-table td:nth-child(3), table.data-table td:nth-child(4),
+  table.data-table td:nth-child(5), table.data-table td:nth-child(6), table.data-table td:nth-child(7),
+  table.data-table td:nth-child(8) {
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  table.data-table td.factor { text-align: left; font-size: 0.76rem; color: var(--text-secondary); min-width: 170px; }
+  table.data-table th { color: var(--text-muted); font-weight: 500; font-size: 0.74rem; background: var(--surface-1); }
+  table.data-table tr.summary-row td { background: var(--surface-1); font-weight: 600; }
+  .pos { color: var(--good); }
+  .neg { color: var(--critical); }
+  .sep { color: var(--text-muted); margin: 0 2px; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--card-bg); padding: 4px 0; margin-bottom: 12px; }
+  .table-note { font-size: 0.78rem; color: var(--text-muted); margin: 0 0 24px; }
+
+  .cycle-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .month-attr { font-size: 0.87rem; color: var(--text-secondary); margin-top: 10px; }
+  .month-attr b { color: var(--text-primary); }
+
+  .src-list { font-size: 0.76rem; color: var(--text-muted); line-height: 1.8; }
+
+  .callout {
+    border-left: 3px solid var(--series-1); padding: 10px 16px; background: var(--card-bg);
+    border-radius: 0 8px 8px 0; font-size: 0.9rem; color: var(--text-secondary); margin: 16px 0;
+  }
+  .callout.warn { border-left-color: var(--serious); }
+
+  .scenario-table th, .scenario-table td { text-align: left; }
+  .scenario-table td.prob { text-align: center; font-weight: 600; white-space: nowrap; }
+
+  .disclaimer {
+    margin-top: 40px; padding: 16px 18px; border: 1px dashed var(--border); border-radius: 10px;
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+
+<style>
+  small.muted { color: var(--text-muted); font-size: 0.7rem; }
+  .verdict { display:inline-block; font-size:0.72rem; font-weight:600; padding:1px 8px; border-radius:999px; border:1px solid; white-space:nowrap; }
+  .v-ok { color: var(--good); border-color: var(--good); }
+  .v-bad { color: var(--critical); border-color: var(--critical); }
+  .v-mid { color: var(--serious); border-color: var(--serious); }
+  ul.check { list-style:none; padding:0; margin:0; }
+  ul.check li { padding:10px 0; border-bottom:1px solid var(--grid); font-size:0.88rem; color:var(--text-secondary); }
+  ul.check li:last-child { border-bottom:none; }
+  ul.check b { color: var(--text-primary); }
+  .tldr { background: var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:16px 20px; }
+  .tldr ol { margin:0; padding-left:20px; } .tldr li { margin:6px 0; font-size:0.92rem; }
+  table.data-table td.left { text-align:left; white-space:normal; min-width:160px; }
+  @media (max-width: 640px) { .viz-root { padding: 20px 16px 60px; } }
+</style></head><body>
+<div class="viz-root">
+<h1>2026中期选举之后：走势推演与前两版结论映射</h1>
+<p class="subtitle">第三版 · 数据截至 2026-11-05 收盘 · 前两版：7/29《复盘与展望》、11/3《选后展望与传言核查》</p>
+<div class="meta-bar"><span>指数/行业ETF：Yahoo Finance 日线独立计算</span><span>选举结果：AP / CBS / CNN（部分席位仍在计票）</span><span>市场归因：CNBC / Yahoo Finance / Fox Business / Reuters</span></div>
+
+<div class="tldr"><h3>一页结论</h3><ol>
+<li><b>选举结果：民主党横扫，规模超出预期。</b>参院约54席（翻转堪萨斯、艾奥瓦、得州、俄亥俄、缅因、北卡、南卡），众院预计250席以上。这与推文样本里真正“两院同时翻转”的1954、2006属于同一类。</li>
+<li><b>市场反应分两段：</b>11/4 “不确定性消除 + 伊朗停战预期”，标普 +1.6%，WTI −8.3%；11/5 “AI监管叙事 + 对冲基金兑现 + 高通指引疲弱”，标普 −4.4%，纳指 −5.5% 进入技术性回调，费城半导体 −12%，VIX 28。选举日后2天累计 −2.8%，是1954年以来最差的中期选举后开局。</li>
+<li><b>和前两版对照：</b>“选举只是时间坐标”这一条被推翻，选举通过油价和AI两个渠道直接改变了定价；“选后修复并非无条件”和“推文过于乐观”两条目前成立。</li>
+<li><b>修正后的推演（到2027年1月末）：</b>基准45%，“冲击后震荡修复”，标普 7,400–7,800；风险35%，“2018式12月杀跌”，6,600–7,000；乐观20%，“伊朗协议 + 加息撤出定价”，7,800–8,100。概率加权中枢约 <b>7,390</b>，相对11/5收盘约 +0.5%。中枢较11/3版下调约5%，风险情景权重从25%上调到35%。</li>
+<li><b>6–12个月：</b>历史上中期选举后12个月18/18上涨；Fed加息期4个样本12个月均值 +14.9%，但路径都要先经历一次回撤。今年的特殊之处在于AI估值没有前例可比，所以“逢低布局”的前提是确认12月FOMC不再加码。</li>
+</ol></div>
+
+<h2><span class="part-no">一、</span>选后三天发生了什么</h2>
+<div class="stat-row">
+ <div class="stat-tile"><div class="label">标普 11/3→11/5</div><div class="value crit">−2.8%</div><div class="sub">7,569 → 7,354；距10/6高点 −5.9%</div></div>
+ <div class="stat-tile"><div class="label">纳指 11/3→11/5</div><div class="value crit">−4.2%</div><div class="sub">24,315；距高点 −11.9%，进入技术性回调</div></div>
+ <div class="stat-tile"><div class="label">VIX</div><div class="value crit">28.2</div><div class="sub">11/4 16.6 → 11/5 单日 +70%</div></div>
+ <div class="stat-tile"><div class="label">WTI</div><div class="value good">$91.7</div><div class="sub">11/4 一度 $88.1（两个月低点）</div></div>
+ <div class="stat-tile"><div class="label">10Y美债</div><div class="value">4.84%</div><div class="sub">选后小幅回落</div></div>
+</div>
+<div class="table-scroll"><table class="data-table">
+<tr><th>日期</th><th>标普</th><th>纳指</th><th>半导体SMH</th><th>VIX</th><th>WTI</th><th>主要驱动</th></tr>
+<tr><td>11/3 选举日</td><td><span class="pos">+0.4%</span></td><td><span class="pos">+0.8%</span></td><td><span class="pos">+2.0%</span></td><td>20.8</td><td>$96.1</td><td class="factor">等待结果</td></tr>
+<tr><td>11/4</td><td><span class="pos">+1.6%</span></td><td><span class="pos">+1.4%</span></td><td><span class="neg">-2.8%</span></td><td>16.6</td><td>$88.1</td><td class="factor">结果清晰、特朗普接受结果，不确定性消除；万斯称“输在战争”，特朗普表示无意升级中东战事 → 油价 −8.3%；道指 +1,500点，为2025年4月以来最佳单日。半导体当天已经逆势下跌。</td></tr>
+<tr><td>11/5</td><td><span class="neg">-4.3%</span></td><td><span class="neg">-5.5%</span></td><td><span class="neg">-11.2%</span></td><td>28.2</td><td>$91.7</td><td class="factor">AI交易踩踏：费城半导体 −12%，英伟达 −9%，美光 −17%，博通 −10%。归因有三：① 民主党控两院后数据中心/电价监管叙事升温（选举中数据中心相关公投几乎全被否决，桑德斯/AOC提出数据中心暂停法案）；② 对冲基金锁定全年收益（Nomura McElligott：“不是基本面恶化”）；③ 高通指引疲弱。散户单日净卖出为2020年以来最大（Vanda）。</td></tr>
+</table></div>
+<div class="callout"><b>怎么看11/5：</b>“民主党会叫停AI基建”在立法上走不通：总统否决权还在，参院阻挠议事门槛是60票，新国会到2027年1月才就任。真实的监管渠道在州一级（公投、州长，如得州当选州长主张暂停新建数据中心）和电价分摊，影响的是项目节奏而不是行业需求。所以11/5里政策叙事的部分可能被高估了。但10月财报季暴露的“资本开支能否回本”是真问题，两者叠加，才是这次大跌比单纯的政治冲击更深的原因。</div>
+
+<h2><span class="part-no">二、</span>与前两版研究结论的映射</h2>
+<div class="table-scroll"><table class="data-table">
+<tr><th>出处</th><th>当时的结论</th><th>判定</th><th>实际情况</th></tr>
+<tr><td>7/29</td><td class='left'>选举只是时间坐标，不是驱动变量</td><td><span class="verdict v-bad">被推翻</span></td><td class='factor'>这次选举通过两个渠道直接改变了定价：① 选举被当成对伊朗战争的公投（万斯：“我们输在战争”）→ 11/4 WTI −8.3%；② 数据中心与电价成为选举议题（41项相关公投几乎全被否决）→ 11/5 费城半导体 −12%。</td></tr><tr><td>7/29</td><td class='left'>美联储表态比选举结果更重要</td><td><span class="verdict v-mid">待验证</span></td><td class='factor'>12月FOMC加息定价约85–90%，是下一个硬节点。新变化：民主党控参院后，总统重塑Fed的路径基本被封死（UBS），对期限溢价偏利好。</td></tr><tr><td>7/29</td><td class='left'>选后修复并非无条件（2002/2014二次走弱）</td><td><span class="verdict v-ok">正在应验</span></td><td class='factor'>选后第2天就由涨转跌，2个交易日累计 −2.8%，是1954年以来最差的中期选举后开局（此前最差为2002年 −1.4%）。</td></tr><tr><td>11/3</td><td class='left'>民主党横扫已被定价，选举本身主要是消除不确定性</td><td><span class="verdict v-mid">对一半</span></td><td class='factor'>11/4 标普 +1.6%、VIX 从20.8降到16.6，“消除不确定性”兑现；但结果比定价更大（参院约54席、众院250+），AI监管叙事随之被重新定价，这部分没有被定价。</td></tr><tr><td>11/3</td><td class='left'>推文“3个月 +10.7%”过于乐观，乐观情景只给25%</td><td><span class="verdict v-ok">目前成立</span></td><td class='factor'>开局 −2.8%。要在1月末达到 +10.7%（约8,380点），需要从11/5收盘再涨14%。</td></tr><tr><td>11/3</td><td class='left'>基准情景：11月标普 0~+3%</td><td><span class="verdict v-bad">偏离</span></td><td class='factor'>11月至今 −2.5%，正落在风险情景的11月区间（−4~0%）。</td></tr><tr><td>11/3</td><td class='left'>跟踪清单 ①伊朗/油价 ②AI资本开支</td><td><span class="verdict v-ok">命中</span></td><td class='factor'>两个最高优先级变量在选后48小时内先后爆发，而且方向相反：油价是利好，AI是利空。</td></tr><tr><td>11/3</td><td class='left'>行业：必需消费、清洁能源受益；金融、工业承压</td><td><span class="verdict v-ok">基本命中</span></td><td class='factor'>11/2→11/5：太阳能TAN +4.8%、必需消费XLP +0.5%、工业XLI −4.3%、金融XLF −0.1%；能源XLE −8.4%（油价）、半导体SMH −11.9%没有预判到。</td></tr>
+</table></div>
+<div class="callout warn"><b>方法论修正：</b>前两版都默认“选举 → 股市”只通过财政和监管这类慢变量传导，所以把选举当成时间坐标。这次暴露出两个快变量渠道：一是<b>战争和油价</b>（选举被解读为对伊朗战争的否决），二是<b>选举议题直接对应某个板块的估值</b>（数据中心/电价 → AI算力链）。当市场最拥挤的交易恰好是选举议题时，选举就从坐标变成了驱动变量。</div>
+
+<h2><span class="part-no">三、</span>历史对照：选后开局就跌，意味着什么</h2>
+<p class="section-desc">标普500，选举日收盘＝100，往后63个交易日（约3个月）。灰带为1954–2022年18次中期选举的区间，蓝色虚线为中位数，右侧色块为第四部分三情景在1月末的点位区间。</p>
+<div class="chart-wrap">
+ <div class="legend"><span><span class="dot" style="background:var(--series-2)"></span>2026</span><span><span class="dot" style="background:var(--critical)"></span>2018</span><span><span class="dot" style="background:var(--serious)"></span>2002</span><span><span class="dot" style="background:var(--text-muted)"></span>1994</span><span><span class="dot" style="background:var(--series-1)"></span>18次中位数</span></div>
+ <svg viewBox="0 0 900 330" width="100%" role="img" aria-label="中期选举后63个交易日标普路径对比">
+<polygon points="44.0,123.7 55.2,81.6 66.4,87.6 77.6,77.3 88.8,82.0 100.0,77.6 111.2,76.6 122.4,66.8 133.7,64.5 144.9,66.8 156.1,63.4 167.3,61.3 178.5,64.8 189.7,67.5 200.9,48.7 212.1,47.8 223.3,41.4 234.5,30.2 245.7,30.5 256.9,40.7 268.1,49.2 279.3,39.2 290.5,32.3 301.7,23.1 313.0,17.6 324.2,19.7 335.4,25.5 346.6,29.9 357.8,28.8 369.0,37.0 380.2,29.9 391.4,17.3 402.6,-16.2 413.8,3.7 425.0,2.1 436.2,3.4 447.4,2.4 458.6,12.6 469.8,-3.3 481.0,-10.2 492.3,-10.2 503.5,-18.2 514.7,-44.3 525.9,-33.1 537.1,-30.3 548.3,-35.6 559.5,-24.7 570.7,-11.8 581.9,-8.1 593.1,-4.7 604.3,-4.7 615.5,-13.2 626.7,-17.6 637.9,-10.5 649.1,-12.9 660.3,-16.0 671.6,-21.9 682.8,-21.7 694.0,-26.1 705.2,-40.0 716.4,-33.5 727.6,-32.4 738.8,-40.2 750.0,-43.3 750.0,214.6 738.8,208.1 727.6,202.7 716.4,188.5 705.2,193.9 694.0,206.9 682.8,183.7 671.6,190.6 660.3,203.6 649.1,187.2 637.9,172.0 626.7,186.9 615.5,181.5 604.3,183.2 593.1,167.5 581.9,170.4 570.7,178.2 559.5,180.4 548.3,191.2 537.1,185.9 525.9,196.4 514.7,190.4 503.5,194.4 492.3,204.1 481.0,211.0 469.8,243.9 458.6,237.6 447.4,238.0 436.2,233.6 425.0,241.7 413.8,254.9 402.6,281.7 391.4,256.2 380.2,236.2 369.0,231.7 357.8,247.8 346.6,238.9 335.4,233.5 324.2,230.4 313.0,235.9 301.7,260.0 290.5,268.5 279.3,252.5 268.1,234.1 256.9,237.5 245.7,224.1 234.5,197.4 223.3,197.8 212.1,204.6 200.9,213.7 189.7,212.8 178.5,223.1 167.3,227.1 156.1,222.8 144.9,207.5 133.7,169.6 122.4,153.1 111.2,162.4 100.0,161.8 88.8,169.8 77.6,148.0 66.4,138.7 55.2,146.1 44.0,123.7" fill="var(--text-muted)" opacity="0.10"/><line x1="44" x2="750" y1="296.0" y2="296.0" stroke="var(--grid)"/><text x="38" y="300.0" text-anchor="end" font-size="11" fill="var(--text-muted)">84</text><line x1="44" x2="750" y1="252.9" y2="252.9" stroke="var(--grid)"/><text x="38" y="256.9" text-anchor="end" font-size="11" fill="var(--text-muted)">88</text><line x1="44" x2="750" y1="209.8" y2="209.8" stroke="var(--grid)"/><text x="38" y="213.8" text-anchor="end" font-size="11" fill="var(--text-muted)">92</text><line x1="44" x2="750" y1="166.8" y2="166.8" stroke="var(--grid)"/><text x="38" y="170.8" text-anchor="end" font-size="11" fill="var(--text-muted)">96</text><line x1="44" x2="750" y1="123.7" y2="123.7" stroke="var(--grid)"/><text x="38" y="127.7" text-anchor="end" font-size="11" fill="var(--text-muted)">100</text><line x1="44" x2="750" y1="80.6" y2="80.6" stroke="var(--grid)"/><text x="38" y="84.6" text-anchor="end" font-size="11" fill="var(--text-muted)">104</text><line x1="44" x2="750" y1="37.5" y2="37.5" stroke="var(--grid)"/><text x="38" y="41.5" text-anchor="end" font-size="11" fill="var(--text-muted)">108</text><line x1="44" x2="750" y1="123.7" y2="123.7" stroke="var(--baseline)"/><text x="44.0" y="318" text-anchor="middle" font-size="11" fill="var(--text-muted)">选举日</text><text x="279.3" y="318" text-anchor="middle" font-size="11" fill="var(--text-muted)">+1个月</text><text x="514.7" y="318" text-anchor="middle" font-size="11" fill="var(--text-muted)">+2个月</text><text x="716.4" y="318" text-anchor="middle" font-size="11" fill="var(--text-muted)">≈1月末</text>
+<polyline fill="none" stroke="var(--text-muted)" stroke-width="1.2"  points="44.0,123.7 55.2,124.2 66.4,126.6 77.6,131.3 88.8,122.8 100.0,125.1 111.2,123.8 122.4,128.5 133.7,133.4 144.9,140.7 156.1,159.7 167.3,160.1 178.5,154.6 189.7,150.3 200.9,147.9 212.1,151.4 223.3,162.4 234.5,152.2 245.7,152.2 256.9,152.7 268.1,157.1 279.3,170.4 290.5,166.9 301.7,161.1 313.0,159.6 324.2,148.4 335.4,147.5 346.6,139.5 357.8,141.6 369.0,143.5 380.2,137.7 391.4,137.5 402.6,137.2 413.8,131.0 425.0,134.8 436.2,134.0 447.4,138.4 458.6,138.8 469.8,135.1 481.0,136.0 492.3,135.2 503.5,134.9 514.7,132.8 525.9,133.0 537.1,133.0 548.3,122.9 559.5,115.1 570.7,113.6 581.9,114.3 593.1,120.7 604.3,125.7 615.5,123.3 626.7,123.2 637.9,119.6 649.1,117.6 660.3,112.7 671.6,117.1 682.8,112.7 694.0,112.7 705.2,107.2 716.4,93.6 727.6,87.8 738.8,88.6 750.0,87.7"/><polyline fill="none" stroke="var(--serious)" stroke-width="1.4"  points="44.0,123.7 55.2,113.9 66.4,138.7 77.6,148.0 88.8,169.8 100.0,161.8 111.2,162.4 122.4,136.7 133.7,130.3 144.9,141.4 156.1,145.7 167.3,125.2 178.5,102.0 189.7,105.8 200.9,103.1 212.1,126.2 223.3,96.0 234.5,99.0 245.7,101.2 256.9,117.3 268.1,121.1 279.3,134.1 290.5,127.5 301.7,151.3 313.0,136.6 324.2,136.0 335.4,140.0 346.6,154.2 357.8,129.6 369.0,138.2 380.2,152.2 391.4,160.3 402.6,146.7 413.8,144.9 425.0,150.6 436.2,154.0 447.4,170.8 458.6,166.0 469.8,165.6 481.0,131.1 492.3,131.7 503.5,107.6 514.7,114.9 525.9,130.2 537.1,109.4 548.3,109.4 559.5,110.9 570.7,104.5 581.9,120.4 593.1,124.7 604.3,139.7 615.5,156.3 626.7,167.3 637.9,156.6 649.1,187.2 660.3,203.6 671.6,190.6 682.8,183.7 694.0,206.9 705.2,193.9 716.4,188.5 727.6,202.7 738.8,208.1 750.0,214.6"/><polyline fill="none" stroke="var(--critical)" stroke-width="1.6"  points="44.0,123.7 55.2,100.9 66.4,103.7 77.6,113.7 88.8,135.1 100.0,136.7 111.2,144.8 122.4,133.6 133.7,131.2 144.9,149.0 156.1,168.1 167.3,164.9 178.5,171.7 189.7,155.8 200.9,152.3 212.1,128.2 223.3,130.6 234.5,121.9 245.7,110.0 256.9,145.3 268.1,147.0 279.3,171.5 290.5,169.7 301.7,170.1 313.0,164.5 324.2,164.7 335.4,184.4 346.6,205.5 357.8,205.5 369.0,220.8 380.2,236.2 391.4,256.2 402.6,281.7 413.8,236.1 425.0,227.9 436.2,229.1 447.4,220.8 458.6,219.6 469.8,243.9 481.0,211.0 492.3,204.1 503.5,194.4 514.7,190.4 525.9,185.7 537.1,185.9 548.3,191.2 559.5,180.4 570.7,178.2 581.9,170.4 593.1,156.9 604.3,171.6 615.5,169.4 626.7,168.0 637.9,159.1 649.1,167.3 660.3,168.8 671.6,152.8 682.8,143.7 694.0,142.9 705.2,135.6 716.4,130.6 727.6,133.1 738.8,143.0 750.0,142.3"/>
+<polyline fill="none" stroke="var(--series-1)" stroke-width="1.8" stroke-dasharray="5 4" points="44.0,123.7 55.2,117.3 66.4,115.3 77.6,113.4 88.8,112.4 100.0,109.9 111.2,111.4 122.4,110.0 133.7,113.0 144.9,114.9 156.1,122.1 167.3,114.3 178.5,110.6 189.7,112.4 200.9,116.0 212.1,120.7 223.3,112.5 234.5,103.2 245.7,101.4 256.9,96.7 268.1,97.1 279.3,96.1 290.5,98.8 301.7,95.2 313.0,96.7 324.2,95.3 335.4,101.3 346.6,107.1 357.8,109.6 369.0,113.0 380.2,111.9 391.4,104.1 402.6,98.7 413.8,92.7 425.0,90.5 436.2,93.4 447.4,96.9 458.6,88.9 469.8,91.6 481.0,96.4 492.3,99.7 503.5,98.3 514.7,97.0 525.9,85.5 537.1,80.7 548.3,70.9 559.5,69.7 570.7,63.5 581.9,58.9 593.1,56.1 604.3,54.2 615.5,53.1 626.7,49.0 637.9,54.7 649.1,50.5 660.3,47.0 671.6,42.0 682.8,43.6 694.0,47.7 705.2,43.1 716.4,48.3 727.6,43.1 738.8,46.4 750.0,54.1"/>
+<polyline fill="none" stroke="var(--series-2)" stroke-width="3"  points="44.0,123.7 55.2,106.7 66.4,154.3"/><rect x="711.4" y="48.1" width="10" height="42.7" fill="var(--good)" opacity="0.35" rx="2"/><text x="726.4" y="73.5" font-size="11" fill="var(--text-secondary)">乐观 7,800–8,100</text><rect x="711.4" y="90.8" width="10" height="56.9" fill="var(--series-1)" opacity="0.35" rx="2"/><text x="726.4" y="123.3" font-size="11" fill="var(--text-secondary)">基准 7,400–7,800</text><rect x="711.4" y="204.6" width="10" height="56.9" fill="var(--critical)" opacity="0.35" rx="2"/><text x="726.4" y="237.1" font-size="11" fill="var(--text-secondary)">风险 6,600–7,000</text><text x="754.0" y="146.3" font-size="11" fill="var(--critical)">2018</text><text x="754.0" y="218.6" font-size="11" fill="var(--serious)">2002</text><text x="754.0" y="91.7" font-size="11" fill="var(--text-muted)">1994</text><text x="72.4" y="168.3" font-size="11" font-weight="600" fill="var(--series-2)">2026：-2.8%</text>
+</svg>
+</div>
+<div class="table-scroll"><table class="data-table">
+<tr><th>样本</th><th>选后2日</th><th>选后60日内最大回撤</th><th>3个月收益</th><th>当时环境</th></tr>
+<tr><td>1974</td><td><span class="pos">+0.1%</span></td><td><span class="neg">-13.5%</span></td><td><span class="pos">+5.1%</span></td><td class='factor'>深度衰退+熊市尾段，Fed刚转向降息</td></tr><tr><td>2002</td><td><span class="neg">-1.4%</span></td><td><span class="neg">-8.4%</span></td><td><span class="neg">-8.4%</span></td><td class='factor'>伊拉克战争筹备，避险情绪二次回归</td></tr><tr><td>2018</td><td><span class="pos">+1.9%</span></td><td><span class="neg">-14.7%</span></td><td><span class="neg">-1.7%</span></td><td class='factor'>Fed加息+缩表、贸易战、科技股估值杀</td></tr><tr class='summary-row'><td>其余15次</td><td>—</td><td>最深 −4.3%（1994）</td><td>全部为正</td><td class='factor'>没有同时存在“紧缩+外部冲击”</td></tr><tr><td><b>2026</b></td><td><span class="neg">-2.8%</span></td><td>已 <span class="neg">-2.8%</span>（2个交易日）</td><td>?</td><td class='factor'>Fed加息周期 + 伊朗战争 + AI估值杀，三项同时存在</td></tr>
+</table></div>
+<p class="table-note">18次中期选举里，选后3个月内回撤超过5%的只有3次（1974/2002/2018），都同时存在“紧缩或衰退 + 外部冲击”。2026年同时具备Fed加息、伊朗战争和AI估值压力，宏观环境最接近2018年：Fed加息中、科技股估值杀、选后次日先涨（2018年11/7 +2.1%）后跌，12月加息后又跌了一段，直到2019年1月4日鲍威尔转向。</p>
+
+<h2><span class="part-no">四、</span>修正后的推演（11/5 → 2027年1月末）</h2>
+<div class="table-scroll"><table class="data-table scenario-table">
+<tr><th>情景</th><th>概率<br><small class="muted">11/3版</small></th><th>触发条件</th><th>路径</th><th>1月末 标普 / 纳指</th></tr>
+<tr><td>基准：冲击后震荡修复（1994式）</td><td class="prob">45%<br><small class="muted">50%</small></td><td class="left">AI抛售在11月中下旬英伟达财报前后企稳，属于仓位出清而非需求见顶；伊朗谈判慢慢推进，油价维持在85–95美元；12月加息25bp并暗示这是最后一次</td><td class="left">11月下旬二次探底，标普 7,000–7,300（距高点 −7~−10%）；12月加息落地后横盘；1月修复</td><td><b>7,400–7,800</b><br>纳指 24,500–26,000<br><small class="muted">相对11/5 +1~+6%</small></td></tr>
+<tr><td>风险：2018式12月杀跌</td><td class="prob">35%<br><small class="muted">25%</small></td><td class="left">超大规模云厂商下调2027年资本开支，或英伟达指引不及预期；12月加息且点阵图偏鹰；谈判破裂，油价重回100美元以上；跛脚鸭会期出现债务上限/停摆博弈</td><td class="left">半导体继续下杀，纳指进入熊市（距高点 −20%以上）；12月为全年低点</td><td><b>6,600–7,000</b><br>纳指 21,000–22,500<br><small class="muted">相对11/5 −10~−5%；距高点 −16~−10%</small></td></tr>
+<tr><td>乐观：伊朗协议 + 加息撤出定价</td><td class="prob">20%<br><small class="muted">25%</small></td><td class="left">美伊正式签署协议，油价跌破80美元；11月CPI回落，12月加息被撤出定价；英伟达财报重新确认需求</td><td class="left">11/5成为恐慌低点（VIX 28、散户投降式卖出），V型反弹</td><td><b>7,800–8,100</b><br>纳指 26,500–27,800<br><small class="muted">可能重回新高</small></td></tr>
+</table></div>
+<p class="table-note">概率加权中枢：0.45×7,600 + 0.35×6,800 + 0.20×7,950 ≈ <b>7,390</b>（相对11/5约 +0.5%，相对选举日 −2.4%）。11/3版中枢约7,800（选举日 +3%），这次下调约5%。主要原因是AI变量提前恶化，加上历史上“紧缩 + 外部冲击”组合下的选后回撤（2018 −14.7%、2002 −8.4%）。概率是主观判断，不是模型输出；前两版对路径都判断过错，请把区间当作量级参考。</p>
+
+<div class="card"><h3>6–12个月视角</h3><ul class="check">
+<li><b>历史：</b>18次中期选举后12个月全部上涨，均值 +15.1%；Fed加息期4次均值 +14.9%（2018年选后12个月 +11.7%，中间经历了 −14.7% 的回撤）。</li>
+<li><b>今年的折扣：</b>起点估值更高，AI资本开支周期有没有见顶在历史上没有可比样本；“选后12个月必涨”从未在一个AI级别的板块泡沫争议中检验过。我们把12个月（至2027年11月）中枢定在相对选举日 +5~+10%，即 7,950–8,330，低于历史均值。</li>
+<li><b>政治日程：</b>新国会2027年1月3日就任；债务上限预计2027年冬末至仲夏触及（BPC），是上半年最大的财政噪音。民主党控参院后，Fed人事受到制衡，长期看有利于压低期限溢价。</li>
+</ul></div>
+
+<h4>跟踪清单（未来4周）</h4>
+<div class="card"><ul class="check">
+<li><b>① 11月中下旬英伟达财报，以及云厂商对2027年资本开支的口径</b>：决定11/5是仓位出清还是基本面拐点，是基准和风险情景的分水岭。</li>
+<li><b>② 美伊协议是否正式落地</b>：油价跌破80美元是乐观情景的前提。</li>
+<li><b>③ 11/6非农、11月CPI → 12月FOMC</b>：加息定价约85–90%，关键在点阵图和沃什是否给出“最后一次”的信号。</li>
+<li><b>④ 跛脚鸭会期</b>：拨款和债务上限的处理方式，以及民主党领导层对数据中心/电价议题的第一批表态（州级动作比联邦更值得看）。</li>
+<li><b>⑤ 情绪指标</b>：VIX能否回到20以下、费城半导体能否收复11/5跌幅的一半。历史上真正的恐慌低点通常在一到两周内二次确认。</li>
+</ul></div>
+
+<h2>数据来源</h2>
+<div class="src-list">
+指数/ETF/VIX/10Y/原油：Yahoo Finance（^GSPC 1954–2026、^IXIC、^VIX、^TNX、CL=F、BZ=F、SMH、XLF/XLE/XLV/XLP/XLI/ITA/TAN）日线独立计算 ·
+选举结果：<a href="https://www.cnbc.com/2026/11/04/democrats-2026-midterm-election-results.html">CNBC</a> · <a href="https://www.cbsnews.com/live-updates/election-day-2026-midterms/">CBS News</a> · <a href="https://edition.cnn.com/2026/11/05/politics/live-news/midterm-election-congress">CNN</a> · <a href="https://www.aljazeera.com/news/2026/11/4/democrats-win-control-of-house-and-senate-key-us-midterms-takeaways">Al Jazeera</a> ·
+11/4：<a href="https://www.cnbc.com/2026/11/03/stock-market-today-live-updates.html">CNBC 道指+1500点</a> · <a href="https://www.cnbc.com/2026/11/04/oil-price-iran-war-us-election-strait-hormuz.html">CNBC 油价/万斯表态</a> · <a href="https://www.washingtonpost.com/business/2026/11/05/oil-prices-hit-two-month-low-following-decisive-midterm-election-results/">Washington Post</a> ·
+11/5：<a href="https://finance.yahoo.com/markets/live/stock-market-today-thursday-november-5-dow-sp-500-nasdaq-plunge-chip-stocks-melt-down-193726491.html">Yahoo Finance 直播</a> · <a href="https://www.foxbusiness.com/markets/stocks-nov-5-2026">Fox Business</a> · <a href="https://finance.yahoo.com/markets/stocks/articles/stocks-plunge-dem-midterm-sweep-205246551.html">AI监管担忧</a> · <a href="https://www.cnbc.com/2026/11/04/data-center-ballot-measures-2026-midterm.html">CNBC 数据中心公投</a> · <a href="https://www.tradingkey.com/analysis/stocks/us-stocks/262284414-us-stocks-close-nasdaq-sp500-dow-enters-correction-ai-selloff-tradingkey">TradingKey</a> ·
+Fed：<a href="https://www.cnn.com/2026/10/28/business/live-news/federal-reserve-interest-rate-october">CNN 10/28 FOMC</a> · 12月加息概率为10月下旬二手报道（约85–90%），选后最新值未能核实 ·
+债务上限：<a href="https://www.cnbc.com/2026/10/30/2026-midterm-election-wall-street-prepares-for-democratic-gains.html">CNBC/BPC</a>
+</div>
+<div class="disclaimer">本报告由AI辅助生成。部分席位仍在计票；历史样本量小（n=18），情景概率为主观判断。不构成投资建议。</div>
+</div></body></html>
